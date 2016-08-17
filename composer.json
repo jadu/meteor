@@ -1,0 +1,42 @@
+{
+    "name": "jadu/meteor2",
+    "type": "library",
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/class-loader": "^2.6",
+        "symfony/config": "^2.6",
+        "symfony/console": "^2.6",
+        "symfony/dependency-injection": "^2.6",
+        "symfony/event-dispatcher": "^2.6",
+        "symfony/finder": "^2.6",
+        "symfony/process": "^2.6",
+        "symfony/options-resolver": "^2.6",
+        "symfony/yaml": "^2.6",
+        "doctrine/dbal": "^2.5",
+        "doctrine/migrations": "^1.0.0@alpha",
+        "composer/semver": "^1.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*",
+        "mockery/mockery": "*",
+        "mikey179/vfsStream": "*",
+        "kherge/box": "^2.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Meteor\\": "src/",
+            "Jadu\\Meteor\\": "src/BackwardsCompatibility"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Meteor\\": "tests/"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "5.3.3"
+        }
+    },
+    "bin": ["bin/meteor2"]
+}

@@ -1,0 +1,12 @@
+{
+    "styles": {
+        "website": "styles/documentation.css",
+        "ebook": "styles/documentation.css",
+        "mobi": "styles/documentation.css",
+        "epub": "styles/documentation.css"
+    },
+    "plugins": [
+        "anchors",
+        "search"
+    ]
+}

@@ -1,0 +1,8 @@
+ ------ ----- ---------------- 
+  Name   Age   Favourite food  
+ ------ ----- ---------------- 
+  Tom    30    Chocolate       
+  Lisa   52    Strawberries    
+  Adam   24    Bread           
+ ------ ----- ---------------- 
+
