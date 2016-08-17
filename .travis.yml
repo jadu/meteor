@@ -7,8 +7,8 @@ php:
 
 before_script:
   - wget http://getcomposer.org/composer.phar
-  - composer require satooshi/php-coveralls:dev-master --ignore-platform-reqs
-  - php composer.phar install --no-interaction --ignore-platform-reqs
+  - if [[ "$PHP" > "5.3" ]]; then composer require satooshi/php-coveralls:dev-master; fi
+  - php composer.phar install --no-interaction
   - php composer.phar dump-autoload --optimize
 
 script:
