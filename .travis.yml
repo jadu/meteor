@@ -7,9 +7,17 @@ php:
 
 before_script:
   - wget http://getcomposer.org/composer.phar
+  - if [[ "$PHP" > "5.3" ]]; then composer require satooshi/php-coveralls:dev-master; fi
   - php composer.phar install --no-interaction
   - php composer.phar dump-autoload --optimize
-  
+
+script:
+  - mkdir ./tests/logs/
+  - ./vendor/bin/phpunit --coverage-clover ./tests/logs/clover.xml
+
+after_script:
+  - if [[ "$PHP" > "5.3" ]]; then travis_retry php vendor/bin/coveralls -v; fi
+
 matrix:
   fast_finish: true
   allow_failures:
