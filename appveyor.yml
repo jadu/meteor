@@ -1,0 +1,9 @@
+build: off
+platform:
+  - x86
+  - x64
+clone_folder: C:\projects\meteor
+install:
+  - wget http://getcomposer.org/composer.phar
+  - php composer.phar install --no-interaction
+  - php composer.phar dump-autoload --optimize
