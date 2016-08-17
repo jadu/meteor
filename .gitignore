@@ -1,5 +1,6 @@
 /bin/meteor.phar
 /box.json
+/box.phar
 /composer.phar
 /docs/_book
 /docs/node_modules
