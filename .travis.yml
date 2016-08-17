@@ -16,7 +16,7 @@ script:
   - ./vendor/bin/phpunit --coverage-clover ./tests/logs/clover.xml
 
 after_script:
-  - travis_retry php vendor/bin/coveralls -v
+  - if [[ "$PHP" > "5.3" ]]; then travis_retry php vendor/bin/coveralls -v; fi
 
 matrix:
   fast_finish: true
