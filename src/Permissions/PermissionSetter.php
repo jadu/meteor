@@ -75,20 +75,28 @@ class PermissionSetter
 
         $permissionErrors = array();
         $permissions = $this->permissionLoader->load($targetDir);
+        if (empty($permissions)) {
+            return;
+        }
+
+        $this->io->progressStart(count($permissions));
+
         foreach ($permissions as $permission) {
-            $this->io->text(sprintf(' * %s <info>%s</>', $permission->getPattern(), $permission->getModeString()));
+            $this->io->debug(sprintf('%s <info>%s</>', $permission->getPattern(), $permission->getModeString()));
 
             $files = $this->resolvePattern($baseDir, $targetDir, $permission->getPattern());
             foreach ($files as $file) {
-                $this->io->debug(sprintf(' > %s (<comment>%s</>)', $file, $permission->getModeString()));
-
                 try {
                     $this->platform->setPermission($file, $permission);
                 } catch (Exception $exception) {
                     $permissionErrors[] = sprintf('%s (%s)', $file, $permission->getModeString());
                 }
             }
+
+            $this->io->progressAdvance();
         }
+
+        $this->io->progressFinish();
 
         if (!empty($permissionErrors)) {
             $this->io->warning('Unable to set permissions correctly for some files. They should be set manually or by running `meteor permissions:reset` with the correct permission.');
