@@ -14,9 +14,10 @@ install:
   - appveyor DownloadFile http://windows.php.net/downloads/releases/archives/php-5.5.9-nts-Win32-VC11-x86.zip
   - 7z x php-5.5.9-nts-Win32-VC11-x86.zip -y >nul
   - del /Q *.zip
-  - php -v
   - echo 'extension=php_openssl.dll' >> c:\windows\php.ini
-  - php -v
+  - echo 'extension=php_curl.dll' >> c:\windows\php.ini
+  - echo 'curl.cainfo=c:\php\cacert.pem' >> c:\windows\php.ini
+  - php -d display_startup_errors=1 -d display_errors=1 -i
   - IF NOT EXIST composer.phar (appveyor DownloadFile https://getcomposer.org/download/1.2.0/composer.phar)
   - cd c:\projects\meteor
   - php c:\php\composer.phar install --no-interaction
