@@ -9,6 +9,8 @@ init:
   - SET COMPOSER_NO_INTERACTION=1
 
 install:
+  - mkdir c:\php && cd c:\php
+  - appveyor DownloadFile https://raw.githubusercontent.com/symfony/binary-utils/master/cacert.pem
   - appveyor DownloadFile http://windows.php.net/downloads/releases/archives/php-5.5.9-nts-Win32-VC11-x86.zip
   - 7z x php-5.5.9-nts-Win32-VC11-x86.zip -y >nul
   - del /Q *.zip
