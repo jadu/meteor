@@ -10,13 +10,14 @@ init:
 
 install:
   - mkdir c:\php && cd c:\php
-  - appveyor DownloadFile https://raw.githubusercontent.com/symfony/binary-utils/master/cacert.pem
+  - appveyor DownloadFile https://curl.haxx.se/ca/cacert.pem
   - appveyor DownloadFile http://windows.php.net/downloads/releases/archives/php-5.5.9-nts-Win32-VC11-x86.zip
   - 7z x php-5.5.9-nts-Win32-VC11-x86.zip -y >nul
-  - del /Q *.zip
   - echo 'extension=php_openssl.dll' >> c:\windows\php.ini
-  - php -i
+  - del /Q *.zip
+  - echo curl.cainfo=c:\php\cacert.pem >> c:\windows\php.ini
   - IF NOT EXIST composer.phar (appveyor DownloadFile https://getcomposer.org/download/1.2.0/composer.phar)
+  - php -i
   - php composer.phar self-update --disable-tls
   - php composer.phar install --no-interaction
   - php composer.phar dump-autoload --optimize
