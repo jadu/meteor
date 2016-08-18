@@ -27,4 +27,4 @@ install:
   
 test_script:
   - cd c:\projects\meteor
-  - php vendor/bin/phpunit.phar --version
+  - php vendor/bin/phpunit --version
