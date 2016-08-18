@@ -14,14 +14,19 @@ install:
   - appveyor DownloadFile http://windows.php.net/downloads/releases/archives/php-5.5.9-nts-Win32-VC11-x86.zip
   - 7z x php-5.5.9-nts-Win32-VC11-x86.zip -y >nul
   - del /Q *.zip
+  - echo 'display_startup_errors=On' >> c:\windows\php.ini
+  - echo 'display_errors=On' >> c:\windows\php.ini
+  - echo max_execution_time=1200 >> c:\windows\php.ini
+  - echo date.timezone="UTC" >> c:\windows\php.ini
+  - echo extension_dir=ext >> c:\windows\php.ini
   - echo 'extension=php_openssl.dll' >> c:\windows\php.ini
   - echo 'extension=php_curl.dll' >> c:\windows\php.ini
   - echo 'curl.cainfo=c:\php\cacert.pem' >> c:\windows\php.ini
-  - php -d display_startup_errors=1 -d display_errors=1 -i
-  - IF NOT EXIST composer.phar (appveyor DownloadFile https://getcomposer.org/download/1.2.0/composer.phar)
   - cd c:\projects\meteor
-  - php c:\php\composer.phar install --no-interaction
-  - php c:\php\composer.phar dump-autoload --optimize
+  - IF NOT EXIST composer.phar (appveyor DownloadFile https://getcomposer.org/download/1.2.0/composer.phar)
+  - php composer.phar self-update
+  - php composer.phar install --no-interaction
+  - php composer.phar dump-autoload --optimize
   
 test_script:
   - cd c:\projects\meteor
