@@ -13,9 +13,10 @@ install:
   - appveyor DownloadFile https://curl.haxx.se/ca/cacert.pem
   - appveyor DownloadFile http://windows.php.net/downloads/releases/archives/php-5.5.9-nts-Win32-VC11-x86.zip
   - 7z x php-5.5.9-nts-Win32-VC11-x86.zip -y >nul
-  - echo 'extension=php_openssl.dll' >> c:\windows\php.ini
   - del /Q *.zip
-  - echo curl.cainfo=c:\php\cacert.pem >> c:\windows\php.ini
+  - echo 'extension=php_openssl.dll' >> c:\windows\php.ini
+  - echo 'extension=php_curl.dll' >> c:\windows\php.ini
+  - echo 'curl.cainfo=c:\php\cacert.pem' >> c:\windows\php.ini
   - IF NOT EXIST composer.phar (appveyor DownloadFile https://getcomposer.org/download/1.2.0/composer.phar)
   - php -i
   - php composer.phar self-update --disable-tls
