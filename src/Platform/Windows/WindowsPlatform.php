@@ -54,7 +54,7 @@ class WindowsPlatform implements PlatformInterface
         if (is_dir($path) && $permission->isRecursive()) {
             $command = 'icacls '.ProcessUtils::escapeArgument($path).' /remove:g '.ProcessUtils::escapeArgument($user).' /grant '.ProcessUtils::escapeArgument($user.':(OI)(CI)'.$modes).' /t /Q';
         } else {
-            $command = 'icacls '.ProcessUtils::escapeArgument($path).' /remove:g '.ProcessUtils::escapeArgument($user).' /grant '.ProcessUtils::escapeArgument($user.':(OI)(CI)'.$modes).' /Q';
+            $command = 'icacls '.ProcessUtils::escapeArgument($path).' /remove:g '.ProcessUtils::escapeArgument($user).' /grant '.ProcessUtils::escapeArgument($user.':'.$modes).' /Q';
         }
 
         $this->processRunner->run($command);

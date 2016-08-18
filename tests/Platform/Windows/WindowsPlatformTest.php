@@ -34,13 +34,24 @@ class WindowsPlatformTest extends \PHPUnit_Framework_TestCase
         $permission = Permission::create('', array('r', 'w', 'x'));
 
         $this->processRunner->shouldReceive('run')
-            ->with("icacls 'vfs://root/jadu/JaduConstants.php' /remove:g 'IIS_IUSRS' /grant 'IIS_IUSRS:(OI)(CI)RXWM' /Q")
+            ->with("icacls 'vfs://root/jadu/JaduConstants.php' /remove:g 'IIS_IUSRS' /grant 'IIS_IUSRS:RXWM' /Q")
             ->once();
 
         $this->platform->setPermission(vfsStream::url('root/jadu/JaduConstants.php'), $permission);
     }
 
     public function testSetPermissionWithDirectory()
+    {
+        $permission = Permission::create('', array('r', 'w', 'x'));
+
+        $this->processRunner->shouldReceive('run')
+            ->with("icacls 'vfs://root/jadu/custom' /remove:g 'IIS_IUSRS' /grant 'IIS_IUSRS:RXWM' /Q")
+            ->once();
+
+        $this->platform->setPermission(vfsStream::url('root/jadu/custom'), $permission);
+    }
+
+    public function testSetPermissionWithDirectoryAndRecursive()
     {
         $permission = Permission::create('', array('r', 'w', 'x', 'R'));
 
@@ -56,7 +67,7 @@ class WindowsPlatformTest extends \PHPUnit_Framework_TestCase
         $permission = Permission::create('', array('r', 'w', 'x', 'R'));
 
         $this->processRunner->shouldReceive('run')
-            ->with("icacls 'vfs://root/jadu/JaduConstants.php' /remove:g 'IIS_IUSRS' /grant 'IIS_IUSRS:(OI)(CI)RXWM' /Q")
+            ->with("icacls 'vfs://root/jadu/JaduConstants.php' /remove:g 'IIS_IUSRS' /grant 'IIS_IUSRS:RXWM' /Q")
             ->once();
 
         $this->platform->setPermission(vfsStream::url('root/jadu/JaduConstants.php'), $permission);
@@ -67,7 +78,7 @@ class WindowsPlatformTest extends \PHPUnit_Framework_TestCase
         $permission = Permission::create('', array('x'));
 
         $this->processRunner->shouldReceive('run')
-            ->with("icacls 'vfs://root/jadu/JaduConstants.php' /remove:g 'IIS_IUSRS' /grant 'IIS_IUSRS:(OI)(CI)RX' /Q")
+            ->with("icacls 'vfs://root/jadu/JaduConstants.php' /remove:g 'IIS_IUSRS' /grant 'IIS_IUSRS:RX' /Q")
             ->once();
 
         $this->platform->setPermission(vfsStream::url('root/jadu/JaduConstants.php'), $permission);
