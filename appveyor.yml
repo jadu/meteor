@@ -15,6 +15,7 @@ install:
   - 7z x php-5.5.9-nts-Win32-VC11-x86.zip -y >nul
   - del /Q *.zip
   - echo 'extension=php_openssl.dll' >> c:\windows\php.ini
+  - php -i
   - IF NOT EXIST composer.phar (appveyor DownloadFile https://getcomposer.org/download/1.2.0/composer.phar)
   - php composer.phar self-update --disable-tls
   - php composer.phar install --no-interaction
