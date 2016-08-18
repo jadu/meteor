@@ -27,4 +27,4 @@ install:
   
 test_script:
   - cd c:\projects\meteor
-  - php phpunit
+  - php vendor/bin/phpunit
