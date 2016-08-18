@@ -4,7 +4,6 @@ platform:
   - x64
 clone_folder: C:\projects\meteor
 install:
-  - cinst -y php
-  - cinst composer
+  - cinst -y php composer
   - php composer.phar install --no-interaction
   - php composer.phar dump-autoload --optimize
