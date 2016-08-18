@@ -3,6 +3,11 @@ platform:
   - x86
   - x64
 clone_folder: C:\projects\meteor
+
+init:
+  - SET PATH=c:\php;%PATH%
+  - SET COMPOSER_NO_INTERACTION=1
+
 install:
   - appveyor DownloadFile http://windows.php.net/downloads/releases/archives/php-5.5.9-nts-Win32-VC11-x86.zip
   - 7z x php-5.5.9-nts-Win32-VC11-x86.zip -y >nul
@@ -11,3 +16,7 @@ install:
   - php composer.phar self-update
   - php composer.phar install --no-interaction
   - php composer.phar dump-autoload --optimize
+  
+test_script:
+  - cd c:\projects\meteor
+  - php phpunit
