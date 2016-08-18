@@ -131,9 +131,6 @@ class PackageCreator
             $this->io->debug('Writing meteor.json.package config file');
             $this->configurationWriter->write($tempDir.'/'.ConfigurationLoader::PACKAGE_CONFIG_NAME, $config);
 
-            // Add the INSTRUCTIONS.md file to the package
-            $this->addInstructionsToPackage($tempDir);
-
             // When Meteor is run using the Phar then add the PHAR to the package
             $this->addPharToPackage($tempDir, $pharPath);
 
@@ -223,14 +220,6 @@ class PackageCreator
         }
 
         $this->io->error($exception->getMessage());
-    }
-
-    /**
-     * @param string $tempDir
-     */
-    private function addInstructionsToPackage($tempDir)
-    {
-        $this->filesystem->copy(realpath(__DIR__.'/../../res/INSTRUCTIONS.md'), $tempDir.'/INSTRUCTIONS.md', true);
     }
 
     /**
