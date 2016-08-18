@@ -125,7 +125,7 @@ class CheckDiskSpaceHandler
         }
 
         foreach ($backups as $backup) {
-            $this->io->text(sprintf('Removing backup <info>%s</>', $backup->getPath()));
+            $this->io->text(sprintf('Removing backup <info>%s</>', $backup->getDate()->format('c')));
             $this->filesystem->remove($backup->getPath());
         }
     }

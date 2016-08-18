@@ -183,7 +183,7 @@ class RollbackCommand extends AbstractPatchCommand
 
         $this->logger->enable($this->getLogPath($workingDir));
 
-        $this->io->title(sprintf('Rolling back the <info>%s</> patch to version <info>%s</>', $config['name'], basename($backup->getPath())));
+        $this->io->title(sprintf('Rolling back the <info>%s</> patch to version <info>%s</>', $config['name'], $backup->getDate()->format('c')));
 
         if (!$this->io->getOption('skip-lock')) {
             $this->locker->lock($installDir);
@@ -203,7 +203,7 @@ class RollbackCommand extends AbstractPatchCommand
             }, $intermediateBackups);
 
             $this->io->note('The latest backup was not chosen so intermediate backups will be removed.');
-            $this->io->text('Intermediate backups to be deleted:');
+            $this->io->text('Intermediate backups to be removed:');
             $this->io->listing($intermediateBackupDates);
         } else {
             $intermediateBackupDirs = array();
