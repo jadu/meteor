@@ -18,7 +18,6 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
     private $configurationWriter;
     private $io;
     private $packageCreator;
-    private $instructionsPath;
 
     public function setUp()
     {
@@ -45,8 +44,6 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             $this->configurationWriter,
             $this->io
         );
-
-        $this->instructionsPath = realpath(__DIR__.'/../../res/INSTRUCTIONS.md');
     }
 
     public function testCombinePackagesWithNoPackageFiles()
@@ -92,11 +89,6 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
 
         $this->configurationWriter->shouldReceive('write')
             ->with($tempDir.'/meteor.json.package', $config)
-            ->ordered()
-            ->once();
-
-        $this->filesystem->shouldReceive('copy')
-            ->with($this->instructionsPath, $tempDir.'/INSTRUCTIONS.md', true)
             ->ordered()
             ->once();
 
@@ -186,11 +178,6 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             ->ordered()
             ->once();
 
-        $this->filesystem->shouldReceive('copy')
-            ->with($this->instructionsPath, $tempDir.'/INSTRUCTIONS.md', true)
-            ->ordered()
-            ->once();
-
         $this->packageArchiver->shouldReceive('archive')
             ->with($tempDir, $outputDir.'/package.zip', 'package')
             ->ordered()
@@ -260,11 +247,6 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
 
         $this->configurationWriter->shouldReceive('write')
             ->with($tempDir.'/meteor.json.package', $config)
-            ->ordered()
-            ->once();
-
-        $this->filesystem->shouldReceive('copy')
-            ->with($this->instructionsPath, $tempDir.'/INSTRUCTIONS.md', true)
             ->ordered()
             ->once();
 
