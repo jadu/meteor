@@ -19,8 +19,8 @@ install:
   - php -v
   - IF NOT EXIST composer.phar (appveyor DownloadFile https://getcomposer.org/download/1.2.0/composer.phar)
   - cd c:\projects\meteor
-  - php composer.phar install --no-interaction
-  - php composer.phar dump-autoload --optimize
+  - php c:\php\composer.phar install --no-interaction
+  - php c:\php\composer.phar dump-autoload --optimize
   
 test_script:
   - cd c:\projects\meteor
