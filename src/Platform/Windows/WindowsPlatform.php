@@ -49,13 +49,20 @@ class WindowsPlatform implements PlatformInterface
     public function setPermission($path, Permission $permission)
     {
         $user = 'IIS_IUSRS';
-        $modes = $this->getModeString($permission);
 
-        if (is_dir($path) && $permission->isRecursive()) {
-            $command = 'icacls '.ProcessUtils::escapeArgument($path).' /remove:g '.ProcessUtils::escapeArgument($user).' /grant '.ProcessUtils::escapeArgument($user.':(OI)(CI)'.$modes).' /t /Q';
-        } else {
-            $command = 'icacls '.ProcessUtils::escapeArgument($path).' /remove:g '.ProcessUtils::escapeArgument($user).' /grant '.ProcessUtils::escapeArgument($user.':'.$modes).' /Q';
+        $grant = $user.':';
+        if (is_dir($path)) {
+            $grant .= '(OI)(CI)';
         }
+        $grant .= $this->getModeString($permission);
+
+        $command = sprintf(
+            'icacls %s /remove:g %s /grant %s%s /Q',
+            ProcessUtils::escapeArgument($path),
+            ProcessUtils::escapeArgument($user),
+            ProcessUtils::escapeArgument($grant),
+            is_dir($path) && $permission->isRecursive() ? ' /t' : ''
+        );
 
         $this->processRunner->run($command);
     }

@@ -45,7 +45,7 @@ class WindowsPlatformTest extends \PHPUnit_Framework_TestCase
         $permission = Permission::create('', array('r', 'w', 'x'));
 
         $this->processRunner->shouldReceive('run')
-            ->with("icacls 'vfs://root/jadu/custom' /remove:g 'IIS_IUSRS' /grant 'IIS_IUSRS:RXWM' /Q")
+            ->with("icacls 'vfs://root/jadu/custom' /remove:g 'IIS_IUSRS' /grant 'IIS_IUSRS:(OI)(CI)RXWM' /Q")
             ->once();
 
         $this->platform->setPermission(vfsStream::url('root/jadu/custom'), $permission);
