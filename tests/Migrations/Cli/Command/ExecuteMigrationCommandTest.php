@@ -56,6 +56,8 @@ class ExecuteMigrationCommandTest extends CommandTestCase
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
         ));
+
+        $this->assertSame(0, $this->tester->getStatusCode());
     }
 
     public function testExecuteMigrationDown()
@@ -87,5 +89,37 @@ class ExecuteMigrationCommandTest extends CommandTestCase
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
         ));
+
+        $this->assertSame(0, $this->tester->getStatusCode());
+    }
+
+    public function testRequiresPackageName()
+    {
+        $workingDir = vfsStream::url('root/working');
+        $installDir = vfsStream::url('root/install');
+
+        $config = array(
+            'name' => 'test',
+            'migrations' => array(
+                'name' => 'test',
+                'table' => 'JaduMigrationsXFP',
+                'namespace' => 'Migrations',
+                'directory' => 'upgrades',
+            ),
+        );
+
+        $this->command->setConfiguration($config);
+
+        $this->migrator->shouldReceive('execute')
+            ->never();
+
+        $this->tester->execute(array(
+            'version' => '20160701102030',
+            '--down' => null,
+            '--working-dir' => $workingDir,
+            '--install-dir' => $installDir,
+        ));
+
+        $this->assertSame(1, $this->tester->getStatusCode());
     }
 }

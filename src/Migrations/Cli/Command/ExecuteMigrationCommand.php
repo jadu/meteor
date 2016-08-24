@@ -84,16 +84,23 @@ EOT;
         $workingDir = $this->getWorkingDir();
         $installDir = $this->getInstallDir();
 
-        $this->logger->enable($this->getLogPath($workingDir));
+        $packageName = $this->io->getArgument('package');
+        if (empty($packageName)) {
+            $this->io->error('You must specify a package name as the first argument.');
+
+            return 1;
+        }
+
         $config = $this->getConfiguration();
         $migrationConfigs = $this->getMigrationConfigs($config);
-        $packageName = $this->io->getArgument('package');
 
         if (!isset($migrationConfigs[$packageName])) {
             $this->io->error(sprintf('Unable to find migrations for the package "%s"', $packageName));
 
             return 1;
         }
+
+        $this->logger->enable($this->getLogPath($workingDir));
 
         $version = $this->io->getArgument('version');
         $direction = $this->io->getOption('down') ? 'down' : 'up';
