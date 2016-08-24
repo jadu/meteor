@@ -117,6 +117,8 @@ class VersionCommandTest extends CommandTestCase
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
         ));
+
+        $this->assertSame(0, $this->tester->getStatusCode());
     }
 
     public function testMarkAllNotMigrated()
@@ -148,5 +150,37 @@ class VersionCommandTest extends CommandTestCase
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
         ));
+
+        $this->assertSame(0, $this->tester->getStatusCode());
+    }
+
+    public function testRequiresPackageName()
+    {
+        $workingDir = vfsStream::url('root/working');
+        $installDir = vfsStream::url('root/install');
+
+        $config = array(
+            'name' => 'test',
+            'migrations' => array(
+                'name' => 'test',
+                'table' => 'JaduMigrationsXFP',
+                'namespace' => 'Migrations',
+                'directory' => 'upgrades',
+            ),
+        );
+
+        $this->command->setConfiguration($config);
+
+        $this->versionManager->shouldReceive('markAllMigrated')
+            ->never();
+
+        $this->tester->execute(array(
+            '--add' => null,
+            '--all' => true,
+            '--working-dir' => $workingDir,
+            '--install-dir' => $installDir,
+        ));
+
+        $this->assertSame(1, $this->tester->getStatusCode());
     }
 }

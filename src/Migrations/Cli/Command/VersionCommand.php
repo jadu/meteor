@@ -83,6 +83,12 @@ EOT;
         }
 
         $packageName = $this->io->getArgument('package');
+        if (empty($packageName)) {
+            $this->io->error('You must specify a package name as the first argument.');
+
+            return 1;
+        }
+
         $migrationConfigs = $this->getMigrationConfigs($config);
 
         if (!isset($migrationConfigs[$packageName])) {
