@@ -37,6 +37,7 @@ class PackageCommand extends AbstractCommand
         $this->addOption('output-dir', 'o', InputOption::VALUE_REQUIRED, 'The directory to put the ZIP archive in.', 'output');
         $this->addOption('filename', 'f', InputOption::VALUE_REQUIRED, 'The name given to the package ZIP archive.');
         $this->addOption('combine', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'One or more packages to combine with this package.');
+        $this->addOption('skip-combine', null, InputOption::VALUE_NONE, 'Do not combine packages automatically based on the config.');
         $this->addOption('phar', null, InputOption::VALUE_REQUIRED, 'The path to a Phar archive to bundle with the package.');
 
         parent::configure();
@@ -54,6 +55,7 @@ class PackageCommand extends AbstractCommand
             $this->io->getOption('filename'),
             $this->getConfiguration(),
             $this->io->getOption('combine'),
+            $this->io->getOption('skip-combine'),
             $this->io->getOption('phar')
         );
 

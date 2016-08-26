@@ -32,6 +32,7 @@ class PackageCommandTest extends CommandTestCase
                     '/path/to/package1.zip',
                     '/path/to/package2.zip',
                 ),
+                false,
                 null
             )
             ->once();
@@ -47,6 +48,31 @@ class PackageCommandTest extends CommandTestCase
         ));
     }
 
+    public function testCreatesPackageWithoutCombiningPackages()
+    {
+        $workingDir = __DIR__;
+        $outputDir = __DIR__;
+
+        $this->packageCreator->shouldReceive('create')
+            ->with(
+                $workingDir,
+                $outputDir,
+                'package.zip',
+                array('name' => 'test'),
+                array(),
+                true,
+                null
+            )
+            ->once();
+
+        $this->tester->execute(array(
+            '--working-dir' => $workingDir,
+            '--output-dir' => $outputDir,
+            '--filename' => 'package.zip',
+            '--skip-combine' => true,
+        ));
+    }
+
     public function testCreatesPackageWithPhar()
     {
         $workingDir = __DIR__;
@@ -59,6 +85,7 @@ class PackageCommandTest extends CommandTestCase
                 'package.zip',
                 array('name' => 'test'),
                 array(),
+                false,
                 '/path/to/meteor.phar'
             )
             ->once();
