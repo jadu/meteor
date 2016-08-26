@@ -111,6 +111,69 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testCanSkipCombiningPackages()
+    {
+        $workingDir = 'working';
+        $outputDir = 'output';
+        $tempDir = 'temp';
+
+        $config = array(
+            'name' => 'jadu/xfp',
+            'package' => array(
+                'combine' => array(),
+            ),
+        );
+
+        $this->filesystem->shouldReceive('ensureDirectoryExists')
+            ->andReturn($outputDir)
+            ->ordered()
+            ->once();
+
+        $this->filesystem->shouldReceive('createTempDirectory')
+            ->with($outputDir)
+            ->andReturn($tempDir)
+            ->ordered()
+            ->once();
+
+        $this->filesystem->shouldReceive('copyDirectory')
+            ->with($workingDir, $tempDir.'/to_patch', null)
+            ->ordered()
+            ->once();
+
+        $this->migrationsCopier->shouldReceive('copy')
+            ->with($workingDir, $tempDir, $config)
+            ->andReturn($config)
+            ->ordered()
+            ->once();
+
+        $this->combinedPackageResolver->shouldReceive('resolve')
+            ->never();
+
+        $this->configurationWriter->shouldReceive('write')
+            ->with($tempDir.'/meteor.json.package', $config)
+            ->ordered()
+            ->once();
+
+        $this->packageArchiver->shouldReceive('archive')
+            ->with($tempDir, $outputDir.'/package.zip', 'package')
+            ->ordered()
+            ->once();
+
+        $this->filesystem->shouldReceive('remove')
+            ->with($tempDir)
+            ->ordered()
+            ->once();
+
+        $this->packageCreator->create(
+            $workingDir,
+            $outputDir,
+            'package',
+            $config,
+            array('cms.zip'),
+            true
+        );
+    }
+
     public function testCreate()
     {
         $workingDir = 'working';
@@ -271,6 +334,7 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             'package',
             $config,
             array('cms.zip'),
+            false,
             'meteor.phar'
         );
     }

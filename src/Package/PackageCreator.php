@@ -89,8 +89,9 @@ class PackageCreator
      * @param string $workingDir
      * @param string $outputDir
      * @param string $fileName
-     * @param array  $config
-     * @param array  $combinePackages
+     * @param array $config
+     * @param array $combinePackages
+     * @param bool $skipCombine
      * @param string $pharPath
      *
      * @return bool
@@ -98,7 +99,7 @@ class PackageCreator
      * @throws Exception
      * @throws \Meteor\Configuration\RuntimeException
      */
-    public function create($workingDir, $outputDir, $fileName, array $config, array $combinePackages, $pharPath = null)
+    public function create($workingDir, $outputDir, $fileName, array $config, array $combinePackages, $skipCombine = false, $pharPath = null)
     {
         $this->io->title(sprintf('Creating package for <info>%s</>', $config['name']));
 
@@ -118,8 +119,10 @@ class PackageCreator
             $composerRequirements = $this->composerDependencyChecker->getRequirements($workingDir);
             $hasComposerRequirements = !empty($composerRequirements);
 
-            // Combine packages passed and automatically resolve required packages using the provider
-            $config = $this->combinedPackageResolver->resolve($combinePackages, $outputDir, $tempDir, $config, $hasComposerRequirements);
+            if (!$skipCombine) {
+                // Combine packages passed and automatically resolve required packages using the provider
+                $config = $this->combinedPackageResolver->resolve($combinePackages, $outputDir, $tempDir, $config, $hasComposerRequirements);
+            }
 
             if ($hasComposerRequirements) {
                 // Check that any required Composer dependencies are in the lock file
