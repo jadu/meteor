@@ -1,4 +1,4 @@
-# vX.Y.Z
+## v2.1.0
 
 * Improved error message when not specifying a package name in migration commands ([#10](https://github.com/jadu/meteor/pull/10))
 * Added `--skip-combine` option to skip package combining ([#11](https://github.com/jadu/meteor/pull/11))
@@ -11,6 +11,6 @@
 
 * Fixed permission setting on Windows
 
-# v2.0.0
+## v2.0.0
 
 Initial release
