@@ -91,13 +91,11 @@ class Migrator
                 $this->io->text(' * '.$configuration->formatVersion($executedUnavailableMigration).' (<comment>'.$executedUnavailableMigration.'</>)');
             }
 
-            if ($this->io->isInteractive()) {
-                $confirmation = $this->io->askConfirmation('Are you sure you wish to continue?', false);
-                if (!$confirmation) {
-                    $this->io->error('Migrations cancelled.');
+            $confirmation = $this->io->askConfirmation('Are you sure you wish to continue?', true);
+            if (!$confirmation) {
+                $this->io->error('Migrations cancelled.');
 
-                    return false;
-                }
+                return false;
             }
         }
 
