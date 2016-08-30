@@ -2,6 +2,7 @@
 
 namespace Meteor\Patch\Task;
 
+use Meteor\IO\IOInterface;
 use Meteor\Migrations\Configuration\ConfigurationFactory;
 use Meteor\Migrations\MigrationsConstants;
 use Meteor\Migrations\Version\VersionFileManager;
@@ -19,13 +20,20 @@ class UpdateMigrationVersionFilesHandler
     private $versionFileManager;
 
     /**
+     * @var IOInterface
+     */
+    private $io;
+
+    /**
      * @param ConfigurationFactory $configurationFactory
      * @param VersionFileManager $versionFileManager
+     * @param IOInterface $io
      */
-    public function __construct(ConfigurationFactory $configurationFactory, VersionFileManager $versionFileManager)
+    public function __construct(ConfigurationFactory $configurationFactory, VersionFileManager $versionFileManager, IOInterface $io)
     {
         $this->configurationFactory = $configurationFactory;
         $this->versionFileManager = $versionFileManager;
+        $this->io = $io;
     }
 
     /**
@@ -49,6 +57,12 @@ class UpdateMigrationVersionFilesHandler
             }
         }
 
+        if (empty($migrationConfigs)) {
+            return;
+        }
+
+        $this->io->text('Storing current migration status in the backup');
+
         foreach ($migrationConfigs as $migrationConfig) {
             $configuration = $this->configurationFactory->createConfiguration(
                 MigrationsConstants::TYPE_DATABASE,
@@ -57,9 +71,10 @@ class UpdateMigrationVersionFilesHandler
                 $task->installDir
             );
 
+            $this->io->debug(sprintf('Storing current database migration version for "%s"', $migrationConfig['table']));
             $this->versionFileManager->setCurrentVersion(
                 $configuration->getCurrentVersion(),
-                $task->installDir,
+                $task->backupDir,
                 $migrationConfig['table'],
                 VersionFileManager::DATABASE_MIGRATION
             );
@@ -71,12 +86,15 @@ class UpdateMigrationVersionFilesHandler
                 $task->installDir
             );
 
+            $this->io->debug(sprintf('Storing current file migration version for "%s"', $migrationConfig['table']));
             $this->versionFileManager->setCurrentVersion(
                 $configuration->getCurrentVersion(),
-                $task->installDir,
+                $task->backupDir,
                 $migrationConfig['table'],
                 VersionFileManager::FILE_MIGRATION
             );
         }
+
+        $this->io->newLine();
     }
 }

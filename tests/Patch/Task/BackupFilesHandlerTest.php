@@ -28,19 +28,6 @@ class BackupFilesHandlerTest extends \PHPUnit_Framework_TestCase
         $this->handler = new BackupFilesHandler($this->filesystem, $this->configurationLoader, $this->io);
     }
 
-    public function testCreatesBackupDirectory()
-    {
-        $this->filesystem->shouldReceive('ensureDirectoryExists')
-            ->with('install/backups')
-            ->once();
-
-        $this->filesystem->shouldReceive('ensureDirectoryExists')
-            ->with('install/backups/20160701000000')
-            ->once();
-
-        $this->handler->handle(new BackupFiles('20160701000000', 'patch', 'install'), array());
-    }
-
     public function testCopiesFilesFromInstallIntoBackupDirectory()
     {
         $patchFiles = array('VERSION');
@@ -53,17 +40,7 @@ class BackupFilesHandlerTest extends \PHPUnit_Framework_TestCase
             ->with($patchFiles, 'install', 'install/backups/20160701000000/to_patch')
             ->once();
 
-        $migrationFiles = array('CORE_MIGRATION_VERSION');
-        $this->filesystem->shouldReceive('findFiles')
-            ->with('install', array('/*_MIGRATION_NUMBER'))
-            ->andReturn($migrationFiles)
-            ->once();
-
-        $this->filesystem->shouldReceive('copyFiles')
-            ->with($migrationFiles, 'install', 'install/backups/20160701000000')
-            ->once();
-
-        $this->handler->handle(new BackupFiles('20160701000000', 'patch', 'install'), array());
+        $this->handler->handle(new BackupFiles('install/backups/20160701000000', 'patch', 'install'), array());
     }
 
     public function testCopiesMeteorConfigIntoBackupFromPatch()
@@ -77,6 +54,6 @@ class BackupFilesHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('patch/meteor.json.package', 'install/backups/20160701000000/meteor.json.package', true)
             ->once();
 
-        $this->handler->handle(new BackupFiles('20160701000000', 'patch', 'install'), array());
+        $this->handler->handle(new BackupFiles('install/backups/20160701000000', 'patch', 'install'), array());
     }
 }

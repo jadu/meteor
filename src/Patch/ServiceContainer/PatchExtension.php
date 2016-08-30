@@ -332,6 +332,7 @@ class PatchExtension implements ExtensionInterface, ScriptEventProviderInterface
         $definition = new Definition('Meteor\Patch\Task\UpdateMigrationVersionFilesHandler', array(
             new Reference(MigrationsExtension::SERVICE_CONFIGURATION_FACTORY),
             new Reference(MigrationsExtension::SERVICE_VERSION_FILE_MANAGER),
+            new Reference(IOExtension::SERVICE_IO),
         ));
         $definition->addTag(self::TAG_TASK_HANDLER, array(
             'task' => 'Meteor\Patch\Task\UpdateMigrationVersionFiles',

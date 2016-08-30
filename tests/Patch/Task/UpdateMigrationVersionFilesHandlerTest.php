@@ -2,6 +2,7 @@
 
 namespace Meteor\Patch\Task;
 
+use Meteor\IO\NullIO;
 use Meteor\Migrations\Configuration\ConfigurationFactory;
 use Meteor\Migrations\MigrationsConstants;
 use Meteor\Migrations\Version\VersionFileManager;
@@ -19,7 +20,8 @@ class UpdateMigrationVersionFilesHandlerTest extends \PHPUnit_Framework_TestCase
         $this->versionFileManager = Mockery::mock('Meteor\Migrations\Version\VersionFileManager');
         $this->handler = new UpdateMigrationVersionFilesHandler(
             $this->configurationFactory,
-            $this->versionFileManager
+            $this->versionFileManager,
+            new NullIO()
         );
     }
 
@@ -42,7 +44,7 @@ class UpdateMigrationVersionFilesHandlerTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->versionFileManager->shouldReceive('setCurrentVersion')
-            ->with('20160701000000', 'install', 'Migrations', VersionFileManager::DATABASE_MIGRATION)
+            ->with('20160701000000', 'backup', 'Migrations', VersionFileManager::DATABASE_MIGRATION)
             ->once();
 
         $fileConfiguration = Mockery::mock('Meteor\Migrations\Configuration\FileConfiguration', array(
@@ -55,10 +57,10 @@ class UpdateMigrationVersionFilesHandlerTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->versionFileManager->shouldReceive('setCurrentVersion')
-            ->with('20160701000000', 'install', 'Migrations', VersionFileManager::FILE_MIGRATION)
+            ->with('20160701000000', 'backup', 'Migrations', VersionFileManager::FILE_MIGRATION)
             ->once();
 
-        $this->handler->handle(new UpdateMigrationVersionFiles('patch', 'install'), $config);
+        $this->handler->handle(new UpdateMigrationVersionFiles('backup', 'patch', 'install'), $config);
     }
 
     public function testSetsCurrentVersionForCombinedPackageMigrations()
@@ -84,7 +86,7 @@ class UpdateMigrationVersionFilesHandlerTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->versionFileManager->shouldReceive('setCurrentVersion')
-            ->with('20160701000000', 'install', 'Migrations', VersionFileManager::DATABASE_MIGRATION)
+            ->with('20160701000000', 'backup', 'Migrations', VersionFileManager::DATABASE_MIGRATION)
             ->once();
 
         $fileConfiguration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', array(
@@ -97,9 +99,9 @@ class UpdateMigrationVersionFilesHandlerTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->versionFileManager->shouldReceive('setCurrentVersion')
-            ->with('20160701000000', 'install', 'Migrations', VersionFileManager::FILE_MIGRATION)
+            ->with('20160701000000', 'backup', 'Migrations', VersionFileManager::FILE_MIGRATION)
             ->once();
 
-        $this->handler->handle(new UpdateMigrationVersionFiles('patch', 'install'), $config);
+        $this->handler->handle(new UpdateMigrationVersionFiles('backup', 'patch', 'install'), $config);
     }
 }

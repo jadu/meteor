@@ -7,7 +7,7 @@ class BackupFiles
     /**
      * @var string
      */
-    public $timestamp;
+    public $backupDir;
 
     /**
      * @var string
@@ -20,13 +20,13 @@ class BackupFiles
     public $installDir;
 
     /**
-     * @param string $timestamp
+     * @param string $backupDir
      * @param string $patchDir
      * @param string $installDir
      */
-    public function __construct($timestamp, $patchDir, $installDir)
+    public function __construct($backupDir, $patchDir, $installDir)
     {
-        $this->timestamp = $timestamp;
+        $this->backupDir = $backupDir;
         $this->patchDir = $patchDir;
         $this->installDir = $installDir;
     }

@@ -29,6 +29,7 @@ class OverwritePatchStrategy implements PatchStrategyInterface
     {
         $tasks = array();
         $patchFilesDir = $patchDir.'/'.PackageConstants::PATCH_DIR;
+        $backupDir = $installDir.'/backups/'.date('YmdHis');
 
         $tasks[] = new CheckWritePermission($installDir);
         $tasks[] = new DisplayVersionInfo($patchFilesDir, $installDir);
@@ -43,10 +44,10 @@ class OverwritePatchStrategy implements PatchStrategyInterface
         }
 
         $tasks[] = new CheckDiskSpace($installDir);
-        $tasks[] = new UpdateMigrationVersionFiles($patchDir, $installDir);
 
         if (!$options['skip-backup']) {
-            $tasks[] = new BackupFiles(date('YmdHis'), $patchDir, $installDir);
+            $tasks[] = new BackupFiles($backupDir, $patchDir, $installDir);
+            $tasks[] = new UpdateMigrationVersionFiles($backupDir, $patchDir, $installDir);
         }
 
         $tasks[] = new CopyFiles($patchFilesDir, $installDir);

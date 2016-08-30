@@ -42,26 +42,17 @@ class BackupFilesHandler
      */
     public function handle(BackupFiles $task, array $config)
     {
-        $backupsDir = $task->installDir.'/backups';
-        $this->filesystem->ensureDirectoryExists($backupsDir);
+        $this->io->text(sprintf('Creating backup in <info>%s</>', $task->backupDir));
 
-        $this->io->text(sprintf('Creating backup to <info>%s</>', $task->timestamp));
-
-        $backupDir = $backupsDir.'/'.$task->timestamp;
-        $this->filesystem->ensureDirectoryExists($backupDir);
+        $this->filesystem->ensureDirectoryExists($task->backupDir);
 
         // Copy the files from the install that exist in the patch to the backup
         $this->io->text('Copying files from the install to the backup:');
         $files = $this->filesystem->findFiles($task->patchDir.'/'.PackageConstants::PATCH_DIR);
-        $this->filesystem->copyFiles($files, $task->installDir, $backupDir.'/'.PackageConstants::PATCH_DIR);
-
-        // Copy migration status files so we know what to migrate down to during a rollback
-        $this->io->text('Copying migration status files into the backup:');
-        $files = $this->filesystem->findFiles($task->installDir, array('/*_MIGRATION_NUMBER'));
-        $this->filesystem->copyFiles($files, $task->installDir, $backupDir);
+        $this->filesystem->copyFiles($files, $task->installDir, $task->backupDir.'/'.PackageConstants::PATCH_DIR);
 
         // Copy the meteor.json into the backup
         $configPath = $this->configurationLoader->resolve($task->patchDir);
-        $this->filesystem->copy($configPath, $backupDir.'/meteor.json.package', true);
+        $this->filesystem->copy($configPath, $task->backupDir.'/meteor.json.package', true);
     }
 }
