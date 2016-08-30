@@ -1,5 +1,7 @@
 ## Next release
 
+## v2.1.1
+
 * Changed unexecuted migrations confirmation question default answer to yes ([#14](https://github.com/jadu/meteor/pull/14))
 * Fixed issue with the updating migration version files task taking too long ([#13](https://github.com/jadu/meteor/pull/13))
 
