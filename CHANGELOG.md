@@ -1,3 +1,8 @@
+## Next release
+
+* Changed unexecuted migrations confirmation question default answer to yes ([#14](https://github.com/jadu/meteor/pull/14))
+* Fixed issue with the updating migration version files task taking too long ([#13](https://github.com/jadu/meteor/pull/13))
+
 ## v2.1.0
 
 * Improved error message when not specifying a package name in migration commands ([#10](https://github.com/jadu/meteor/pull/10))
