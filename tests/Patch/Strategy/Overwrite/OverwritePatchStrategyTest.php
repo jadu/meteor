@@ -45,12 +45,13 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Meteor\Patch\Task\CheckDiskSpace', $tasks[5]);
         $this->assertSame('install', $tasks[5]->installDir);
 
-        $this->assertInstanceOf('Meteor\Patch\Task\UpdateMigrationVersionFiles', $tasks[6]);
+        $this->assertInstanceOf('Meteor\Patch\Task\BackupFiles', $tasks[6]);
+        $this->assertSame('install/backups/'.date('YmdHis'), $tasks[6]->backupDir);
         $this->assertSame('patch', $tasks[6]->patchDir);
         $this->assertSame('install', $tasks[6]->installDir);
 
-        $this->assertInstanceOf('Meteor\Patch\Task\BackupFiles', $tasks[7]);
-        $this->assertNotEmpty($tasks[7]->timestamp);
+        $this->assertInstanceOf('Meteor\Patch\Task\UpdateMigrationVersionFiles', $tasks[7]);
+        $this->assertSame('install/backups/'.date('YmdHis'), $tasks[7]->backupDir);
         $this->assertSame('patch', $tasks[7]->patchDir);
         $this->assertSame('install', $tasks[7]->installDir);
 
@@ -82,8 +83,8 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Meteor\Patch\Task\DisplayVersionInfo', $tasks[1]);
         $this->assertInstanceOf('Meteor\Patch\Task\CheckDatabaseConnection', $tasks[2]);
         $this->assertInstanceOf('Meteor\Patch\Task\CheckDiskSpace', $tasks[3]);
-        $this->assertInstanceOf('Meteor\Patch\Task\UpdateMigrationVersionFiles', $tasks[4]);
-        $this->assertInstanceOf('Meteor\Patch\Task\BackupFiles', $tasks[5]);
+        $this->assertInstanceOf('Meteor\Patch\Task\BackupFiles', $tasks[4]);
+        $this->assertInstanceOf('Meteor\Patch\Task\UpdateMigrationVersionFiles', $tasks[5]);
         $this->assertInstanceOf('Meteor\Patch\Task\CopyFiles', $tasks[6]);
         $this->assertInstanceOf('Meteor\Patch\Task\MigrateUp', $tasks[7]);
         $this->assertInstanceOf('Meteor\Patch\Task\MigrateUp', $tasks[8]);
@@ -104,8 +105,8 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Meteor\Patch\Task\CheckVersion', $tasks[3]);
         $this->assertInstanceOf('Meteor\Patch\Task\CheckDatabaseConnection', $tasks[4]);
         $this->assertInstanceOf('Meteor\Patch\Task\CheckDiskSpace', $tasks[5]);
-        $this->assertInstanceOf('Meteor\Patch\Task\UpdateMigrationVersionFiles', $tasks[6]);
-        $this->assertInstanceOf('Meteor\Patch\Task\BackupFiles', $tasks[7]);
+        $this->assertInstanceOf('Meteor\Patch\Task\BackupFiles', $tasks[6]);
+        $this->assertInstanceOf('Meteor\Patch\Task\UpdateMigrationVersionFiles', $tasks[7]);
         $this->assertInstanceOf('Meteor\Patch\Task\CopyFiles', $tasks[8]);
         $this->assertInstanceOf('Meteor\Patch\Task\MigrateUp', $tasks[9]);
     }
@@ -125,8 +126,8 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Meteor\Patch\Task\CheckVersion', $tasks[3]);
         $this->assertInstanceOf('Meteor\Patch\Task\CheckDatabaseConnection', $tasks[4]);
         $this->assertInstanceOf('Meteor\Patch\Task\CheckDiskSpace', $tasks[5]);
-        $this->assertInstanceOf('Meteor\Patch\Task\UpdateMigrationVersionFiles', $tasks[6]);
-        $this->assertInstanceOf('Meteor\Patch\Task\BackupFiles', $tasks[7]);
+        $this->assertInstanceOf('Meteor\Patch\Task\BackupFiles', $tasks[6]);
+        $this->assertInstanceOf('Meteor\Patch\Task\UpdateMigrationVersionFiles', $tasks[7]);
         $this->assertInstanceOf('Meteor\Patch\Task\CopyFiles', $tasks[8]);
         $this->assertInstanceOf('Meteor\Patch\Task\MigrateUp', $tasks[9]);
     }
@@ -145,8 +146,8 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Meteor\Patch\Task\CheckModuleCmsDependency', $tasks[2]);
         $this->assertInstanceOf('Meteor\Patch\Task\CheckVersion', $tasks[3]);
         $this->assertInstanceOf('Meteor\Patch\Task\CheckDiskSpace', $tasks[4]);
-        $this->assertInstanceOf('Meteor\Patch\Task\UpdateMigrationVersionFiles', $tasks[5]);
-        $this->assertInstanceOf('Meteor\Patch\Task\BackupFiles', $tasks[6]);
+        $this->assertInstanceOf('Meteor\Patch\Task\BackupFiles', $tasks[5]);
+        $this->assertInstanceOf('Meteor\Patch\Task\UpdateMigrationVersionFiles', $tasks[6]);
         $this->assertInstanceOf('Meteor\Patch\Task\CopyFiles', $tasks[7]);
     }
 
@@ -165,10 +166,9 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Meteor\Patch\Task\CheckVersion', $tasks[3]);
         $this->assertInstanceOf('Meteor\Patch\Task\CheckDatabaseConnection', $tasks[4]);
         $this->assertInstanceOf('Meteor\Patch\Task\CheckDiskSpace', $tasks[5]);
-        $this->assertInstanceOf('Meteor\Patch\Task\UpdateMigrationVersionFiles', $tasks[6]);
-        $this->assertInstanceOf('Meteor\Patch\Task\CopyFiles', $tasks[7]);
+        $this->assertInstanceOf('Meteor\Patch\Task\CopyFiles', $tasks[6]);
+        $this->assertInstanceOf('Meteor\Patch\Task\MigrateUp', $tasks[7]);
         $this->assertInstanceOf('Meteor\Patch\Task\MigrateUp', $tasks[8]);
-        $this->assertInstanceOf('Meteor\Patch\Task\MigrateUp', $tasks[9]);
     }
 
     public function testRollback()
