@@ -73,6 +73,12 @@ class PackageCombiner
         $extractedDir = $this->extractPackage($packagePath, $outputDir);
         $packageConfig = $this->configurationLoader->load($extractedDir, false);
 
+        if ($this->hasCombinedPackage($packageConfig['name'], $config)) {
+            $this->io->note(sprintf('The %s package has already been combined', $packageConfig['name']));
+
+            return;
+        }
+
         $this->io->text(sprintf('Found package: <info>%s</>', $packageConfig['name']));
         $this->io->newLine();
 
@@ -101,9 +107,13 @@ class PackageCombiner
 
         if (isset($packageConfig['combined'])) {
             foreach ($packageConfig['combined'] as $combinedConfig) {
-                // Copy migrations into place and update configuration
-                $combinedConfig = $this->migrationsCopier->copy($extractedDir, $tempDir, $combinedConfig);
-                $config['combined'][] = $combinedConfig;
+                if (!$this->hasCombinedPackage($combinedConfig['name'], $config)) {
+                    // Copy migrations into place and update configuration
+                    $combinedConfig = $this->migrationsCopier->copy($extractedDir, $tempDir, $combinedConfig);
+                    $config['combined'][] = $combinedConfig;
+                } else {
+                    $this->io->note(sprintf('The %s package has already been combined', $combinedConfig['name']));
+                }
             }
 
             unset($packageConfig['combined'], $packageConfig['extensions']);
@@ -118,6 +128,25 @@ class PackageCombiner
         }
 
         return $config;
+    }
+
+    /**
+     * @param string $packageName
+     * @param array $config
+     *
+     * @return bool
+     */
+    private function hasCombinedPackage($packageName, array $config)
+    {
+        if (isset($config['combined'])) {
+            foreach ($config['combined'] as $combinedConfig) {
+                if ($combinedConfig['name'] === $packageName) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
