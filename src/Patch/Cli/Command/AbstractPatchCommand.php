@@ -68,10 +68,6 @@ abstract class AbstractPatchCommand extends AbstractCommand
             if (!is_dir($this->installDir)) {
                 throw new InvalidArgumentException(sprintf('The install directory `%s` does not exist.', $this->installDir));
             }
-
-            if ($this->getWorkingDir() === $this->installDir) {
-                throw new InvalidArgumentException('The working directory cannot be the same as the install directory');
-            }
         }
 
         return $this->installDir;

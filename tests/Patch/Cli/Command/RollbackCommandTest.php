@@ -132,6 +132,20 @@ class RollbackCommandTest extends CommandTestCase
         ));
     }
 
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testThrowsExceptionWhenWorkingDirIsTheSameAsTheInstallDir()
+    {
+        $workingDir = vfsStream::url('root/install');
+        $installDir = vfsStream::url('root/install');
+
+        $this->tester->execute(array(
+            '--working-dir' => $workingDir,
+            '--install-dir' => $installDir,
+        ));
+    }
+
     public function testDoesNotLockWhenSkipLockOptionSpecified()
     {
         $workingDir = vfsStream::url('root/patch');
