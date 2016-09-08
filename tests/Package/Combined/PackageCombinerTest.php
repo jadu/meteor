@@ -162,7 +162,7 @@ class PackageCombinerTest extends \PHPUnit_Framework_TestCase
             'combined' => array(
                 array(
                     'name' => 'jadu/cms',
-                )
+                ),
             ),
         );
 
@@ -235,7 +235,7 @@ class PackageCombinerTest extends \PHPUnit_Framework_TestCase
             'combined' => array(
                 array(
                     'name' => 'jadu/cms',
-                )
+                ),
             ),
         );
 
@@ -247,8 +247,8 @@ class PackageCombinerTest extends \PHPUnit_Framework_TestCase
             'combined' => array(
                 array(
                     'name' => 'jadu/cms',
-                )
-            )
+                ),
+            ),
         );
 
         $this->filesystem->shouldReceive('createTempDirectory')
