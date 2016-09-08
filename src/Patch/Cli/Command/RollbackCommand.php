@@ -2,6 +2,7 @@
 
 namespace Meteor\Patch\Cli\Command;
 
+use InvalidArgumentException;
 use Meteor\IO\IOInterface;
 use Meteor\Logger\LoggerInterface;
 use Meteor\Package\PackageConstants;
@@ -120,6 +121,11 @@ class RollbackCommand extends AbstractPatchCommand
     {
         $workingDir = $this->getWorkingDir();
         $installDir = $this->getInstallDir();
+
+        if ($workingDir === $installDir) {
+            throw new InvalidArgumentException('The working directory cannot be the same as the install directory');
+        }
+
         $config = $this->getConfiguration();
 
         $this->platform->setInstallDir($installDir);
