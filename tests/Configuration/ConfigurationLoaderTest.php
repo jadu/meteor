@@ -146,6 +146,38 @@ JSON;
         ), $config);
     }
 
+    public function testLoadCombined()
+    {
+        $json = <<<JSON
+{
+    "name": "jadu/xfp",
+    "combined": [
+        {
+            "name": "jadu/cms"
+        }
+    ]
+}
+JSON;
+
+        vfsStream::setup('root', null, array(
+            'meteor.json' => $json,
+        ));
+
+        $this->configurationLoader->buildTree(array());
+        $config = $this->configurationLoader->load(vfsStream::url('root'));
+
+        $this->assertSame(array(
+            'name' => 'jadu/xfp',
+            'combined' => array(
+                array(
+                    'name' => 'jadu/cms',
+                    'extensions' => array(),
+                ),
+            ),
+            'extensions' => array(),
+        ), $config);
+    }
+
     public function testLoadIgnoresUnrecognisedOptionsWhenNotStrict()
     {
         $json = <<<JSON

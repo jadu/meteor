@@ -156,14 +156,14 @@ class PackageCombinerTest extends \PHPUnit_Framework_TestCase
 
     public function testCombineHoistsCombinedPackages()
     {
-        $combinedPackageConfig = array(
-            'name' => 'jadu/cms',
-        );
-
         $packagePath = '/path/to/package.zip';
         $packageConfig = array(
             'name' => 'jadu/xfp',
-            'combined' => array($combinedPackageConfig),
+            'combined' => array(
+                array(
+                    'name' => 'jadu/cms',
+                )
+            ),
         );
 
         $outputDir = 'output';
@@ -202,10 +202,87 @@ class PackageCombinerTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->migrationsCopier->shouldReceive('copy')
-            ->with($extractedDir, $tempDir, $combinedPackageConfig)
-            ->andReturn($combinedPackageConfig)
+            ->with($extractedDir, $tempDir, $packageConfig['combined'][0])
+            ->andReturn($packageConfig['combined'][0])
             ->ordered()
             ->once();
+
+        $this->filesystem->shouldReceive('remove')
+            ->with($extractedDir)
+            ->ordered()
+            ->once();
+
+        $updatedConfig = $this->packageCombiner->combine($packagePath, $outputDir, $tempDir, $config, false);
+
+        $this->assertEquals(array(
+            'name' => 'client',
+            'combined' => array(
+                array(
+                    'name' => 'jadu/cms',
+                ),
+                array(
+                    'name' => 'jadu/xfp',
+                ),
+            ),
+        ), $updatedConfig);
+    }
+
+    public function testIgnoresAlreadyCombinedPackages()
+    {
+        $packagePath = '/path/to/package.zip';
+        $packageConfig = array(
+            'name' => 'jadu/xfp',
+            'combined' => array(
+                array(
+                    'name' => 'jadu/cms',
+                )
+            ),
+        );
+
+        $outputDir = 'output';
+        $tempDir = '/tmp/working';
+        $extractedDir = '/tmp/extracted';
+        $config = array(
+            'name' => 'client',
+            'combined' => array(
+                array(
+                    'name' => 'jadu/cms',
+                )
+            )
+        );
+
+        $this->filesystem->shouldReceive('createTempDirectory')
+            ->with($outputDir)
+            ->andReturn($extractedDir)
+            ->ordered()
+            ->once();
+
+        $this->packageExtractor->shouldReceive('extract')
+            ->with($packagePath, $extractedDir)
+            ->andReturn($extractedDir)
+            ->ordered()
+            ->once();
+
+        $this->configurationLoader->shouldReceive('load')
+            ->with($extractedDir, false)
+            ->andReturn($packageConfig)
+            ->ordered()
+            ->once();
+
+        $this->filesystem->shouldReceive('copyDirectory')
+            ->ordered()
+            ->once();
+
+        $this->migrationsCopier->shouldReceive('copy')
+            ->with($extractedDir, $tempDir, $packageConfig)
+            ->andReturn($packageConfig)
+            ->ordered()
+            ->once();
+
+        $this->migrationsCopier->shouldReceive('copy')
+            ->with($extractedDir, $tempDir, $packageConfig['combined'][0])
+            ->andReturn($packageConfig['combined'][0])
+            ->never();
 
         $this->filesystem->shouldReceive('remove')
             ->with($extractedDir)
