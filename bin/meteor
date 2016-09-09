@@ -1,6 +1,9 @@
 #!/usr/bin/env php
 <?php
 
+error_reporting(-1);
+ini_set('display_errors', true);
+
 use Meteor\ApplicationFactory;
 
 define('METEOR_BIN_PATH', __FILE__);
