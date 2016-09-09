@@ -53,11 +53,11 @@ class CheckDiskSpaceHandlerTest extends \PHPUnit_Framework_TestCase
         $config = array('name' => 'test');
 
         $backups = array(
-            new Backup('backups/1', array()),
-            new Backup('backups/2', array()),
-            new Backup('backups/3', array()),
-            new Backup('backups/4', array()),
             new Backup('backups/5', array()),
+            new Backup('backups/4', array()),
+            new Backup('backups/3', array()),
+            new Backup('backups/2', array()),
+            new Backup('backups/1', array()),
         );
 
         $this->backupFinder->shouldReceive('find')
@@ -74,7 +74,7 @@ class CheckDiskSpaceHandlerTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->filesystem->shouldReceive('remove')
-            ->with('backups/4')
+            ->with('backups/2')
             ->andReturnUsing(function () {
                 // Free up some space
                 $GLOBALS['disk_free_space'] += 104857600;
@@ -82,7 +82,7 @@ class CheckDiskSpaceHandlerTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->filesystem->shouldReceive('remove')
-            ->with('backups/5')
+            ->with('backups/1')
             ->andReturnUsing(function () {
                 // Free up some space
                 $GLOBALS['disk_free_space'] += 104857600;
@@ -90,6 +90,29 @@ class CheckDiskSpaceHandlerTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->assertTrue($this->handler->handle(new CheckDiskSpace('install'), $config));
+    }
+
+    public function testDoesNotRemoveMostRecentBackups()
+    {
+        $GLOBALS['disk_total_space'] = 1048576000;
+        $GLOBALS['disk_free_space'] = 419430400;
+
+        $config = array('name' => 'test');
+
+        $backups = array(
+            new Backup('backups/5', array()),
+            new Backup('backups/4', array()),
+        );
+
+        $this->backupFinder->shouldReceive('find')
+            ->with('install', $config)
+            ->andReturn($backups)
+            ->once();
+
+        $this->filesystem->shouldReceive('remove')
+            ->never();
+
+        $this->assertFalse($this->handler->handle(new CheckDiskSpace('install'), $config));
     }
 
     public function testRemovesOldBackupsWhenRunningLowOnSpaceButNotEnoughIsFreedUp()
@@ -100,11 +123,11 @@ class CheckDiskSpaceHandlerTest extends \PHPUnit_Framework_TestCase
         $config = array('name' => 'test');
 
         $backups = array(
-            new Backup('backups/1', array()),
-            new Backup('backups/2', array()),
-            new Backup('backups/3', array()),
-            new Backup('backups/4', array()),
             new Backup('backups/5', array()),
+            new Backup('backups/4', array()),
+            new Backup('backups/3', array()),
+            new Backup('backups/2', array()),
+            new Backup('backups/1', array()),
         );
 
         $this->backupFinder->shouldReceive('find')
@@ -121,7 +144,7 @@ class CheckDiskSpaceHandlerTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->filesystem->shouldReceive('remove')
-            ->with('backups/4')
+            ->with('backups/2')
             ->andReturnUsing(function () {
                 // Free up some space
                 $GLOBALS['disk_free_space'] += 100;
@@ -129,7 +152,7 @@ class CheckDiskSpaceHandlerTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->filesystem->shouldReceive('remove')
-            ->with('backups/5')
+            ->with('backups/1')
             ->andReturnUsing(function () {
                 // Free up some space
                 $GLOBALS['disk_free_space'] += 100;
