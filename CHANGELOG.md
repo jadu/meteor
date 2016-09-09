@@ -1,5 +1,7 @@
 ## Next release
 
+## v2.1.2
+
 * Fixed issue with the user being asked to delete 0 backups ([#23](https://github.com/jadu/meteor/pull/23))
 * Allow migration commands to be run from the install ([#21](https://github.com/jadu/meteor/pull/21))
 * Prevent duplicate combined packages ([#19](https://github.com/jadu/meteor/pull/19))
