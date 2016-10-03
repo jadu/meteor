@@ -7,6 +7,8 @@ use Meteor\Cli\ServiceContainer\CliExtension;
 use Meteor\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Meteor\IO\ServiceContainer\IOExtension;
 use Meteor\Process\ServiceContainer\ProcessExtension;
+use Meteor\Scripts\Exception\CircularScriptReferenceException;
+use Meteor\Scripts\Exception\ScriptReferenceException;
 use Meteor\Scripts\ScriptEventProviderInterface;
 use Meteor\ServiceContainer\ExtensionInterface;
 use Meteor\ServiceContainer\ExtensionManager;
@@ -26,6 +28,16 @@ class ScriptsExtension implements ExtensionInterface
      * @var array
      */
     private $eventNames = array();
+
+    /**
+     * @var array
+     */
+    private $scripts = array();
+
+    /**
+     * @var array
+     */
+    private $referenced = array();
 
     /**
      * Returns the extension config key.
@@ -61,9 +73,9 @@ class ScriptsExtension implements ExtensionInterface
             ->normalizeKeys(false)
             ->validate()
                 ->ifTrue(function ($scripts) use ($that) {
-                    return $that->hasInfiniteRecursion($scripts);
+                    return !$that->validateScripts($scripts);
                 })
-                ->thenInvalid('Infinite recursion detected in scripts')
+                ->thenInvalid('Invalid scripts')
             ->end()
             ->prototype('array')
                 ->beforeNormalization()
@@ -77,19 +89,47 @@ class ScriptsExtension implements ExtensionInterface
         ->end();
     }
 
-    public function hasInfiniteRecursion(array $scripts)
+    /**
+     * Validates the scripts exist and do not have circular references.
+     *
+     * @param array $scripts
+     *
+     * @return bool True when valid and False when invalidd
+     */
+    public function validateScripts(array $scripts)
     {
-        foreach ($scripts as $name => $commands) {
-            foreach ($commands as $command) {
-                if (strpos($command, '@') === 0) {
-                    $command = substr($command, 1);
-                    if ($command === $name) {
-                        return true;
-                    }
+        $this->scripts = $scripts;
+        foreach (array_keys($scripts) as $name) {
+            // NB: Exceptions will be caught and used as the error message
+            $this->checkCircularReference($name);
+        }
+
+        return true;
+    }
+
+    /**
+     * Check for circular references.
+     *
+     * @param string $name
+     */
+    private function checkCircularReference($name)
+    {
+        $this->referenced[$name] = true;
+
+        foreach ($this->scripts[$name] as $command) {
+            if (strpos($command, '@') === 0) {
+                $command = substr($command, 1);
+                if (!isset($this->scripts[$command])) {
+                    throw new ScriptReferenceException(sprintf('Unable to find referenced script "%s"', $command));
                 }
+
+                if (isset($this->referenced[$command])) {
+                    throw new CircularScriptReferenceException(sprintf('Circular reference detected in "%s" to "%s"', $name, $command));
+                }
+
+                $this->checkCircularReference($command);
             }
         }
-        return false;
     }
 
     /**

@@ -4,7 +4,6 @@ namespace Meteor\Scripts;
 
 use Meteor\IO\IOInterface;
 use Meteor\Process\ProcessRunner;
-use RuntimeException;
 
 class ScriptRunner
 {
@@ -67,21 +66,17 @@ class ScriptRunner
 
         $result = true;
         foreach ($this->scripts[$scriptName] as $script) {
-            $result = $this->runScript($scriptName, $script);
+            $result = $this->runScript($script);
         }
 
         return $result;
     }
 
-    private function runScript($scriptName, $script)
+    private function runScript($script)
     {
         if (strpos($script, '@') === 0) {
-            $script = substr($script, 1);
-            if ($scriptName === $script) {
-                throw new RuntimeException(sprintf('Infinite recursion detected in script "%s"', $scriptName));
-            }
-
-            return $this->run($script);
+            // NB: Infinite recursion detection happens when processing the config
+            return $this->run(substr($script, 1));
         }
 
         $this->processRunner->run($script, $this->getWorkingDir());

@@ -78,17 +78,4 @@ class ScriptRunnerTest extends \PHPUnit_Framework_TestCase
 
         $scriptRunner->run('test');
     }
-
-    /**
-     * @expectedException RuntimeException
-     * @expectedExceptionMessage Infinite recursion
-     */
-    public function testPreventInfiniteLoop()
-    {
-        $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
-            'test' => array('@test'),
-        ));
-
-        $scriptRunner->run('test');
-    }
 }
