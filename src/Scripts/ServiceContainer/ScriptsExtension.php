@@ -80,11 +80,10 @@ class ScriptsExtension implements ExtensionInterface
     public function hasInfiniteRecursion(array $scripts)
     {
         foreach ($scripts as $name => $commands) {
-            foreach ($commands as $idOrName => $command) {
-                $parentName = (is_string($idOrName) ? $idOrName : $name);
+            foreach ($commands as $command) {
                 if (strpos($command, '@') === 0) {
                     $command = substr($command, 1);
-                    if ($command === $parentName) {
+                    if ($command === $name) {
                         return true;
                     }
                 }
