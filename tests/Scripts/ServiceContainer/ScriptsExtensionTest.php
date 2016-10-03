@@ -70,12 +70,27 @@ class ScriptsExtensionTest extends ExtensionTestCase
 
     /**
      * @expectedException Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Infinite recursion detected in scripts
      */
     public function testConfigPreventsInfiniteRecursion()
     {
         $this->processConfiguration(array(
             'scripts' => array(
                 'test' => array('@test'),
+            ),
+        ));
+    }
+
+    /**
+     * @expectedException Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Infinite recursion detected in scripts
+     */
+    public function testConfigPreventsInfiniteRecursionWithScriptReferences()
+    {
+        $this->processConfiguration(array(
+            'scripts' => array(
+                'test1' => array('@test2'),
+                'test2' => array('@test1'),
             ),
         ));
     }
