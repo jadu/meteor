@@ -51,7 +51,7 @@ class GenerateMigrationCommand extends AbstractCommand
         $config = $this->getConfiguration();
 
         if (!isset($config['migrations'])) {
-            $this->io->error('Migrated not configured');
+            $this->io->error('Migrations not configured');
         }
 
         $path = $this->getWorkingDir().'/'.$config['migrations']['directory'];
