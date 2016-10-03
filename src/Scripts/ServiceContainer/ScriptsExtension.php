@@ -77,21 +77,18 @@ class ScriptsExtension implements ExtensionInterface
         ->end();
     }
 
-    public function hasInfiniteRecursion(array $scripts, $parentName = null)
+    public function hasInfiniteRecursion(array $scripts)
     {
         foreach ($scripts as $name => $commands) {
             foreach ($commands as $command) {
                 if (strpos($command, '@') === 0) {
                     $command = substr($command, 1);
-                    if ($command === $parentName) {
+                    if ($command === $name) {
                         return true;
                     }
-
-                    return $this->hasInfiniteRecursion($scripts[$command]);
                 }
             }
         }
-
         return false;
     }
 
