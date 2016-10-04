@@ -21,10 +21,12 @@ class ScriptRunnerTest extends \PHPUnit_Framework_TestCase
         $scriptRunner->run('test');
     }
 
-    public function testRunsScriptCommand()
+    public function testRunsGlobalScriptCommand()
     {
         $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
-            'test' => array('ls'),
+            'global' => array(
+                'test' => array('ls'),
+            ),
         ));
 
         $this->processRunner->shouldReceive('run')
@@ -34,10 +36,29 @@ class ScriptRunnerTest extends \PHPUnit_Framework_TestCase
         $scriptRunner->run('test');
     }
 
-    public function testRunsRunsAllCommands()
+    public function testRunsCombinedScriptCommand()
     {
         $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
-            'test' => array('test1', 'test2'),
+            'combined' => array(
+                'jadu/cms' => array(
+                    'test' => array('ls'),
+                ),
+            ),
+        ));
+
+        $this->processRunner->shouldReceive('run')
+            ->with('ls', null)
+            ->once();
+
+        $scriptRunner->run('test');
+    }
+
+    public function testRunsAllGlobalCommands()
+    {
+        $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
+            'global' => array(
+                'test' => array('test1', 'test2'),
+            ),
         ));
 
         $this->processRunner->shouldReceive('run')
@@ -51,10 +72,47 @@ class ScriptRunnerTest extends \PHPUnit_Framework_TestCase
         $scriptRunner->run('test');
     }
 
-    public function testRunsScriptCommandWithWorkingDirectory()
+    public function testRunsGlobalAndCombinedScriptCommands()
     {
         $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
-            'test' => array('ls'),
+            'global' => array(
+                'test' => array('test1', 'test2'),
+            ),
+            'combined' => array(
+                'jadu/cms' => array(
+                    'test' => array('test3'),
+                ),
+                'spacecraft/client' => array(
+                    'test' => array('test4'),
+                ),
+            ),
+        ));
+
+        $this->processRunner->shouldReceive('run')
+            ->with('test1', null)
+            ->once();
+
+        $this->processRunner->shouldReceive('run')
+            ->with('test2', null)
+            ->once();
+
+        $this->processRunner->shouldReceive('run')
+            ->with('test3', null)
+            ->once();
+
+        $this->processRunner->shouldReceive('run')
+            ->with('test4', null)
+            ->once();
+
+        $scriptRunner->run('test');
+    }
+
+    public function testRunsGlobalScriptCommandWithWorkingDirectory()
+    {
+        $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
+            'global' => array(
+                'test' => array('ls'),
+            ),
         ));
 
         $this->processRunner->shouldReceive('run')
@@ -65,11 +123,31 @@ class ScriptRunnerTest extends \PHPUnit_Framework_TestCase
         $scriptRunner->run('test');
     }
 
-    public function testRunsReferencedScriptCommand()
+    public function testRunsGlobalReferencedScriptCommand()
     {
         $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
-            'test' => array('@clear-cache'),
-            'clear-cache' => array('clear-cache.sh'),
+            'global' => array(
+                'test' => array('@clear-cache'),
+                'clear-cache' => array('clear-cache.sh'),
+            ),
+        ));
+
+        $this->processRunner->shouldReceive('run')
+            ->with('clear-cache.sh', null)
+            ->once();
+
+        $scriptRunner->run('test');
+    }
+
+    public function testRunsCombinedReferencedScriptCommand()
+    {
+        $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
+            'combined' => array(
+                'jadu/cms' => array(
+                    'test' => array('@clear-cache'),
+                    'clear-cache' => array('clear-cache.sh'),
+                ),
+            ),
         ));
 
         $this->processRunner->shouldReceive('run')
@@ -83,12 +161,32 @@ class ScriptRunnerTest extends \PHPUnit_Framework_TestCase
      * @expectedException RuntimeException
      * @expectedExceptionMessage Infinite recursion
      */
-    public function testPreventInfiniteLoop()
+    public function testPreventGlobalInfiniteLoop()
     {
         $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
-            'test' => array('@test'),
+            'global' => array(
+                'test' => array('@test'),
+            ),
         ));
 
         $scriptRunner->run('test');
     }
+
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage Infinite recursion
+     */
+    public function testPreventsCombinedInfiniteLoop()
+    {
+        $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
+            'combined' => array(
+                'jadu/cms' => array(
+                    'test' => array('@test'),
+                ),
+            ),
+        ));
+
+        $scriptRunner->run('test');
+    }
+
 }
