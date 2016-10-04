@@ -78,7 +78,8 @@ class ScriptRunner
     }
 
     /**
-     * Run a single script, or parse the script if it's a function alias.
+     * Cycle through each of the script declarations and run the, or
+     * parse the script if it's a function alias.
      *
      * @param $scriptName
      * @param $scripts
