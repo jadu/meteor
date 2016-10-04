@@ -21,10 +21,10 @@ class ScriptRunnerTest extends \PHPUnit_Framework_TestCase
         $scriptRunner->run('test');
     }
 
-    public function testRunsGlobalScriptCommand()
+    public function testRunsCustomerScriptCommand()
     {
         $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
-            'global' => array(
+            'spacecraft/customer' => array(
                 'test' => array('ls'),
             ),
         ));
@@ -39,10 +39,8 @@ class ScriptRunnerTest extends \PHPUnit_Framework_TestCase
     public function testRunsCombinedScriptCommand()
     {
         $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
-            'combined' => array(
-                'jadu/cms' => array(
-                    'test' => array('ls'),
-                ),
+            'jadu/cms' => array(
+                'test' => array('ls'),
             ),
         ));
 
@@ -53,10 +51,10 @@ class ScriptRunnerTest extends \PHPUnit_Framework_TestCase
         $scriptRunner->run('test');
     }
 
-    public function testRunsAllGlobalCommands()
+    public function testRunsAllCustomerCommands()
     {
         $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
-            'global' => array(
+            'spacecraft/customer' => array(
                 'test' => array('test1', 'test2'),
             ),
         ));
@@ -72,19 +70,17 @@ class ScriptRunnerTest extends \PHPUnit_Framework_TestCase
         $scriptRunner->run('test');
     }
 
-    public function testRunsGlobalAndCombinedScriptCommands()
+    public function testRunsCustomerAndCombinedScriptCommands()
     {
         $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
-            'global' => array(
+            'spacecraft/customer' => array(
                 'test' => array('test1', 'test2'),
             ),
-            'combined' => array(
-                'jadu/cms' => array(
-                    'test' => array('test3'),
-                ),
-                'spacecraft/client' => array(
-                    'test' => array('test4'),
-                ),
+            'jadu/cms' => array(
+                'test' => array('test3'),
+            ),
+            'spacecraft/client' => array(
+                'test' => array('test4'),
             ),
         ));
 
@@ -107,10 +103,10 @@ class ScriptRunnerTest extends \PHPUnit_Framework_TestCase
         $scriptRunner->run('test');
     }
 
-    public function testRunsGlobalScriptCommandWithWorkingDirectory()
+    public function testRunsCustomerScriptCommandWithWorkingDirectory()
     {
         $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
-            'global' => array(
+            'spacecraft/customer' => array(
                 'test' => array('ls'),
             ),
         ));
@@ -123,10 +119,10 @@ class ScriptRunnerTest extends \PHPUnit_Framework_TestCase
         $scriptRunner->run('test');
     }
 
-    public function testRunsGlobalReferencedScriptCommand()
+    public function testRunsCustomerReferencedScriptCommand()
     {
         $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
-            'global' => array(
+            'spacecraft/customer' => array(
                 'test' => array('@clear-cache'),
                 'clear-cache' => array('clear-cache.sh'),
             ),
@@ -142,11 +138,9 @@ class ScriptRunnerTest extends \PHPUnit_Framework_TestCase
     public function testRunsCombinedReferencedScriptCommand()
     {
         $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
-            'combined' => array(
-                'jadu/cms' => array(
-                    'test' => array('@clear-cache'),
-                    'clear-cache' => array('clear-cache.sh'),
-                ),
+            'jadu/cms' => array(
+                'test' => array('@clear-cache'),
+                'clear-cache' => array('clear-cache.sh'),
             ),
         ));
 
@@ -164,7 +158,7 @@ class ScriptRunnerTest extends \PHPUnit_Framework_TestCase
     public function testPreventGlobalInfiniteLoop()
     {
         $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
-            'global' => array(
+            'spacecraft/customer' => array(
                 'test' => array('@test'),
             ),
         ));
@@ -179,10 +173,8 @@ class ScriptRunnerTest extends \PHPUnit_Framework_TestCase
     public function testPreventsCombinedInfiniteLoop()
     {
         $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
-            'combined' => array(
-                'jadu/cms' => array(
-                    'test' => array('@test'),
-                ),
+            'jadu/cms' => array(
+                'test' => array('@test'),
             ),
         ));
 
