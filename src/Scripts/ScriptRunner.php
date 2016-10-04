@@ -64,7 +64,7 @@ class ScriptRunner
      */
     public function run($scriptName)
     {
-        $result = true;
+        $result = false;
 
         foreach ($this->scripts as $scripts) {
             if (!isset($scripts[$scriptName])) {
