@@ -64,10 +64,17 @@ class ScriptRunner
      */
     public function run($scriptName)
     {
-        return (
-            $this->runGlobal($scriptName) &&
-            $this->runCombined($scriptName)
-        );
+        $result = true;
+
+        if (isset($this->scripts['global'])) {
+            $result = $this->runGlobal($scriptName);
+        }
+
+        if (isset($this->scripts['combined'])) {
+            $result = $this->runCombined($scriptName);
+        }
+
+        return $result;
     }
 
     /**
