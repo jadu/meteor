@@ -54,6 +54,31 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
     /**
      * {@inheritdoc}
      */
+    public function configParse(array $config)
+    {
+        $extensionConfig = array(
+            'global'   => parent::configParse($config),
+            'combined' => array()
+        );
+
+        if (isset($config['combined'])) {
+            $extensionConfigKey = $this->getConfigKey();
+            foreach ($config['combined'] as $combinedConfig) {
+                if (isset($combinedConfig[$extensionConfigKey])) {
+                    $extensionConfig['combined'][
+                        $combinedConfig['name']
+                    ] = $combinedConfig[$extensionConfigKey];
+                }
+            }
+
+        }
+
+        return $extensionConfig;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function configure(ArrayNodeDefinition $builder)
     {
         $that = $this;
