@@ -78,10 +78,13 @@ class ScriptRunner
      */
     private function runGlobal($scriptName)
     {
-        return $this->runProcessedScripts(
-            $scriptName,
-            $this->scripts['global']
-        );
+        $scripts = $this->scripts['global'];
+
+        if (!isset($scripts[$scriptName])) {
+            return false;
+        }
+
+        return $this->runProcessedScripts($scriptName, $scripts);
     }
 
     /**
@@ -96,10 +99,11 @@ class ScriptRunner
         $products = $this->scripts['combined'];
 
         foreach ($products as $name => $scripts) {
-            $result = $this->runProcessedScripts(
-                $scriptName,
-                $scripts
-            );
+            if (!isset($scripts[$scriptName])) {
+                continue;
+            }
+
+            $result = $this->runProcessedScripts($scriptName, $scripts);
         }
 
         return $result;
@@ -115,10 +119,8 @@ class ScriptRunner
     private function runProcessedScripts($scriptName, $scripts)
     {
         $result = true;
-        if (isset($scripts[$scriptName])) {
-            foreach ($scripts[$scriptName] as $script) {
-                $result = $this->runScript($scriptName, $script, $scripts);
-            }
+        foreach ($scripts[$scriptName] as $script) {
+            $result = $this->runScript($scriptName, $script, $scripts);
         }
         return $result;
     }
