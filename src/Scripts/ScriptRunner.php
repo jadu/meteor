@@ -57,23 +57,81 @@ class ScriptRunner
     }
 
     /**
+     * Process each script type.
+     *
      * @param string $scriptName
+     * @return boolean
      */
     public function run($scriptName)
     {
-        if (!isset($this->scripts[$scriptName])) {
-            return false;
-        }
+        return (
+            $this->runGlobal($scriptName) &&
+            $this->runCombined($scriptName)
+        );
+    }
 
+    /**
+     * Search through the global scripts and process.
+     *
+     * @param $scriptName
+     * @return bool
+     */
+    private function runGlobal($scriptName)
+    {
+        return $this->runProcessedScripts(
+            $scriptName,
+            $this->scripts['global']
+        );
+    }
+
+    /**
+     * Search through each of the combined scripts and process.
+     *
+     * @param $scriptName
+     * @return bool
+     */
+    private function runCombined($scriptName)
+    {
         $result = true;
-        foreach ($this->scripts[$scriptName] as $script) {
-            $result = $this->runScript($scriptName, $script);
+        $products = $this->scripts['combined'];
+
+        foreach ($products as $name => $scripts) {
+            $result = $this->runProcessedScripts(
+                $scriptName,
+                $scripts
+            );
         }
 
         return $result;
     }
 
-    private function runScript($scriptName, $script)
+    /**
+     * Handle the calling of the script processing.
+     *
+     * @param $scriptName
+     * @param $scripts
+     * @return bool
+     */
+    private function runProcessedScripts($scriptName, $scripts)
+    {
+        $result = true;
+        if (isset($scripts[$scriptName])) {
+            foreach ($scripts[$scriptName] as $script) {
+                $result = $this->runScript($scriptName, $script, $scripts);
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Run a single script, or parse the script if it's a function alias.
+     *
+     * @param $scriptName
+     * @param $script
+     * @param $scripts
+     * @return bool
+     */
+    private function runScript($scriptName, $script, $scripts)
     {
         if (strpos($script, '@') === 0) {
             $script = substr($script, 1);
@@ -81,7 +139,7 @@ class ScriptRunner
                 throw new RuntimeException(sprintf('Infinite recursion detected in script "%s"', $scriptName));
             }
 
-            return $this->run($script);
+            return $this->runProcessedScripts($script, $scripts);
         }
 
         $this->processRunner->run($script, $this->getWorkingDir());
