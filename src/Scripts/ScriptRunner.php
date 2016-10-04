@@ -59,7 +59,8 @@ class ScriptRunner
      * Process each script type.
      *
      * @param string $scriptName
-     * @return boolean
+     *
+     * @return bool
      */
     public function run($scriptName)
     {
@@ -82,6 +83,7 @@ class ScriptRunner
      *
      * @param $scriptName
      * @param $scripts
+     *
      * @return bool
      */
     private function runScripts($scriptName, $scripts)
@@ -99,5 +101,4 @@ class ScriptRunner
 
         return true;
     }
-
 }

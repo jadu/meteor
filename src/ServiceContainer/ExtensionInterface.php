@@ -19,6 +19,7 @@ interface ExtensionInterface extends CompilerPassInterface
      * Handles the processing of the configuration array.
      *
      * @param array $config
+     *
      * @return array
      */
     public function configParse(array $config);

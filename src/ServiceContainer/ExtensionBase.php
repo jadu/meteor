@@ -4,7 +4,6 @@ namespace Meteor\ServiceContainer;
 
 abstract class ExtensionBase
 {
-
     /**
      * {@inheritdoc}
      */
@@ -19,5 +18,4 @@ abstract class ExtensionBase
 
         return $extensionConfig;
     }
-
 }
