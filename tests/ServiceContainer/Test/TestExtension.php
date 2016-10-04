@@ -2,12 +2,13 @@
 
 namespace Meteor\ServiceContainer\Test;
 
+use Meteor\ServiceContainer\ExtensionBase;
 use Meteor\ServiceContainer\ExtensionInterface;
 use Meteor\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class TestExtension implements ExtensionInterface
+class TestExtension extends ExtensionBase implements ExtensionInterface
 {
     /**
      * Returns the extension config key.

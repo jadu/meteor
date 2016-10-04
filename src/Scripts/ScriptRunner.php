@@ -57,35 +57,50 @@ class ScriptRunner
     }
 
     /**
+     * Process each script type.
+     *
      * @param string $scriptName
+     * @return boolean
      */
     public function run($scriptName)
     {
-        if (!isset($this->scripts[$scriptName])) {
-            return false;
-        }
+        $result = false;
 
-        $result = true;
-        foreach ($this->scripts[$scriptName] as $script) {
-            $result = $this->runScript($scriptName, $script);
+        foreach ($this->scripts as $scripts) {
+            if (!isset($scripts[$scriptName])) {
+                continue;
+            }
+
+            $result = $this->runScripts($scriptName, $scripts);
         }
 
         return $result;
     }
 
-    private function runScript($scriptName, $script)
+    /**
+     * Cycle through each of the script declarations and run the, or
+     * parse the script if it's a function alias.
+     *
+     * @param $scriptName
+     * @param $scripts
+     * @return bool
+     */
+    private function runScripts($scriptName, $scripts)
     {
-        if (strpos($script, '@') === 0) {
-            $script = substr($script, 1);
-            if ($scriptName === $script) {
-                throw new RuntimeException(sprintf('Infinite recursion detected in script "%s"', $scriptName));
+        foreach ($scripts[$scriptName] as $script) {
+            if (strpos($script, '@') === 0) {
+                $script = substr($script, 1);
+                if ($scriptName === $script) {
+                    throw new RuntimeException(sprintf('Infinite recursion detected in script "%s"', $scriptName));
+                }
+
+                return $this->runScripts($script, $scripts);
             }
 
-            return $this->run($script);
+            $this->processRunner->run($script, $this->getWorkingDir());
         }
-
-        $this->processRunner->run($script, $this->getWorkingDir());
 
         return true;
     }
+
 }

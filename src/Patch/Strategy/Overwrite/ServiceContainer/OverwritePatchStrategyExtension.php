@@ -3,13 +3,14 @@
 namespace Meteor\Patch\Strategy\Overwrite\ServiceContainer;
 
 use Meteor\Patch\ServiceContainer\PatchExtension;
+use Meteor\ServiceContainer\ExtensionBase;
 use Meteor\ServiceContainer\ExtensionInterface;
 use Meteor\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
-class OverwritePatchStrategyExtension implements ExtensionInterface
+class OverwritePatchStrategyExtension extends ExtensionBase implements ExtensionInterface
 {
     const STRATEGY_NAME = 'overwrite';
 

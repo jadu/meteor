@@ -8,14 +8,15 @@ use Meteor\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Meteor\IO\ServiceContainer\IOExtension;
 use Meteor\Process\ServiceContainer\ProcessExtension;
 use Meteor\Scripts\ScriptEventProviderInterface;
-use Meteor\ServiceContainer\ExtensionInterface;
+use Meteor\ServiceContainer\ExtensionBase;
 use Meteor\ServiceContainer\ExtensionManager;
+use Meteor\ServiceContainer\ExtensionInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class ScriptsExtension implements ExtensionInterface
+class ScriptsExtension extends ExtensionBase implements ExtensionInterface
 {
     const PARAMETER_SCRIPTS = 'scripts';
     const SERVICE_COMMAND_RUN = 'scripts.cli.command.run';
@@ -48,6 +49,26 @@ class ScriptsExtension implements ExtensionInterface
                 $this->eventNames = array_merge($this->eventNames, $extension->getEventNames());
             }
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configParse(array $config)
+    {
+        $extensionConfig = array();
+        $extensionConfig[] = parent::configParse($config);
+
+        if (isset($config['combined'])) {
+            $extensionConfigKey = $this->getConfigKey();
+            foreach ($config['combined'] as $combinedConfig) {
+                if (isset($combinedConfig[$extensionConfigKey])) {
+                    $extensionConfig[] = $combinedConfig[$extensionConfigKey];
+                }
+            }
+        }
+
+        return $extensionConfig;
     }
 
     /**

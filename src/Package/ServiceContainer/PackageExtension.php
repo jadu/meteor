@@ -8,6 +8,7 @@ use Meteor\Cli\ServiceContainer\CliExtension;
 use Meteor\Configuration\ServiceContainer\ConfigurationExtension;
 use Meteor\Filesystem\ServiceContainer\FilesystemExtension;
 use Meteor\IO\ServiceContainer\IOExtension;
+use Meteor\ServiceContainer\ExtensionBase;
 use Meteor\ServiceContainer\ExtensionInterface;
 use Meteor\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -16,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class PackageExtension implements ExtensionInterface
+class PackageExtension extends ExtensionBase implements ExtensionInterface
 {
     const PARAMETER_PROVIDER = 'package.provider';
     const SERVICE_COMBINED_PACKAGE_DEPENDENCY_CHECKER = 'package.combined.package_dependency_checker';

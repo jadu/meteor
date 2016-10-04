@@ -2,13 +2,14 @@
 
 namespace Meteor\Logger\ServiceContainer;
 
+use Meteor\ServiceContainer\ExtensionBase;
 use Meteor\ServiceContainer\ExtensionInterface;
 use Meteor\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
-class LoggerExtension implements ExtensionInterface
+class LoggerExtension extends ExtensionBase implements ExtensionInterface
 {
     const SERVICE_LOGGER = 'logger';
 

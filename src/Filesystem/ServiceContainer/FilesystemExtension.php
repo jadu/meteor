@@ -3,6 +3,7 @@
 namespace Meteor\Filesystem\ServiceContainer;
 
 use Meteor\IO\ServiceContainer\IOExtension;
+use Meteor\ServiceContainer\ExtensionBase;
 use Meteor\ServiceContainer\ExtensionInterface;
 use Meteor\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -10,7 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class FilesystemExtension implements ExtensionInterface
+class FilesystemExtension extends ExtensionBase implements ExtensionInterface
 {
     const SERVICE_FILESYSTEM = 'filesystem';
     const SERVICE_FINDER_FACTORY = 'filesyste.finder.factory';
