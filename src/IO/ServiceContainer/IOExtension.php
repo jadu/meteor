@@ -4,6 +4,7 @@ namespace Meteor\IO\ServiceContainer;
 
 use Meteor\Cli\ServiceContainer\CliExtension;
 use Meteor\Logger\ServiceContainer\LoggerExtension;
+use Meteor\ServiceContainer\ExtensionBase;
 use Meteor\ServiceContainer\ExtensionInterface;
 use Meteor\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -11,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class IOExtension implements ExtensionInterface
+class IOExtension extends ExtensionBase implements ExtensionInterface
 {
     const SERVICE_IO = 'io';
 
