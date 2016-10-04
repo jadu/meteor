@@ -70,12 +70,44 @@ class ScriptsExtensionTest extends ExtensionTestCase
 
     /**
      * @expectedException Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Circular reference detected in "test" to "test"
      */
     public function testConfigPreventsInfiniteRecursion()
     {
         $this->processConfiguration(array(
             'scripts' => array(
                 'test' => array('@test'),
+            ),
+        ));
+    }
+
+    /**
+     * @expectedException Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Circular reference detected in "test2" to "test1"
+     */
+    public function testConfigPreventsInfiniteRecursionWithScriptReferences()
+    {
+        $this->processConfiguration(array(
+            'scripts' => array(
+                'test1' => array('@test2'),
+                'test2' => array('@test1'),
+            ),
+        ));
+    }
+
+    /**
+     * @expectedException Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Circular reference detected in "test5" to "test1"
+     */
+    public function testConfigPreventsInfiniteRecursionWithDeepScriptReferences()
+    {
+        $this->processConfiguration(array(
+            'scripts' => array(
+                'test1' => array('@test2'),
+                'test2' => array('@test3'),
+                'test3' => array('@test4'),
+                'test4' => array('@test5'),
+                'test5' => array('@test1'),
             ),
         ));
     }
