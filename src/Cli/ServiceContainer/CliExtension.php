@@ -2,12 +2,13 @@
 
 namespace Meteor\Cli\ServiceContainer;
 
+use Meteor\ServiceContainer\ExtensionBase;
 use Meteor\ServiceContainer\ExtensionInterface;
 use Meteor\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class CliExtension implements ExtensionInterface
+class CliExtension extends ExtensionBase implements ExtensionInterface
 {
     const PARAMETER_COMMAND_SERVICE_IDS = 'cli.command.service_ids';
     const SERVICE_APPLICATION = 'cli.application';

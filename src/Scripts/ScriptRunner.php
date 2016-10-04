@@ -56,31 +56,48 @@ class ScriptRunner
     }
 
     /**
+     * Process each script type.
+     *
      * @param string $scriptName
+     * @return boolean
      */
     public function run($scriptName)
     {
-        if (!isset($this->scripts[$scriptName])) {
-            return false;
-        }
+        $result = false;
 
-        $result = true;
-        foreach ($this->scripts[$scriptName] as $script) {
-            $result = $this->runScript($script);
+        foreach ($this->scripts as $scripts) {
+            if (!isset($scripts[$scriptName])) {
+                continue;
+            }
+
+            $result = $this->runScripts($scriptName, $scripts);
         }
 
         return $result;
     }
 
-    private function runScript($script)
+    /**
+     * Cycle through each of the script declarations and run the, or
+     * parse the script if it's a function alias.
+     *
+     * @param $scriptName
+     * @param $scripts
+     * @return bool
+     */
+    private function runScripts($scriptName, $scripts)
     {
-        if (strpos($script, '@') === 0) {
-            // NB: Infinite recursion detection happens when processing the config
-            return $this->run(substr($script, 1));
-        }
+        foreach ($scripts[$scriptName] as $script) {
+            if (strpos($script, '@') === 0) {
+                // NB: Infinite recursion detection happens when processing the config
+                $script = substr($script, 1);
 
-        $this->processRunner->run($script, $this->getWorkingDir());
+                return $this->runScripts($script, $scripts);
+            }
+
+            $this->processRunner->run($script, $this->getWorkingDir());
+        }
 
         return true;
     }
+
 }

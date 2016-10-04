@@ -16,6 +16,14 @@ interface ExtensionInterface extends CompilerPassInterface
     public function getConfigKey();
 
     /**
+     * Handles the processing of the configuration array.
+     *
+     * @param array $config
+     * @return array
+     */
+    public function configParse(array $config);
+
+    /**
      * Initializes other extensions.
      *
      * This method is called immediately after all extensions are activated but

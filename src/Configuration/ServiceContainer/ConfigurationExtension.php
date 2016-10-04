@@ -2,13 +2,14 @@
 
 namespace Meteor\Configuration\ServiceContainer;
 
+use Meteor\ServiceContainer\ExtensionBase;
 use Meteor\ServiceContainer\ExtensionInterface;
 use Meteor\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
-class ConfigurationExtension implements ExtensionInterface
+class ConfigurationExtension extends ExtensionBase implements ExtensionInterface
 {
     // NB: Set in Application
     const SERVICE_LOADER = 'configuration.loader';

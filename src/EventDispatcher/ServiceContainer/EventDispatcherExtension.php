@@ -2,6 +2,7 @@
 
 namespace Meteor\EventDispatcher\ServiceContainer;
 
+use Meteor\ServiceContainer\ExtensionBase;
 use Meteor\ServiceContainer\ExtensionInterface;
 use Meteor\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -9,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class EventDispatcherExtension implements ExtensionInterface
+class EventDispatcherExtension extends ExtensionBase implements ExtensionInterface
 {
     const SERVICE_EVENT_DISPATCHER = 'events.event_dispatcher';
     const TAG_SUBSCRIBER = 'events.subscriber';

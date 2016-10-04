@@ -9,6 +9,7 @@ use Meteor\IO\ServiceContainer\IOExtension;
 use Meteor\Logger\ServiceContainer\LoggerExtension;
 use Meteor\Migrations\MigrationsConstants;
 use Meteor\Platform\ServiceContainer\PlatformExtension;
+use Meteor\ServiceContainer\ExtensionBase;
 use Meteor\ServiceContainer\ExtensionInterface;
 use Meteor\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -16,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class MigrationsExtension implements ExtensionInterface
+class MigrationsExtension extends ExtensionBase implements ExtensionInterface
 {
     const SERVICE_CONFIGURATION_FACTORY = 'migrations.configuration.factory';
     const SERVICE_CONNECTION_CONFIGURATION_LOADER = 'migrations.connection.configuration.loader';

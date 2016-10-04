@@ -21,10 +21,12 @@ class ScriptRunnerTest extends \PHPUnit_Framework_TestCase
         $scriptRunner->run('test');
     }
 
-    public function testRunsScriptCommand()
+    public function testRunsCustomerScriptCommand()
     {
         $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
-            'test' => array('ls'),
+            'spacecraft/customer' => array(
+                'test' => array('ls'),
+            ),
         ));
 
         $this->processRunner->shouldReceive('run')
@@ -34,10 +36,27 @@ class ScriptRunnerTest extends \PHPUnit_Framework_TestCase
         $scriptRunner->run('test');
     }
 
-    public function testRunsRunsAllCommands()
+    public function testRunsCombinedScriptCommand()
     {
         $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
-            'test' => array('test1', 'test2'),
+            'jadu/cms' => array(
+                'test' => array('ls'),
+            ),
+        ));
+
+        $this->processRunner->shouldReceive('run')
+            ->with('ls', null)
+            ->once();
+
+        $scriptRunner->run('test');
+    }
+
+    public function testRunsAllCustomerCommands()
+    {
+        $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
+            'spacecraft/customer' => array(
+                'test' => array('test1', 'test2'),
+            ),
         ));
 
         $this->processRunner->shouldReceive('run')
@@ -51,10 +70,45 @@ class ScriptRunnerTest extends \PHPUnit_Framework_TestCase
         $scriptRunner->run('test');
     }
 
-    public function testRunsScriptCommandWithWorkingDirectory()
+    public function testRunsCustomerAndCombinedScriptCommands()
     {
         $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
-            'test' => array('ls'),
+            'spacecraft/customer' => array(
+                'test' => array('test1', 'test2'),
+            ),
+            'jadu/cms' => array(
+                'test' => array('test3'),
+            ),
+            'spacecraft/client' => array(
+                'test' => array('test4'),
+            ),
+        ));
+
+        $this->processRunner->shouldReceive('run')
+            ->with('test1', null)
+            ->once();
+
+        $this->processRunner->shouldReceive('run')
+            ->with('test2', null)
+            ->once();
+
+        $this->processRunner->shouldReceive('run')
+            ->with('test3', null)
+            ->once();
+
+        $this->processRunner->shouldReceive('run')
+            ->with('test4', null)
+            ->once();
+
+        $scriptRunner->run('test');
+    }
+
+    public function testRunsCustomerScriptCommandWithWorkingDirectory()
+    {
+        $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
+            'spacecraft/customer' => array(
+                'test' => array('ls'),
+            ),
         ));
 
         $this->processRunner->shouldReceive('run')
@@ -65,11 +119,29 @@ class ScriptRunnerTest extends \PHPUnit_Framework_TestCase
         $scriptRunner->run('test');
     }
 
-    public function testRunsReferencedScriptCommand()
+    public function testRunsCustomerReferencedScriptCommand()
     {
         $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
-            'test' => array('@clear-cache'),
-            'clear-cache' => array('clear-cache.sh'),
+            'spacecraft/customer' => array(
+                'test' => array('@clear-cache'),
+                'clear-cache' => array('clear-cache.sh'),
+            ),
+        ));
+
+        $this->processRunner->shouldReceive('run')
+            ->with('clear-cache.sh', null)
+            ->once();
+
+        $scriptRunner->run('test');
+    }
+
+    public function testRunsCombinedReferencedScriptCommand()
+    {
+        $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), array(
+            'jadu/cms' => array(
+                'test' => array('@clear-cache'),
+                'clear-cache' => array('clear-cache.sh'),
+            ),
         ));
 
         $this->processRunner->shouldReceive('run')

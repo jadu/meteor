@@ -18,6 +18,7 @@ use Meteor\Permissions\ServiceContainer\PermissionsExtension;
 use Meteor\Platform\ServiceContainer\PlatformExtension;
 use Meteor\Scripts\ScriptEventProviderInterface;
 use Meteor\Scripts\ServiceContainer\ScriptsExtension;
+use Meteor\ServiceContainer\ExtensionBase;
 use Meteor\ServiceContainer\ExtensionInterface;
 use Meteor\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -25,7 +26,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class PatchExtension implements ExtensionInterface, ScriptEventProviderInterface
+class PatchExtension extends ExtensionBase implements ExtensionInterface, ScriptEventProviderInterface
 {
     const PARAMETER_STRATEGY = 'patch.strategy';
     const SERVICE_BACKUP_FINDER = 'patch.backup.finder';

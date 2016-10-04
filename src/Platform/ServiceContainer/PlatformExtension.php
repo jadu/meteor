@@ -4,6 +4,7 @@ namespace Meteor\Platform\ServiceContainer;
 
 use Meteor\Filesystem\ServiceContainer\FilesystemExtension;
 use Meteor\Process\ServiceContainer\ProcessExtension;
+use Meteor\ServiceContainer\ExtensionBase;
 use Meteor\ServiceContainer\ExtensionInterface;
 use Meteor\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -11,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class PlatformExtension implements ExtensionInterface
+class PlatformExtension extends ExtensionBase implements ExtensionInterface
 {
     const SERVICE_PLATFORM = 'platform';
     const SERVICE_PLATFORM_UNIX = 'platform.unix';

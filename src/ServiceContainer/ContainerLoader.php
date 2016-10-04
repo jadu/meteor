@@ -86,13 +86,11 @@ class ContainerLoader
     private function loadExtensions(ContainerBuilder $container, array $config)
     {
         foreach ($this->extensionManager->getExtensions() as $extension) {
-            $extensionConfig = array();
-            if (isset($config[$extension->getConfigKey()])) {
-                $extensionConfig = $config[$extension->getConfigKey()];
-                unset($config[$extension->getConfigKey()]);
-            }
-
-            $this->loadExtension($container, $extension, $extensionConfig);
+            $this->loadExtension(
+                $container,
+                $extension,
+                $extension->configParse($config)
+            );
         }
     }
 

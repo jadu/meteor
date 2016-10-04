@@ -6,6 +6,7 @@ use Meteor\Cli\Application;
 use Meteor\Cli\ServiceContainer\CliExtension;
 use Meteor\IO\ServiceContainer\IOExtension;
 use Meteor\Platform\ServiceContainer\PlatformExtension;
+use Meteor\ServiceContainer\ExtensionBase;
 use Meteor\ServiceContainer\ExtensionInterface;
 use Meteor\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -13,7 +14,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class PermissionsExtension implements ExtensionInterface
+class PermissionsExtension extends ExtensionBase implements ExtensionInterface
 {
     const SERVICE_COMMAND_RESET_PERMISSIONS = 'permissions.cli.command.reset_permissions';
     const SERVICE_PERMISSION_LOADER = 'permissions.permission_loader';
