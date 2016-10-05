@@ -5,12 +5,13 @@ namespace Meteor\Migrations\Cli\Command;
 use Meteor\IO\IOInterface;
 use Meteor\Migrations\Outputter\StatusOutputter;
 use Meteor\Platform\PlatformInterface;
+use Meteor\Patch\Cli\Command\AbstractPatchCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class StatusCommand extends AbstractMigrationCommand
+class StatusCommand extends AbstractPatchCommand
 {
     /**
      * @var StatusOutputter
@@ -54,18 +55,17 @@ class StatusCommand extends AbstractMigrationCommand
     {
         $config = $this->getConfiguration();
 
-        $migrationConfigs = $this->getMigrationConfigs($config);
         $packageName = $this->io->getArgument('package');
         $showVersions = $this->io->getOption('show-versions');
 
         if ($packageName === null) {
-            if (empty($migrationConfigs)) {
+            if (empty($config)) {
                 $this->io->error('There are no migrations configured');
 
                 return 1;
             }
 
-            foreach ($migrationConfigs as $packageName => $migrationConfig) {
+            foreach ($config as $packageName => $migrationConfig) {
                 $this->io->title(sprintf('Migration status for <info>%s</>', $packageName));
 
                 $this->statusOutputter->output(
@@ -80,7 +80,7 @@ class StatusCommand extends AbstractMigrationCommand
             return;
         }
 
-        if (!isset($migrationConfigs[$packageName])) {
+        if (!isset($config[$packageName])) {
             $this->io->error(sprintf('Unable to find migrations for the package "%s"', $packageName));
 
             return 1;
@@ -91,7 +91,7 @@ class StatusCommand extends AbstractMigrationCommand
         $this->statusOutputter->output(
             $this->getWorkingDir(),
             $this->getInstallDir(),
-            $migrationConfigs[$packageName],
+            $config[$packageName],
             $this->type,
             $showVersions
         );

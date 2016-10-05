@@ -2,13 +2,12 @@
 
 namespace Meteor\Migrations\Cli\Command;
 
-use Meteor\Cli\Command\CommandTestCase;
 use Meteor\IO\NullIO;
 use Meteor\Migrations\MigrationsConstants;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
 
-class VersionCommandTest extends CommandTestCase
+class VersionCommandTest extends MigrationTestCase
 {
     private $platform;
     private $versionManager;
@@ -41,7 +40,9 @@ class VersionCommandTest extends CommandTestCase
             ),
         );
 
-        $this->command->setConfiguration($config);
+        $this->command->setConfiguration(
+            $this->extension->configParse($config)
+        );
 
         $this->versionManager->shouldReceive('markMigrated')
             ->with($workingDir, $installDir, $config['migrations'], MigrationsConstants::TYPE_DATABASE, '20160701102030')
@@ -72,7 +73,9 @@ class VersionCommandTest extends CommandTestCase
             ),
         );
 
-        $this->command->setConfiguration($config);
+        $this->command->setConfiguration(
+            $this->extension->configParse($config)
+        );
 
         $this->versionManager->shouldReceive('markNotMigrated')
             ->with($workingDir, $installDir, $config['migrations'], MigrationsConstants::TYPE_DATABASE, '20160701102030')
@@ -103,7 +106,9 @@ class VersionCommandTest extends CommandTestCase
             ),
         );
 
-        $this->command->setConfiguration($config);
+        $this->command->setConfiguration(
+            $this->extension->configParse($config)
+        );
 
         $this->versionManager->shouldReceive('markAllMigrated')
             ->with($workingDir, $installDir, $config['migrations'], MigrationsConstants::TYPE_DATABASE)
@@ -136,7 +141,9 @@ class VersionCommandTest extends CommandTestCase
             ),
         );
 
-        $this->command->setConfiguration($config);
+        $this->command->setConfiguration(
+            $this->extension->configParse($config)
+        );
 
         $this->versionManager->shouldReceive('markAllNotMigrated')
             ->with($workingDir, $installDir, $config['migrations'], MigrationsConstants::TYPE_DATABASE)
@@ -169,7 +176,9 @@ class VersionCommandTest extends CommandTestCase
             ),
         );
 
-        $this->command->setConfiguration($config);
+        $this->command->setConfiguration(
+            $this->extension->configParse($config)
+        );
 
         $this->versionManager->shouldReceive('markAllMigrated')
             ->never();
