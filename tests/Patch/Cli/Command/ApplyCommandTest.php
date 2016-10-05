@@ -190,4 +190,28 @@ class ApplyCommandTest extends CommandTestCase
             '--install-dir' => $installDir,
         ));
     }
+
+    /**
+     * @expectedException Meteor\Patch\Exception\PhpVersionException
+     */
+    public function testUnsatisfiedPhpVersionConstraint()
+    {
+        $workingDir = vfsStream::url('root/patch');
+        $installDir = vfsStream::url('root/install');
+
+        $config = array(
+            'name' => 'test',
+            'package' => array(
+                'php' => '>=7'
+            )
+        );
+
+        $this->command->setConfiguration($config);
+        $this->command->setPhpVersion('5.6.0');
+
+        $this->tester->execute(array(
+            '--working-dir' => $workingDir,
+            '--install-dir' => $installDir,
+        ));
+    }
 }
