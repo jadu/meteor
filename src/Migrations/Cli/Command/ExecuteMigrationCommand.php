@@ -6,12 +6,13 @@ use Meteor\IO\IOInterface;
 use Meteor\Logger\LoggerInterface;
 use Meteor\Migrations\Migrator;
 use Meteor\Platform\PlatformInterface;
+use Meteor\Patch\Cli\Command\AbstractPatchCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ExecuteMigrationCommand extends AbstractMigrationCommand
+class ExecuteMigrationCommand extends AbstractPatchCommand
 {
     /**
      * @var Migrator
@@ -92,9 +93,8 @@ EOT;
         }
 
         $config = $this->getConfiguration();
-        $migrationConfigs = $this->getMigrationConfigs($config);
 
-        if (!isset($migrationConfigs[$packageName])) {
+        if (!isset($config[$packageName])) {
             $this->io->error(sprintf('Unable to find migrations for the package "%s"', $packageName));
 
             return 1;
@@ -119,7 +119,7 @@ EOT;
         $result = $this->migrator->execute(
             $workingDir,
             $installDir,
-            $migrationConfigs[$packageName],
+            $config[$packageName],
             $this->type,
             $version,
             $direction

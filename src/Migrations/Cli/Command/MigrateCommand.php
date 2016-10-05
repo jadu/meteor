@@ -6,11 +6,12 @@ use Meteor\IO\IOInterface;
 use Meteor\Logger\LoggerInterface;
 use Meteor\Migrations\Migrator;
 use Meteor\Platform\PlatformInterface;
+use Meteor\Patch\Cli\Command\AbstractPatchCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class MigrateCommand extends AbstractMigrationCommand
+class MigrateCommand extends AbstractPatchCommand
 {
     /**
      * @var Migrator
@@ -81,17 +82,16 @@ EOT;
 
         $this->logger->enable($this->getLogPath($workingDir));
         $config = $this->getConfiguration();
-        $migrationConfigs = $this->getMigrationConfigs($config);
         $packageName = $this->io->getArgument('package');
 
         if ($packageName === null) {
-            if (empty($migrationConfigs)) {
+            if (empty($config)) {
                 $this->io->error('There are no migrations configured');
 
                 return 1;
             }
 
-            foreach ($migrationConfigs as $packageName => $migrationConfig) {
+            foreach ($config as $packageName => $migrationConfig) {
                 $this->io->text(sprintf('Running <info>%s</> %s migrations', $packageName, $this->type));
 
                 $result = $this->migrator->migrate(
@@ -110,7 +110,7 @@ EOT;
             return;
         }
 
-        if (!isset($migrationConfigs[$packageName])) {
+        if (!isset($config[$packageName])) {
             $this->io->error(sprintf('Unable to find migrations for the package "%s"', $packageName));
 
             return 1;
@@ -121,7 +121,7 @@ EOT;
         $result = $this->migrator->migrate(
             $workingDir,
             $installDir,
-            $migrationConfigs[$packageName],
+            $config[$packageName],
             $this->type,
             $this->io->getArgument('version')
         );

@@ -5,12 +5,13 @@ namespace Meteor\Migrations\Cli\Command;
 use Meteor\IO\IOInterface;
 use Meteor\Migrations\Version\VersionManager;
 use Meteor\Platform\PlatformInterface;
+use Meteor\Patch\Cli\Command\AbstractPatchCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class VersionCommand extends AbstractMigrationCommand
+class VersionCommand extends AbstractPatchCommand
 {
     /**
      * @var VersionManager
@@ -89,9 +90,7 @@ EOT;
             return 1;
         }
 
-        $migrationConfigs = $this->getMigrationConfigs($config);
-
-        if (!isset($migrationConfigs[$packageName])) {
+        if (!isset($config[$packageName])) {
             $this->io->error(sprintf('Unable to find migrations for the package "%s"', $packageName));
 
             return 1;
@@ -115,14 +114,14 @@ EOT;
                 $result = $this->versionManager->markAllMigrated(
                     $workingDir,
                     $installDir,
-                    $migrationConfigs[$packageName],
+                    $config[$packageName],
                     $this->type
                 );
             } else {
                 $result = $this->versionManager->markAllNotMigrated(
                     $workingDir,
                     $installDir,
-                    $migrationConfigs[$packageName],
+                    $config[$packageName],
                     $this->type
                 );
             }
@@ -131,7 +130,7 @@ EOT;
                 $result = $this->versionManager->markMigrated(
                     $workingDir,
                     $installDir,
-                    $migrationConfigs[$packageName],
+                    $config[$packageName],
                     $this->type,
                     $this->io->getArgument('version')
                 );
@@ -139,7 +138,7 @@ EOT;
                 $result = $this->versionManager->markNotMigrated(
                     $workingDir,
                     $installDir,
-                    $migrationConfigs[$packageName],
+                    $config[$packageName],
                     $this->type,
                     $this->io->getArgument('version')
                 );
