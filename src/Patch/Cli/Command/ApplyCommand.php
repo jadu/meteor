@@ -2,9 +2,11 @@
 
 namespace Meteor\Patch\Cli\Command;
 
+use Composer\Semver\Semver;
 use InvalidArgumentException;
 use Meteor\IO\IOInterface;
 use Meteor\Logger\LoggerInterface;
+use Meteor\Patch\Exception\PhpVersionException;
 use Meteor\Patch\Event\PatchEvents;
 use Meteor\Patch\Lock\Locker;
 use Meteor\Patch\Strategy\PatchStrategyInterface;
@@ -50,6 +52,11 @@ class ApplyCommand extends AbstractPatchCommand
     private $logger;
 
     /**
+     * @var string
+     */
+    private $phpVersion;
+
+    /**
      * @param string $name
      * @param array $config
      * @param IOInterface $io
@@ -60,6 +67,7 @@ class ApplyCommand extends AbstractPatchCommand
      * @param EventDispatcherInterface $eventDispatcher
      * @param ScriptRunner $scriptRunner
      * @param LoggerInterface $logger
+     * @param string $phpVersion
      */
     public function __construct(
         $name,
@@ -71,7 +79,8 @@ class ApplyCommand extends AbstractPatchCommand
         Locker $locker,
         EventDispatcherInterface $eventDispatcher,
         ScriptRunner $scriptRunner,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        $phpVersion = PHP_VERSION
     ) {
         $this->taskBus = $taskBus;
         $this->strategy = $strategy;
@@ -79,6 +88,7 @@ class ApplyCommand extends AbstractPatchCommand
         $this->eventDispatcher = $eventDispatcher;
         $this->scriptRunner = $scriptRunner;
         $this->logger = $logger;
+        $this->phpVersion = $phpVersion;
 
         parent::__construct($name, $config, $io, $platform);
     }
@@ -92,6 +102,51 @@ class ApplyCommand extends AbstractPatchCommand
         $this->strategy->configureApplyCommand($this->getDefinition());
 
         parent::configure();
+    }
+
+    /**
+     * Override the current PHP version that's in use.
+     *
+     * @param $version
+     * @return $this
+     */
+    public function setPhpVersion($version)
+    {
+        $this->phpVersion = $version;
+        return $this;
+    }
+
+    /**
+     * Compiles a complete list of PHP version constraints from customer and combined packages
+     * and verifies if the current PHP version is compatiable.
+     *
+     * @param array $config
+     * @throws PhpVersionException
+     */
+    protected function checkPhpConstraint(array $config)
+    {
+        $versions = array();
+
+        if (isset($config['package']['php'])) {
+            $versions[$config['name']] = $config['package']['php'];
+        }
+
+        if (isset($config['combined'])) {
+            foreach ($config['combined'] as $combinedPackage => $combinedConfig) {
+                if (!isset($combinedConfig['package']['php'])) {
+                    continue;
+                }
+                $versions[$combinedConfig['name']] = $combinedConfig['package']['php'];
+            }
+        }
+
+        foreach ($versions as $package => $version) {
+            if (!Semver::satisfies($this->phpVersion, $version)) {
+                throw new PhpVersionException(sprintf('Your PHP version (%s) is not sufficient enough for the package "%s", which requires %s', $this->phpVersion, $package, $version));
+            }
+        }
+
+        return;
     }
 
     /**
@@ -109,6 +164,7 @@ class ApplyCommand extends AbstractPatchCommand
 
         $config = $this->getConfiguration();
 
+        $this->checkPhpConstraint($config);
         $this->platform->setInstallDir($installDir);
         $this->scriptRunner->setWorkingDir($installDir);
         $this->logger->enable($this->getLogPath($workingDir));
