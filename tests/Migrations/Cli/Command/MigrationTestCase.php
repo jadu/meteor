@@ -7,7 +7,7 @@ use Meteor\Migrations\ServiceContainer\MigrationsExtension;
 
 abstract class MigrationTestCase extends CommandTestCase
 {
-    public $extension;
+    protected $extension;
 
     public function setUp()
     {
