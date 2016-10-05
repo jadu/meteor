@@ -66,7 +66,6 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
     public function configParse(array $config)
     {
         $extensionConfig = array();
-        $extensionConfig[$config['name']] = parent::configParse($config);
 
         if (isset($config['combined'])) {
             $extensionConfigKey = $this->getConfigKey();
@@ -76,6 +75,8 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
                 }
             }
         }
+
+        $extensionConfig[$config['name']] = parent::configParse($config);
 
         return $extensionConfig;
     }
