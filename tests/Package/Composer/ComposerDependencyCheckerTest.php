@@ -23,11 +23,12 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
 
         $requirements = $this->checker->getRequirements(vfsStream::url('root'));
 
-        $this->assertCount(2, $requirements);
-        $this->assertEquals('jadu/cms-dependencies', $requirements[0]->getPackageName());
-        $this->assertEquals('~13.6.0', $requirements[0]->getVersionConstraint());
-        $this->assertEquals('symfony/symfony', $requirements[1]->getPackageName());
-        $this->assertEquals('~2.6.11', $requirements[1]->getVersionConstraint());
+        $this->assertCount(3, $requirements);
+        $this->assertEquals('>=5.3.2', $requirements[0]->getVersionConstraint());
+        $this->assertEquals('jadu/cms-dependencies', $requirements[1]->getPackageName());
+        $this->assertEquals('~13.6.0', $requirements[1]->getVersionConstraint());
+        $this->assertEquals('symfony/symfony', $requirements[2]->getPackageName());
+        $this->assertEquals('~2.6.11', $requirements[2]->getVersionConstraint());
     }
 
     public function testGetRequirementsReturnsEmptyArrayWhenComposerJsonNotFound()
