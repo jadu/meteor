@@ -2,14 +2,13 @@
 
 namespace Meteor\Migrations\Cli\Command;
 
-use Meteor\Cli\Command\CommandTestCase;
 use Meteor\IO\NullIO;
 use Meteor\Logger\NullLogger;
 use Meteor\Migrations\MigrationsConstants;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
 
-class MigrateCommandTest extends CommandTestCase
+class MigrateCommandTest extends MigrationTestCase
 {
     private $platform;
     private $migrator;
@@ -56,7 +55,9 @@ class MigrateCommandTest extends CommandTestCase
             ),
         );
 
-        $this->command->setConfiguration($config);
+        $this->command->setConfiguration(
+            $this->extension->configParse($config)
+        );
 
         $this->migrator->shouldReceive('migrate')
             ->with($workingDir, $installDir, $config['combined'][0]['migrations'], MigrationsConstants::TYPE_DATABASE, 'latest')

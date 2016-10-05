@@ -2,14 +2,13 @@
 
 namespace Meteor\Migrations\Cli\Command;
 
-use Meteor\Cli\Command\CommandTestCase;
 use Meteor\IO\NullIO;
 use Meteor\Logger\NullLogger;
 use Meteor\Migrations\MigrationsConstants;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
 
-class ExecuteMigrationCommandTest extends CommandTestCase
+class ExecuteMigrationCommandTest extends MigrationTestCase
 {
     private $platform;
     private $migrator;
@@ -42,7 +41,9 @@ class ExecuteMigrationCommandTest extends CommandTestCase
             ),
         );
 
-        $this->command->setConfiguration($config);
+        $this->command->setConfiguration(
+            $this->extension->configParse($config)
+        );
 
         $this->migrator->shouldReceive('execute')
             ->with($workingDir, $installDir, $config['migrations'], MigrationsConstants::TYPE_DATABASE, '20160701102030', 'up')
@@ -75,7 +76,9 @@ class ExecuteMigrationCommandTest extends CommandTestCase
             ),
         );
 
-        $this->command->setConfiguration($config);
+        $this->command->setConfiguration(
+            $this->extension->configParse($config)
+        );
 
         $this->migrator->shouldReceive('execute')
             ->with($workingDir, $installDir, $config['migrations'], MigrationsConstants::TYPE_DATABASE, '20160701102030', 'down')
@@ -108,7 +111,9 @@ class ExecuteMigrationCommandTest extends CommandTestCase
             ),
         );
 
-        $this->command->setConfiguration($config);
+        $this->command->setConfiguration(
+            $this->extension->configParse($config)
+        );
 
         $this->migrator->shouldReceive('execute')
             ->never();
