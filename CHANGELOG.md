@@ -1,4 +1,10 @@
-## Next release
+## v2.2.0
+
+* Fixes a typo within an exception message within the generate migration command. ([#28](https://github.com/jadu/meteor/pull/28))
+* Fixes the detection of a script recursion. ([#29](https://github.com/jadu/meteor/pull/29))
+* Add's the ability to process scripts from within combined package scripts. ([#32](https://github.com/jadu/meteor/pull/32))
+* Add's additional recursion checking for circular references. ([#31](https://github.com/jadu/meteor/pull/31))
+* Improves migration configuration handling. ([#33](https://github.com/jadu/meteor/pull/33))
 
 ## v2.1.2
 
