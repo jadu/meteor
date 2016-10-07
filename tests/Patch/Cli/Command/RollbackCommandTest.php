@@ -5,6 +5,7 @@ namespace Meteor\Patch\Cli\Command;
 use Meteor\Cli\Command\CommandTestCase;
 use Meteor\IO\NullIO;
 use Meteor\Patch\Backup\Backup;
+use Meteor\Patch\Event\PatchEvents;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
 
@@ -103,6 +104,10 @@ class RollbackCommandTest extends CommandTestCase
             ->with($installDir)
             ->once();
 
+        $this->eventDispatcher->shouldReceive('dispatch')
+            ->with(PatchEvents::PRE_ROLLBACK, Mockery::any())
+            ->once();
+
         $tasks = array(
             new \stdClass(),
             new \stdClass(),
@@ -122,6 +127,10 @@ class RollbackCommandTest extends CommandTestCase
             ->andReturn(true)
             ->once();
 
+        $this->eventDispatcher->shouldReceive('dispatch')
+            ->with(PatchEvents::POST_ROLLBACK, Mockery::any())
+            ->once();
+
         $this->locker->shouldReceive('unlock')
             ->with($installDir)
             ->once();
@@ -129,6 +138,75 @@ class RollbackCommandTest extends CommandTestCase
         $this->tester->execute(array(
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
+        ));
+    }
+
+    public function testDoesNotRunScriptsIfSkipped()
+    {
+        $workingDir = vfsStream::url('root/patch');
+        $installDir = vfsStream::url('root/install');
+
+        $config = array('name' => 'test');
+        $this->command->setConfiguration($config);
+
+        $this->platform->shouldReceive('setInstallDir')
+            ->with($installDir);
+
+        $this->scriptRunner->shouldReceive('setWorkingDir')
+            ->with($installDir);
+
+        $this->versionComparer->shouldReceive('comparePackage')
+            ->with($workingDir.'/to_patch', $installDir, $config)
+            ->andReturn(array());
+
+        $backups = array(
+            new Backup(vfsStream::url('root/install/backups/20160701102030'), array()),
+            new Backup(vfsStream::url('root/install/backups/20160702102030'), array()),
+            new Backup(vfsStream::url('root/install/backups/20160703102030'), array()),
+        );
+
+        $this->backupFinder->shouldReceive('find')
+            ->with($installDir, $config)
+            ->andReturn($backups);
+
+        $backupDir = $backups[0]->getPath();
+
+        $this->logger->shouldReceive('enable');
+
+        $this->locker->shouldReceive('lock')
+            ->with($installDir);
+
+        $this->eventDispatcher->shouldReceive('dispatch')
+            ->with(PatchEvents::PRE_ROLLBACK, Mockery::any())
+            ->never();
+
+        $tasks = array(
+            new \stdClass(),
+            new \stdClass(),
+        );
+        $this->strategy->shouldReceive('rollback')
+            ->with($backupDir, $workingDir, $installDir, array(), Mockery::any())
+            ->andReturn($tasks);
+
+        $this->taskBus->shouldReceive('run')
+            ->with($tasks[0], $config)
+            ->andReturn(true);
+
+        $this->taskBus->shouldReceive('run')
+            ->with($tasks[1], $config)
+            ->andReturn(true);
+
+        $this->eventDispatcher->shouldReceive('dispatch')
+            ->with(PatchEvents::POST_ROLLBACK, Mockery::any())
+            ->never();
+
+        $this->locker->shouldReceive('unlock')
+            ->with($installDir);
+
+        $this->tester->execute(array(
+            '--working-dir' => $workingDir,
+            '--install-dir' => $installDir,
+            '--skip-scripts' => null,
         ));
     }
 
