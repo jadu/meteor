@@ -4,6 +4,7 @@ namespace Meteor\Patch\Cli\Command;
 
 use Meteor\Cli\Command\CommandTestCase;
 use Meteor\IO\NullIO;
+use Meteor\Patch\Event\PatchEvents;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
 
@@ -79,7 +80,7 @@ class ApplyCommandTest extends CommandTestCase
             ->once();
 
         $this->eventDispatcher->shouldReceive('dispatch')
-            ->with('patch.pre-apply', Mockery::any())
+            ->with(PatchEvents::PRE_APPLY, Mockery::any())
             ->once();
 
         $tasks = array(
@@ -102,7 +103,7 @@ class ApplyCommandTest extends CommandTestCase
             ->once();
 
         $this->eventDispatcher->shouldReceive('dispatch')
-            ->with('patch.post-apply', Mockery::any())
+            ->with(PatchEvents::POST_APPLY, Mockery::any())
             ->once();
 
         $this->locker->shouldReceive('unlock')
@@ -219,7 +220,7 @@ class ApplyCommandTest extends CommandTestCase
             ->with($installDir);
 
         $this->eventDispatcher->shouldReceive('dispatch')
-            ->with('patch.pre-apply', Mockery::any())
+            ->with(PatchEvents::PRE_APPLY, Mockery::any())
             ->never();
 
         $tasks = array(
@@ -239,7 +240,7 @@ class ApplyCommandTest extends CommandTestCase
             ->andReturn(true);
 
         $this->eventDispatcher->shouldReceive('dispatch')
-            ->with('patch.post-apply', Mockery::any())
+            ->with(PatchEvents::POST_APPLY, Mockery::any())
             ->never();
 
         $this->locker->shouldReceive('unlock')

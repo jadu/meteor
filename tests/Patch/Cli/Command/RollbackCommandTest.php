@@ -5,6 +5,7 @@ namespace Meteor\Patch\Cli\Command;
 use Meteor\Cli\Command\CommandTestCase;
 use Meteor\IO\NullIO;
 use Meteor\Patch\Backup\Backup;
+use Meteor\Patch\Event\PatchEvents;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
 
@@ -104,7 +105,7 @@ class RollbackCommandTest extends CommandTestCase
             ->once();
 
         $this->eventDispatcher->shouldReceive('dispatch')
-            ->with('patch.pre-rollback', Mockery::any())
+            ->with(PatchEvents::PRE_ROLLBACK, Mockery::any())
             ->once();
 
         $tasks = array(
@@ -127,7 +128,7 @@ class RollbackCommandTest extends CommandTestCase
             ->once();
 
         $this->eventDispatcher->shouldReceive('dispatch')
-            ->with('patch.post-rollback', Mockery::any())
+            ->with(PatchEvents::POST_ROLLBACK, Mockery::any())
             ->once();
 
         $this->locker->shouldReceive('unlock')
@@ -176,7 +177,7 @@ class RollbackCommandTest extends CommandTestCase
             ->with($installDir);
 
         $this->eventDispatcher->shouldReceive('dispatch')
-            ->with('patch.pre-rollback', Mockery::any())
+            ->with(PatchEvents::PRE_ROLLBACK, Mockery::any())
             ->never();
 
         $tasks = array(
@@ -196,7 +197,7 @@ class RollbackCommandTest extends CommandTestCase
             ->andReturn(true);
 
         $this->eventDispatcher->shouldReceive('dispatch')
-            ->with('patch.post-rollback', Mockery::any())
+            ->with(PatchEvents::POST_ROLLBACK, Mockery::any())
             ->never();
 
         $this->locker->shouldReceive('unlock')
