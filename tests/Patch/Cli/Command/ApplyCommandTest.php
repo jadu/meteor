@@ -78,6 +78,10 @@ class ApplyCommandTest extends CommandTestCase
             ->with($installDir)
             ->once();
 
+        $this->eventDispatcher->shouldReceive('dispatch')
+            ->with('patch.pre-apply', Mockery::any())
+            ->once();
+
         $tasks = array(
             new \stdClass(),
             new \stdClass(),
@@ -95,6 +99,10 @@ class ApplyCommandTest extends CommandTestCase
         $this->taskBus->shouldReceive('run')
             ->with($tasks[1], $config)
             ->andReturn(true)
+            ->once();
+
+        $this->eventDispatcher->shouldReceive('dispatch')
+            ->with('patch.post-apply', Mockery::any())
             ->once();
 
         $this->locker->shouldReceive('unlock')
@@ -188,6 +196,59 @@ class ApplyCommandTest extends CommandTestCase
         $this->tester->execute(array(
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
+        ));
+    }
+
+    public function testDoesNotRunScriptsIfSkipped()
+    {
+        $workingDir = vfsStream::url('root/patch');
+        $installDir = vfsStream::url('root/install');
+
+        $config = array('name' => 'test');
+        $this->command->setConfiguration($config);
+
+        $this->platform->shouldReceive('setInstallDir')
+            ->with($installDir);
+
+        $this->scriptRunner->shouldReceive('setWorkingDir')
+            ->with($installDir);
+
+        $this->logger->shouldReceive('enable');
+
+        $this->locker->shouldReceive('lock')
+            ->with($installDir);
+
+        $this->eventDispatcher->shouldReceive('dispatch')
+            ->with('patch.pre-apply', Mockery::any())
+            ->never();
+
+        $tasks = array(
+            new \stdClass(),
+            new \stdClass(),
+        );
+        $this->strategy->shouldReceive('apply')
+            ->with($workingDir, $installDir, Mockery::any())
+            ->andReturn($tasks);
+
+        $this->taskBus->shouldReceive('run')
+            ->with($tasks[0], $config)
+            ->andReturn(true);
+
+        $this->taskBus->shouldReceive('run')
+            ->with($tasks[1], $config)
+            ->andReturn(true);
+
+        $this->eventDispatcher->shouldReceive('dispatch')
+            ->with('patch.post-apply', Mockery::any())
+            ->never();
+
+        $this->locker->shouldReceive('unlock')
+            ->with($installDir);
+
+        $this->tester->execute(array(
+            '--working-dir' => $workingDir,
+            '--install-dir' => $installDir,
+            '--skip-scripts' => null,
         ));
     }
 }

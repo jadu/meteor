@@ -108,6 +108,7 @@ class RollbackCommand extends AbstractPatchCommand
         $this->setDescription('Rolls back a previous patch');
 
         $this->addOption('skip-lock', null, InputOption::VALUE_NONE, 'Skip any existing lock files to force a rollback');
+        $this->addOption('skip-scripts', null, InputOption::VALUE_NONE, 'Skip script execution');
         $this->strategy->configureRollbackCommand($this->getDefinition());
 
         parent::configure();
@@ -195,7 +196,9 @@ class RollbackCommand extends AbstractPatchCommand
             $this->locker->lock($installDir);
         }
 
-        $this->eventDispatcher->dispatch(PatchEvents::PRE_ROLLBACK, new Event());
+        if (!$this->io->getOption('skip-scripts')) {
+            $this->eventDispatcher->dispatch(PatchEvents::PRE_ROLLBACK, new Event());
+        }
 
         if ($backupChoice > 0 && !empty($backups)) {
             $intermediateBackups = array_slice($backups, 0, $backupChoice);
@@ -223,7 +226,9 @@ class RollbackCommand extends AbstractPatchCommand
             }
         }
 
-        $this->eventDispatcher->dispatch(PatchEvents::POST_ROLLBACK, new Event());
+        if (!$this->io->getOption('skip-scripts')) {
+            $this->eventDispatcher->dispatch(PatchEvents::POST_ROLLBACK, new Event());
+        }
 
         if (!$this->io->getOption('skip-lock')) {
             $this->locker->unlock($installDir);
