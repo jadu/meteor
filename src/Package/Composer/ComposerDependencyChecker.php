@@ -30,8 +30,9 @@ class ComposerDependencyChecker
         $requirements = array();
         if (isset($json['require'])) {
             foreach ($json['require'] as $packageName => $versionConstraint) {
-                if (preg_match('/.*\/.*/', $packageName)) {
-                    // NB: We're only concerned with package requirements not PHP/extension requirements
+                if ($packageName === 'php') {
+                    $requirements[] = new ComposerPhpVersion($versionConstraint);
+                } elseif (preg_match('/.*\/.*/', $packageName)) {
                     $requirements[] = new ComposerRequirement($packageName, $versionConstraint);
                 }
             }
@@ -113,7 +114,11 @@ class ComposerDependencyChecker
         $config['package']['composer'] = array();
 
         foreach ($requirements as $requirement) {
-            $config['package']['composer'][$requirement->getPackageName()] = $requirement->getVersionConstraint();
+            if ($requirement instanceof ComposerRequirement) {
+                $config['package']['composer'][$requirement->getPackageName()] = $requirement->getVersionConstraint();
+            } elseif ($requirement instanceof ComposerPhpVersion) {
+                $config['package']['php'] = $requirement->getVersionConstraint();
+            }
         }
 
         return $config;

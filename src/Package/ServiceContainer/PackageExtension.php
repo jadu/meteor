@@ -75,6 +75,8 @@ class PackageExtension extends ExtensionBase implements ExtensionInterface
                     ->normalizeKeys(false)
                     ->prototype('scalar')->end()
                 ->end()
+                ->scalarNode('php')
+                ->end()
             ->end()
         ->end();
     }

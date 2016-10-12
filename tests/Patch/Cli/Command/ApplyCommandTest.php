@@ -200,6 +200,71 @@ class ApplyCommandTest extends CommandTestCase
         ));
     }
 
+
+    /**
+     * @expectedException Meteor\Patch\Exception\PhpVersionException
+     * @expectedExceptionMessage Your PHP version (5.6.0) is not sufficient enough for the package "test", which requires >=7
+     */
+    public function testPhpVersionConstraint()
+    {
+        $workingDir = vfsStream::url('root/patch');
+        $installDir = vfsStream::url('root/install');
+
+        $config = array(
+            'name' => 'test',
+            'package' => array(
+                'php' => '>=7'
+            )
+        );
+
+        $this->command->setConfiguration($config);
+        $this->command->setPhpVersion('5.6.0');
+
+        $this->tester->execute(array(
+            '--working-dir' => $workingDir,
+            '--install-dir' => $installDir,
+        ));
+    }
+
+    /**
+     * @expectedException Meteor\Patch\Exception\PhpVersionException
+     * @expectedExceptionMessage Your PHP version (5.4.0) is not sufficient enough for the package "package/second", which requires >=5.6
+     */
+    public function testCombinedPhpVersionConstraint()
+    {
+        $workingDir = vfsStream::url('root/patch');
+        $installDir = vfsStream::url('root/install');
+
+        $config = array(
+            'name' => 'test',
+            'package' => array(
+                'php' => '>=5.3.3'
+            ),
+            'combined' => array(
+                array(
+                    'name' => 'package/first',
+                    'package' => array(
+                        'php' => '>=5.4.0'
+                    )
+                ),
+                array(
+                    'name' => 'package/second',
+                    'package' => array(
+                        'php' => '>=5.6'
+                    )
+                ),
+            )
+        );
+
+        $this->command->setConfiguration($config);
+        $this->command->setPhpVersion('5.4.0');
+
+        $this->tester->execute(array(
+            '--working-dir' => $workingDir,
+            '--install-dir' => $installDir,
+        ));
+    }
+
     public function testDoesNotRunScriptsIfSkipped()
     {
         $workingDir = vfsStream::url('root/patch');
