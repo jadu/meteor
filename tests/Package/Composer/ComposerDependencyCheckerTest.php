@@ -24,6 +24,28 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
         $requirements = $this->checker->getRequirements(vfsStream::url('root'));
 
         $this->assertCount(3, $requirements);
+
+        $this->assertInstanceOf('Meteor\Package\Composer\ComposerPhpVersion', $requirements[0]);
+        $this->assertEquals('>=5.3.2', $requirements[0]->getVersionConstraint());
+
+        $this->assertInstanceOf('Meteor\Package\Composer\ComposerRequirement', $requirements[1]);
+        $this->assertEquals('jadu/cms-dependencies', $requirements[1]->getPackageName());
+        $this->assertEquals('~13.6.0', $requirements[1]->getVersionConstraint());
+
+        $this->assertInstanceOf('Meteor\Package\Composer\ComposerRequirement', $requirements[2]);
+        $this->assertEquals('symfony/symfony', $requirements[2]->getPackageName());
+        $this->assertEquals('~2.6.11', $requirements[2]->getVersionConstraint());
+    }
+
+    public function testGetRequirementsIgnoresPhpExtensionRequirements()
+    {
+        vfsStream::setup('root', null, array(
+            'composer.json' => file_get_contents(__DIR__.'/Fixtures/composer.json'),
+        ));
+
+        $requirements = $this->checker->getRequirements(vfsStream::url('root'));
+
+        $this->assertCount(3, $requirements);
         $this->assertEquals('>=5.3.2', $requirements[0]->getVersionConstraint());
         $this->assertEquals('jadu/cms-dependencies', $requirements[1]->getPackageName());
         $this->assertEquals('~13.6.0', $requirements[1]->getVersionConstraint());

@@ -1,6 +1,7 @@
 {
     "require": {
         "php": ">=5.3.2",
+        "ext-apc": "^0.1",
         "jadu/cms-dependencies": "~13.6.0",
         "symfony/symfony": "~2.6.11"
     }

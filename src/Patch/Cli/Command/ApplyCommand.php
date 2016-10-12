@@ -107,13 +107,11 @@ class ApplyCommand extends AbstractPatchCommand
     /**
      * Override the current PHP version that's in use.
      *
-     * @param $version
-     * @return $this
+     * @param string $version
      */
     public function setPhpVersion($version)
     {
         $this->phpVersion = $version;
-        return $this;
     }
 
     /**
@@ -133,10 +131,9 @@ class ApplyCommand extends AbstractPatchCommand
 
         if (isset($config['combined'])) {
             foreach ($config['combined'] as $combinedPackage => $combinedConfig) {
-                if (!isset($combinedConfig['package']['php'])) {
-                    continue;
+                if (isset($combinedConfig['package']['php'])) {
+                    $versions[$combinedConfig['name']] = $combinedConfig['package']['php'];
                 }
-                $versions[$combinedConfig['name']] = $combinedConfig['package']['php'];
             }
         }
 
@@ -164,7 +161,9 @@ class ApplyCommand extends AbstractPatchCommand
 
         $config = $this->getConfiguration();
 
+        // NB: Should be checked prior to locking for patching
         $this->checkPhpConstraint($config);
+
         $this->platform->setInstallDir($installDir);
         $this->scriptRunner->setWorkingDir($installDir);
         $this->logger->enable($this->getLogPath($workingDir));

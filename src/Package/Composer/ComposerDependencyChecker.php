@@ -32,7 +32,7 @@ class ComposerDependencyChecker
             foreach ($json['require'] as $packageName => $versionConstraint) {
                 if ($packageName === 'php') {
                     $requirements[] = new ComposerPhpVersion($versionConstraint);
-                } else {
+                } elseif (preg_match('/.*\/.*/', $packageName)) {
                     $requirements[] = new ComposerRequirement($packageName, $versionConstraint);
                 }
             }
