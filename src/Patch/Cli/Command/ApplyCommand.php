@@ -99,6 +99,7 @@ class ApplyCommand extends AbstractPatchCommand
         $this->setDescription('Applies a patch');
 
         $this->addOption('skip-lock', null, InputOption::VALUE_NONE, 'Skip any existing lock files to force a patch');
+        $this->addOption('skip-scripts', null, InputOption::VALUE_NONE, 'Skip script execution');
         $this->strategy->configureApplyCommand($this->getDefinition());
 
         parent::configure();
@@ -174,7 +175,9 @@ class ApplyCommand extends AbstractPatchCommand
             $this->locker->lock($installDir);
         }
 
-        $this->eventDispatcher->dispatch(PatchEvents::PRE_APPLY, new Event());
+        if (!$this->io->getOption('skip-scripts')) {
+            $this->eventDispatcher->dispatch(PatchEvents::PRE_APPLY, new Event());
+        }
 
         $tasks = $this->strategy->apply($workingDir, $installDir, $this->io->getOptions());
         foreach ($tasks as $task) {
@@ -184,7 +187,9 @@ class ApplyCommand extends AbstractPatchCommand
             }
         }
 
-        $this->eventDispatcher->dispatch(PatchEvents::POST_APPLY, new Event());
+        if (!$this->io->getOption('skip-scripts')) {
+            $this->eventDispatcher->dispatch(PatchEvents::POST_APPLY, new Event());
+        }
 
         if (!$this->io->getOption('skip-lock')) {
             $this->locker->unlock($installDir);
