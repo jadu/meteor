@@ -14,7 +14,8 @@
         "symfony/yaml": "^2.6",
         "doctrine/dbal": "^2.5",
         "doctrine/migrations": "^1.0.0@alpha",
-        "composer/semver": "^1.4"
+        "composer/semver": "^1.4",
+        "jadu/doctrine-types": "^0.1"
     },
     "require-dev": {
         "phpunit/phpunit": "*",
