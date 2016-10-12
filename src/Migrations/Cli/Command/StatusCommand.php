@@ -4,8 +4,8 @@ namespace Meteor\Migrations\Cli\Command;
 
 use Meteor\IO\IOInterface;
 use Meteor\Migrations\Outputter\StatusOutputter;
-use Meteor\Platform\PlatformInterface;
 use Meteor\Patch\Cli\Command\AbstractPatchCommand;
+use Meteor\Platform\PlatformInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
