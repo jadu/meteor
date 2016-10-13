@@ -1,3 +1,8 @@
+## v2.3.0
+
+* Add's --skip-scripts option to skip patch script execution ([#38](https://github.com/jadu/meteor/pull/38))
+* Check required PHP version before patching. ([#35](https://github.com/jadu/meteor/pull/35))
+
 ## v2.2.0
 
 * Fixes a typo within an exception message within the generate migration command. ([#28](https://github.com/jadu/meteor/pull/28))
