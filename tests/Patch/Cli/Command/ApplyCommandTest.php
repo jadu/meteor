@@ -200,7 +200,6 @@ class ApplyCommandTest extends CommandTestCase
         ));
     }
 
-
     /**
      * @expectedException Meteor\Patch\Exception\PhpVersionException
      * @expectedExceptionMessage Your PHP version (5.6.0) is not sufficient enough for the package "test", which requires >=7
@@ -213,8 +212,8 @@ class ApplyCommandTest extends CommandTestCase
         $config = array(
             'name' => 'test',
             'package' => array(
-                'php' => '>=7'
-            )
+                'php' => '>=7',
+            ),
         );
 
         $this->command->setConfiguration($config);
@@ -238,22 +237,22 @@ class ApplyCommandTest extends CommandTestCase
         $config = array(
             'name' => 'test',
             'package' => array(
-                'php' => '>=5.3.3'
+                'php' => '>=5.3.3',
             ),
             'combined' => array(
                 array(
                     'name' => 'package/first',
                     'package' => array(
-                        'php' => '>=5.4.0'
-                    )
+                        'php' => '>=5.4.0',
+                    ),
                 ),
                 array(
                     'name' => 'package/second',
                     'package' => array(
-                        'php' => '>=5.6'
-                    )
+                        'php' => '>=5.6',
+                    ),
                 ),
-            )
+            ),
         );
 
         $this->command->setConfiguration($config);

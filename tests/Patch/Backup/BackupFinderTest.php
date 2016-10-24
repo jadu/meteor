@@ -5,8 +5,8 @@ namespace Meteor\Patch\Backup;
 use Meteor\Configuration\Exception\ConfigurationLoadingException;
 use Meteor\Patch\Version\VersionComparer;
 use Mockery;
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use org\bovigo\vfs\vfsStream;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 class BackupFinderTest extends \PHPUnit_Framework_TestCase
 {

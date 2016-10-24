@@ -6,8 +6,8 @@ use Composer\Semver\Semver;
 use InvalidArgumentException;
 use Meteor\IO\IOInterface;
 use Meteor\Logger\LoggerInterface;
-use Meteor\Patch\Exception\PhpVersionException;
 use Meteor\Patch\Event\PatchEvents;
+use Meteor\Patch\Exception\PhpVersionException;
 use Meteor\Patch\Lock\Locker;
 use Meteor\Patch\Strategy\PatchStrategyInterface;
 use Meteor\Patch\Task\TaskBusInterface;
@@ -120,6 +120,7 @@ class ApplyCommand extends AbstractPatchCommand
      * and verifies if the current PHP version is compatiable.
      *
      * @param array $config
+     *
      * @throws PhpVersionException
      */
     protected function checkPhpConstraint(array $config)
