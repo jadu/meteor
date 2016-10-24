@@ -7,6 +7,7 @@ use Meteor\Configuration\ConfigurationLoader;
 use Meteor\Configuration\Exception\ConfigurationLoadingException;
 use Meteor\Package\PackageConstants;
 use Meteor\Patch\Version\VersionComparer;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 class BackupFinder
 {
@@ -67,6 +68,8 @@ class BackupFinder
                 }
             } catch (ConfigurationLoadingException $exception) {
                 // Not a valid backup
+            } catch (InvalidConfigurationException $exception) {
+                // Unable to parse config
             }
         }
 

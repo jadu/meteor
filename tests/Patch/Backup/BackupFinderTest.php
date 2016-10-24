@@ -5,6 +5,7 @@ namespace Meteor\Patch\Backup;
 use Meteor\Configuration\Exception\ConfigurationLoadingException;
 use Meteor\Patch\Version\VersionComparer;
 use Mockery;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use org\bovigo\vfs\vfsStream;
 
 class BackupFinderTest extends \PHPUnit_Framework_TestCase
@@ -88,6 +89,36 @@ class BackupFinderTest extends \PHPUnit_Framework_TestCase
         $this->configurationLoader->shouldReceive('load')
             ->with(vfsStream::url('root/backups/20160701102030'))
             ->andThrow(new ConfigurationLoadingException())
+            ->once();
+
+        $backups = $this->backupFinder->find(vfsStream::url('root'), $config);
+
+        $this->assertCount(0, $backups);
+    }
+
+    public function testFindIgnoresBackupsWithAnInvalidMeteorConfig()
+    {
+        $config = array(
+            'name' => 'jadu/cms',
+            'package' => array(
+                'version' => 'VERSION',
+            ),
+        );
+
+        vfsStream::setup('root', null, array(
+            'backups' => array(
+                '20160701102030' => array(
+                    'to_patch' => array(
+                        'VERSION' => '1.0.0',
+                    ),
+                ),
+            ),
+            'VERSION' => '1.1.0',
+        ));
+
+        $this->configurationLoader->shouldReceive('load')
+            ->with(vfsStream::url('root/backups/20160701102030'))
+            ->andThrow(new InvalidConfigurationException())
             ->once();
 
         $backups = $this->backupFinder->find(vfsStream::url('root'), $config);
