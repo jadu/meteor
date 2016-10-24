@@ -120,6 +120,10 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
     public function validateScripts(array $scripts)
     {
         $this->scripts = $scripts;
+
+        // NB: Resetting so loading multiple script configs does not cause circular references
+        $this->referenced = array();
+
         foreach (array_keys($scripts) as $name) {
             // NB: Exceptions will be caught and used as the error message
             $this->checkCircularReference($name);

@@ -125,4 +125,21 @@ class ScriptsExtensionTest extends ExtensionTestCase
             ),
         ));
     }
+
+    public function testLoadingMultipleConfigsWithReferencedScriptsDoesNotCauseCircularReferenceExceptionToBeThrown()
+    {
+        $this->processConfiguration(array(
+            'scripts' => array(
+                'patch' => array('@test'),
+                'test' => array('test'),
+            ),
+        ));
+
+        $this->processConfiguration(array(
+            'scripts' => array(
+                'patch' => array('@test'),
+                'test' => array('test'),
+            ),
+        ));
+    }
 }
