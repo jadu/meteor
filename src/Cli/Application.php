@@ -123,7 +123,7 @@ class Application extends BaseApplication
      * @param Exception $exception
      * @param OutputInterface $output
      */
-    public function renderException($exception, $output)
+    public function renderException(Exception $exception, OutputInterface $output)
     {
         parent::renderException($exception, $output);
 

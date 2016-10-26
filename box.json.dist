@@ -11,7 +11,6 @@
     "finder": [
         {
             "exclude": [
-                "/kherge",
                 "/mikey179",
                 "/mockery",
                 "/phpunit",
