@@ -11,7 +11,7 @@ class ExtensionManagerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->extensionManager = new ExtensionManager(array());
+        $this->extensionManager = new ExtensionManager([]);
     }
 
     public function testActivateExtensionWithClass()
@@ -19,7 +19,7 @@ class ExtensionManagerTest extends \PHPUnit_Framework_TestCase
         $this->extensionManager->activateExtension('Meteor\ServiceContainer\Test\TestExtension', null);
 
         $this->assertSame(
-            array('Meteor\ServiceContainer\Test\TestExtension'),
+            ['Meteor\ServiceContainer\Test\TestExtension'],
             $this->extensionManager->getExtensionClasses()
         );
     }
@@ -29,7 +29,7 @@ class ExtensionManagerTest extends \PHPUnit_Framework_TestCase
         $this->extensionManager->activateExtension(__DIR__.'/Fixtures/absolute_extension.php', null);
 
         $this->assertSame(
-            array('Meteor\ServiceContainer\Test\TestAbsoluteFileExtension'),
+            ['Meteor\ServiceContainer\Test\TestAbsoluteFileExtension'],
             $this->extensionManager->getExtensionClasses()
         );
     }
@@ -39,7 +39,7 @@ class ExtensionManagerTest extends \PHPUnit_Framework_TestCase
         $this->extensionManager->activateExtension('relative_extension.php', __DIR__.'/Fixtures');
 
         $this->assertSame(
-            array('Meteor\ServiceContainer\Test\TestRelativeFileExtension'),
+            ['Meteor\ServiceContainer\Test\TestRelativeFileExtension'],
             $this->extensionManager->getExtensionClasses()
         );
     }
@@ -63,7 +63,7 @@ class ExtensionManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetExtension()
     {
         $extension = new TestExtension();
-        $extensionManager = new ExtensionManager(array($extension));
+        $extensionManager = new ExtensionManager([$extension]);
 
         $this->assertSame($extension, $extensionManager->getExtension('test'));
     }
@@ -76,28 +76,28 @@ class ExtensionManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetExtensions()
     {
         $extension = new TestExtension();
-        $extensionManager = new ExtensionManager(array($extension));
+        $extensionManager = new ExtensionManager([$extension]);
 
-        $this->assertSame(array('test' => $extension), $extensionManager->getExtensions());
+        $this->assertSame(['test' => $extension], $extensionManager->getExtensions());
     }
 
     public function testGetExtensionClasses()
     {
         $extension = new TestExtension();
-        $extensionManager = new ExtensionManager(array($extension));
+        $extensionManager = new ExtensionManager([$extension]);
 
         $this->assertSame(
-            array('Meteor\ServiceContainer\Test\TestExtension'),
+            ['Meteor\ServiceContainer\Test\TestExtension'],
             $extensionManager->getExtensionClasses()
         );
     }
 
     public function testInitializeExtensions()
     {
-        $extension = Mockery::mock('Meteor\ServiceContainer\ExtensionInterface', array(
+        $extension = Mockery::mock('Meteor\ServiceContainer\ExtensionInterface', [
             'getConfigKey' => 'test',
-        ));
-        $extensionManager = new ExtensionManager(array($extension));
+        ]);
+        $extensionManager = new ExtensionManager([$extension]);
 
         $extension->shouldReceive('initialize')
             ->with($extensionManager)

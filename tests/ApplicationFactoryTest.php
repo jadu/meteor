@@ -22,12 +22,12 @@ class ApplicationFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCanRunPatchApplyCommand()
     {
         // Attempt to run the patch:apply command
-        $input = new ArrayInput(array(
+        $input = new ArrayInput([
             'command' => 'patch:apply',
             '--working-dir' => __DIR__,
             // NB: Intentionally omitted the --install-dir option
             //  so that the command does not properly execute during tests.
-        ));
+        ]);
 
         $input->setInteractive(false);
 

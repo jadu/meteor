@@ -27,7 +27,7 @@ class OverwritePatchStrategy implements PatchStrategyInterface
      */
     public function apply($patchDir, $installDir, array $options)
     {
-        $tasks = array();
+        $tasks = [];
         $patchFilesDir = $patchDir.'/'.PackageConstants::PATCH_DIR;
         $backupDir = $installDir.'/backups/'.date('YmdHis');
 
@@ -78,7 +78,7 @@ class OverwritePatchStrategy implements PatchStrategyInterface
      */
     public function rollback($backupDir, $patchDir, $installDir, array $intermediateBackupDirs, array $options)
     {
-        $tasks = array();
+        $tasks = [];
         $backupFilesDir = $backupDir.'/'.PackageConstants::PATCH_DIR;
 
         $tasks[] = new CheckWritePermission($installDir);

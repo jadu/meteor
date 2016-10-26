@@ -20,16 +20,16 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
 
     private function createVersion($versionString)
     {
-        return Mockery::mock('Doctrine\DBAL\Migrations\Version', array(
+        return Mockery::mock('Doctrine\DBAL\Migrations\Version', [
             'getVersion' => $versionString,
             '__toString' => $versionString,
             'getTime' => 5,
-        ));
+        ]);
     }
 
     public function testMarkMigrated()
     {
-        $config = array();
+        $config = [];
 
         $version = $this->createVersion('20160701000000');
 
@@ -63,7 +63,7 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testMarkMigratedReturnsFalseWhenVersionHasBeenMigrated()
     {
-        $config = array();
+        $config = [];
 
         $version = $this->createVersion('20160701000000');
 
@@ -94,7 +94,7 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testMarkMigratedReturnsFalseWhenVersionNotFound()
     {
-        $config = array();
+        $config = [];
 
         $version = $this->createVersion('20160701000000');
 
@@ -115,7 +115,7 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testMarkNotMigrated()
     {
-        $config = array();
+        $config = [];
 
         $version = $this->createVersion('20160701000000');
 
@@ -149,7 +149,7 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testMarkNotMigratedReturnsFalseWhenVersionHasNotBeenMigrated()
     {
-        $config = array();
+        $config = [];
 
         $version = $this->createVersion('20160701000000');
 
@@ -180,7 +180,7 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testMarkNotMigratedReturnsFalseWhenVersionNotFound()
     {
-        $config = array();
+        $config = [];
 
         $version = $this->createVersion('20160701000000');
 
@@ -201,19 +201,19 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testMarkAllMigrated()
     {
-        $config = array();
+        $config = [];
 
         $version1 = $this->createVersion('20160701000000');
         $version2 = $this->createVersion('20160702000000');
         $version3 = $this->createVersion('20160703000000');
 
-        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', array(
-            'getAvailableVersions' => array(
+        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', [
+            'getAvailableVersions' => [
                 $version1->getVersion(),
                 $version2->getVersion(),
                 $version3->getVersion(),
-            ),
-        ));
+            ],
+        ]);
 
         $this->configurationFactory->shouldReceive('createConfiguration')
             ->with(MigrationsConstants::TYPE_DATABASE, $config, 'patch', 'install')
@@ -264,19 +264,19 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testMarkAllNotMigrated()
     {
-        $config = array();
+        $config = [];
 
         $version1 = $this->createVersion('20160701000000');
         $version2 = $this->createVersion('20160702000000');
         $version3 = $this->createVersion('20160703000000');
 
-        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', array(
-            'getAvailableVersions' => array(
+        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', [
+            'getAvailableVersions' => [
                 $version1->getVersion(),
                 $version2->getVersion(),
                 $version3->getVersion(),
-            ),
-        ));
+            ],
+        ]);
 
         $this->configurationFactory->shouldReceive('createConfiguration')
             ->with(MigrationsConstants::TYPE_DATABASE, $config, 'patch', 'install')

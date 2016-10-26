@@ -67,11 +67,11 @@ class PermissionsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadPermissionSetter(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_PERMISSION_SETTER, new Definition('Meteor\Permissions\PermissionSetter', array(
+        $container->setDefinition(self::SERVICE_PERMISSION_SETTER, new Definition('Meteor\Permissions\PermissionSetter', [
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_PERMISSION_LOADER),
             new Reference(IOExtension::SERVICE_IO),
-        )));
+        ]));
     }
 
     /**
@@ -79,13 +79,13 @@ class PermissionsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadResetPermissionsCommand(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Permissions\Cli\Command\ResetPermissionsCommand', array(
+        $definition = new Definition('Meteor\Permissions\Cli\Command\ResetPermissionsCommand', [
             null,
             '%'.Application::PARAMETER_CONFIG.'%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_PERMISSION_SETTER),
-        ));
+        ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
         $container->setDefinition(self::SERVICE_COMMAND_RESET_PERMISSIONS, $definition);
     }

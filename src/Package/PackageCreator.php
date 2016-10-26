@@ -190,7 +190,7 @@ class PackageCreator
     {
         $this->io->error('The package could not be created as required Meteor packages were missing');
 
-        $problems = array();
+        $problems = [];
         foreach ($exception->getProblems() as $problem) {
             $problems[] = (string) $problem;
         }
@@ -212,7 +212,7 @@ class PackageCreator
     {
         $this->io->error('The package could not be created as required Composer packages were missing');
 
-        $problems = array();
+        $problems = [];
         foreach ($exception->getProblems() as $problem) {
             $problems[] = (string) $problem;
         }

@@ -8,7 +8,7 @@ class PermissionsExtensionTest extends ExtensionTestCase
 {
     public function testServicesCanBeInstantiated()
     {
-        $container = $this->loadContainer(array());
+        $container = $this->loadContainer([]);
 
         foreach ($this->getServiceIds() as $serviceId) {
             $container->get($serviceId);
@@ -17,10 +17,10 @@ class PermissionsExtensionTest extends ExtensionTestCase
 
     private function getServiceIds()
     {
-        return array(
+        return [
             PermissionsExtension::SERVICE_COMMAND_RESET_PERMISSIONS,
             PermissionsExtension::SERVICE_PERMISSION_LOADER,
             PermissionsExtension::SERVICE_PERMISSION_SETTER,
-        );
+        ];
     }
 }

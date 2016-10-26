@@ -14,15 +14,15 @@ class BackupFilesHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->filesystem = Mockery::mock('Meteor\Filesystem\Filesystem', array(
+        $this->filesystem = Mockery::mock('Meteor\Filesystem\Filesystem', [
             'ensureDirectoryExists' => null,
-            'findFiles' => array(),
+            'findFiles' => [],
             'copyFiles' => null,
             'copy' => null,
-        ));
-        $this->configurationLoader = Mockery::mock('Meteor\Configuration\configurationLoader', array(
+        ]);
+        $this->configurationLoader = Mockery::mock('Meteor\Configuration\configurationLoader', [
             'resolve' => null,
-        ));
+        ]);
         $this->io = new NullIO();
 
         $this->handler = new BackupFilesHandler($this->filesystem, $this->configurationLoader, $this->io);
@@ -30,7 +30,7 @@ class BackupFilesHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testCopiesFilesFromInstallIntoBackupDirectory()
     {
-        $patchFiles = array('VERSION');
+        $patchFiles = ['VERSION'];
         $this->filesystem->shouldReceive('findFiles')
             ->with('patch/to_patch')
             ->andReturn($patchFiles)
@@ -40,7 +40,7 @@ class BackupFilesHandlerTest extends \PHPUnit_Framework_TestCase
             ->with($patchFiles, 'install', 'install/backups/20160701000000/to_patch')
             ->once();
 
-        $this->handler->handle(new BackupFiles('install/backups/20160701000000', 'patch', 'install'), array());
+        $this->handler->handle(new BackupFiles('install/backups/20160701000000', 'patch', 'install'), []);
     }
 
     public function testCopiesMeteorConfigIntoBackupFromPatch()
@@ -54,6 +54,6 @@ class BackupFilesHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('patch/meteor.json.package', 'install/backups/20160701000000/meteor.json.package', true)
             ->once();
 
-        $this->handler->handle(new BackupFiles('install/backups/20160701000000', 'patch', 'install'), array());
+        $this->handler->handle(new BackupFiles('install/backups/20160701000000', 'patch', 'install'), []);
     }
 }

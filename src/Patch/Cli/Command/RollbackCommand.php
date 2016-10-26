@@ -155,28 +155,28 @@ class RollbackCommand extends AbstractPatchCommand
             return 1;
         }
 
-        $backupChoices = array();
-        $backupRows = array();
+        $backupChoices = [];
+        $backupRows = [];
         foreach ($backups as $index => $backup) {
             $backupChoices[] = $index;
 
-            $backupVersions = array();
+            $backupVersions = [];
             foreach ($backup->getVersions() as $version) {
                 $backupVersions[] = sprintf('<comment>%s</>: %s', $version->getPackageName(), $version->getNewVersion());
             }
 
-            $backupRows[] = array(
+            $backupRows[] = [
                 $index,
                 $backup->getDate()->format('c'),
                 implode($backupVersions, ', '),
-            );
+            ];
         }
 
-        $this->io->table(array(
+        $this->io->table([
             'Choice',
             'Date',
             'Versions',
-        ), $backupRows);
+        ], $backupRows);
 
         // NB: The first backup will be the most recent
         $backupChoice = (int) $this->io->ask('Please select a backup to rollback to:', 0);
@@ -215,7 +215,7 @@ class RollbackCommand extends AbstractPatchCommand
             $this->io->text('Intermediate backups to be removed:');
             $this->io->listing($intermediateBackupDates);
         } else {
-            $intermediateBackupDirs = array();
+            $intermediateBackupDirs = [];
         }
 
         $tasks = $this->strategy->rollback($backup->getPath(), $workingDir, $installDir, $intermediateBackupDirs, $this->io->getOptions());

@@ -5,7 +5,6 @@ namespace Meteor\Migrations\Configuration;
 use Meteor\IO\NullIO;
 use Meteor\Migrations\Version\VersionFileManager;
 use Mockery;
-use org\bovigo\vfs\vfsStream;
 
 class ConfigurationFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,12 +38,12 @@ class ConfigurationFactoryTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $configuration = $this->configurationFactory->createDatabaseConfiguration(
-            array(
+            [
                 'name' => 'jadu/xfp',
                 'namespace' => 'Migrations',
                 'table' => 'JaduMigrationsXFP',
                 'directory' => 'upgrades',
-            ),
+            ],
             __DIR__.'/Fixtures/patch',
             __DIR__.'/Fixtures/install',
             true
@@ -66,21 +65,21 @@ class ConfigurationFactoryTest extends \PHPUnit_Framework_TestCase
             ->andReturn($connection)
             ->once();
 
-        $fileMigrationVersionStorage = Mockery::mock('Meteor\Migrations\Version\FileMigrationVersionStorage', array(
+        $fileMigrationVersionStorage = Mockery::mock('Meteor\Migrations\Version\FileMigrationVersionStorage', [
             'isInitialised' => true,
-        ));
+        ]);
         $this->fileMigrationVersionStorageFactory->shouldReceive('create')
             ->with(__DIR__.'/Fixtures/install', 'JaduMigrationsXFP')
             ->andReturn($fileMigrationVersionStorage)
             ->once();
 
         $configuration = $this->configurationFactory->createFileConfiguration(
-            array(
+            [
                 'name' => 'jadu/xfp',
                 'namespace' => 'Migrations',
                 'table' => 'JaduMigrationsXFP',
                 'directory' => 'upgrades',
-            ),
+            ],
             __DIR__.'/Fixtures/patch',
             __DIR__.'/Fixtures/install',
             true
@@ -103,9 +102,9 @@ class ConfigurationFactoryTest extends \PHPUnit_Framework_TestCase
             ->andReturn($connection)
             ->once();
 
-        $fileMigrationVersionStorage = Mockery::mock('Meteor\Migrations\Version\FileMigrationVersionStorage', array(
+        $fileMigrationVersionStorage = Mockery::mock('Meteor\Migrations\Version\FileMigrationVersionStorage', [
             'isInitialised' => false,
-        ));
+        ]);
 
         $this->fileMigrationVersionStorageFactory->shouldReceive('create')
             ->with(__DIR__.'/Fixtures/install', 'JaduMigrationsXFP')
@@ -122,12 +121,12 @@ class ConfigurationFactoryTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $configuration = $this->configurationFactory->createFileConfiguration(
-            array(
+            [
                 'name' => 'jadu/xfp',
                 'namespace' => 'Migrations',
                 'table' => 'JaduMigrationsXFP',
                 'directory' => 'upgrades',
-            ),
+            ],
             __DIR__.'/Fixtures/patch',
             __DIR__.'/Fixtures/install',
             true

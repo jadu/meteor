@@ -44,23 +44,23 @@ class DisplayVersionInfoHandler
                 $status = '<fg=yellow>No change</>';
             }
 
-            $rows[] = array(
+            $rows[] = [
                 $version->getPackageName(),
                 $version->getFileName(),
                 $version->getCurrentVersion(),
                 $version->getNewVersion(),
                 $status,
-            );
+            ];
         }
 
         if (isset($rows)) {
-            $this->io->table(array(
+            $this->io->table([
                 'Name',
                 'Version file',
                 'Current version',
                 'Patch version',
                 'Status',
-            ), $rows);
+            ], $rows);
         }
     }
 }

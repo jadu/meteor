@@ -27,7 +27,7 @@ class CheckDiskSpaceHandlerTest extends \PHPUnit_Framework_TestCase
         $GLOBALS['disk_total_space'] = 1048576000;
         $GLOBALS['disk_free_space'] = 1048576000;
 
-        $config = array('name' => 'test');
+        $config = ['name' => 'test'];
         $this->assertTrue($this->handler->handle(new CheckDiskSpace('install'), $config));
     }
 
@@ -36,11 +36,11 @@ class CheckDiskSpaceHandlerTest extends \PHPUnit_Framework_TestCase
         $GLOBALS['disk_total_space'] = 1048576000;
         $GLOBALS['disk_free_space'] = 419430400;
 
-        $config = array('name' => 'test');
+        $config = ['name' => 'test'];
 
         $this->backupFinder->shouldReceive('find')
             ->with('install', $config)
-            ->andReturn(array());
+            ->andReturn([]);
 
         $this->assertFalse($this->handler->handle(new CheckDiskSpace('install'), $config));
     }
@@ -50,15 +50,15 @@ class CheckDiskSpaceHandlerTest extends \PHPUnit_Framework_TestCase
         $GLOBALS['disk_total_space'] = 1048576000;
         $GLOBALS['disk_free_space'] = 419430400;
 
-        $config = array('name' => 'test');
+        $config = ['name' => 'test'];
 
-        $backups = array(
-            new Backup('backups/5', array()),
-            new Backup('backups/4', array()),
-            new Backup('backups/3', array()),
-            new Backup('backups/2', array()),
-            new Backup('backups/1', array()),
-        );
+        $backups = [
+            new Backup('backups/5', []),
+            new Backup('backups/4', []),
+            new Backup('backups/3', []),
+            new Backup('backups/2', []),
+            new Backup('backups/1', []),
+        ];
 
         $this->backupFinder->shouldReceive('find')
             ->with('install', $config)
@@ -97,12 +97,12 @@ class CheckDiskSpaceHandlerTest extends \PHPUnit_Framework_TestCase
         $GLOBALS['disk_total_space'] = 1048576000;
         $GLOBALS['disk_free_space'] = 419430400;
 
-        $config = array('name' => 'test');
+        $config = ['name' => 'test'];
 
-        $backups = array(
-            new Backup('backups/5', array()),
-            new Backup('backups/4', array()),
-        );
+        $backups = [
+            new Backup('backups/5', []),
+            new Backup('backups/4', []),
+        ];
 
         $this->backupFinder->shouldReceive('find')
             ->with('install', $config)
@@ -120,15 +120,15 @@ class CheckDiskSpaceHandlerTest extends \PHPUnit_Framework_TestCase
         $GLOBALS['disk_total_space'] = 1048576000;
         $GLOBALS['disk_free_space'] = 104857600;
 
-        $config = array('name' => 'test');
+        $config = ['name' => 'test'];
 
-        $backups = array(
-            new Backup('backups/5', array()),
-            new Backup('backups/4', array()),
-            new Backup('backups/3', array()),
-            new Backup('backups/2', array()),
-            new Backup('backups/1', array()),
-        );
+        $backups = [
+            new Backup('backups/5', []),
+            new Backup('backups/4', []),
+            new Backup('backups/3', []),
+            new Backup('backups/2', []),
+            new Backup('backups/1', []),
+        ];
 
         $this->backupFinder->shouldReceive('find')
             ->with('install', $config)

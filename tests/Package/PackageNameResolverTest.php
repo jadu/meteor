@@ -17,9 +17,9 @@ class PackageNameResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testResolveReturnsFileNameWhenGiven()
     {
-        $config = array(
+        $config = [
             'name' => 'jadu/test',
-        );
+        ];
 
         $this->assertSame('package', $this->resolver->resolve('package', vfsStream::url('root'), $config));
     }
@@ -29,19 +29,19 @@ class PackageNameResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolveGeneratesFileNameFromPackageName($packageName, $expectedFileName)
     {
-        $config = array(
+        $config = [
             'name' => $packageName,
-        );
+        ];
 
         $this->assertSame($expectedFileName, $this->resolver->resolve(null, vfsStream::url('root'), $config));
     }
 
     public function packageNameProvider()
     {
-        return array(
-            array('jadu/test', 'jadu_test'),
-            array('XFP-3.9.1', 'XFP-3.9.1'),
-        );
+        return [
+            ['jadu/test', 'jadu_test'],
+            ['XFP-3.9.1', 'XFP-3.9.1'],
+        ];
     }
 
     /**
@@ -49,27 +49,27 @@ class PackageNameResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolveGeneratesFileNameFromPackageNameAndVersion($version, $expectedFileName)
     {
-        $config = array(
+        $config = [
             'name' => 'jadu/test',
-            'package' => array(
+            'package' => [
                 'version' => 'VERSION',
-            ),
-        );
+            ],
+        ];
 
-        vfsStream::setup('root', null, array(
+        vfsStream::setup('root', null, [
             'VERSION' => $version,
-        ));
+        ]);
 
         $this->assertSame($expectedFileName, $this->resolver->resolve(null, vfsStream::url('root'), $config));
     }
 
     public function versionProvider()
     {
-        return array(
-            array('1.0.0', 'jadu_test_1.0.0'),
-            array('1.2.0-9298a2a08a460f2e3c16a71bb01d472af07137ba', 'jadu_test_1.2.0-9298a2a08a460f2e3c16a71bb01d472af07137ba'),
-            array('$$$$', 'jadu_test'),
-        );
+        return [
+            ['1.0.0', 'jadu_test_1.0.0'],
+            ['1.2.0-9298a2a08a460f2e3c16a71bb01d472af07137ba', 'jadu_test_1.2.0-9298a2a08a460f2e3c16a71bb01d472af07137ba'],
+            ['$$$$', 'jadu_test'],
+        ];
     }
 
     /**
@@ -77,12 +77,12 @@ class PackageNameResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolveThrowsExceptionWhenVersionFileCannotBeFound()
     {
-        $config = array(
+        $config = [
             'name' => 'jadu/test',
-            'package' => array(
+            'package' => [
                 'version' => 'VERSION',
-            ),
-        );
+            ],
+        ];
 
         $this->resolver->resolve(null, vfsStream::url('root'), $config);
     }
@@ -92,21 +92,21 @@ class PackageNameResolverTest extends \PHPUnit_Framework_TestCase
      */
     public function testResolveGeneratesFileNameFromPackageNameWhenFileNameInvalid($fileName)
     {
-        $config = array(
+        $config = [
             'name' => 'jadu/test',
-        );
+        ];
 
         $this->assertSame('jadu_test', $this->resolver->resolve($fileName, vfsStream::url('root'), $config));
     }
 
     public function invalidFileNameProvider()
     {
-        return array(
-            array(null),
-            array(''),
-            array('     '),
-            array('___'),
-            array('package$$$'),
-        );
+        return [
+            [null],
+            [''],
+            ['     '],
+            ['___'],
+            ['package$$$'],
+        ];
     }
 }

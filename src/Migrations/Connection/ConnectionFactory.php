@@ -36,7 +36,7 @@ class ConnectionFactory
      */
     public function createFakeConnection()
     {
-        return new Connection(array(), new Driver());
+        return new Connection([], new Driver());
     }
 
     /**

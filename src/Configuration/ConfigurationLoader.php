@@ -110,7 +110,7 @@ class ConfigurationLoader
             throw new ConfigurationLoadingException('The configuration cannot be processed as the tree was not built');
         }
 
-        return $this->processor->process($this->tree, array($config));
+        return $this->processor->process($this->tree, [$config]);
     }
 
     /**
@@ -150,12 +150,12 @@ class ConfigurationLoader
     public function resolve($path)
     {
         $paths = array_filter(
-            array(
+            [
                 // NB: The package from packages should chosen first
                 $path.'/'.self::PACKAGE_CONFIG_NAME,
                 $path.'/'.self::CONFIG_NAME,
                 $path.'/'.self::DIST_CONFIG_NAME,
-            ),
+            ],
             'is_file'
         );
 

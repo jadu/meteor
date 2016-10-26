@@ -11,11 +11,11 @@ class FileConfigurationTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->configuration = new FileConfiguration(Mockery::mock('Doctrine\DBAL\Connection', array(
+        $this->configuration = new FileConfiguration(Mockery::mock('Doctrine\DBAL\Connection', [
             // Stub methods to satisfy `new Version`
             'getSchemaManager' => Mockery::mock('Doctrine\DBAL\Schema\AbstractSchemaManager'),
             'getDatabasePlatform' => Mockery::mock('Doctrine\DBAL\Platforms\AbstractPlatform'),
-        )));
+        ]));
 
         $this->versionStorage = Mockery::mock('Meteor\Migrations\Version\FileMigrationVersionStorage');
         $this->configuration->setVersionStorage($this->versionStorage);
@@ -40,9 +40,9 @@ class FileConfigurationTest extends \PHPUnit_Framework_TestCase
 
     public function testHasVersionMigrated()
     {
-        $version = Mockery::mock('Doctrine\DBAL\Migrations\Version', array(
+        $version = Mockery::mock('Doctrine\DBAL\Migrations\Version', [
             'getVersion' => '1',
-        ));
+        ]);
 
         $this->versionStorage->shouldReceive('hasVersionMigrated')
             ->with('1')
@@ -54,7 +54,7 @@ class FileConfigurationTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMigratedVersions()
     {
-        $versionStrings = array('20160701000000', '20160701000001', '20160701000002', '20160701000003');
+        $versionStrings = ['20160701000000', '20160701000001', '20160701000002', '20160701000003'];
         $this->versionStorage->shouldReceive('getMigratedVersions')
             ->andReturn($versionStrings)
             ->once();

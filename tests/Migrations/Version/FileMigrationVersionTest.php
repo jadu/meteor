@@ -14,13 +14,13 @@ class FileMigrationVersionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->configuration = Mockery::mock('Doctrine\DBAL\Migrations\Configuration\Configuration', array(
-            'getConnection' => Mockery::mock('Doctrine\DBAL\Connection', array(
+        $this->configuration = Mockery::mock('Doctrine\DBAL\Migrations\Configuration\Configuration', [
+            'getConnection' => Mockery::mock('Doctrine\DBAL\Connection', [
                 'getDatabasePlatform' => Mockery::mock('Doctrine\DBAL\Platforms\AbstractPlatform'),
                 'getSchemaManager' => Mockery::mock('Doctrine\DBAL\Schema\AbstractSchemaManager'),
-            )),
+            ]),
             'getOutputWriter' => Mockery::mock('Doctrine\DBAL\Migrations\OutputWriter'),
-        ));
+        ]);
         $this->versionStorage = Mockery::mock('Meteor\Migrations\Version\FileMigrationVersionStorage');
         $this->version = new FileMigrationVersion($this->configuration, '12345', 'stdClass', null, $this->versionStorage);
     }

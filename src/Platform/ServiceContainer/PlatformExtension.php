@@ -57,9 +57,9 @@ class PlatformExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadWindowsPlatform(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_PLATFORM_WINDOWS, new Definition('Meteor\Platform\Windows\WindowsPlatform', array(
+        $container->setDefinition(self::SERVICE_PLATFORM_WINDOWS, new Definition('Meteor\Platform\Windows\WindowsPlatform', [
             new Reference(ProcessExtension::SERVICE_PROCESS_RUNNER),
-        )));
+        ]));
     }
 
     /**
@@ -77,10 +77,10 @@ class PlatformExtension extends ExtensionBase implements ExtensionInterface
     {
         $this->loadUnixPlatformInstallConfigLoader($container);
 
-        $definition = new Definition('Meteor\Platform\Unix\UnixPlatform', array(
+        $definition = new Definition('Meteor\Platform\Unix\UnixPlatform', [
             new Reference(self::SERVICE_UNIX_INSTALL_CONFIG_LOADER),
             new Reference(FilesystemExtension::SERVICE_FILESYSTEM),
-        ));
+        ]);
         $container->setDefinition(self::SERVICE_PLATFORM_UNIX, $definition);
     }
 

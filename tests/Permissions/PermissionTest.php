@@ -12,7 +12,7 @@ class PermissionTest extends \PHPUnit_Framework_TestCase
         $expectedPermission->setExecute(true);
         $expectedPermission->setRecursive(true);
 
-        $this->assertEquals($expectedPermission, Permission::create('test/*', array('r', 'w', 'x', 'R')));
+        $this->assertEquals($expectedPermission, Permission::create('test/*', ['r', 'w', 'x', 'R']));
     }
 
     public function testCreateWithNoPermissions()
@@ -23,7 +23,7 @@ class PermissionTest extends \PHPUnit_Framework_TestCase
         $expectedPermission->setExecute(false);
         $expectedPermission->setRecursive(false);
 
-        $this->assertEquals($expectedPermission, Permission::create('test/*', array()));
+        $this->assertEquals($expectedPermission, Permission::create('test/*', []));
     }
 
     public function testCreateWithSomePermissions()
@@ -34,14 +34,14 @@ class PermissionTest extends \PHPUnit_Framework_TestCase
         $expectedPermission->setExecute(true);
         $expectedPermission->setRecursive(false);
 
-        $this->assertEquals($expectedPermission, Permission::create('test/*', array('r', 'x')));
+        $this->assertEquals($expectedPermission, Permission::create('test/*', ['r', 'x']));
     }
 
     public function testCreateWithExtraWhitespaceInPath()
     {
         $expectedPermission = new Permission('    test/*    ');
 
-        $this->assertEquals($expectedPermission, Permission::create('test/*', array()));
+        $this->assertEquals($expectedPermission, Permission::create('test/*', []));
     }
 
     /**
@@ -55,11 +55,11 @@ class PermissionTest extends \PHPUnit_Framework_TestCase
 
     public function matchesProvider()
     {
-        return array(
-            array('test', 'test', true),
-            array('test', 'other/test', false),
-            array('config/*.xml', 'config/system.xml', true),
-            array('config/*.xml', 'config/system.xml.dist', false),
-        );
+        return [
+            ['test', 'test', true],
+            ['test', 'other/test', false],
+            ['config/*.xml', 'config/system.xml', true],
+            ['config/*.xml', 'config/system.xml.dist', false],
+        ];
     }
 }

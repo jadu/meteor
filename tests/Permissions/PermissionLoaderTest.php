@@ -15,13 +15,13 @@ class PermissionLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $permissions = $this->loader->load(__DIR__.'/Fixtures');
 
-        $this->assertEquals(Permission::create('public_html/.htaccess*', array('r', 'w')), $permissions[0]);
+        $this->assertEquals(Permission::create('public_html/.htaccess*', ['r', 'w']), $permissions[0]);
     }
 
     public function testLoadIgnoresExtraWhitespace()
     {
         $permissions = $this->loader->load(__DIR__.'/Fixtures');
 
-        $this->assertEquals(Permission::create('var/tmp', array('r', 'w', 'x', 'R')), $permissions[38]);
+        $this->assertEquals(Permission::create('var/tmp', ['r', 'w', 'x', 'R']), $permissions[38]);
     }
 }

@@ -16,12 +16,12 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
 
     public function testApply()
     {
-        $tasks = $this->strategy->apply('patch', 'install', array(
+        $tasks = $this->strategy->apply('patch', 'install', [
             'skip-backup' => false,
             'skip-db-migrations' => false,
             'skip-file-migrations' => false,
             'skip-version-check' => false,
-        ));
+        ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
         $this->assertSame('install', $tasks[0]->targetDir);
@@ -72,12 +72,12 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
 
     public function testApplyCanSkipVersionCheck()
     {
-        $tasks = $this->strategy->apply('patch', 'install', array(
+        $tasks = $this->strategy->apply('patch', 'install', [
             'skip-backup' => false,
             'skip-db-migrations' => false,
             'skip-file-migrations' => false,
             'skip-version-check' => true,
-        ));
+        ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
         $this->assertInstanceOf('Meteor\Patch\Task\DisplayVersionInfo', $tasks[1]);
@@ -92,12 +92,12 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
 
     public function testApplyCanSkipFileMigrations()
     {
-        $tasks = $this->strategy->apply('patch', 'install', array(
+        $tasks = $this->strategy->apply('patch', 'install', [
             'skip-backup' => false,
             'skip-db-migrations' => false,
             'skip-file-migrations' => true,
             'skip-version-check' => false,
-        ));
+        ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
         $this->assertInstanceOf('Meteor\Patch\Task\DisplayVersionInfo', $tasks[1]);
@@ -113,12 +113,12 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
 
     public function testApplyCanSkipDbMigrations()
     {
-        $tasks = $this->strategy->apply('patch', 'install', array(
+        $tasks = $this->strategy->apply('patch', 'install', [
             'skip-backup' => false,
             'skip-db-migrations' => true,
             'skip-file-migrations' => false,
             'skip-version-check' => false,
-        ));
+        ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
         $this->assertInstanceOf('Meteor\Patch\Task\DisplayVersionInfo', $tasks[1]);
@@ -134,12 +134,12 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
 
     public function testApplyCanSkipDbAndFileMigrations()
     {
-        $tasks = $this->strategy->apply('patch', 'install', array(
+        $tasks = $this->strategy->apply('patch', 'install', [
             'skip-backup' => false,
             'skip-db-migrations' => true,
             'skip-file-migrations' => true,
             'skip-version-check' => false,
-        ));
+        ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
         $this->assertInstanceOf('Meteor\Patch\Task\DisplayVersionInfo', $tasks[1]);
@@ -153,12 +153,12 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
 
     public function testApplyCanSkipBackup()
     {
-        $tasks = $this->strategy->apply('patch', 'install', array(
+        $tasks = $this->strategy->apply('patch', 'install', [
             'skip-backup' => true,
             'skip-db-migrations' => false,
             'skip-file-migrations' => false,
             'skip-version-check' => false,
-        ));
+        ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
         $this->assertInstanceOf('Meteor\Patch\Task\DisplayVersionInfo', $tasks[1]);
@@ -173,11 +173,11 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
 
     public function testRollback()
     {
-        $tasks = $this->strategy->rollback('backups/1', 'patch', 'install', array(), array(
+        $tasks = $this->strategy->rollback('backups/1', 'patch', 'install', [], [
             'skip-db-migrations' => false,
             'skip-file-migrations' => false,
             'skip-version-check' => false,
-        ));
+        ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
         $this->assertSame('install', $tasks[0]->targetDir);
@@ -216,11 +216,11 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
 
     public function testRollbackCanSkipDbMigrations()
     {
-        $tasks = $this->strategy->rollback('backups/1', 'patch', 'install', array(), array(
+        $tasks = $this->strategy->rollback('backups/1', 'patch', 'install', [], [
             'skip-db-migrations' => true,
             'skip-file-migrations' => false,
             'skip-version-check' => false,
-        ));
+        ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
         $this->assertInstanceOf('Meteor\Patch\Task\DisplayVersionInfo', $tasks[1]);
@@ -233,11 +233,11 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
 
     public function testRollbackCanSkipFileMigrations()
     {
-        $tasks = $this->strategy->rollback('backups/1', 'patch', 'install', array(), array(
+        $tasks = $this->strategy->rollback('backups/1', 'patch', 'install', [], [
             'skip-db-migrations' => false,
             'skip-file-migrations' => true,
             'skip-version-check' => false,
-        ));
+        ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
         $this->assertInstanceOf('Meteor\Patch\Task\DisplayVersionInfo', $tasks[1]);
@@ -250,11 +250,11 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
 
     public function testRollbackCanSkipDbAndFileMigrations()
     {
-        $tasks = $this->strategy->rollback('backups/1', 'patch', 'install', array(), array(
+        $tasks = $this->strategy->rollback('backups/1', 'patch', 'install', [], [
             'skip-db-migrations' => true,
             'skip-file-migrations' => true,
             'skip-version-check' => false,
-        ));
+        ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
         $this->assertInstanceOf('Meteor\Patch\Task\DisplayVersionInfo', $tasks[1]);
@@ -265,11 +265,11 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
 
     public function testRollbackCanSkipVersionCheck()
     {
-        $tasks = $this->strategy->rollback('backups/1', 'patch', 'install', array(), array(
+        $tasks = $this->strategy->rollback('backups/1', 'patch', 'install', [], [
             'skip-db-migrations' => false,
             'skip-file-migrations' => false,
             'skip-version-check' => true,
-        ));
+        ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
         $this->assertInstanceOf('Meteor\Patch\Task\DisplayVersionInfo', $tasks[1]);
@@ -282,11 +282,11 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
 
     public function testRollbackDeletesIntermediateBackups()
     {
-        $tasks = $this->strategy->rollback('backups/3', 'patch', 'install', array('backups/1', 'backups/2'), array(
+        $tasks = $this->strategy->rollback('backups/3', 'patch', 'install', ['backups/1', 'backups/2'], [
             'skip-db-migrations' => false,
             'skip-file-migrations' => false,
             'skip-version-check' => false,
-        ));
+        ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\DeleteBackup', $tasks[7]);
         $this->assertSame('backups/1', $tasks[7]->backupDir);

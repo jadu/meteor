@@ -44,7 +44,7 @@ class ApplicationFactory
      */
     protected function getDefaultExtensions()
     {
-        return array(
+        return [
             new CliExtension(),
             new ConfigurationExtension(),
             new EventDispatcherExtension(),
@@ -59,7 +59,7 @@ class ApplicationFactory
             new PlatformExtension(),
             new ProcessExtension(),
             new ScriptsExtension(),
-        );
+        ];
     }
 
     /**

@@ -13,7 +13,7 @@ $config->finder($finder);
 $config->level(FixerInterface::SYMFONY_LEVEL);
 $config->fixers([
     '-phpdoc_params',
-    'long_array_syntax',
+    'short_array_syntax',
     'ordered_use',
     'unused_use',
     'strict',

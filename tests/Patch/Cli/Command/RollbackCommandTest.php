@@ -23,25 +23,25 @@ class RollbackCommandTest extends CommandTestCase
 
     public function createCommand()
     {
-        vfsStream::setup('root', null, array(
-            'patch' => array(),
-            'install' => array(),
-        ));
+        vfsStream::setup('root', null, [
+            'patch' => [],
+            'install' => [],
+        ]);
 
         $this->versionComparer = Mockery::mock('Meteor\Patch\Version\VersionComparer');
         $this->backupFinder = Mockery::mock('Meteor\Patch\Backup\BackupFinder');
         $this->taskBus = Mockery::mock('Meteor\Patch\Task\TaskBusInterface');
         $this->strategy = Mockery::mock('Meteor\Patch\Strategy\PatchStrategyInterface');
-        $this->platform = Mockery::mock('Meteor\Platform\PlatformInterface', array(
+        $this->platform = Mockery::mock('Meteor\Platform\PlatformInterface', [
             'setInstallDir' => null,
-        ));
+        ]);
         $this->locker = Mockery::mock('Meteor\Patch\Lock\Locker');
-        $this->eventDispatcher = Mockery::mock('Symfony\Component\EventDispatcher\EventDispatcherInterface', array(
+        $this->eventDispatcher = Mockery::mock('Symfony\Component\EventDispatcher\EventDispatcherInterface', [
             'dispatch' => null,
-        ));
-        $this->scriptRunner = Mockery::mock('Meteor\Scripts\ScriptRunner', array(
+        ]);
+        $this->scriptRunner = Mockery::mock('Meteor\Scripts\ScriptRunner', [
             'setWorkingDir' => null,
-        ));
+        ]);
         $this->logger = Mockery::mock('Meteor\Logger\LoggerInterface');
 
         $this->strategy->shouldReceive('configureRollbackCommand')
@@ -49,7 +49,7 @@ class RollbackCommandTest extends CommandTestCase
 
         return new RollbackCommand(
             null,
-            array(),
+            [],
             new NullIO(),
             $this->platform,
             $this->versionComparer,
@@ -68,7 +68,7 @@ class RollbackCommandTest extends CommandTestCase
         $workingDir = vfsStream::url('root/patch');
         $installDir = vfsStream::url('root/install');
 
-        $config = array('name' => 'test');
+        $config = ['name' => 'test'];
         $this->command->setConfiguration($config);
 
         $this->platform->shouldReceive('setInstallDir')
@@ -81,14 +81,14 @@ class RollbackCommandTest extends CommandTestCase
 
         $this->versionComparer->shouldReceive('comparePackage')
             ->with($workingDir.'/to_patch', $installDir, $config)
-            ->andReturn(array())
+            ->andReturn([])
             ->once();
 
-        $backups = array(
-            new Backup(vfsStream::url('root/install/backups/20160701102030'), array()),
-            new Backup(vfsStream::url('root/install/backups/20160702102030'), array()),
-            new Backup(vfsStream::url('root/install/backups/20160703102030'), array()),
-        );
+        $backups = [
+            new Backup(vfsStream::url('root/install/backups/20160701102030'), []),
+            new Backup(vfsStream::url('root/install/backups/20160702102030'), []),
+            new Backup(vfsStream::url('root/install/backups/20160703102030'), []),
+        ];
 
         $this->backupFinder->shouldReceive('find')
             ->with($installDir, $config)
@@ -108,12 +108,12 @@ class RollbackCommandTest extends CommandTestCase
             ->with(PatchEvents::PRE_ROLLBACK, Mockery::any())
             ->once();
 
-        $tasks = array(
+        $tasks = [
             new \stdClass(),
             new \stdClass(),
-        );
+        ];
         $this->strategy->shouldReceive('rollback')
-            ->with($backupDir, $workingDir, $installDir, array(), Mockery::any())
+            ->with($backupDir, $workingDir, $installDir, [], Mockery::any())
             ->andReturn($tasks)
             ->once();
 
@@ -135,10 +135,10 @@ class RollbackCommandTest extends CommandTestCase
             ->with($installDir)
             ->once();
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
-        ));
+        ]);
     }
 
     public function testDoesNotRunScriptsIfSkipped()
@@ -146,7 +146,7 @@ class RollbackCommandTest extends CommandTestCase
         $workingDir = vfsStream::url('root/patch');
         $installDir = vfsStream::url('root/install');
 
-        $config = array('name' => 'test');
+        $config = ['name' => 'test'];
         $this->command->setConfiguration($config);
 
         $this->platform->shouldReceive('setInstallDir')
@@ -157,13 +157,13 @@ class RollbackCommandTest extends CommandTestCase
 
         $this->versionComparer->shouldReceive('comparePackage')
             ->with($workingDir.'/to_patch', $installDir, $config)
-            ->andReturn(array());
+            ->andReturn([]);
 
-        $backups = array(
-            new Backup(vfsStream::url('root/install/backups/20160701102030'), array()),
-            new Backup(vfsStream::url('root/install/backups/20160702102030'), array()),
-            new Backup(vfsStream::url('root/install/backups/20160703102030'), array()),
-        );
+        $backups = [
+            new Backup(vfsStream::url('root/install/backups/20160701102030'), []),
+            new Backup(vfsStream::url('root/install/backups/20160702102030'), []),
+            new Backup(vfsStream::url('root/install/backups/20160703102030'), []),
+        ];
 
         $this->backupFinder->shouldReceive('find')
             ->with($installDir, $config)
@@ -180,12 +180,12 @@ class RollbackCommandTest extends CommandTestCase
             ->with(PatchEvents::PRE_ROLLBACK, Mockery::any())
             ->never();
 
-        $tasks = array(
+        $tasks = [
             new \stdClass(),
             new \stdClass(),
-        );
+        ];
         $this->strategy->shouldReceive('rollback')
-            ->with($backupDir, $workingDir, $installDir, array(), Mockery::any())
+            ->with($backupDir, $workingDir, $installDir, [], Mockery::any())
             ->andReturn($tasks);
 
         $this->taskBus->shouldReceive('run')
@@ -203,11 +203,11 @@ class RollbackCommandTest extends CommandTestCase
         $this->locker->shouldReceive('unlock')
             ->with($installDir);
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
             '--skip-scripts' => null,
-        ));
+        ]);
     }
 
     /**
@@ -218,10 +218,10 @@ class RollbackCommandTest extends CommandTestCase
         $workingDir = vfsStream::url('root/install');
         $installDir = vfsStream::url('root/install');
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
-        ));
+        ]);
     }
 
     public function testDoesNotLockWhenSkipLockOptionSpecified()
@@ -229,19 +229,19 @@ class RollbackCommandTest extends CommandTestCase
         $workingDir = vfsStream::url('root/patch');
         $installDir = vfsStream::url('root/install');
 
-        $config = array('name' => 'test');
+        $config = ['name' => 'test'];
         $this->command->setConfiguration($config);
 
         $this->versionComparer->shouldReceive('comparePackage')
             ->with($workingDir.'/to_patch', $installDir, $config)
-            ->andReturn(array())
+            ->andReturn([])
             ->once();
 
-        $backups = array(
-            new Backup(vfsStream::url('root/install/backups/20160701102030'), array()),
-            new Backup(vfsStream::url('root/install/backups/20160702102030'), array()),
-            new Backup(vfsStream::url('root/install/backups/20160703102030'), array()),
-        );
+        $backups = [
+            new Backup(vfsStream::url('root/install/backups/20160701102030'), []),
+            new Backup(vfsStream::url('root/install/backups/20160702102030'), []),
+            new Backup(vfsStream::url('root/install/backups/20160703102030'), []),
+        ];
 
         $this->backupFinder->shouldReceive('find')
             ->with($installDir, $config)
@@ -256,9 +256,9 @@ class RollbackCommandTest extends CommandTestCase
         $this->locker->shouldReceive('lock')
             ->never();
 
-        $tasks = array(new \stdClass());
+        $tasks = [new \stdClass()];
         $this->strategy->shouldReceive('rollback')
-            ->with($backupDir, $workingDir, $installDir, array(), Mockery::any())
+            ->with($backupDir, $workingDir, $installDir, [], Mockery::any())
             ->andReturn($tasks)
             ->once();
 
@@ -270,11 +270,11 @@ class RollbackCommandTest extends CommandTestCase
         $this->locker->shouldReceive('unlock')
             ->never();
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
             '--skip-lock' => null,
-        ));
+        ]);
     }
 
     public function testDoesNotUnlockIfTaskFails()
@@ -282,19 +282,19 @@ class RollbackCommandTest extends CommandTestCase
         $workingDir = vfsStream::url('root/patch');
         $installDir = vfsStream::url('root/install');
 
-        $config = array('name' => 'test');
+        $config = ['name' => 'test'];
         $this->command->setConfiguration($config);
 
         $this->versionComparer->shouldReceive('comparePackage')
             ->with($workingDir.'/to_patch', $installDir, $config)
-            ->andReturn(array())
+            ->andReturn([])
             ->once();
 
-        $backups = array(
-            new Backup(vfsStream::url('root/install/backups/20160701102030'), array()),
-            new Backup(vfsStream::url('root/install/backups/20160702102030'), array()),
-            new Backup(vfsStream::url('root/install/backups/20160703102030'), array()),
-        );
+        $backups = [
+            new Backup(vfsStream::url('root/install/backups/20160701102030'), []),
+            new Backup(vfsStream::url('root/install/backups/20160702102030'), []),
+            new Backup(vfsStream::url('root/install/backups/20160703102030'), []),
+        ];
 
         $this->backupFinder->shouldReceive('find')
             ->with($installDir, $config)
@@ -310,9 +310,9 @@ class RollbackCommandTest extends CommandTestCase
             ->with($installDir)
             ->once();
 
-        $tasks = array(new \stdClass());
+        $tasks = [new \stdClass()];
         $this->strategy->shouldReceive('rollback')
-            ->with($backupDir, $workingDir, $installDir, array(), Mockery::any())
+            ->with($backupDir, $workingDir, $installDir, [], Mockery::any())
             ->andReturn($tasks)
             ->once();
 
@@ -324,9 +324,9 @@ class RollbackCommandTest extends CommandTestCase
         $this->locker->shouldReceive('unlock')
             ->never();
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
-        ));
+        ]);
     }
 }

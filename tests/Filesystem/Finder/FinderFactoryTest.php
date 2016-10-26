@@ -22,7 +22,7 @@ class FinderFactoryTest extends \PHPUnit_Framework_TestCase
 
         $finder = $this->finderFactory->create(vfsStream::url('root'), $filters);
 
-        $foundFiles = array();
+        $foundFiles = [];
         foreach ($finder as $file) {
             $foundFiles[] = preg_replace('/^'.preg_quote(vfsStream::url('root').'/', '/').'/', '', $file->getPathname());
         }
@@ -32,155 +32,155 @@ class FinderFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function filterProvider()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'index.html' => '',
                     'XFP_VERSION' => '',
-                ),
-                array(
+                ],
+                [
                     '**',
-                ),
-                array(
+                ],
+                [
                     'index.html',
                     'XFP_VERSION',
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     'index.html' => '',
-                ),
-                array(
+                ],
+                [
                     'index.html',
-                ),
-                array(
+                ],
+                [
                     'index.html',
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     'index.html' => '',
-                ),
-                array(
+                ],
+                [
                     '!index.html',
-                ),
-                array(
-                ),
-            ),
-            array(
-                array(
+                ],
+                [
+                ],
+            ],
+            [
+                [
                     'XFP_VERSION' => '',
-                ),
-                array(
+                ],
+                [
                     '*VERSION',
-                ),
-                array(
+                ],
+                [
                     'XFP_VERSION',
-                ),
-            ),
-            array(
-                array(
-                    'var' => array(
+                ],
+            ],
+            [
+                [
+                    'var' => [
                         'XFP_VERSION' => '',
-                    ),
+                    ],
                     'VERSION' => '',
-                ),
-                array(
+                ],
+                [
                     '*VERSION',
-                ),
-                array(
+                ],
+                [
                     'var/XFP_VERSION',
                     'VERSION',
-                ),
-            ),
-            array(
-                array(
-                    'var' => array(
+                ],
+            ],
+            [
+                [
+                    'var' => [
                         'XFP_VERSION' => '1.3.2',
-                    ),
+                    ],
                     'VERSION' => '',
-                ),
-                array(
+                ],
+                [
                     '/*VERSION',
-                ),
-                array(
+                ],
+                [
                     'VERSION',
-                ),
-            ),
-            array(
-                array(
-                    'var' => array(
+                ],
+            ],
+            [
+                [
+                    'var' => [
                         'XFP_VERSION' => '1.3.2',
-                    ),
+                    ],
                     'VERSION' => '',
-                ),
-                array(
+                ],
+                [
                     '**VERSION',
                     '!/*VERSION',
-                ),
-                array(
+                ],
+                [
                     'var/XFP_VERSION',
-                ),
-            ),
-            array(
-                array(
-                    'backups' => array(
-                        '20160701102030' => array(
+                ],
+            ],
+            [
+                [
+                    'backups' => [
+                        '20160701102030' => [
                             'CORE_MIGRATION_NUMBER' => '2',
-                        ),
-                    ),
+                        ],
+                    ],
                     'CORE_MIGRATION_NUMBER' => '1',
-                ),
-                array(
+                ],
+                [
                     '/*_MIGRATION_NUMBER',
-                ),
-                array(
+                ],
+                [
                     'CORE_MIGRATION_NUMBER',
-                ),
-            ),
-            array(
-                array(
-                    'backups' => array(
-                        '20160701102030' => array(
+                ],
+            ],
+            [
+                [
+                    'backups' => [
+                        '20160701102030' => [
                             'CORE_MIGRATION_NUMBER' => '2',
-                        ),
-                    ),
+                        ],
+                    ],
                     'CORE_MIGRATION_NUMBER' => '1',
-                ),
-                array(
+                ],
+                [
                     '*_MIGRATION_NUMBER',
-                ),
-                array(
+                ],
+                [
                     'backups/20160701102030/CORE_MIGRATION_NUMBER',
                     'CORE_MIGRATION_NUMBER',
-                ),
-            ),
-            array(
-                array(
-                    'public_html' => array(
+                ],
+            ],
+            [
+                [
+                    'public_html' => [
                         '.htaccess' => '',
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     '/public_html/**',
-                ),
-                array(
+                ],
+                [
                     'public_html/.htaccess',
-                ),
-            ),
-            array(
-                array(
-                    'public_html' => array(
+                ],
+            ],
+            [
+                [
+                    'public_html' => [
                         '.htaccess' => '',
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     '.htaccess',
-                ),
-                array(
+                ],
+                [
                     'public_html/.htaccess',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 }

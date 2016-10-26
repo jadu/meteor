@@ -27,7 +27,7 @@ class FinderFactory
         }
 
         if ($filters !== null) {
-            $patterns = array();
+            $patterns = [];
             foreach ($filters as $filter) {
                 $patterns[] = $this->generatePattern($filter);
             }
@@ -85,6 +85,6 @@ class FinderFactory
 
         $pattern = '/'.str_replace('/', '\/', $pattern).'/';
 
-        return array($pattern, $negate);
+        return [$pattern, $negate];
     }
 }

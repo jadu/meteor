@@ -15,9 +15,9 @@ class GoogleDrivePackageProviderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->processRunner = Mockery::mock('Meteor\Process\ProcessRunner');
-        $this->packageProvider = new GoogleDrivePackageProvider($this->processRunner, new NullIO(), 'gdrive', array(
+        $this->packageProvider = new GoogleDrivePackageProvider($this->processRunner, new NullIO(), 'gdrive', [
             'jadu/cms' => '12345',
-        ));
+        ]);
 
         vfsStream::setup('root');
     }
@@ -25,9 +25,9 @@ class GoogleDrivePackageProviderTest extends \PHPUnit_Framework_TestCase
     public function testDownload()
     {
         // Create the file as if it was downloaded
-        vfsStream::setup('root', null, array(
+        vfsStream::setup('root', null, [
             '3.2.1.zip' => '',
-        ));
+        ]);
 
         $this->processRunner->shouldReceive('run')
             ->with("gdrive download query 'name = '\''3.2.1.zip'\'' and '\''12345'\'' in parents' --force", vfsStream::url('root'))

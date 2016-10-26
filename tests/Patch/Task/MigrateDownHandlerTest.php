@@ -24,12 +24,12 @@ class MigrateDownHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testRunsFileMigrationsIfConfigured()
     {
-        $config = array(
+        $config = [
             'name' => 'root',
-            'migrations' => array(
+            'migrations' => [
                 'table' => 'Migrations',
-            ),
-        );
+            ],
+        ];
 
         $this->versionFileManager->shouldReceive('getCurrentVersion')
             ->with('backups/1', 'Migrations', 'FILE_SYSTEM_MIGRATION_NUMBER')
@@ -47,12 +47,12 @@ class MigrateDownHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testRunsDatabaseMigrationsIfConfigured()
     {
-        $config = array(
+        $config = [
             'name' => 'root',
-            'migrations' => array(
+            'migrations' => [
                 'table' => 'Migrations',
-            ),
-        );
+            ],
+        ];
 
         $this->versionFileManager->shouldReceive('getCurrentVersion')
             ->with('backups/1', 'Migrations', 'MIGRATION_NUMBER')
@@ -70,16 +70,16 @@ class MigrateDownHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testRunsCombinedPackageMigrationsIfConfigured()
     {
-        $config = array(
-            'combined' => array(
-                array(
+        $config = [
+            'combined' => [
+                [
                     'name' => 'test',
-                    'migrations' => array(
+                    'migrations' => [
                         'table' => 'Migrations',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $this->versionFileManager->shouldReceive('getCurrentVersion')
             ->with('backups/1', 'Migrations', 'FILE_SYSTEM_MIGRATION_NUMBER')
@@ -97,26 +97,26 @@ class MigrateDownHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testRunsMigrationsInReverseOrder()
     {
-        $config = array(
+        $config = [
             'name' => 'root',
-            'migrations' => array(
+            'migrations' => [
                 'table' => 'Migrations',
-            ),
-            'combined' => array(
-                array(
+            ],
+            'combined' => [
+                [
                     'name' => 'test1',
-                    'migrations' => array(
+                    'migrations' => [
                         'table' => 'Migrations1',
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'name' => 'test2',
-                    'migrations' => array(
+                    'migrations' => [
                         'table' => 'Migrations2',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $this->versionFileManager->shouldReceive('getCurrentVersion')
             ->with('backups/1', $config['migrations']['table'], 'FILE_SYSTEM_MIGRATION_NUMBER')
@@ -160,20 +160,20 @@ class MigrateDownHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testHaltsHandlerIfMigrationsFail()
     {
-        $config = array(
+        $config = [
             'name' => 'root',
-            'migrations' => array(
+            'migrations' => [
                 'table' => 'Migrations',
-            ),
-            'combined' => array(
-                array(
+            ],
+            'combined' => [
+                [
                     'name' => 'test',
-                    'migrations' => array(
+                    'migrations' => [
                         'table' => 'Migrations',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $this->versionFileManager->shouldReceive('getCurrentVersion')
             ->andReturn('0');
@@ -193,22 +193,22 @@ class MigrateDownHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testHaltsHandlerIfCombinedPackageMigrationsFail()
     {
-        $config = array(
-            'combined' => array(
-                array(
+        $config = [
+            'combined' => [
+                [
                     'name' => 'test',
-                    'migrations' => array(
+                    'migrations' => [
                         'table' => 'Migrations1',
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'name' => 'test2',
-                    'migrations' => array(
+                    'migrations' => [
                         'table' => 'Migrations2',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $this->versionFileManager->shouldReceive('getCurrentVersion')
             ->andReturn('0');

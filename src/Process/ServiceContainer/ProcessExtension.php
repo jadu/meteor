@@ -52,9 +52,9 @@ class ProcessExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadProcessRunner(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_PROCESS_RUNNER, new Definition('Meteor\Process\ProcessRunner', array(
+        $container->setDefinition(self::SERVICE_PROCESS_RUNNER, new Definition('Meteor\Process\ProcessRunner', [
             new Reference(IOExtension::SERVICE_IO),
-        )));
+        ]));
     }
 
     /**

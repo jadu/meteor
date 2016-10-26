@@ -16,14 +16,14 @@ class CopyFilesHandlerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->io = new NullIO();
-        $this->filesystem = Mockery::mock('Meteor\Filesystem\Filesystem', array(
-            'findNewFiles' => array(),
+        $this->filesystem = Mockery::mock('Meteor\Filesystem\Filesystem', [
+            'findNewFiles' => [],
             'copyDirectory' => null,
-        ));
-        $this->permissionSetter = Mockery::mock('Meteor\Permissions\PermissionSetter', array(
+        ]);
+        $this->permissionSetter = Mockery::mock('Meteor\Permissions\PermissionSetter', [
             'setDefaultPermissions' => null,
             'setPermissions' => null,
-        ));
+        ]);
         $this->handler = new CopyFilesHandler($this->io, $this->filesystem, $this->permissionSetter);
     }
 
@@ -33,14 +33,14 @@ class CopyFilesHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('source', 'target')
             ->once();
 
-        $this->handler->handle(new CopyFiles('source', 'target'), array());
+        $this->handler->handle(new CopyFiles('source', 'target'), []);
     }
 
     public function testSetsPermissions()
     {
-        $newFiles = array(
+        $newFiles = [
             'test',
-        );
+        ];
 
         $this->filesystem->shouldReceive('findNewFiles')
             ->with('source', 'target')
@@ -57,6 +57,6 @@ class CopyFilesHandlerTest extends \PHPUnit_Framework_TestCase
             ->ordered()
             ->once();
 
-        $this->handler->handle(new CopyFiles('source', 'target'), array());
+        $this->handler->handle(new CopyFiles('source', 'target'), []);
     }
 }

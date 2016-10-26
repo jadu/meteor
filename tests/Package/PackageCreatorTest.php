@@ -23,14 +23,14 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->filesystem = Mockery::mock('Meteor\Filesystem\Filesystem');
         $this->packageArchiver = Mockery::mock('Meteor\Package\PackageArchiver');
-        $this->packageNameResolver = Mockery::mock('Meteor\Package\PackageNameResolver', array(
+        $this->packageNameResolver = Mockery::mock('Meteor\Package\PackageNameResolver', [
             'resolve' => 'package',
-        ));
+        ]);
         $this->migrationsCopier = Mockery::mock('Meteor\Package\Migrations\MigrationsCopier');
         $this->combinedPackageResolver = Mockery::mock('Meteor\Package\Combined\CombinedPackageResolver');
-        $this->composerDependencyChecker = Mockery::mock('Meteor\Package\Composer\ComposerDependencyChecker', array(
-            'getRequirements' => array(),
-        ));
+        $this->composerDependencyChecker = Mockery::mock('Meteor\Package\Composer\ComposerDependencyChecker', [
+            'getRequirements' => [],
+        ]);
         $this->configurationWriter = Mockery::mock('Meteor\Configuration\ConfigurationWriter');
         $this->io = new NullIO();
 
@@ -52,12 +52,12 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
         $outputDir = 'output';
         $tempDir = 'temp';
 
-        $config = array(
+        $config = [
             'name' => 'jadu/xfp',
-            'package' => array(
-                'combine' => array(),
-            ),
-        );
+            'package' => [
+                'combine' => [],
+            ],
+        ];
 
         $this->filesystem->shouldReceive('ensureDirectoryExists')
             ->andReturn($outputDir)
@@ -82,7 +82,7 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->combinedPackageResolver->shouldReceive('resolve')
-            ->with(array('cms.zip'), $outputDir, $tempDir, $config, false)
+            ->with(['cms.zip'], $outputDir, $tempDir, $config, false)
             ->andReturn($config)
             ->ordered()
             ->once();
@@ -107,7 +107,7 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             $outputDir,
             'package',
             $config,
-            array('cms.zip')
+            ['cms.zip']
         );
     }
 
@@ -117,12 +117,12 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
         $outputDir = 'output';
         $tempDir = 'temp';
 
-        $config = array(
+        $config = [
             'name' => 'jadu/xfp',
-            'package' => array(
-                'combine' => array(),
-            ),
-        );
+            'package' => [
+                'combine' => [],
+            ],
+        ];
 
         $this->filesystem->shouldReceive('ensureDirectoryExists')
             ->andReturn($outputDir)
@@ -169,7 +169,7 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             $outputDir,
             'package',
             $config,
-            array('cms.zip'),
+            ['cms.zip'],
             true
         );
     }
@@ -180,13 +180,13 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
         $outputDir = 'output';
         $tempDir = 'temp';
 
-        $config = array(
+        $config = [
             'name' => 'jadu/xfp',
-            'package' => array(
-                'files' => array('/**'),
-                'combine' => array(),
-            ),
-        );
+            'package' => [
+                'files' => ['/**'],
+                'combine' => [],
+            ],
+        ];
 
         $this->filesystem->shouldReceive('ensureDirectoryExists')
             ->andReturn($outputDir)
@@ -200,7 +200,7 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->filesystem->shouldReceive('copyDirectory')
-            ->with($workingDir, $tempDir.'/to_patch', array('/**'))
+            ->with($workingDir, $tempDir.'/to_patch', ['/**'])
             ->ordered()
             ->once();
 
@@ -210,9 +210,9 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             ->ordered()
             ->once();
 
-        $composerRequirements = array(
+        $composerRequirements = [
             new ComposerRequirement('jadu/cms-dependencies', '~13.6.0'),
-        );
+        ];
 
         $this->composerDependencyChecker->shouldReceive('getRequirements')
             ->with($workingDir)
@@ -220,7 +220,7 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->combinedPackageResolver->shouldReceive('resolve')
-            ->with(array('cms.zip'), $outputDir, $tempDir, $config, true)
+            ->with(['cms.zip'], $outputDir, $tempDir, $config, true)
             ->andReturn($config)
             ->ordered()
             ->once();
@@ -256,7 +256,7 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             $outputDir,
             'package',
             $config,
-            array('cms.zip')
+            ['cms.zip']
         );
     }
 
@@ -266,13 +266,13 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
         $outputDir = 'output';
         $tempDir = 'temp';
 
-        $config = array(
+        $config = [
             'name' => 'jadu/xfp',
-            'package' => array(
-                'files' => array('/**'),
-                'combine' => array(),
-            ),
-        );
+            'package' => [
+                'files' => ['/**'],
+                'combine' => [],
+            ],
+        ];
 
         $this->filesystem->shouldReceive('ensureDirectoryExists')
             ->andReturn($outputDir)
@@ -286,7 +286,7 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->filesystem->shouldReceive('copyDirectory')
-            ->with($workingDir, $tempDir.'/to_patch', array('/**'))
+            ->with($workingDir, $tempDir.'/to_patch', ['/**'])
             ->ordered()
             ->once();
 
@@ -296,14 +296,14 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             ->ordered()
             ->once();
 
-        $composerRequirements = array();
+        $composerRequirements = [];
         $this->composerDependencyChecker->shouldReceive('getRequirements')
             ->with($workingDir)
             ->andReturn($composerRequirements)
             ->once();
 
         $this->combinedPackageResolver->shouldReceive('resolve')
-            ->with(array('cms.zip'), $outputDir, $tempDir, $config, false)
+            ->with(['cms.zip'], $outputDir, $tempDir, $config, false)
             ->andReturn($config)
             ->ordered()
             ->once();
@@ -333,7 +333,7 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             $outputDir,
             'package',
             $config,
-            array('cms.zip'),
+            ['cms.zip'],
             false,
             'meteor.phar'
         );

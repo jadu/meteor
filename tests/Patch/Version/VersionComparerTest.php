@@ -15,14 +15,14 @@ class VersionComparerTest extends \PHPUnit_Framework_TestCase
 
     public function testCompare()
     {
-        vfsStream::setup('root', null, array(
-            'working' => array(
+        vfsStream::setup('root', null, [
+            'working' => [
                 'VERSION' => '1.1.0',
-            ),
-            'install' => array(
+            ],
+            'install' => [
                 'VERSION' => '0.1.2',
-            ),
-        ));
+            ],
+        ]);
 
         $version = $this->versionComparer->compare(vfsStream::url('root/working'), vfsStream::url('root/install'), 'jadu/cms', 'VERSION');
 
@@ -35,39 +35,39 @@ class VersionComparerTest extends \PHPUnit_Framework_TestCase
 
     public function testComparePackage()
     {
-        vfsStream::setup('root', null, array(
-            'working' => array(
+        vfsStream::setup('root', null, [
+            'working' => [
                 'VERSION' => '1.1.0',
                 'XFP_VERSION' => '2.0.0',
                 'CP_VERSION' => '0.0.1',
-            ),
-            'install' => array(
+            ],
+            'install' => [
                 'VERSION' => '1.1.2',
                 'XFP_VERSION' => '3.0.0',
                 'CP_VERSION' => '0.1.0',
-            ),
-        ));
+            ],
+        ]);
 
-        $config = array(
+        $config = [
             'name' => 'jadu/cms',
-            'package' => array(
+            'package' => [
                 'version' => 'VERSION',
-            ),
-            'combined' => array(
-                array(
+            ],
+            'combined' => [
+                [
                     'name' => 'jadu/xfp',
-                    'package' => array(
+                    'package' => [
                         'version' => 'XFP_VERSION',
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'name' => 'jadu/cp',
-                    'package' => array(
+                    'package' => [
                         'version' => 'CP_VERSION',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $versions = $this->versionComparer->comparePackage(vfsStream::url('root/working'), vfsStream::url('root/install'), $config);
 
@@ -94,37 +94,37 @@ class VersionComparerTest extends \PHPUnit_Framework_TestCase
 
     public function testComparePackageIgnoresVersionFilesThatDoNotExistInThePatchDir()
     {
-        vfsStream::setup('root', null, array(
-            'working' => array(
+        vfsStream::setup('root', null, [
+            'working' => [
                 'VERSION' => '1.1.0',
-            ),
-            'install' => array(
+            ],
+            'install' => [
                 'VERSION' => '1.1.2',
                 'XFP_VERSION' => '3.0.0',
                 'CP_VERSION' => '0.1.0',
-            ),
-        ));
+            ],
+        ]);
 
-        $config = array(
+        $config = [
             'name' => 'jadu/cms',
-            'package' => array(
+            'package' => [
                 'version' => 'VERSION',
-            ),
-            'combined' => array(
-                array(
+            ],
+            'combined' => [
+                [
                     'name' => 'jadu/xfp',
-                    'package' => array(
+                    'package' => [
                         'version' => 'XFP_VERSION',
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'name' => 'jadu/cp',
-                    'package' => array(
+                    'package' => [
                         'version' => 'CP_VERSION',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $versions = $this->versionComparer->comparePackage(vfsStream::url('root/working'), vfsStream::url('root/install'), $config);
 
@@ -142,10 +142,10 @@ class VersionComparerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCompareThrowsExceptionWhenUnableToFindVersionFileInWorkingDir()
     {
-        vfsStream::setup('root', null, array(
-            'working' => array(),
-            'install' => array(),
-        ));
+        vfsStream::setup('root', null, [
+            'working' => [],
+            'install' => [],
+        ]);
 
         $this->versionComparer->compare(vfsStream::url('root/working'), vfsStream::url('root/install'), 'test', 'VERSION');
     }

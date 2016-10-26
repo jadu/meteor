@@ -14,24 +14,24 @@ class DisplayVersionInfoHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->io = Mockery::mock('Meteor\IO\IOInterface', array(
+        $this->io = Mockery::mock('Meteor\IO\IOInterface', [
             'text' => null,
             'newLine' => null,
-        ));
+        ]);
         $this->versionComparer = Mockery::mock('Meteor\Patch\Version\VersionComparer');
         $this->handler = new DisplayVersionInfoHandler($this->io, $this->versionComparer);
     }
 
     public function testHandleDoesntOutputWhenThereAreNoVersions()
     {
-        $config = array(
+        $config = [
             'name' => 'jadu/cms',
-            'combined' => array(
-            ),
-        );
+            'combined' => [
+            ],
+        ];
 
-        $versions = array(
-        );
+        $versions = [
+        ];
 
         $this->versionComparer->shouldReceive('comparePackage')
             ->with('working', 'install', $config)
@@ -41,8 +41,8 @@ class DisplayVersionInfoHandlerTest extends \PHPUnit_Framework_TestCase
         $this->io->shouldNotReceive('table')
             ->with(
                 Mockery::any(),
-                array(
-                )
+                [
+                ]
             );
 
         $this->handler->handle(new DisplayVersionInfo('working', 'install'), $config);
@@ -50,32 +50,32 @@ class DisplayVersionInfoHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleOutputsPackageVersionInfo()
     {
-        $config = array(
+        $config = [
             'name' => 'jadu/cms',
-            'package' => array(
+            'package' => [
                 'version' => 'VERSION',
-            ),
-            'combined' => array(
-                array(
+            ],
+            'combined' => [
+                [
                     'name' => 'jadu/xfp',
-                    'package' => array(
+                    'package' => [
                         'version' => 'XFP_VERSION',
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'name' => 'jadu/cp',
-                    'package' => array(
+                    'package' => [
                         'version' => 'CP_VERSION',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
-        $versions = array(
+        $versions = [
             new VersionDiff('jadu/cms', 'VERSION', '1.1.0', '1.0.0'),
             new VersionDiff('jadu/xfp', 'XFP_VERSION', '1.1.0', '1.2.0'),
             new VersionDiff('jadu/cp', 'CP_VERSION', '1.0.0', '1.0.0'),
-        );
+        ];
 
         $this->versionComparer->shouldReceive('comparePackage')
             ->with('working', 'install', $config)
@@ -85,11 +85,11 @@ class DisplayVersionInfoHandlerTest extends \PHPUnit_Framework_TestCase
         $this->io->shouldReceive('table')
             ->with(
                 Mockery::any(),
-                array(
-                    array('jadu/cms', 'VERSION', '1.0.0', '1.1.0', '<fg=green>Newer</>'),
-                    array('jadu/xfp', 'XFP_VERSION', '1.2.0', '1.1.0', '<fg=red>Older</>'),
-                    array('jadu/cp', 'CP_VERSION', '1.0.0', '1.0.0', '<fg=yellow>No change</>'),
-                )
+                [
+                    ['jadu/cms', 'VERSION', '1.0.0', '1.1.0', '<fg=green>Newer</>'],
+                    ['jadu/xfp', 'XFP_VERSION', '1.2.0', '1.1.0', '<fg=red>Older</>'],
+                    ['jadu/cp', 'CP_VERSION', '1.0.0', '1.0.0', '<fg=yellow>No change</>'],
+                ]
             )
             ->once();
 

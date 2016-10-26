@@ -14,7 +14,7 @@ class RunCommandTest extends CommandTestCase
     {
         $this->scriptRunner = Mockery::mock('Meteor\Scripts\ScriptRunner');
 
-        return new RunCommand(null, array('name' => 'test'), new NullIO(), $this->scriptRunner);
+        return new RunCommand(null, ['name' => 'test'], new NullIO(), $this->scriptRunner);
     }
 
     public function testRunsCommand()
@@ -30,9 +30,9 @@ class RunCommandTest extends CommandTestCase
             ->andReturn(true)
             ->once();
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             'script' => 'test',
             '--working-dir' => $workingDir,
-        ));
+        ]);
     }
 }

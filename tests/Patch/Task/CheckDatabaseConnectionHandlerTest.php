@@ -17,12 +17,12 @@ class CheckDatabaseConnectionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testChecksConnectionWhenRootPackageHasMigrations()
     {
-        $config = array(
-            'migrations' => array(
+        $config = [
+            'migrations' => [
                 'table' => 'migrations',
-            ),
-            'combined' => array(),
-        );
+            ],
+            'combined' => [],
+        ];
 
         $this->connectionFactory->shouldReceive('getConnection')
             ->with('install')
@@ -34,15 +34,15 @@ class CheckDatabaseConnectionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testChecksConnectionWhenCombinedPackagesHaveMigrations()
     {
-        $config = array(
-            'combined' => array(
-                array(
-                    'migrations' => array(
+        $config = [
+            'combined' => [
+                [
+                    'migrations' => [
                         'table' => 'migrations',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $this->connectionFactory->shouldReceive('getConnection')
             ->with('install')
@@ -54,9 +54,9 @@ class CheckDatabaseConnectionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testDoesNotCheckConnectionIfNoMigrations()
     {
-        $config = array(
-            'combined' => array(),
-        );
+        $config = [
+            'combined' => [],
+        ];
 
         $this->connectionFactory->shouldReceive('getConnection')
             ->never();

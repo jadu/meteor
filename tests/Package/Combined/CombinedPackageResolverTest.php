@@ -16,9 +16,9 @@ class CombinedPackageResolverTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->packageCombiner = Mockery::mock('Meteor\Package\Combined\PackageCombiner');
-        $this->combinedPackageDependencyChecker = Mockery::mock('Meteor\Package\Combined\CombinedPackageDependencyChecker', array(
+        $this->combinedPackageDependencyChecker = Mockery::mock('Meteor\Package\Combined\CombinedPackageDependencyChecker', [
             'check' => null,
-        ));
+        ]);
         $this->filesystem = Mockery::mock('Meteor\Filesystem\Filesystem');
         $this->packageProvider = Mockery::mock('Meteor\Package\Provider\PackageProviderInterface');
 
@@ -36,16 +36,16 @@ class CombinedPackageResolverTest extends \PHPUnit_Framework_TestCase
         $outputDir = 'output';
         $tempDir = 'temp';
 
-        $config = array(
+        $config = [
             'name' => 'test',
-        );
+        ];
 
         $updatedConfig = $config;
-        $updatedConfig['combined'] = array(
-            array(
+        $updatedConfig['combined'] = [
+            [
                 'name' => 'jadu/cms',
-            ),
-        );
+            ],
+        ];
 
         $this->packageCombiner->shouldReceive('combine')
             ->with('cms.zip', $outputDir, $tempDir, $config, true)
@@ -56,7 +56,7 @@ class CombinedPackageResolverTest extends \PHPUnit_Framework_TestCase
             ->with($tempDir, $updatedConfig)
             ->once();
 
-        $this->assertSame($updatedConfig, $this->combinedPackageResolver->resolve(array('cms.zip'), $outputDir, $tempDir, $config, true));
+        $this->assertSame($updatedConfig, $this->combinedPackageResolver->resolve(['cms.zip'], $outputDir, $tempDir, $config, true));
     }
 
     public function testResolveDoesNotDownloadPackageIfAlreadyCombined()
@@ -64,21 +64,21 @@ class CombinedPackageResolverTest extends \PHPUnit_Framework_TestCase
         $outputDir = 'output';
         $tempDir = 'temp';
 
-        $config = array(
+        $config = [
             'name' => 'test',
-            'package' => array(
-                'combine' => array(
+            'package' => [
+                'combine' => [
                     'jadu/cms' => '13.6.0',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $updatedConfig = $config;
-        $updatedConfig['combined'] = array(
-            array(
+        $updatedConfig['combined'] = [
+            [
                 'name' => 'jadu/cms',
-            ),
-        );
+            ],
+        ];
 
         $this->packageCombiner->shouldReceive('combine')
             ->with('cms.zip', $outputDir, $tempDir, $config, true)
@@ -92,7 +92,7 @@ class CombinedPackageResolverTest extends \PHPUnit_Framework_TestCase
             ->with($tempDir, $updatedConfig)
             ->once();
 
-        $this->assertSame($updatedConfig, $this->combinedPackageResolver->resolve(array('cms.zip'), $outputDir, $tempDir, $config, true));
+        $this->assertSame($updatedConfig, $this->combinedPackageResolver->resolve(['cms.zip'], $outputDir, $tempDir, $config, true));
     }
 
     public function testResolveDoesNotDownloadPackageIfAlreadyCombinedViaAnotherCombinedPackage()
@@ -100,24 +100,24 @@ class CombinedPackageResolverTest extends \PHPUnit_Framework_TestCase
         $outputDir = 'output';
         $tempDir = 'temp';
 
-        $config = array(
+        $config = [
             'name' => 'test',
-            'package' => array(
-                'combine' => array(
+            'package' => [
+                'combine' => [
                     'jadu/xfp' => '3.2.1',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $updatedConfig = $config;
-        $updatedConfig['combined'] = array(
-            array(
+        $updatedConfig['combined'] = [
+            [
                 'name' => 'jadu/cms',
-            ),
-            array(
+            ],
+            [
                 'name' => 'jadu/xfp',
-            ),
-        );
+            ],
+        ];
 
         $this->packageCombiner->shouldReceive('combine')
             ->with('xfp.zip', $outputDir, $tempDir, $config, true)
@@ -131,7 +131,7 @@ class CombinedPackageResolverTest extends \PHPUnit_Framework_TestCase
             ->with($tempDir, $updatedConfig)
             ->once();
 
-        $this->assertSame($updatedConfig, $this->combinedPackageResolver->resolve(array('xfp.zip'), $outputDir, $tempDir, $config, true));
+        $this->assertSame($updatedConfig, $this->combinedPackageResolver->resolve(['xfp.zip'], $outputDir, $tempDir, $config, true));
     }
 
     public function testResolveDownloadsPackages()
@@ -139,21 +139,21 @@ class CombinedPackageResolverTest extends \PHPUnit_Framework_TestCase
         $outputDir = 'output';
         $tempDir = 'temp';
 
-        $config = array(
+        $config = [
             'name' => 'test',
-            'package' => array(
-                'combine' => array(
+            'package' => [
+                'combine' => [
                     'jadu/cms' => '13.6.0',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $updatedConfig = $config;
-        $updatedConfig['combined'] = array(
-            array(
+        $updatedConfig['combined'] = [
+            [
                 'name' => 'jadu/cms',
-            ),
-        );
+            ],
+        ];
 
         $this->filesystem->shouldReceive('createTempDirectory')
             ->with($outputDir)
@@ -177,7 +177,7 @@ class CombinedPackageResolverTest extends \PHPUnit_Framework_TestCase
             ->with($tempDir, $updatedConfig)
             ->once();
 
-        $this->assertSame($updatedConfig, $this->combinedPackageResolver->resolve(array(), $outputDir, $tempDir, $config, true));
+        $this->assertSame($updatedConfig, $this->combinedPackageResolver->resolve([], $outputDir, $tempDir, $config, true));
     }
 
     public function testChecksPackageDependencies()
@@ -185,14 +185,14 @@ class CombinedPackageResolverTest extends \PHPUnit_Framework_TestCase
         $outputDir = 'output';
         $tempDir = 'temp';
 
-        $config = array(
+        $config = [
             'name' => 'test',
-        );
+        ];
 
         $this->combinedPackageDependencyChecker->shouldReceive('check')
             ->with($tempDir, $config)
             ->once();
 
-        $this->combinedPackageResolver->resolve(array(), $outputDir, $tempDir, $config, true);
+        $this->combinedPackageResolver->resolve([], $outputDir, $tempDir, $config, true);
     }
 }

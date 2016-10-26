@@ -20,23 +20,23 @@ class ApplyCommandTest extends CommandTestCase
 
     public function createCommand()
     {
-        vfsStream::setup('root', null, array(
-            'patch' => array(),
-            'install' => array(),
-        ));
+        vfsStream::setup('root', null, [
+            'patch' => [],
+            'install' => [],
+        ]);
 
         $this->taskBus = Mockery::mock('Meteor\Patch\Task\TaskBusInterface');
         $this->strategy = Mockery::mock('Meteor\Patch\Strategy\PatchStrategyInterface');
-        $this->platform = Mockery::mock('Meteor\Platform\PlatformInterface', array(
+        $this->platform = Mockery::mock('Meteor\Platform\PlatformInterface', [
             'setInstallDir' => null,
-        ));
+        ]);
         $this->locker = Mockery::mock('Meteor\Patch\Lock\Locker');
-        $this->eventDispatcher = Mockery::mock('Symfony\Component\EventDispatcher\EventDispatcherInterface', array(
+        $this->eventDispatcher = Mockery::mock('Symfony\Component\EventDispatcher\EventDispatcherInterface', [
             'dispatch' => null,
-        ));
-        $this->scriptRunner = Mockery::mock('Meteor\Scripts\ScriptRunner', array(
+        ]);
+        $this->scriptRunner = Mockery::mock('Meteor\Scripts\ScriptRunner', [
             'setWorkingDir' => null,
-        ));
+        ]);
         $this->logger = Mockery::mock('Meteor\Logger\LoggerInterface');
 
         $this->strategy->shouldReceive('configureApplyCommand')
@@ -44,7 +44,7 @@ class ApplyCommandTest extends CommandTestCase
 
         return new ApplyCommand(
             null,
-            array(),
+            [],
             new NullIO(),
             $this->platform,
             $this->taskBus,
@@ -61,7 +61,7 @@ class ApplyCommandTest extends CommandTestCase
         $workingDir = vfsStream::url('root/patch');
         $installDir = vfsStream::url('root/install');
 
-        $config = array('name' => 'test');
+        $config = ['name' => 'test'];
         $this->command->setConfiguration($config);
 
         $this->platform->shouldReceive('setInstallDir')
@@ -83,10 +83,10 @@ class ApplyCommandTest extends CommandTestCase
             ->with(PatchEvents::PRE_APPLY, Mockery::any())
             ->once();
 
-        $tasks = array(
+        $tasks = [
             new \stdClass(),
             new \stdClass(),
-        );
+        ];
         $this->strategy->shouldReceive('apply')
             ->with($workingDir, $installDir, Mockery::any())
             ->andReturn($tasks)
@@ -110,10 +110,10 @@ class ApplyCommandTest extends CommandTestCase
             ->with($installDir)
             ->once();
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
-        ));
+        ]);
     }
 
     /**
@@ -124,10 +124,10 @@ class ApplyCommandTest extends CommandTestCase
         $workingDir = vfsStream::url('root/install');
         $installDir = vfsStream::url('root/install');
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
-        ));
+        ]);
     }
 
     public function testDoesNotLockWhenSkipLockOptionSpecified()
@@ -135,7 +135,7 @@ class ApplyCommandTest extends CommandTestCase
         $workingDir = vfsStream::url('root/patch');
         $installDir = vfsStream::url('root/install');
 
-        $config = array('name' => 'test');
+        $config = ['name' => 'test'];
         $this->command->setConfiguration($config);
 
         $this->logger->shouldReceive('enable')
@@ -144,7 +144,7 @@ class ApplyCommandTest extends CommandTestCase
         $this->locker->shouldReceive('lock')
             ->never();
 
-        $tasks = array(new \stdClass());
+        $tasks = [new \stdClass()];
         $this->strategy->shouldReceive('apply')
             ->with($workingDir, $installDir, Mockery::any())
             ->andReturn($tasks)
@@ -158,11 +158,11 @@ class ApplyCommandTest extends CommandTestCase
         $this->locker->shouldReceive('unlock')
             ->never();
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
             '--skip-lock' => null,
-        ));
+        ]);
     }
 
     public function testDoesNotUnlockIfTaskFails()
@@ -170,7 +170,7 @@ class ApplyCommandTest extends CommandTestCase
         $workingDir = vfsStream::url('root/patch');
         $installDir = vfsStream::url('root/install');
 
-        $config = array('name' => 'test');
+        $config = ['name' => 'test'];
         $this->command->setConfiguration($config);
 
         $this->logger->shouldReceive('enable')
@@ -180,7 +180,7 @@ class ApplyCommandTest extends CommandTestCase
             ->with($installDir)
             ->once();
 
-        $tasks = array(new \stdClass());
+        $tasks = [new \stdClass()];
         $this->strategy->shouldReceive('apply')
             ->with($workingDir, $installDir, Mockery::any())
             ->andReturn($tasks)
@@ -194,10 +194,10 @@ class ApplyCommandTest extends CommandTestCase
         $this->locker->shouldReceive('unlock')
             ->never();
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
-        ));
+        ]);
     }
 
     /**
@@ -209,20 +209,20 @@ class ApplyCommandTest extends CommandTestCase
         $workingDir = vfsStream::url('root/patch');
         $installDir = vfsStream::url('root/install');
 
-        $config = array(
+        $config = [
             'name' => 'test',
-            'package' => array(
+            'package' => [
                 'php' => '>=7',
-            ),
-        );
+            ],
+        ];
 
         $this->command->setConfiguration($config);
         $this->command->setPhpVersion('5.6.0');
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
-        ));
+        ]);
     }
 
     /**
@@ -234,34 +234,34 @@ class ApplyCommandTest extends CommandTestCase
         $workingDir = vfsStream::url('root/patch');
         $installDir = vfsStream::url('root/install');
 
-        $config = array(
+        $config = [
             'name' => 'test',
-            'package' => array(
+            'package' => [
                 'php' => '>=5.3.3',
-            ),
-            'combined' => array(
-                array(
+            ],
+            'combined' => [
+                [
                     'name' => 'package/first',
-                    'package' => array(
+                    'package' => [
                         'php' => '>=5.4.0',
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'name' => 'package/second',
-                    'package' => array(
+                    'package' => [
                         'php' => '>=5.6',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $this->command->setConfiguration($config);
         $this->command->setPhpVersion('5.4.0');
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
-        ));
+        ]);
     }
 
     public function testDoesNotRunScriptsIfSkipped()
@@ -269,7 +269,7 @@ class ApplyCommandTest extends CommandTestCase
         $workingDir = vfsStream::url('root/patch');
         $installDir = vfsStream::url('root/install');
 
-        $config = array('name' => 'test');
+        $config = ['name' => 'test'];
         $this->command->setConfiguration($config);
 
         $this->platform->shouldReceive('setInstallDir')
@@ -287,10 +287,10 @@ class ApplyCommandTest extends CommandTestCase
             ->with(PatchEvents::PRE_APPLY, Mockery::any())
             ->never();
 
-        $tasks = array(
+        $tasks = [
             new \stdClass(),
             new \stdClass(),
-        );
+        ];
         $this->strategy->shouldReceive('apply')
             ->with($workingDir, $installDir, Mockery::any())
             ->andReturn($tasks);
@@ -310,10 +310,10 @@ class ApplyCommandTest extends CommandTestCase
         $this->locker->shouldReceive('unlock')
             ->with($installDir);
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
             '--skip-scripts' => null,
-        ));
+        ]);
     }
 }

@@ -9,7 +9,7 @@ abstract class ExtensionBase
      */
     public function configParse(array $config)
     {
-        $extensionConfig = array();
+        $extensionConfig = [];
         $extensionConfigKey = $this->getConfigKey();
 
         if (isset($config[$extensionConfigKey])) {

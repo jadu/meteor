@@ -8,7 +8,7 @@ class MigrationsExtensionTest extends ExtensionTestCase
 {
     public function testServicesCanBeInstantiated()
     {
-        $container = $this->loadContainer(array());
+        $container = $this->loadContainer([]);
 
         foreach ($this->getServiceIds() as $serviceId) {
             $container->get($serviceId);
@@ -17,7 +17,7 @@ class MigrationsExtensionTest extends ExtensionTestCase
 
     private function getServiceIds()
     {
-        return array(
+        return [
             MigrationsExtension::SERVICE_CONFIGURATION_FACTORY,
             MigrationsExtension::SERVICE_CONNECTION_CONFIGURATION_LOADER,
             MigrationsExtension::SERVICE_CONNECTION_CONFIGURATION_LOADER_INPUT_OPTION,
@@ -39,12 +39,12 @@ class MigrationsExtensionTest extends ExtensionTestCase
             MigrationsExtension::SERVICE_STATUS_OUTPUTTER,
             MigrationsExtension::SERVICE_VERSION_FILE_MANAGER,
             MigrationsExtension::SERVICE_VERSION_FILE_MIGRATION_VERSION_STORAGE_FACTORY,
-        );
+        ];
     }
 
     public function testCanOmitMigrationsConfiguration()
     {
-        $config = $this->processConfiguration(array());
+        $config = $this->processConfiguration([]);
 
         $this->assertArrayNotHasKey('migrations', $config);
     }

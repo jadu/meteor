@@ -41,8 +41,8 @@ class StatusOutputter
     {
         $configuration = $this->createConfiguration($type, $config, $patchDir, $installDir);
 
-        $formattedVersions = array();
-        foreach (array('prev', 'current', 'next', 'latest') as $alias) {
+        $formattedVersions = [];
+        foreach (['prev', 'current', 'next', 'latest'] as $alias) {
             $version = $configuration->resolveVersionAlias($alias);
             if ($version === null) {
                 if ($alias === 'next') {
@@ -63,21 +63,21 @@ class StatusOutputter
         $numExecutedUnavailableMigrations = count($executedUnavailableMigrations);
         $newMigrations = count(array_diff($availableMigrations, $executedMigrations));
 
-        $rows = array(
-            array('Version table name', $configuration->getMigrationsTableName()),
-            array('Migrations namespace', $configuration->getMigrationsNamespace()),
-            array('Migrations directory', $configuration->getMigrationsDirectory()),
-            array('Previous version', $formattedVersions['prev']),
-            array('Current version', $formattedVersions['current']),
-            array('Next version', $formattedVersions['next']),
-            array('Latest version', $formattedVersions['latest']),
-            array('Executed migrations', count($executedMigrations)),
-            array('Executed unavailable migrations', $numExecutedUnavailableMigrations > 0 ? '<error>'.$numExecutedUnavailableMigrations.'</error>' : 0),
-            array('Available migrations', count($availableMigrations)),
-            array('New migrations', $newMigrations > 0 ? '<question>'.$newMigrations.'</question>' : 0),
-        );
+        $rows = [
+            ['Version table name', $configuration->getMigrationsTableName()],
+            ['Migrations namespace', $configuration->getMigrationsNamespace()],
+            ['Migrations directory', $configuration->getMigrationsDirectory()],
+            ['Previous version', $formattedVersions['prev']],
+            ['Current version', $formattedVersions['current']],
+            ['Next version', $formattedVersions['next']],
+            ['Latest version', $formattedVersions['latest']],
+            ['Executed migrations', count($executedMigrations)],
+            ['Executed unavailable migrations', $numExecutedUnavailableMigrations > 0 ? '<error>'.$numExecutedUnavailableMigrations.'</error>' : 0],
+            ['Available migrations', count($availableMigrations)],
+            ['New migrations', $newMigrations > 0 ? '<question>'.$newMigrations.'</question>' : 0],
+        ];
 
-        $this->io->table(array(), $rows);
+        $this->io->table([], $rows);
 
         if ($showVersions) {
             $migrations = $configuration->getMigrations();

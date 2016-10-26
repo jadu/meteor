@@ -90,10 +90,10 @@ class Logger implements LoggerInterface
      */
     private function splitMessageLines($messages)
     {
-        $lines = array();
+        $lines = [];
 
         if (!is_array($messages)) {
-            $messages = array($messages);
+            $messages = [$messages];
         }
 
         foreach ($messages as $message) {

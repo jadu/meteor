@@ -14,7 +14,7 @@ class PackageCommandTest extends CommandTestCase
     {
         $this->packageCreator = Mockery::mock('Meteor\Package\PackageCreator');
 
-        return new PackageCommand(null, array('name' => 'test'), new NullIO(), $this->packageCreator);
+        return new PackageCommand(null, ['name' => 'test'], new NullIO(), $this->packageCreator);
     }
 
     public function testCreatesPackage()
@@ -27,25 +27,25 @@ class PackageCommandTest extends CommandTestCase
                 $workingDir,
                 $outputDir,
                 'package.zip',
-                array('name' => 'test'),
-                array(
+                ['name' => 'test'],
+                [
                     '/path/to/package1.zip',
                     '/path/to/package2.zip',
-                ),
+                ],
                 false,
                 null
             )
             ->once();
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             '--working-dir' => $workingDir,
             '--output-dir' => $outputDir,
             '--filename' => 'package.zip',
-            '--combine' => array(
+            '--combine' => [
                 '/path/to/package1.zip',
                 '/path/to/package2.zip',
-            ),
-        ));
+            ],
+        ]);
     }
 
     public function testCreatesPackageWithoutCombiningPackages()
@@ -58,19 +58,19 @@ class PackageCommandTest extends CommandTestCase
                 $workingDir,
                 $outputDir,
                 'package.zip',
-                array('name' => 'test'),
-                array(),
+                ['name' => 'test'],
+                [],
                 true,
                 null
             )
             ->once();
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             '--working-dir' => $workingDir,
             '--output-dir' => $outputDir,
             '--filename' => 'package.zip',
             '--skip-combine' => true,
-        ));
+        ]);
     }
 
     public function testCreatesPackageWithPhar()
@@ -83,18 +83,18 @@ class PackageCommandTest extends CommandTestCase
                 $workingDir,
                 $outputDir,
                 'package.zip',
-                array('name' => 'test'),
-                array(),
+                ['name' => 'test'],
+                [],
                 false,
                 '/path/to/meteor.phar'
             )
             ->once();
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             '--working-dir' => $workingDir,
             '--output-dir' => $outputDir,
             '--filename' => 'package.zip',
             '--phar' => '/path/to/meteor.phar',
-        ));
+        ]);
     }
 }

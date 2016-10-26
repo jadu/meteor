@@ -24,9 +24,9 @@ class PermissionSetterTest extends \PHPUnit_Framework_TestCase
 
     public function testSetDefaultPermissions()
     {
-        $files = array(
+        $files = [
             'test',
-        );
+        ];
 
         $this->platform->shouldReceive('setDefaultPermission')
             ->with('target', 'test')
@@ -37,9 +37,9 @@ class PermissionSetterTest extends \PHPUnit_Framework_TestCase
 
     public function testSetDefaultPermissionsCatchesExceptions()
     {
-        $files = array(
+        $files = [
             'test',
-        );
+        ];
 
         $this->platform->shouldReceive('setDefaultPermission')
             ->andThrow(new Exception())
@@ -50,28 +50,28 @@ class PermissionSetterTest extends \PHPUnit_Framework_TestCase
 
     public function testSetPermissions()
     {
-        vfsStream::setup('root', null, array(
-            'base' => array(
-                'var' => array(
-                    'config' => array(
+        vfsStream::setup('root', null, [
+            'base' => [
+                'var' => [
+                    'config' => [
                         'system.xml' => '',
-                    ),
-                ),
-            ),
-            'target' => array(
-                'var' => array(
-                    'config' => array(
+                    ],
+                ],
+            ],
+            'target' => [
+                'var' => [
+                    'config' => [
                         'system.xml' => '',
-                    ),
-                ),
-            ),
-        ));
+                    ],
+                ],
+            ],
+        ]);
 
         $permission = new Permission('var/config');
 
         $this->permissionLoader->shouldReceive('load')
             ->with(vfsStream::url('root/target'))
-            ->andReturn(array($permission))
+            ->andReturn([$permission])
             ->once();
 
         $this->platform->shouldReceive('setPermission')
@@ -83,30 +83,30 @@ class PermissionSetterTest extends \PHPUnit_Framework_TestCase
 
     public function testSetPermissionsWithWildcardPattern()
     {
-        vfsStream::setup('root', null, array(
-            'base' => array(
-                'var' => array(
-                    'config' => array(
+        vfsStream::setup('root', null, [
+            'base' => [
+                'var' => [
+                    'config' => [
                         'system.xml' => '',
                         'constants.xml' => '',
-                    ),
-                ),
-            ),
-            'target' => array(
-                'var' => array(
-                    'config' => array(
+                    ],
+                ],
+            ],
+            'target' => [
+                'var' => [
+                    'config' => [
                         'system.xml' => '',
                         'constants.xml' => '',
-                    ),
-                ),
-            ),
-        ));
+                    ],
+                ],
+            ],
+        ]);
 
         $permission = new Permission('var/config/*.xml');
 
         $this->permissionLoader->shouldReceive('load')
             ->with(vfsStream::url('root/target'))
-            ->andReturn(array($permission))
+            ->andReturn([$permission])
             ->once();
 
         $this->platform->shouldReceive('setPermission')
@@ -122,28 +122,28 @@ class PermissionSetterTest extends \PHPUnit_Framework_TestCase
 
     public function testSetPermissionsCatchesExceptions()
     {
-        vfsStream::setup('root', null, array(
-            'base' => array(
-                'var' => array(
-                    'config' => array(
+        vfsStream::setup('root', null, [
+            'base' => [
+                'var' => [
+                    'config' => [
                         'system.xml' => '',
-                    ),
-                ),
-            ),
-            'target' => array(
-                'var' => array(
-                    'config' => array(
+                    ],
+                ],
+            ],
+            'target' => [
+                'var' => [
+                    'config' => [
                         'system.xml' => '',
-                    ),
-                ),
-            ),
-        ));
+                    ],
+                ],
+            ],
+        ]);
 
         $permission = new Permission('var/config');
 
         $this->permissionLoader->shouldReceive('load')
             ->with(vfsStream::url('root/target'))
-            ->andReturn(array($permission))
+            ->andReturn([$permission])
             ->once();
 
         $this->platform->shouldReceive('setPermission')

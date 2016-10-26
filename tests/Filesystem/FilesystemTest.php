@@ -53,7 +53,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateTempDirectoryReturnsRandomDirectoryNames()
     {
-        $paths = array();
+        $paths = [];
         for ($i = 0; $i < 100; ++$i) {
             $paths[] = $this->filesystem->createTempDirectory();
         }
@@ -82,16 +82,16 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     public function testFindFilesWithRelativePaths()
     {
-        vfsStream::setup('root', null, array(
-            'public_html' => array(
+        vfsStream::setup('root', null, [
+            'public_html' => [
                 'index.html' => '',
-            ),
-            'var' => array(
-                'config' => array(
+            ],
+            'var' => [
+                'config' => [
                     'system.xml' => '',
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
         $sourceDir = vfsStream::url('root');
 
@@ -104,27 +104,27 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
         $files = $this->filesystem->findFiles($sourceDir);
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'public_html',
             'public_html/index.html',
             'var',
             'var/config',
             'var/config/system.xml',
-        ), $files);
+        ], $files);
     }
 
     public function testFindFilesWithRelativePathsWhenSourceDirInputDiffersToRealPath()
     {
-        vfsStream::setup('root', null, array(
-            'public_html' => array(
+        vfsStream::setup('root', null, [
+            'public_html' => [
                 'index.html' => '',
-            ),
-            'var' => array(
-                'config' => array(
+            ],
+            'var' => [
+                'config' => [
                     'system.xml' => '',
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
         // The fake realpath function will lowercase the path so it will differ
         $sourceDir = vfsStream::url('root');
@@ -138,27 +138,27 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
         $files = $this->filesystem->findFiles(strtoupper($sourceDir));
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'public_html',
             'public_html/index.html',
             'var',
             'var/config',
             'var/config/system.xml',
-        ), $files);
+        ], $files);
     }
 
     public function testFindFilesWithAbsolutePaths()
     {
-        vfsStream::setup('root', null, array(
-            'public_html' => array(
+        vfsStream::setup('root', null, [
+            'public_html' => [
                 'index.html' => '',
-            ),
-            'var' => array(
-                'config' => array(
+            ],
+            'var' => [
+                'config' => [
                     'system.xml' => '',
-                ),
-            ),
-        ));
+                ],
+            ],
+        ]);
 
         $sourceDir = vfsStream::url('root');
 
@@ -171,13 +171,13 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
         $files = $this->filesystem->findFiles($sourceDir, null, false);
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'vfs://root/public_html',
             'vfs://root/public_html/index.html',
             'vfs://root/var',
             'vfs://root/var/config',
             'vfs://root/var/config/system.xml',
-        ), $files);
+        ], $files);
     }
 
     public function testFindFilesWithFilters()
@@ -188,33 +188,33 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $finder->in($sourceDir);
 
         $this->finderFactory->shouldReceive('create')
-            ->with($sourceDir, array('/**'), null)
+            ->with($sourceDir, ['/**'], null)
             ->andReturn($finder)
             ->once();
 
-        $this->filesystem->findFiles($sourceDir, array('/**'));
+        $this->filesystem->findFiles($sourceDir, ['/**']);
     }
 
     public function testFindNewFiles()
     {
-        vfsStream::setup('root', null, array(
-            'base' => array(
-                'public_html' => array(
+        vfsStream::setup('root', null, [
+            'base' => [
+                'public_html' => [
                     'index.html' => '',
-                ),
-                'var' => array(
-                    'config' => array(
+                ],
+                'var' => [
+                    'config' => [
                         'system.xml' => '',
-                    ),
-                ),
-            ),
-            'target' => array(
-                'public_html' => array(
+                    ],
+                ],
+            ],
+            'target' => [
+                'public_html' => [
                     'index.html' => '',
-                ),
-                'var' => array(),
-            ),
-        ));
+                ],
+                'var' => [],
+            ],
+        ]);
 
         $baseDir = vfsStream::url('root/base');
         $targetDir = vfsStream::url('root/target');
@@ -228,26 +228,26 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
         $files = $this->filesystem->findNewFiles($baseDir, $targetDir);
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'var/config',
             'var/config/system.xml',
-        ), $files);
+        ], $files);
     }
 
     public function testCopyDirectory()
     {
-        vfsStream::setup('root', null, array(
-            'source' => array(
+        vfsStream::setup('root', null, [
+            'source' => [
                 'index.html' => '',
-                'var' => array(
-                    'config' => array(
+                'var' => [
+                    'config' => [
                         'system.xml' => '',
-                    ),
-                    'cache' => array(),
-                ),
-            ),
-            'target' => array(),
-        ));
+                    ],
+                    'cache' => [],
+                ],
+            ],
+            'target' => [],
+        ]);
 
         $this->assertTrue($this->filesystem->copyDirectory(vfsStream::url('root/source'), vfsStream::url('root/target')));
 
@@ -258,32 +258,32 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     public function testCopyDirectoryReturnsFalseWhenEmpty()
     {
-        vfsStream::setup('root', null, array(
-            'source' => array(),
-            'target' => array(),
-        ));
+        vfsStream::setup('root', null, [
+            'source' => [],
+            'target' => [],
+        ]);
 
         $this->assertFalse($this->filesystem->copyDirectory(vfsStream::url('root/source'), vfsStream::url('root/target')));
     }
 
     public function testCopyDirectoryWithFiltersOnlyCopiesFilteredFiles()
     {
-        vfsStream::setup('root', null, array(
-            'source' => array(
+        vfsStream::setup('root', null, [
+            'source' => [
                 'index.html' => '',
-            ),
-            'target' => array(),
-        ));
+            ],
+            'target' => [],
+        ]);
 
         $finder = new Finder();
         $finder->in(vfsStream::url('root/source'));
 
         $this->finderFactory->shouldReceive('create')
-            ->with(vfsStream::url('root/source'), array('/**'), null)
+            ->with(vfsStream::url('root/source'), ['/**'], null)
             ->andReturn($finder)
             ->once();
 
-        $this->filesystem->copyDirectory(vfsStream::url('root/source'), vfsStream::url('root/target'), array('/**'));
+        $this->filesystem->copyDirectory(vfsStream::url('root/source'), vfsStream::url('root/target'), ['/**']);
     }
 }
 

@@ -8,11 +8,11 @@ class GoogleDrivePackageProviderExtensionTest extends ExtensionTestCase
 {
     public function testServicesLoadedWhenGDriveProvider()
     {
-        $container = $this->loadContainer(array(
-            'package' => array(
+        $container = $this->loadContainer([
+            'package' => [
                 'provider' => 'gdrive',
-            ),
-        ));
+            ],
+        ]);
 
         $this->assertTrue($container->has('package.provider.gdrive'));
 
@@ -21,24 +21,24 @@ class GoogleDrivePackageProviderExtensionTest extends ExtensionTestCase
 
     public function testServicesNotLoadedWhenNotGDriveProvider()
     {
-        $container = $this->loadContainer(array(
-            'package' => array(
+        $container = $this->loadContainer([
+            'package' => [
                 'provider' => 'dummy',
-            ),
-        ));
+            ],
+        ]);
 
         $this->assertFalse($container->has('package.provider.gdrive'));
     }
 
     public function testAddsDefaultFolders()
     {
-        $config = $this->processConfiguration(array());
+        $config = $this->processConfiguration([]);
 
-        $this->assertArraySubset(array(
-            'folders' => array(
+        $this->assertArraySubset([
+            'folders' => [
                 'jadu/cms' => '0B3tlQeNsllCKY2tzbFpUUkI2OGM',
                 'jadu/xfp' => '0B2h2-RgE2WidOHRhZVNUbUc1Z0E',
-            ),
-        ), $config['gdrive_package_provider']);
+            ],
+        ], $config['gdrive_package_provider']);
     }
 }

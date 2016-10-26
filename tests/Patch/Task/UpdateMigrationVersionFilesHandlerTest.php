@@ -27,16 +27,16 @@ class UpdateMigrationVersionFilesHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetsCurrentVersion()
     {
-        $config = array(
+        $config = [
             'name' => 'root',
-            'migrations' => array(
+            'migrations' => [
                 'table' => 'Migrations',
-            ),
-        );
+            ],
+        ];
 
-        $databaseConfiguration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', array(
+        $databaseConfiguration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', [
             'getCurrentVersion' => '20160701000000',
-        ));
+        ]);
 
         $this->configurationFactory->shouldReceive('createConfiguration')
             ->with(MigrationsConstants::TYPE_DATABASE, $config['migrations'], 'patch', 'install')
@@ -47,9 +47,9 @@ class UpdateMigrationVersionFilesHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('20160701000000', 'backup', 'Migrations', VersionFileManager::DATABASE_MIGRATION)
             ->once();
 
-        $fileConfiguration = Mockery::mock('Meteor\Migrations\Configuration\FileConfiguration', array(
+        $fileConfiguration = Mockery::mock('Meteor\Migrations\Configuration\FileConfiguration', [
             'getCurrentVersion' => '20160701000000',
-        ));
+        ]);
 
         $this->configurationFactory->shouldReceive('createConfiguration')
             ->with(MigrationsConstants::TYPE_FILE, $config['migrations'], 'patch', 'install')
@@ -65,20 +65,20 @@ class UpdateMigrationVersionFilesHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetsCurrentVersionForCombinedPackageMigrations()
     {
-        $config = array(
-            'combined' => array(
-                array(
+        $config = [
+            'combined' => [
+                [
                     'name' => 'test',
-                    'migrations' => array(
+                    'migrations' => [
                         'table' => 'Migrations',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
-        $databaseConfiguration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', array(
+        $databaseConfiguration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', [
             'getCurrentVersion' => '20160701000000',
-        ));
+        ]);
 
         $this->configurationFactory->shouldReceive('createConfiguration')
             ->with(MigrationsConstants::TYPE_DATABASE, $config['combined'][0]['migrations'], 'patch', 'install')
@@ -89,9 +89,9 @@ class UpdateMigrationVersionFilesHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('20160701000000', 'backup', 'Migrations', VersionFileManager::DATABASE_MIGRATION)
             ->once();
 
-        $fileConfiguration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', array(
+        $fileConfiguration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', [
             'getCurrentVersion' => '20160701000000',
-        ));
+        ]);
 
         $this->configurationFactory->shouldReceive('createConfiguration')
             ->with(MigrationsConstants::TYPE_FILE, $config['combined'][0]['migrations'], 'patch', 'install')

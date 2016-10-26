@@ -44,7 +44,7 @@ class VersionComparer
      */
     public function comparePackage($patchDir, $installDir, array $config)
     {
-        $versions = array();
+        $versions = [];
 
         if (isset($config['package']['version'])) {
             try {

@@ -8,7 +8,7 @@ class LoggerExtensionTest extends ExtensionTestCase
 {
     public function testServicesCanBeInstantiated()
     {
-        $container = $this->loadContainer(array());
+        $container = $this->loadContainer([]);
 
         foreach ($this->getServiceIds() as $serviceId) {
             $container->get($serviceId);
@@ -17,8 +17,8 @@ class LoggerExtensionTest extends ExtensionTestCase
 
     private function getServiceIds()
     {
-        return array(
+        return [
             LoggerExtension::SERVICE_LOGGER,
-        );
+        ];
     }
 }

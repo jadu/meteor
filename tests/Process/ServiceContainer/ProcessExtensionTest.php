@@ -8,7 +8,7 @@ class ProcessExtensionTest extends ExtensionTestCase
 {
     public function testServicesCanBeInstantiated()
     {
-        $container = $this->loadContainer(array());
+        $container = $this->loadContainer([]);
 
         foreach ($this->getServiceIds() as $serviceId) {
             $container->get($serviceId);
@@ -17,8 +17,8 @@ class ProcessExtensionTest extends ExtensionTestCase
 
     private function getServiceIds()
     {
-        return array(
+        return [
             ProcessExtension::SERVICE_PROCESS_RUNNER,
-        );
+        ];
     }
 }

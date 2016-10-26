@@ -10,7 +10,7 @@ class ComposerDependenciesException extends Exception
     /**
      * @var ComposerProblem[]
      */
-    private $problems = array();
+    private $problems = [];
 
     /**
      * @return ComposerProblem[]

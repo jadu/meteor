@@ -14,7 +14,7 @@ abstract class CommandTestCase extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $extensionManager = new ExtensionManager(array());
+        $extensionManager = new ExtensionManager([]);
         $configurationLoader = new ConfigurationLoader($extensionManager);
 
         $this->command = $this->createCommand();

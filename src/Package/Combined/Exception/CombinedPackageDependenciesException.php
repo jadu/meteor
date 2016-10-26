@@ -10,7 +10,7 @@ class CombinedPackageDependenciesException extends Exception
     /**
      * @var CombinedPackageProblem[]
      */
-    private $problems = array();
+    private $problems = [];
 
     /**
      * @return CombinedPackageProblem[]

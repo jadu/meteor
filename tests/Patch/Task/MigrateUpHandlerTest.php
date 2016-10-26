@@ -22,12 +22,12 @@ class MigrateUpHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testRunsFileMigrationsIfConfigured()
     {
-        $config = array(
+        $config = [
             'name' => 'root',
-            'migrations' => array(
+            'migrations' => [
                 'table' => 'Migrations',
-            ),
-        );
+            ],
+        ];
 
         $this->migrator->shouldReceive('migrate')
             ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_FILE, 'latest')
@@ -40,12 +40,12 @@ class MigrateUpHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testRunsDatabaseMigrationsIfConfigured()
     {
-        $config = array(
+        $config = [
             'name' => 'root',
-            'migrations' => array(
+            'migrations' => [
                 'table' => 'Migrations',
-            ),
-        );
+            ],
+        ];
 
         $this->migrator->shouldReceive('migrate')
             ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_DATABASE, 'latest')
@@ -58,16 +58,16 @@ class MigrateUpHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testRunsCombinedPackageMigrationsIfConfigured()
     {
-        $config = array(
-            'combined' => array(
-                array(
+        $config = [
+            'combined' => [
+                [
                     'name' => 'test',
-                    'migrations' => array(
+                    'migrations' => [
                         'table' => 'Migrations',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $this->migrator->shouldReceive('migrate')
             ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, 'latest')
@@ -80,26 +80,26 @@ class MigrateUpHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testRunMigrationsInOrder()
     {
-        $config = array(
+        $config = [
             'name' => 'root',
-            'migrations' => array(
+            'migrations' => [
                 'table' => 'Migrations',
-            ),
-            'combined' => array(
-                array(
+            ],
+            'combined' => [
+                [
                     'name' => 'test1',
-                    'migrations' => array(
+                    'migrations' => [
                         'table' => 'Migrations1',
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'name' => 'test2',
-                    'migrations' => array(
+                    'migrations' => [
                         'table' => 'Migrations2',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $this->migrator->shouldReceive('migrate')
             ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, 'latest')
@@ -125,20 +125,20 @@ class MigrateUpHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testHaltsHandlerIfMigrationsFail()
     {
-        $config = array(
+        $config = [
             'name' => 'root',
-            'migrations' => array(
+            'migrations' => [
                 'table' => 'Migrations',
-            ),
-            'combined' => array(
-                array(
+            ],
+            'combined' => [
+                [
                     'name' => 'test',
-                    'migrations' => array(
+                    'migrations' => [
                         'table' => 'Migrations',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $this->migrator->shouldReceive('migrate')
             ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_FILE, 'latest')
@@ -155,22 +155,22 @@ class MigrateUpHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testHaltsHandlerIfCombinedPackageMigrationsFail()
     {
-        $config = array(
-            'combined' => array(
-                array(
+        $config = [
+            'combined' => [
+                [
                     'name' => 'test',
-                    'migrations' => array(
+                    'migrations' => [
                         'table' => 'Migrations',
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'name' => 'test2',
-                    'migrations' => array(
+                    'migrations' => [
                         'table' => 'Migrations2',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $this->migrator->shouldReceive('migrate')
             ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, 'latest')

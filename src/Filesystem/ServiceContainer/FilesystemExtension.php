@@ -62,10 +62,10 @@ class FilesystemExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadFilesystem(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_FILESYSTEM, new Definition('Meteor\Filesystem\Filesystem', array(
+        $container->setDefinition(self::SERVICE_FILESYSTEM, new Definition('Meteor\Filesystem\Filesystem', [
             new Reference(self::SERVICE_FINDER_FACTORY),
             new Reference(IOExtension::SERVICE_IO),
-        )));
+        ]));
     }
 
     /**

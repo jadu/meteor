@@ -20,7 +20,7 @@ class TaskBusTest extends \PHPUnit_Framework_TestCase
         $this->taskBus->registerHandler('stdClass', $handler);
 
         $task = new \stdClass();
-        $config = array('name' => 'value');
+        $config = ['name' => 'value'];
 
         $handler->shouldReceive('handle')
             ->with($task, $config)
@@ -35,6 +35,6 @@ class TaskBusTest extends \PHPUnit_Framework_TestCase
      */
     public function testThrowsExceptionWhenMissingHandler()
     {
-        $this->taskBus->run(new \stdClass(), array('name' => 'value'));
+        $this->taskBus->run(new \stdClass(), ['name' => 'value']);
     }
 }

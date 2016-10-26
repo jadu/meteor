@@ -21,17 +21,17 @@ class InputQuestionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
             ->andReturn('dbname')
             ->once();
 
-        $configuration = array(
+        $configuration = [
             'dbname' => '',
             'user' => 'user',
             'password' => 'password',
             'host' => 'host',
             'driver' => 'driver',
-        );
+        ];
 
-        $this->assertArraySubset(array(
+        $this->assertArraySubset([
             'dbname' => 'dbname',
-        ), $this->loader->load('install', $configuration));
+        ], $this->loader->load('install', $configuration));
     }
 
     public function testAsksForUserWhenNotSet()
@@ -40,17 +40,17 @@ class InputQuestionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
             ->andReturn('user')
             ->once();
 
-        $configuration = array(
+        $configuration = [
             'dbname' => 'dbname',
             'user' => '',
             'password' => 'password',
             'host' => 'host',
             'driver' => 'driver',
-        );
+        ];
 
-        $this->assertArraySubset(array(
+        $this->assertArraySubset([
             'user' => 'user',
-        ), $this->loader->load('install', $configuration));
+        ], $this->loader->load('install', $configuration));
     }
 
     public function testAsksForPasswordWhenNotSet()
@@ -59,17 +59,17 @@ class InputQuestionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
             ->andReturn('password')
             ->once();
 
-        $configuration = array(
+        $configuration = [
             'dbname' => 'dbname',
             'user' => 'user',
             'password' => '',
             'host' => 'host',
             'driver' => 'driver',
-        );
+        ];
 
-        $this->assertArraySubset(array(
+        $this->assertArraySubset([
             'password' => 'password',
-        ), $this->loader->load('install', $configuration));
+        ], $this->loader->load('install', $configuration));
     }
 
     public function testAsksForHostWhenNotSet()
@@ -78,17 +78,17 @@ class InputQuestionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
             ->andReturn('host')
             ->once();
 
-        $configuration = array(
+        $configuration = [
             'dbname' => 'dbname',
             'user' => 'user',
             'password' => 'password',
             'host' => '',
             'driver' => 'driver',
-        );
+        ];
 
-        $this->assertArraySubset(array(
+        $this->assertArraySubset([
             'host' => 'host',
-        ), $this->loader->load('install', $configuration));
+        ], $this->loader->load('install', $configuration));
     }
 
     public function testAsksForDriverWhenNotSet()
@@ -97,16 +97,16 @@ class InputQuestionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
             ->andReturn('driver')
             ->once();
 
-        $configuration = array(
+        $configuration = [
             'dbname' => 'dbname',
             'user' => 'user',
             'password' => 'password',
             'host' => 'host',
             'driver' => '',
-        );
+        ];
 
-        $this->assertArraySubset(array(
+        $this->assertArraySubset([
             'driver' => 'driver',
-        ), $this->loader->load('install', $configuration));
+        ], $this->loader->load('install', $configuration));
     }
 }

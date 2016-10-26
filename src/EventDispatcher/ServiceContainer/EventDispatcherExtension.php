@@ -63,7 +63,7 @@ class EventDispatcherExtension extends ExtensionBase implements ExtensionInterfa
         $definition = $container->getDefinition(self::SERVICE_EVENT_DISPATCHER);
 
         foreach ($container->findTaggedServiceIds(self::TAG_SUBSCRIBER) as $id => $tags) {
-            $definition->addMethodCall('addSubscriber', array(new Reference($id)));
+            $definition->addMethodCall('addSubscriber', [new Reference($id)]);
         }
     }
 }

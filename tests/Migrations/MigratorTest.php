@@ -22,43 +22,43 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
 
     private function createVersion($versionString)
     {
-        return Mockery::mock('Doctrine\DBAL\Migrations\Version', array(
+        return Mockery::mock('Doctrine\DBAL\Migrations\Version', [
             'getVersion' => $versionString,
             '__toString' => $versionString,
             'getTime' => 5,
-        ));
+        ]);
     }
 
     public function testMigrate()
     {
-        $config = array();
+        $config = [];
 
         $version1 = $this->createVersion('20160701000000');
         $version2 = $this->createVersion('20160702000000');
         $version3 = $this->createVersion('20160703000000');
 
-        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', array(
-            'getMigrations' => array(
+        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', [
+            'getMigrations' => [
                 $version1->getVersion() => $version1,
                 $version2->getVersion() => $version2,
                 $version3->getVersion() => $version3,
-            ),
-            'getMigratedVersions' => array(
+            ],
+            'getMigratedVersions' => [
                 $version2->getVersion(),
                 $version3->getVersion(),
-            ),
-            'getAvailableVersions' => array(
+            ],
+            'getAvailableVersions' => [
                 $version1->getVersion(),
                 $version2->getVersion(),
                 $version3->getVersion(),
-            ),
+            ],
             'getCurrentVersion' => $version1->getVersion(),
-            'getMigrationsToExecute' => array(
+            'getMigrationsToExecute' => [
                 $version2,
                 $version3,
-            ),
+            ],
             'resolveVersionAlias' => $version3->getVersion(),
-        ));
+        ]);
 
         $configuration->shouldReceive('formatVersion')
             ->andReturnUsing(function ($version) {
@@ -86,32 +86,32 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
 
     public function testMigrateReturnsTrueWhenNoMigrationsToExecute()
     {
-        $config = array();
+        $config = [];
 
         $version1 = $this->createVersion('20160701000000');
         $version2 = $this->createVersion('20160702000000');
         $version3 = $this->createVersion('20160703000000');
 
-        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', array(
-            'getMigrations' => array(
+        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', [
+            'getMigrations' => [
                 $version1->getVersion() => $version1,
                 $version2->getVersion() => $version2,
                 $version3->getVersion() => $version3,
-            ),
-            'getMigratedVersions' => array(
+            ],
+            'getMigratedVersions' => [
                 $version1->getVersion(),
                 $version2->getVersion(),
                 $version3->getVersion(),
-            ),
-            'getAvailableVersions' => array(
+            ],
+            'getAvailableVersions' => [
                 $version1->getVersion(),
                 $version2->getVersion(),
                 $version3->getVersion(),
-            ),
+            ],
             'getCurrentVersion' => $version3->getVersion(),
-            'getMigrationsToExecute' => array(),
+            'getMigrationsToExecute' => [],
             'resolveVersionAlias' => $version3->getVersion(),
-        ));
+        ]);
 
         $configuration->shouldReceive('formatVersion')
             ->andReturnUsing(function ($version) {
@@ -137,7 +137,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteUp()
     {
-        $config = array();
+        $config = [];
 
         $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration');
         $this->configurationFactory->shouldReceive('createConfiguration')
@@ -160,7 +160,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteDown()
     {
-        $config = array();
+        $config = [];
 
         $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration');
         $this->configurationFactory->shouldReceive('createConfiguration')

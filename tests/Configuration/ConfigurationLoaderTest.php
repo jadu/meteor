@@ -16,9 +16,9 @@ class ConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->extensionManager = Mockery::mock('Meteor\ServiceContainer\ExtensionManager', array(
-            'getExtensions' => array(),
-        ));
+        $this->extensionManager = Mockery::mock('Meteor\ServiceContainer\ExtensionManager', [
+            'getExtensions' => [],
+        ]);
         $this->treeBuilder = new TreeBuilder();
         $this->processor = new Processor();
         $this->configurationLoader = new ConfigurationLoader($this->extensionManager, $this->treeBuilder, $this->processor);
@@ -26,35 +26,35 @@ class ConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testBuildTreeConfiguresExtensions()
     {
-        $extension = Mockery::mock('Meteor\ServiceContainer\ExtensionInterface', array(
+        $extension = Mockery::mock('Meteor\ServiceContainer\ExtensionInterface', [
             'getConfigKey' => 'test',
-        ));
+        ]);
 
         // NB: Twice due to building the combined package tree as well
         $extension->shouldReceive('configure')
             ->twice();
 
-        $this->configurationLoader->buildTree(array($extension));
+        $this->configurationLoader->buildTree([$extension]);
     }
 
     public function testAllowsNameSection()
     {
-        $this->configurationLoader->buildTree(array());
+        $this->configurationLoader->buildTree([]);
 
-        $config = $this->configurationLoader->process(array(
+        $config = $this->configurationLoader->process([
             'name' => 'jadu/xfp',
-        ));
+        ]);
 
-        $this->assertArraySubset(array(
+        $this->assertArraySubset([
             'name' => 'jadu/xfp',
-        ), $config);
+        ], $config);
     }
 
     public function testGeneratesAUniqueNameIfNotProvided()
     {
-        $this->configurationLoader->buildTree(array());
+        $this->configurationLoader->buildTree([]);
 
-        $config = $this->configurationLoader->process(array());
+        $config = $this->configurationLoader->process([]);
 
         $this->assertArrayHasKey('name', $config);
         $this->assertNotEmpty($config['name']);
@@ -62,19 +62,19 @@ class ConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testAllowsExtensionsSection()
     {
-        $this->configurationLoader->buildTree(array());
+        $this->configurationLoader->buildTree([]);
 
-        $config = $this->configurationLoader->process(array(
-            'extensions' => array(
+        $config = $this->configurationLoader->process([
+            'extensions' => [
                 'Meteor\Test\ServiceContainer\TestExtension',
-            ),
-        ));
+            ],
+        ]);
 
-        $this->assertArraySubset(array(
-            'extensions' => array(
+        $this->assertArraySubset([
+            'extensions' => [
                 'Meteor\Test\ServiceContainer\TestExtension',
-            ),
-        ), $config);
+            ],
+        ], $config);
     }
 
     public function testParseReturnsConfigAsArray()
@@ -88,18 +88,18 @@ class ConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
 }
 JSON;
 
-        vfsStream::setup('root', null, array(
+        vfsStream::setup('root', null, [
             'meteor.json' => $json,
-        ));
+        ]);
 
         $config = $this->configurationLoader->parse(vfsStream::url('root/meteor.json'));
 
-        $this->assertSame(array(
+        $this->assertSame([
             'name' => 'jadu/xfp',
-            'migrations' => array(
+            'migrations' => [
                 'table' => 'JaduMigrationsXFP',
-            ),
-        ), $config);
+            ],
+        ], $config);
     }
 
     /**
@@ -117,9 +117,9 @@ JSON;
      */
     public function testParseThrowsExceptionWhenJsonCannotBeParsed()
     {
-        vfsStream::setup('root', null, array(
+        vfsStream::setup('root', null, [
             'meteor.json' => '!!!',
-        ));
+        ]);
 
         $this->configurationLoader->parse(vfsStream::url('root/meteor.json'));
     }
@@ -132,18 +132,18 @@ JSON;
 }
 JSON;
 
-        vfsStream::setup('root', null, array(
+        vfsStream::setup('root', null, [
             'meteor.json' => $json,
-        ));
+        ]);
 
-        $this->configurationLoader->buildTree(array());
+        $this->configurationLoader->buildTree([]);
         $config = $this->configurationLoader->load(vfsStream::url('root'));
 
-        $this->assertSame(array(
+        $this->assertSame([
             'name' => 'jadu/xfp',
-            'extensions' => array(),
-            'combined' => array(),
-        ), $config);
+            'extensions' => [],
+            'combined' => [],
+        ], $config);
     }
 
     public function testLoadCombined()
@@ -159,23 +159,23 @@ JSON;
 }
 JSON;
 
-        vfsStream::setup('root', null, array(
+        vfsStream::setup('root', null, [
             'meteor.json' => $json,
-        ));
+        ]);
 
-        $this->configurationLoader->buildTree(array());
+        $this->configurationLoader->buildTree([]);
         $config = $this->configurationLoader->load(vfsStream::url('root'));
 
-        $this->assertSame(array(
+        $this->assertSame([
             'name' => 'jadu/xfp',
-            'combined' => array(
-                array(
+            'combined' => [
+                [
                     'name' => 'jadu/cms',
-                    'extensions' => array(),
-                ),
-            ),
-            'extensions' => array(),
-        ), $config);
+                    'extensions' => [],
+                ],
+            ],
+            'extensions' => [],
+        ], $config);
     }
 
     public function testLoadIgnoresUnrecognisedOptionsWhenNotStrict()
@@ -187,18 +187,18 @@ JSON;
 }
 JSON;
 
-        vfsStream::setup('root', null, array(
+        vfsStream::setup('root', null, [
             'meteor.json' => $json,
-        ));
+        ]);
 
-        $this->configurationLoader->buildTree(array());
+        $this->configurationLoader->buildTree([]);
         $config = $this->configurationLoader->load(vfsStream::url('root'), false);
 
-        $this->assertSame(array(
+        $this->assertSame([
             'name' => 'jadu/xfp',
-            'extensions' => array(),
-            'combined' => array(),
-        ), $config);
+            'extensions' => [],
+            'combined' => [],
+        ], $config);
     }
 
     /**
@@ -206,6 +206,6 @@ JSON;
      */
     public function testCannotProcessBeforeTreeIsBuild()
     {
-        $this->configurationLoader->process(array());
+        $this->configurationLoader->process([]);
     }
 }

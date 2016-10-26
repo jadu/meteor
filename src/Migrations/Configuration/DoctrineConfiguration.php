@@ -21,7 +21,7 @@ abstract class DoctrineConfiguration extends Configuration
      *
      * @var Version[]
      */
-    protected $migrationVersions = array();
+    protected $migrationVersions = [];
 
     /**
      * Get the array of registered migration versions.
@@ -58,7 +58,7 @@ abstract class DoctrineConfiguration extends Configuration
      */
     public function getAvailableVersions()
     {
-        $availableVersions = array();
+        $availableVersions = [];
         foreach ($this->migrationVersions as $migration) {
             $availableVersions[] = $migration->getVersion();
         }
@@ -75,7 +75,7 @@ abstract class DoctrineConfiguration extends Configuration
 
         $where = null;
         if ($this->migrationVersions) {
-            $migratedVersions = array();
+            $migratedVersions = [];
             foreach ($this->migrationVersions as $migration) {
                 $migratedVersions[] = sprintf("'%s'", $migration->getVersion());
             }
@@ -138,12 +138,12 @@ abstract class DoctrineConfiguration extends Configuration
                 $classes = array_reverse(array_values($this->migrationVersions));
                 $allVersions = array_combine($allVersions, $classes);
             } else {
-                $allVersions = array();
+                $allVersions = [];
             }
         } else {
             $allVersions = $this->migrationVersions;
         }
-        $versions = array();
+        $versions = [];
         $migrated = $this->getMigratedVersions();
         foreach ($allVersions as $version) {
             if ($this->shouldMigrationBeExecuted($direction, $version, $to, $migrated)) {

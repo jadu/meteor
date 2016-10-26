@@ -28,19 +28,19 @@ class SystemConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
 </system>
 XML;
 
-        vfsStream::setup('root', null, array(
-            'config' => array(
+        vfsStream::setup('root', null, [
+            'config' => [
                 'system.xml' => $systemXml,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->assertSame(array(
+        $this->assertSame([
             'dbname' => 'jadudb',
             'user' => 'jadu',
             'password' => 'password',
             'host' => 'localhost',
             'driver' => 'pdo_mysql',
-        ), $this->loader->load(vfsStream::url('root')));
+        ], $this->loader->load(vfsStream::url('root')));
     }
 
     public function testUsesPdoMysqlForMysql()
@@ -58,19 +58,19 @@ XML;
 </system>
 XML;
 
-        vfsStream::setup('root', null, array(
-            'config' => array(
+        vfsStream::setup('root', null, [
+            'config' => [
                 'system.xml' => $systemXml,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->assertSame(array(
+        $this->assertSame([
             'dbname' => 'jadudb',
             'user' => 'jadu',
             'password' => 'password',
             'host' => 'localhost',
             'driver' => 'pdo_mysql',
-        ), $this->loader->load(vfsStream::url('root')));
+        ], $this->loader->load(vfsStream::url('root')));
     }
 
     public function testUsesSqlsrvForMssql()
@@ -88,19 +88,19 @@ XML;
 </system>
 XML;
 
-        vfsStream::setup('root', null, array(
-            'config' => array(
+        vfsStream::setup('root', null, [
+            'config' => [
                 'system.xml' => $systemXml,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->assertSame(array(
+        $this->assertSame([
             'dbname' => 'jadudb',
             'user' => 'jadu',
             'password' => 'password',
             'host' => 'localhost',
             'driver' => 'sqlsrv',
-        ), $this->loader->load(vfsStream::url('root')));
+        ], $this->loader->load(vfsStream::url('root')));
     }
 
     public function testLoadDoesNotReturnConfigurationWhenDsnUsed()
@@ -118,12 +118,12 @@ XML;
 </system>
 XML;
 
-        vfsStream::setup('root', null, array(
-            'config' => array(
+        vfsStream::setup('root', null, [
+            'config' => [
                 'system.xml' => $systemXml,
-            ),
-        ));
+            ],
+        ]);
 
-        $this->assertSame(array(), $this->loader->load(vfsStream::url('root')));
+        $this->assertSame([], $this->loader->load(vfsStream::url('root')));
     }
 }

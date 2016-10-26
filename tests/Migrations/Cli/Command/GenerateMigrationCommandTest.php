@@ -16,28 +16,28 @@ class GenerateMigrationCommandTest extends CommandTestCase
     {
         $this->migrationGenerator = Mockery::mock('Meteor\Migrations\Generator\MigrationGenerator');
 
-        return new GenerateMigrationCommand('migrations:generate', array(), new NullIO(), $this->migrationGenerator, MigrationsConstants::TYPE_DATABASE);
+        return new GenerateMigrationCommand('migrations:generate', [], new NullIO(), $this->migrationGenerator, MigrationsConstants::TYPE_DATABASE);
     }
 
     public function testGeneratesMigration()
     {
         $workingDir = __DIR__;
 
-        $this->command->setConfiguration(array(
-            'migrations' => array(
+        $this->command->setConfiguration([
+            'migrations' => [
                 'name' => 'jadu/xfp',
                 'table' => 'JaduMigrationsXFP',
                 'namespace' => 'Migrations',
                 'directory' => 'upgrades',
-            ),
-        ));
+            ],
+        ]);
 
         $this->migrationGenerator->shouldReceive('generate')
             ->with(Mockery::any(), 'Migrations', $workingDir.'/upgrades')
             ->once();
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             '--working-dir' => $workingDir,
-        ));
+        ]);
     }
 }

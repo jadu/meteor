@@ -70,9 +70,9 @@ FINISHED_INSTALL_PHASES="check_config_templates"
 PHPWRAPPER_FILE="php-wrapper"
 CONF;
 
-        vfsStream::setup('root', null, array(
+        vfsStream::setup('root', null, [
             'install.conf' => $installConf,
-        ));
+        ]);
 
         $config = $this->loader->load(vfsStream::url('root'));
 
@@ -100,9 +100,9 @@ CONF;
      */
     public function testLoadThrowsExceptionWhenFileCannotBeParsed()
     {
-        vfsStream::setup('root', null, array(
+        vfsStream::setup('root', null, [
             'install.conf' => '!',
-        ));
+        ]);
 
         $this->loader->load(vfsStream::url('root'));
     }

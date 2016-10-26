@@ -18,12 +18,12 @@ class ExecuteMigrationCommandTest extends MigrationTestCase
         $this->platform = Mockery::mock('Meteor\Platform\PlatformInterface');
         $this->migrator = Mockery::mock('Meteor\Migrations\Migrator');
 
-        vfsStream::setup('root', null, array(
-            'working' => array(),
-            'install' => array(),
-        ));
+        vfsStream::setup('root', null, [
+            'working' => [],
+            'install' => [],
+        ]);
 
-        return new ExecuteMigrationCommand('migrations:execute', array(), new NullIO(), $this->platform, $this->migrator, new NullLogger(), MigrationsConstants::TYPE_DATABASE);
+        return new ExecuteMigrationCommand('migrations:execute', [], new NullIO(), $this->platform, $this->migrator, new NullLogger(), MigrationsConstants::TYPE_DATABASE);
     }
 
     public function testExecuteMigrationUp()
@@ -31,15 +31,15 @@ class ExecuteMigrationCommandTest extends MigrationTestCase
         $workingDir = vfsStream::url('root/working');
         $installDir = vfsStream::url('root/install');
 
-        $config = array(
+        $config = [
             'name' => 'test',
-            'migrations' => array(
+            'migrations' => [
                 'name' => 'test',
                 'table' => 'JaduMigrationsXFP',
                 'namespace' => 'Migrations',
                 'directory' => 'upgrades',
-            ),
-        );
+            ],
+        ];
 
         $this->command->setConfiguration(
             $this->extension->configParse($config)
@@ -50,13 +50,13 @@ class ExecuteMigrationCommandTest extends MigrationTestCase
             ->andReturn(true)
             ->once();
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             'package' => 'test',
             'version' => '20160701102030',
             '--up' => null,
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
-        ));
+        ]);
 
         $this->assertSame(0, $this->tester->getStatusCode());
     }
@@ -66,15 +66,15 @@ class ExecuteMigrationCommandTest extends MigrationTestCase
         $workingDir = vfsStream::url('root/working');
         $installDir = vfsStream::url('root/install');
 
-        $config = array(
+        $config = [
             'name' => 'test',
-            'migrations' => array(
+            'migrations' => [
                 'name' => 'test',
                 'table' => 'JaduMigrationsXFP',
                 'namespace' => 'Migrations',
                 'directory' => 'upgrades',
-            ),
-        );
+            ],
+        ];
 
         $this->command->setConfiguration(
             $this->extension->configParse($config)
@@ -85,13 +85,13 @@ class ExecuteMigrationCommandTest extends MigrationTestCase
             ->andReturn(true)
             ->once();
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             'package' => 'test',
             'version' => '20160701102030',
             '--down' => null,
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
-        ));
+        ]);
 
         $this->assertSame(0, $this->tester->getStatusCode());
     }
@@ -101,15 +101,15 @@ class ExecuteMigrationCommandTest extends MigrationTestCase
         $workingDir = vfsStream::url('root/working');
         $installDir = vfsStream::url('root/install');
 
-        $config = array(
+        $config = [
             'name' => 'test',
-            'migrations' => array(
+            'migrations' => [
                 'name' => 'test',
                 'table' => 'JaduMigrationsXFP',
                 'namespace' => 'Migrations',
                 'directory' => 'upgrades',
-            ),
-        );
+            ],
+        ];
 
         $this->command->setConfiguration(
             $this->extension->configParse($config)
@@ -118,13 +118,13 @@ class ExecuteMigrationCommandTest extends MigrationTestCase
         $this->migrator->shouldReceive('execute')
             ->never();
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             'package' => '',
             'version' => '20160701102030',
             '--down' => null,
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
-        ));
+        ]);
 
         $this->assertSame(1, $this->tester->getStatusCode());
     }
