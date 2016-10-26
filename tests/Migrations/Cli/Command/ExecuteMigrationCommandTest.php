@@ -119,6 +119,7 @@ class ExecuteMigrationCommandTest extends MigrationTestCase
             ->never();
 
         $this->tester->execute(array(
+            'package' => '',
             'version' => '20160701102030',
             '--down' => null,
             '--working-dir' => $workingDir,

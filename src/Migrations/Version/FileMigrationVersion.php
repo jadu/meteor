@@ -3,6 +3,7 @@
 namespace Meteor\Migrations\Version;
 
 use Doctrine\DBAL\Migrations\Configuration\Configuration;
+use Doctrine\DBAL\Migrations\Provider\SchemaDiffProviderInterface;
 use Doctrine\DBAL\Migrations\Version;
 
 class FileMigrationVersion extends Version
@@ -16,11 +17,12 @@ class FileMigrationVersion extends Version
      * @param Configuration $configuration
      * @param string $version
      * @param string $class
+     * @param SchemaDiffProviderInterface $schemaProvider
      * @param FileMigrationVersionStorage $versionStorage
      */
-    public function __construct(Configuration $configuration, $version, $class, FileMigrationVersionStorage $versionStorage)
+    public function __construct(Configuration $configuration, $version, $class, SchemaDiffProviderInterface $schemaProvider = null, FileMigrationVersionStorage $versionStorage = null)
     {
-        parent::__construct($configuration, $version, $class);
+        parent::__construct($configuration, $version, $class, $schemaProvider);
 
         $this->versionStorage = $versionStorage;
     }

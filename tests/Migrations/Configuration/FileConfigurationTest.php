@@ -13,8 +13,8 @@ class FileConfigurationTest extends \PHPUnit_Framework_TestCase
     {
         $this->configuration = new FileConfiguration(Mockery::mock('Doctrine\DBAL\Connection', array(
             // Stub methods to satisfy `new Version`
-            'getSchemaManager' => null,
-            'getDatabasePlatform' => null,
+            'getSchemaManager' => Mockery::mock('Doctrine\DBAL\Schema\AbstractSchemaManager'),
+            'getDatabasePlatform' => Mockery::mock('Doctrine\DBAL\Platforms\AbstractPlatform'),
         )));
 
         $this->versionStorage = Mockery::mock('Meteor\Migrations\Version\FileMigrationVersionStorage');

@@ -20,12 +20,11 @@ class ScriptEventListenerTest extends \PHPUnit_Framework_TestCase
     public function testHandleEvent()
     {
         $event = new Event();
-        $event->setName('test');
 
         $this->scriptRunner->shouldReceive('run')
             ->with('test')
             ->once();
 
-        $this->listener->handleEvent($event);
+        $this->listener->handleEvent($event, 'test');
     }
 }
