@@ -248,7 +248,7 @@ class ConsoleIO implements IOInterface
      */
     private function block($message, $type = null, $style = null, $prefix = ' ', $padding = false)
     {
-        $messages = is_array($message) ? array_values($message) : array($message);
+        $messages = is_array($message) ? array_values($message) : [$message];
 
         $this->autoPrependBlock();
         $this->writeln($this->createBlock($messages, $type, $style, $prefix, $padding, true));
@@ -261,10 +261,10 @@ class ConsoleIO implements IOInterface
     public function title($message)
     {
         $this->autoPrependBlock();
-        $this->writeln(array(
+        $this->writeln([
             sprintf('<comment>%s</>', $message),
             sprintf('<comment>%s</>', str_repeat('=', Helper::strlenWithoutDecoration($this->output->getFormatter(), $message))),
-        ));
+        ]);
         $this->newLine();
     }
 
@@ -274,10 +274,10 @@ class ConsoleIO implements IOInterface
     public function section($message)
     {
         $this->autoPrependBlock();
-        $this->writeln(array(
+        $this->writeln([
             sprintf('<comment>%s</>', $message),
             sprintf('<comment>%s</>', str_repeat('-', Helper::strlenWithoutDecoration($this->output->getFormatter(), $message))),
-        ));
+        ]);
         $this->newLine();
     }
 
@@ -302,7 +302,7 @@ class ConsoleIO implements IOInterface
     {
         $this->autoPrependText();
 
-        $messages = is_array($message) ? array_values($message) : array($message);
+        $messages = is_array($message) ? array_values($message) : [$message];
         foreach ($messages as $message) {
             $this->writeln(sprintf(' %s', $message));
         }
@@ -313,7 +313,7 @@ class ConsoleIO implements IOInterface
      */
     public function debug($message)
     {
-        $messages = is_array($message) ? array_values($message) : array($message);
+        $messages = is_array($message) ? array_values($message) : [$message];
         $block = $this->createBlock($messages, null, null, '<fg=magenta;bg=default>-- </>');
 
         if ($this->isDebug()) {
@@ -477,14 +477,14 @@ class ConsoleIO implements IOInterface
         // Preserve the last 4 chars inserted (PHP_EOL on windows is two chars) in the history buffer
         return array_map(function ($value) {
             return substr($value, -4);
-        }, array_merge(array($this->bufferedOutput->fetch()), (array) $messages));
+        }, array_merge([$this->bufferedOutput->fetch()], (array) $messages));
     }
 
     private function createBlock($messages, $type = null, $style = null, $prefix = ' ', $padding = false, $escape = false)
     {
         $indentLength = 0;
         $prefixLength = Helper::strlenWithoutDecoration($this->output->getFormatter(), $prefix);
-        $lines = array();
+        $lines = [];
 
         if (null !== $type) {
             $type = sprintf('[%s] ', $type);

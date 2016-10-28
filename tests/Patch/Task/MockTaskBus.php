@@ -4,7 +4,7 @@ namespace Meteor\Patch\Task;
 
 class MockTaskBus implements TaskBusInterface
 {
-    public $handled = array();
+    public $handled = [];
 
     public function run($task, array $config)
     {

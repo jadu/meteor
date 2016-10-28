@@ -35,7 +35,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     {
         $this->logger->enable(vfsStream::url('root/logs/meteor.log'));
 
-        $this->logger->log(array('test', 'hello', 'goodbye', ''));
+        $this->logger->log(['test', 'hello', 'goodbye', '']);
 
         $expected = <<<LOG
 [2016-07-01T08:00:00+00:00/32.76MB] test

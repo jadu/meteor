@@ -107,10 +107,10 @@ class Migrator
             $time += $version->getTime();
         }
 
-        $this->io->success(array(
+        $this->io->success([
             sprintf('%s %s migrations executed', $type, count($migrationsToExecute)),
             sprintf('Finished in %s', $time),
-        ));
+        ]);
 
         // NB: Migration version file will be updated when creating a backup rather than after running migrations
 

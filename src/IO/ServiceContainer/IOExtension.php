@@ -45,11 +45,11 @@ class IOExtension extends ExtensionBase implements ExtensionInterface
      */
     public function load(ContainerBuilder $container, array $config)
     {
-        $container->setDefinition(self::SERVICE_IO, new Definition('Meteor\IO\ConsoleIO', array(
+        $container->setDefinition(self::SERVICE_IO, new Definition('Meteor\IO\ConsoleIO', [
             new Reference(CliExtension::SERVICE_INPUT),
             new Reference(CliExtension::SERVICE_OUTPUT),
             new Reference(LoggerExtension::SERVICE_LOGGER),
-        )));
+        ]));
     }
 
     /**

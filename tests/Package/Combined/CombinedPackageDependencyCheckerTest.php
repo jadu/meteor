@@ -17,23 +17,23 @@ class CombinedPackageDependencyCheckerTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckWhenHasNoRequirements()
     {
-        $this->assertTrue($this->checker->check(vfsStream::url('root'), array()));
+        $this->assertTrue($this->checker->check(vfsStream::url('root'), []));
     }
 
     public function testCheckWhenRequirementsMet()
     {
-        $config = array(
-            'package' => array(
-                'combine' => array(
+        $config = [
+            'package' => [
+                'combine' => [
                     'jadu/cms' => '13.7.0',
-                ),
-            ),
-            'combined' => array(
-                array(
+                ],
+            ],
+            'combined' => [
+                [
                     'name' => 'jadu/cms',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $this->assertTrue($this->checker->check(vfsStream::url('root'), $config));
     }
@@ -43,13 +43,13 @@ class CombinedPackageDependencyCheckerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckThrowsExceptionWhenRequiredPackageMissing()
     {
-        $config = array(
-            'package' => array(
-                'combine' => array(
+        $config = [
+            'package' => [
+                'combine' => [
                     'jadu/cms' => '13.7.0',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $this->assertTrue($this->checker->check(vfsStream::url('root'), $config));
     }
@@ -59,50 +59,50 @@ class CombinedPackageDependencyCheckerTest extends \PHPUnit_Framework_TestCase
      */
     public function testChecksRequirementsRecursively()
     {
-        $config = array(
-            'package' => array(
-                'combine' => array(
+        $config = [
+            'package' => [
+                'combine' => [
                     'jadu/xfp' => '3.7.0',
-                ),
-            ),
-            'combined' => array(
-                array(
+                ],
+            ],
+            'combined' => [
+                [
                     'name' => 'jadu/xfp',
-                    'package' => array(
-                        'combine' => array(
+                    'package' => [
+                        'combine' => [
                             'jadu/cms' => '13.7.0',
-                        ),
-                    ),
-                ),
-            ),
-        );
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
         $this->assertTrue($this->checker->check(vfsStream::url('root'), $config));
     }
 
     public function testCheckWhenVersionRequirementsMet()
     {
-        $config = array(
-            'package' => array(
-                'combine' => array(
+        $config = [
+            'package' => [
+                'combine' => [
                     'jadu/cms' => '13.7.0',
-                ),
-            ),
-            'combined' => array(
-                array(
+                ],
+            ],
+            'combined' => [
+                [
                     'name' => 'jadu/cms',
-                    'package' => array(
+                    'package' => [
                         'version' => 'VERSION',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
-        vfsStream::setup('root', null, array(
-            'to_patch' => array(
+        vfsStream::setup('root', null, [
+            'to_patch' => [
                 'VERSION' => '13.7.0',
-            ),
-        ));
+            ],
+        ]);
 
         $this->assertTrue($this->checker->check(vfsStream::url('root'), $config));
     }
@@ -112,27 +112,27 @@ class CombinedPackageDependencyCheckerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckThrowsExceptionWhenVersionRequirementIsNotMet()
     {
-        $config = array(
-            'package' => array(
-                'combine' => array(
+        $config = [
+            'package' => [
+                'combine' => [
                     'jadu/cms' => '13.7.0',
-                ),
-            ),
-            'combined' => array(
-                array(
+                ],
+            ],
+            'combined' => [
+                [
                     'name' => 'jadu/cms',
-                    'package' => array(
+                    'package' => [
                         'version' => 'VERSION',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
-        vfsStream::setup('root', null, array(
-            'to_patch' => array(
+        vfsStream::setup('root', null, [
+            'to_patch' => [
                 'VERSION' => '13.5.0',
-            ),
-        ));
+            ],
+        ]);
 
         $this->assertTrue($this->checker->check(vfsStream::url('root'), $config));
     }
@@ -142,37 +142,37 @@ class CombinedPackageDependencyCheckerTest extends \PHPUnit_Framework_TestCase
      */
     public function testChecksVersionRequirementsRecursively()
     {
-        $config = array(
-            'package' => array(
-                'combine' => array(
+        $config = [
+            'package' => [
+                'combine' => [
                     'jadu/xfp' => '3.7.0',
-                ),
-            ),
-            'combined' => array(
-                array(
+                ],
+            ],
+            'combined' => [
+                [
                     'name' => 'jadu/xfp',
-                    'package' => array(
+                    'package' => [
                         'version' => 'XFP_VERSION',
-                        'combine' => array(
+                        'combine' => [
                             'jadu/cms' => '13.7.0',
-                        ),
-                    ),
-                ),
-                array(
+                        ],
+                    ],
+                ],
+                [
                     'name' => 'jadu/cms',
-                    'package' => array(
+                    'package' => [
                         'version' => 'VERSION',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
-        vfsStream::setup('root', null, array(
-            'to_patch' => array(
+        vfsStream::setup('root', null, [
+            'to_patch' => [
                 'XFP_VERSION' => '3.7.0',
                 'VERSION' => '12.0.0',
-            ),
-        ));
+            ],
+        ]);
 
         $this->assertTrue($this->checker->check(vfsStream::url('root'), $config));
     }

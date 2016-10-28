@@ -33,19 +33,19 @@ class ConfigurationFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $connection = Mockery::mock('Doctrine\DBAL\Connection');
         $this->connectionFactory->shouldReceive('getConnection')
-            ->with('/path/to/install')
+            ->with(__DIR__.'/Fixtures/install')
             ->andReturn($connection)
             ->once();
 
         $configuration = $this->configurationFactory->createDatabaseConfiguration(
-            array(
+            [
                 'name' => 'jadu/xfp',
                 'namespace' => 'Migrations',
                 'table' => 'JaduMigrationsXFP',
                 'directory' => 'upgrades',
-            ),
-            '/path/to/patch',
-            '/path/to/install',
+            ],
+            __DIR__.'/Fixtures/patch',
+            __DIR__.'/Fixtures/install',
             true
         );
 
@@ -53,35 +53,35 @@ class ConfigurationFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('jadu/xfp', $configuration->getName());
         $this->assertSame('Migrations', $configuration->getMigrationsNamespace());
         $this->assertSame('JaduMigrationsXFP', $configuration->getMigrationsTableName());
-        $this->assertSame('/path/to/patch/upgrades', $configuration->getMigrationsDirectory());
-        $this->assertSame('/path/to/install', $configuration->getJaduPath());
+        $this->assertSame(__DIR__.'/Fixtures/patch/upgrades', $configuration->getMigrationsDirectory());
+        $this->assertSame(__DIR__.'/Fixtures/install', $configuration->getJaduPath());
     }
 
     public function testCreateFileConfiguration()
     {
         $connection = Mockery::mock('Doctrine\DBAL\Connection');
         $this->connectionFactory->shouldReceive('getConnection')
-            ->with('/path/to/install')
+            ->with(__DIR__.'/Fixtures/install')
             ->andReturn($connection)
             ->once();
 
-        $fileMigrationVersionStorage = Mockery::mock('Meteor\Migrations\Version\FileMigrationVersionStorage', array(
+        $fileMigrationVersionStorage = Mockery::mock('Meteor\Migrations\Version\FileMigrationVersionStorage', [
             'isInitialised' => true,
-        ));
+        ]);
         $this->fileMigrationVersionStorageFactory->shouldReceive('create')
-            ->with('/path/to/install', 'JaduMigrationsXFP')
+            ->with(__DIR__.'/Fixtures/install', 'JaduMigrationsXFP')
             ->andReturn($fileMigrationVersionStorage)
             ->once();
 
         $configuration = $this->configurationFactory->createFileConfiguration(
-            array(
+            [
                 'name' => 'jadu/xfp',
                 'namespace' => 'Migrations',
                 'table' => 'JaduMigrationsXFP',
                 'directory' => 'upgrades',
-            ),
-            '/path/to/patch',
-            '/path/to/install',
+            ],
+            __DIR__.'/Fixtures/patch',
+            __DIR__.'/Fixtures/install',
             true
         );
 
@@ -89,8 +89,8 @@ class ConfigurationFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('jadu/xfp', $configuration->getName());
         $this->assertSame('Migrations', $configuration->getMigrationsNamespace());
         $this->assertSame('JaduMigrationsXFP', $configuration->getMigrationsTableName());
-        $this->assertSame('/path/to/patch/upgrades/filesystem', $configuration->getMigrationsDirectory());
-        $this->assertSame('/path/to/install', $configuration->getJaduPath());
+        $this->assertSame(__DIR__.'/Fixtures/patch/upgrades/filesystem', $configuration->getMigrationsDirectory());
+        $this->assertSame(__DIR__.'/Fixtures/install', $configuration->getJaduPath());
         $this->assertSame($fileMigrationVersionStorage, $configuration->getVersionStorage());
     }
 
@@ -98,21 +98,21 @@ class ConfigurationFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $connection = Mockery::mock('Doctrine\DBAL\Connection');
         $this->connectionFactory->shouldReceive('getConnection')
-            ->with('/path/to/install')
+            ->with(__DIR__.'/Fixtures/install')
             ->andReturn($connection)
             ->once();
 
-        $fileMigrationVersionStorage = Mockery::mock('Meteor\Migrations\Version\FileMigrationVersionStorage', array(
+        $fileMigrationVersionStorage = Mockery::mock('Meteor\Migrations\Version\FileMigrationVersionStorage', [
             'isInitialised' => false,
-        ));
+        ]);
 
         $this->fileMigrationVersionStorageFactory->shouldReceive('create')
-            ->with('/path/to/install', 'JaduMigrationsXFP')
+            ->with(__DIR__.'/Fixtures/install', 'JaduMigrationsXFP')
             ->andReturn($fileMigrationVersionStorage)
             ->once();
 
         $this->versionFileManager->shouldReceive('getCurrentVersion')
-            ->with('/path/to/install', 'JaduMigrationsXFP', VersionFileManager::FILE_MIGRATION)
+            ->with(__DIR__.'/Fixtures/install', 'JaduMigrationsXFP', VersionFileManager::FILE_MIGRATION)
             ->andReturn('12345')
             ->once();
 
@@ -121,14 +121,14 @@ class ConfigurationFactoryTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $configuration = $this->configurationFactory->createFileConfiguration(
-            array(
+            [
                 'name' => 'jadu/xfp',
                 'namespace' => 'Migrations',
                 'table' => 'JaduMigrationsXFP',
                 'directory' => 'upgrades',
-            ),
-            '/path/to/patch',
-            '/path/to/install',
+            ],
+            __DIR__.'/Fixtures/patch',
+            __DIR__.'/Fixtures/install',
             true
         );
     }

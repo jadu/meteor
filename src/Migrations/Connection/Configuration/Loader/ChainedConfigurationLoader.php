@@ -20,7 +20,7 @@ class ChainedConfigurationLoader implements ConfigurationLoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function load($installDir, array $configuration = array())
+    public function load($installDir, array $configuration = [])
     {
         foreach ($this->loaders as $loader) {
             $configuration = array_merge(array_filter($loader->load($installDir, $configuration)), $configuration);

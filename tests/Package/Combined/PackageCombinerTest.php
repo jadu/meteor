@@ -37,16 +37,16 @@ class PackageCombinerTest extends \PHPUnit_Framework_TestCase
     public function testCombine()
     {
         $packagePath = '/path/to/package.zip';
-        $packageConfig = array(
+        $packageConfig = [
             'name' => 'jadu/xfp',
-        );
+        ];
 
         $outputDir = 'output';
         $tempDir = '/tmp/working';
         $extractedDir = '/tmp/extracted';
-        $config = array(
+        $config = [
             'name' => 'client',
-        );
+        ];
 
         $this->filesystem->shouldReceive('createTempDirectory')
             ->with($outputDir)
@@ -67,7 +67,7 @@ class PackageCombinerTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->filesystem->shouldReceive('copyDirectory')
-            ->with($extractedDir.'/to_patch', $tempDir.'/to_patch', array('/**'))
+            ->with($extractedDir.'/to_patch', $tempDir.'/to_patch', ['/**'])
             ->ordered()
             ->once();
 
@@ -84,29 +84,29 @@ class PackageCombinerTest extends \PHPUnit_Framework_TestCase
 
         $updatedConfig = $this->packageCombiner->combine($packagePath, $outputDir, $tempDir, $config, false);
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'name' => 'client',
-            'combined' => array(
-                array(
+            'combined' => [
+                [
                     'name' => 'jadu/xfp',
-                ),
-            ),
-        ), $updatedConfig);
+                ],
+            ],
+        ], $updatedConfig);
     }
 
     public function testCombineExcludesVendor()
     {
         $packagePath = '/path/to/package.zip';
-        $packageConfig = array(
+        $packageConfig = [
             'name' => 'jadu/xfp',
-        );
+        ];
 
         $outputDir = 'output';
         $tempDir = '/tmp/working';
         $extractedDir = '/tmp/extracted';
-        $config = array(
+        $config = [
             'name' => 'client',
-        );
+        ];
 
         $this->filesystem->shouldReceive('createTempDirectory')
             ->with($outputDir)
@@ -127,7 +127,7 @@ class PackageCombinerTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->filesystem->shouldReceive('copyDirectory')
-            ->with($extractedDir.'/to_patch', $tempDir.'/to_patch', array('/**', '!/vendor'))
+            ->with($extractedDir.'/to_patch', $tempDir.'/to_patch', ['/**', '!/vendor'])
             ->ordered()
             ->once();
 
@@ -144,34 +144,34 @@ class PackageCombinerTest extends \PHPUnit_Framework_TestCase
 
         $updatedConfig = $this->packageCombiner->combine($packagePath, $outputDir, $tempDir, $config, true);
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'name' => 'client',
-            'combined' => array(
-                array(
+            'combined' => [
+                [
                     'name' => 'jadu/xfp',
-                ),
-            ),
-        ), $updatedConfig);
+                ],
+            ],
+        ], $updatedConfig);
     }
 
     public function testCombineHoistsCombinedPackages()
     {
         $packagePath = '/path/to/package.zip';
-        $packageConfig = array(
+        $packageConfig = [
             'name' => 'jadu/xfp',
-            'combined' => array(
-                array(
+            'combined' => [
+                [
                     'name' => 'jadu/cms',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $outputDir = 'output';
         $tempDir = '/tmp/working';
         $extractedDir = '/tmp/extracted';
-        $config = array(
+        $config = [
             'name' => 'client',
-        );
+        ];
 
         $this->filesystem->shouldReceive('createTempDirectory')
             ->with($outputDir)
@@ -214,42 +214,42 @@ class PackageCombinerTest extends \PHPUnit_Framework_TestCase
 
         $updatedConfig = $this->packageCombiner->combine($packagePath, $outputDir, $tempDir, $config, false);
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'name' => 'client',
-            'combined' => array(
-                array(
+            'combined' => [
+                [
                     'name' => 'jadu/cms',
-                ),
-                array(
+                ],
+                [
                     'name' => 'jadu/xfp',
-                ),
-            ),
-        ), $updatedConfig);
+                ],
+            ],
+        ], $updatedConfig);
     }
 
     public function testIgnoresAlreadyCombinedPackages()
     {
         $packagePath = '/path/to/package.zip';
-        $packageConfig = array(
+        $packageConfig = [
             'name' => 'jadu/xfp',
-            'combined' => array(
-                array(
+            'combined' => [
+                [
                     'name' => 'jadu/cms',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $outputDir = 'output';
         $tempDir = '/tmp/working';
         $extractedDir = '/tmp/extracted';
-        $config = array(
+        $config = [
             'name' => 'client',
-            'combined' => array(
-                array(
+            'combined' => [
+                [
                     'name' => 'jadu/cms',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $this->filesystem->shouldReceive('createTempDirectory')
             ->with($outputDir)
@@ -291,17 +291,17 @@ class PackageCombinerTest extends \PHPUnit_Framework_TestCase
 
         $updatedConfig = $this->packageCombiner->combine($packagePath, $outputDir, $tempDir, $config, false);
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'name' => 'client',
-            'combined' => array(
-                array(
+            'combined' => [
+                [
                     'name' => 'jadu/cms',
-                ),
-                array(
+                ],
+                [
                     'name' => 'jadu/xfp',
-                ),
-            ),
-        ), $updatedConfig);
+                ],
+            ],
+        ], $updatedConfig);
     }
 
     public function testCombineDoesNotRemovePackageIfAlreadyExtracted()
@@ -309,15 +309,15 @@ class PackageCombinerTest extends \PHPUnit_Framework_TestCase
         vfsStream::setup('root');
 
         $packagePath = vfsStream::url('root');
-        $packageConfig = array(
+        $packageConfig = [
             'name' => 'jadu/xfp',
-        );
+        ];
 
         $outputDir = 'output';
         $tempDir = '/tmp/working';
-        $config = array(
+        $config = [
             'name' => 'client',
-        );
+        ];
 
         $this->filesystem->shouldReceive('createTempDirectory')
             ->never();
@@ -348,13 +348,13 @@ class PackageCombinerTest extends \PHPUnit_Framework_TestCase
 
         $updatedConfig = $this->packageCombiner->combine($packagePath, $outputDir, $tempDir, $config, false);
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'name' => 'client',
-            'combined' => array(
-                array(
+            'combined' => [
+                [
                     'name' => 'jadu/xfp',
-                ),
-            ),
-        ), $updatedConfig);
+                ],
+            ],
+        ], $updatedConfig);
     }
 }

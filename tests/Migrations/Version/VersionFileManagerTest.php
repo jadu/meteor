@@ -29,80 +29,80 @@ class VersionFileManagerTest extends \PHPUnit_Framework_TestCase
 
     public function getCurrentVersionProvider()
     {
-        return array(
-            array(
-                array('MIGRATION_NUMBER' => '20160701102030'),
+        return [
+            [
+                ['MIGRATION_NUMBER' => '20160701102030'],
                 'JaduMigrations',
                 VersionFileManager::DATABASE_MIGRATION,
                 '20160701102030',
-            ),
-            array(
-                array(),
+            ],
+            [
+                [],
                 'JaduMigrations',
                 VersionFileManager::DATABASE_MIGRATION,
                 '0',
-            ),
-            array(
-                array('XFP_MIGRATION_NUMBER' => '20160701102030'),
+            ],
+            [
+                ['XFP_MIGRATION_NUMBER' => '20160701102030'],
                 'JaduMigrationsXFP',
                 VersionFileManager::DATABASE_MIGRATION,
                 '20160701102030',
-            ),
-            array(
-                array(),
+            ],
+            [
+                [],
                 'JaduMigrationsXFP',
                 VersionFileManager::DATABASE_MIGRATION,
                 '0',
-            ),
-            array(
-                array('SPACECRAFTCUSTOMMIGRATIONS_MIGRATION_NUMBER' => '20160701102030'),
+            ],
+            [
+                ['SPACECRAFTCUSTOMMIGRATIONS_MIGRATION_NUMBER' => '20160701102030'],
                 'SpacecraftCustomMigrations',
                 VersionFileManager::DATABASE_MIGRATION,
                 '20160701102030',
-            ),
-            array(
-                array(),
+            ],
+            [
+                [],
                 'SpacecraftCustomMigrations',
                 VersionFileManager::DATABASE_MIGRATION,
                 '0',
-            ),
-            array(
-                array('FILE_SYSTEM_MIGRATION_NUMBER' => '20160701102030'),
+            ],
+            [
+                ['FILE_SYSTEM_MIGRATION_NUMBER' => '20160701102030'],
                 'JaduMigrations',
                 VersionFileManager::FILE_MIGRATION,
                 '20160701102030',
-            ),
-            array(
-                array(),
+            ],
+            [
+                [],
                 'JaduMigrations',
                 VersionFileManager::FILE_MIGRATION,
                 '0',
-            ),
-            array(
-                array('XFP_FILE_SYSTEM_MIGRATION_NUMBER' => '20160701102030'),
+            ],
+            [
+                ['XFP_FILE_SYSTEM_MIGRATION_NUMBER' => '20160701102030'],
                 'JaduMigrationsXFP',
                 VersionFileManager::FILE_MIGRATION,
                 '20160701102030',
-            ),
-            array(
-                array(),
+            ],
+            [
+                [],
                 'JaduMigrationsXFP',
                 VersionFileManager::FILE_MIGRATION,
                 '0',
-            ),
-            array(
-                array('SPACECRAFTCUSTOMMIGRATIONS_FILE_SYSTEM_MIGRATION_NUMBER' => '20160701102030'),
+            ],
+            [
+                ['SPACECRAFTCUSTOMMIGRATIONS_FILE_SYSTEM_MIGRATION_NUMBER' => '20160701102030'],
                 'SpacecraftCustomMigrations',
                 VersionFileManager::FILE_MIGRATION,
                 '20160701102030',
-            ),
-            array(
-                array(),
+            ],
+            [
+                [],
                 'SpacecraftCustomMigrations',
                 VersionFileManager::FILE_MIGRATION,
                 '0',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -119,37 +119,37 @@ class VersionFileManagerTest extends \PHPUnit_Framework_TestCase
 
     public function setCurrentVersionProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 'JaduMigrations',
                 VersionFileManager::DATABASE_MIGRATION,
                 'MIGRATION_NUMBER',
-            ),
-            array(
+            ],
+            [
                 'JaduMigrationsXFP',
                 VersionFileManager::DATABASE_MIGRATION,
                 'XFP_MIGRATION_NUMBER',
-            ),
-            array(
+            ],
+            [
                 'SpacecraftCustomMigrations',
                 VersionFileManager::DATABASE_MIGRATION,
                 'SPACECRAFTCUSTOMMIGRATIONS_MIGRATION_NUMBER',
-            ),
-            array(
+            ],
+            [
                 'JaduMigrations',
                 VersionFileManager::FILE_MIGRATION,
                 'FILE_SYSTEM_MIGRATION_NUMBER',
-            ),
-            array(
+            ],
+            [
                 'JaduMigrationsXFP',
                 VersionFileManager::FILE_MIGRATION,
                 'XFP_FILE_SYSTEM_MIGRATION_NUMBER',
-            ),
-            array(
+            ],
+            [
                 'SpacecraftCustomMigrations',
                 VersionFileManager::FILE_MIGRATION,
                 'SPACECRAFTCUSTOMMIGRATIONS_FILE_SYSTEM_MIGRATION_NUMBER',
-            ),
-        );
+            ],
+        ];
     }
 }

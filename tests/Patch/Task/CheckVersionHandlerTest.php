@@ -20,15 +20,15 @@ class CheckVersionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testAllowsNewerVersions()
     {
-        $config = array(
-            'package' => array(
+        $config = [
+            'package' => [
                 'version' => 'VERSION',
-            ),
-        );
+            ],
+        ];
 
-        $versions = array(
+        $versions = [
             new VersionDiff('test', 'VERSION', '1.1.0', '1.0.0'),
-        );
+        ];
 
         $this->versionComparer->shouldReceive('comparePackage')
             ->with('working', 'install', $config)
@@ -40,15 +40,15 @@ class CheckVersionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testPreventsOlderVersionFromBeingPatched()
     {
-        $config = array(
-            'package' => array(
+        $config = [
+            'package' => [
                 'version' => 'VERSION',
-            ),
-        );
+            ],
+        ];
 
-        $versions = array(
+        $versions = [
             new VersionDiff('test', 'VERSION', '1.0.0', '1.1.0'),
-        );
+        ];
 
         $this->versionComparer->shouldReceive('comparePackage')
             ->with('working', 'install', $config)
@@ -60,15 +60,15 @@ class CheckVersionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testAllowsOlderVersionsForRollback()
     {
-        $config = array(
-            'package' => array(
+        $config = [
+            'package' => [
                 'version' => 'VERSION',
-            ),
-        );
+            ],
+        ];
 
-        $versions = array(
+        $versions = [
             new VersionDiff('test', 'VERSION', '1.0.0', '1.1.0'),
-        );
+        ];
 
         $this->versionComparer->shouldReceive('comparePackage')
             ->with('working', 'install', $config)
@@ -80,15 +80,15 @@ class CheckVersionHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testPreventsNewerVersionFromBeingPatchedForRollback()
     {
-        $config = array(
-            'package' => array(
+        $config = [
+            'package' => [
                 'version' => 'VERSION',
-            ),
-        );
+            ],
+        ];
 
-        $versions = array(
+        $versions = [
             new VersionDiff('test', 'VERSION', '1.1.0', '1.0.0'),
-        );
+        ];
 
         $this->versionComparer->shouldReceive('comparePackage')
             ->with('working', 'install', $config)

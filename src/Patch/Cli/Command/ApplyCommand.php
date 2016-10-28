@@ -125,7 +125,7 @@ class ApplyCommand extends AbstractPatchCommand
      */
     protected function checkPhpConstraint(array $config)
     {
-        $versions = array();
+        $versions = [];
 
         if (isset($config['package']['php'])) {
             $versions[$config['name']] = $config['package']['php'];

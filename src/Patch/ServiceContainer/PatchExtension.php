@@ -68,12 +68,12 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     public function getEventNames()
     {
-        return array(
+        return [
             PatchEvents::PRE_APPLY,
             PatchEvents::POST_APPLY,
             PatchEvents::PRE_ROLLBACK,
             PatchEvents::POST_ROLLBACK,
-        );
+        ];
     }
 
     /**
@@ -134,10 +134,10 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadBackupFinder(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_BACKUP_FINDER, new Definition('Meteor\Patch\Backup\BackupFinder', array(
+        $container->setDefinition(self::SERVICE_BACKUP_FINDER, new Definition('Meteor\Patch\Backup\BackupFinder', [
             new Reference(self::SERVICE_VERSION_COMPARER),
             new Reference(ConfigurationExtension::SERVICE_LOADER),
-        )));
+        ]));
     }
 
     /**
@@ -153,14 +153,14 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadBackupFilesTaskHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\BackupFilesHandler', array(
+        $definition = new Definition('Meteor\Patch\Task\BackupFilesHandler', [
             new Reference(FilesystemExtension::SERVICE_FILESYSTEM),
             new Reference(ConfigurationExtension::SERVICE_LOADER),
             new Reference(IOExtension::SERVICE_IO),
-        ));
-        $definition->addTag(self::TAG_TASK_HANDLER, array(
+        ]);
+        $definition->addTag(self::TAG_TASK_HANDLER, [
             'task' => 'Meteor\Patch\Task\BackupFiles',
-        ));
+        ]);
 
         $container->setDefinition(self::SERVICE_TASK_BACKUP_FILES_HANDLER, $definition);
     }
@@ -170,12 +170,12 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadCheckDatabaseConnectionTaskHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\CheckDatabaseConnectionHandler', array(
+        $definition = new Definition('Meteor\Patch\Task\CheckDatabaseConnectionHandler', [
             new Reference(MigrationsExtension::SERVICE_CONNECTION_FACTORY),
-        ));
-        $definition->addTag(self::TAG_TASK_HANDLER, array(
+        ]);
+        $definition->addTag(self::TAG_TASK_HANDLER, [
             'task' => 'Meteor\Patch\Task\CheckDatabaseConnection',
-        ));
+        ]);
 
         $container->setDefinition(self::SERVICE_TASK_CHECK_DATABASE_CONNECTION_HANDLER, $definition);
     }
@@ -185,14 +185,14 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadCheckDiskSpaceHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\CheckDiskSpaceHandler', array(
+        $definition = new Definition('Meteor\Patch\Task\CheckDiskSpaceHandler', [
             new Reference(self::SERVICE_BACKUP_FINDER),
             new Reference(FilesystemExtension::SERVICE_FILESYSTEM),
             new Reference(IOExtension::SERVICE_IO),
-        ));
-        $definition->addTag(self::TAG_TASK_HANDLER, array(
+        ]);
+        $definition->addTag(self::TAG_TASK_HANDLER, [
             'task' => 'Meteor\Patch\Task\CheckDiskSpace',
-        ));
+        ]);
 
         $container->setDefinition(self::SERVICE_TASK_CHECK_DISK_SPACE_HANDLER, $definition);
     }
@@ -202,12 +202,12 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadCheckModuleCmsDependencyTaskHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\CheckModuleCmsDependencyHandler', array(
+        $definition = new Definition('Meteor\Patch\Task\CheckModuleCmsDependencyHandler', [
             new Reference(IOExtension::SERVICE_IO),
-        ));
-        $definition->addTag(self::TAG_TASK_HANDLER, array(
+        ]);
+        $definition->addTag(self::TAG_TASK_HANDLER, [
             'task' => 'Meteor\Patch\Task\CheckModuleCmsDependency',
-        ));
+        ]);
 
         $container->setDefinition(self::SERVICE_TASK_CHECK_MODULE_CMS_DEPENDENCY_HANDLER, $definition);
     }
@@ -217,13 +217,13 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadCheckVersionTaskHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\CheckVersionHandler', array(
+        $definition = new Definition('Meteor\Patch\Task\CheckVersionHandler', [
             new Reference(IOExtension::SERVICE_IO),
             new Reference(self::SERVICE_VERSION_COMPARER),
-        ));
-        $definition->addTag(self::TAG_TASK_HANDLER, array(
+        ]);
+        $definition->addTag(self::TAG_TASK_HANDLER, [
             'task' => 'Meteor\Patch\Task\CheckVersion',
-        ));
+        ]);
 
         $container->setDefinition(self::SERVICE_TASK_CHECK_VERSION_HANDLER, $definition);
     }
@@ -233,12 +233,12 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadCheckWritePermissionTaskHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\CheckWritePermissionHandler', array(
+        $definition = new Definition('Meteor\Patch\Task\CheckWritePermissionHandler', [
             new Reference(IOExtension::SERVICE_IO),
-        ));
-        $definition->addTag(self::TAG_TASK_HANDLER, array(
+        ]);
+        $definition->addTag(self::TAG_TASK_HANDLER, [
             'task' => 'Meteor\Patch\Task\CheckWritePermission',
-        ));
+        ]);
 
         $container->setDefinition(self::SERVICE_TASK_CHECK_WRITE_PERMISSION_HANDLER, $definition);
     }
@@ -248,14 +248,14 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadCopyFilesHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\CopyFilesHandler', array(
+        $definition = new Definition('Meteor\Patch\Task\CopyFilesHandler', [
             new Reference(IOExtension::SERVICE_IO),
             new Reference(FilesystemExtension::SERVICE_FILESYSTEM),
             new Reference(PermissionsExtension::SERVICE_PERMISSION_SETTER),
-        ));
-        $definition->addTag(self::TAG_TASK_HANDLER, array(
+        ]);
+        $definition->addTag(self::TAG_TASK_HANDLER, [
             'task' => 'Meteor\Patch\Task\CopyFiles',
-        ));
+        ]);
 
         $container->setDefinition(self::SERVICE_TASK_COPY_FILES_HANDLER, $definition);
     }
@@ -265,13 +265,13 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadDeleteBackupHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\DeleteBackupHandler', array(
+        $definition = new Definition('Meteor\Patch\Task\DeleteBackupHandler', [
             new Reference(IOExtension::SERVICE_IO),
             new Reference(FilesystemExtension::SERVICE_FILESYSTEM),
-        ));
-        $definition->addTag(self::TAG_TASK_HANDLER, array(
+        ]);
+        $definition->addTag(self::TAG_TASK_HANDLER, [
             'task' => 'Meteor\Patch\Task\DeleteBackup',
-        ));
+        ]);
 
         $container->setDefinition(self::SERVICE_TASK_DELETE_BACKUP_HANDLER, $definition);
     }
@@ -281,13 +281,13 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadDisplayVersionInfoTaskHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\DisplayVersionInfoHandler', array(
+        $definition = new Definition('Meteor\Patch\Task\DisplayVersionInfoHandler', [
             new Reference(IOExtension::SERVICE_IO),
             new Reference(self::SERVICE_VERSION_COMPARER),
-        ));
-        $definition->addTag(self::TAG_TASK_HANDLER, array(
+        ]);
+        $definition->addTag(self::TAG_TASK_HANDLER, [
             'task' => 'Meteor\Patch\Task\DisplayVersionInfo',
-        ));
+        ]);
 
         $container->setDefinition(self::SERVICE_TASK_DISPLAY_VERSION_INFO_HANDLER, $definition);
     }
@@ -297,14 +297,14 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadMigrateDownTaskHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\MigrateDownHandler', array(
+        $definition = new Definition('Meteor\Patch\Task\MigrateDownHandler', [
             new Reference(MigrationsExtension::SERVICE_MIGRATOR),
             new Reference(MigrationsExtension::SERVICE_VERSION_FILE_MANAGER),
             new Reference(IOExtension::SERVICE_IO),
-        ));
-        $definition->addTag(self::TAG_TASK_HANDLER, array(
+        ]);
+        $definition->addTag(self::TAG_TASK_HANDLER, [
             'task' => 'Meteor\Patch\Task\MigrateDown',
-        ));
+        ]);
 
         $container->setDefinition(self::SERVICE_TASK_MIGRATE_DOWN_HANDLER, $definition);
     }
@@ -314,13 +314,13 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadMigrateUpTaskHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\MigrateUpHandler', array(
+        $definition = new Definition('Meteor\Patch\Task\MigrateUpHandler', [
             new Reference(MigrationsExtension::SERVICE_MIGRATOR),
             new Reference(IOExtension::SERVICE_IO),
-        ));
-        $definition->addTag(self::TAG_TASK_HANDLER, array(
+        ]);
+        $definition->addTag(self::TAG_TASK_HANDLER, [
             'task' => 'Meteor\Patch\Task\MigrateUp',
-        ));
+        ]);
 
         $container->setDefinition(self::SERVICE_TASK_MIGRATE_UP_HANDLER, $definition);
     }
@@ -330,14 +330,14 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadUpdateMigrationVersionFilesTaskHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\UpdateMigrationVersionFilesHandler', array(
+        $definition = new Definition('Meteor\Patch\Task\UpdateMigrationVersionFilesHandler', [
             new Reference(MigrationsExtension::SERVICE_CONFIGURATION_FACTORY),
             new Reference(MigrationsExtension::SERVICE_VERSION_FILE_MANAGER),
             new Reference(IOExtension::SERVICE_IO),
-        ));
-        $definition->addTag(self::TAG_TASK_HANDLER, array(
+        ]);
+        $definition->addTag(self::TAG_TASK_HANDLER, [
             'task' => 'Meteor\Patch\Task\UpdateMigrationVersionFiles',
-        ));
+        ]);
 
         $container->setDefinition(self::SERVICE_TASK_UPDATE_MIGRATION_VERSION_FILES_HANDLER, $definition);
     }
@@ -347,7 +347,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadApplyCommand(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Cli\Command\ApplyCommand', array(
+        $definition = new Definition('Meteor\Patch\Cli\Command\ApplyCommand', [
             null,
             '%'.Application::PARAMETER_CONFIG.'%',
             new Reference(IOExtension::SERVICE_IO),
@@ -358,7 +358,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
             new Reference(EventDispatcherExtension::SERVICE_EVENT_DISPATCHER),
             new Reference(ScriptsExtension::SERVICE_SCRIPT_RUNNER),
             new Reference(LoggerExtension::SERVICE_LOGGER),
-        ));
+        ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
         $container->setDefinition(self::SERVICE_COMMAND_APPLY, $definition);
     }
@@ -370,13 +370,13 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     {
         $this->loadLocker($container);
 
-        $definition = new Definition('Meteor\Patch\Cli\Command\ClearLockCommand', array(
+        $definition = new Definition('Meteor\Patch\Cli\Command\ClearLockCommand', [
             null,
             '%'.Application::PARAMETER_CONFIG.'%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_LOCKER),
-        ));
+        ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
         $container->setDefinition(self::SERVICE_COMMAND_CLEAR_LOCK, $definition);
     }
@@ -394,7 +394,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadRollbackCommand(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Cli\Command\RollbackCommand', array(
+        $definition = new Definition('Meteor\Patch\Cli\Command\RollbackCommand', [
             null,
             '%'.Application::PARAMETER_CONFIG.'%',
             new Reference(IOExtension::SERVICE_IO),
@@ -407,7 +407,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
             new Reference(EventDispatcherExtension::SERVICE_EVENT_DISPATCHER),
             new Reference(ScriptsExtension::SERVICE_SCRIPT_RUNNER),
             new Reference(LoggerExtension::SERVICE_LOGGER),
-        ));
+        ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
         $container->setDefinition(self::SERVICE_COMMAND_ROLLBACK, $definition);
     }
@@ -417,13 +417,13 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadVersionInfoCommand(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Cli\Command\VersionInfoCommand', array(
+        $definition = new Definition('Meteor\Patch\Cli\Command\VersionInfoCommand', [
             null,
             '%'.Application::PARAMETER_CONFIG.'%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_TASK_BUS),
-        ));
+        ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
         $container->setDefinition(self::SERVICE_COMMAND_VERSION_INFO, $definition);
     }
@@ -456,10 +456,10 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
                     throw new Exception(sprintf('The %s tag must always have a task attribute', self::TAG_TASK_HANDLER));
                 }
 
-                $container->getDefinition(self::SERVICE_TASK_BUS)->addMethodCall('registerHandler', array(
+                $container->getDefinition(self::SERVICE_TASK_BUS)->addMethodCall('registerHandler', [
                     $attributes['task'],
                     new Reference($id),
-                ));
+                ]);
             }
         }
     }

@@ -15,15 +15,15 @@ class VersionInfoCommandTest extends CommandTestCase
 
     public function createCommand()
     {
-        vfsStream::setup('root', null, array(
-            'patch' => array(),
-            'install' => array(),
-        ));
+        vfsStream::setup('root', null, [
+            'patch' => [],
+            'install' => [],
+        ]);
 
         $this->platform = Mockery::mock('Meteor\Platform\PlatformInterface');
         $this->taskBus = Mockery::mock('Meteor\Patch\Task\TaskBusInterface');
 
-        return new VersionInfoCommand(null, array('name' => 'test'), new NullIO(), $this->platform, $this->taskBus);
+        return new VersionInfoCommand(null, ['name' => 'test'], new NullIO(), $this->platform, $this->taskBus);
     }
 
     public function testRunsDisplayVersionInfoTask()
@@ -40,13 +40,13 @@ class VersionInfoCommandTest extends CommandTestCase
 
                     return true;
                 }),
-                array('name' => 'test')
+                ['name' => 'test']
             )
             ->once();
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
-        ));
+        ]);
     }
 }

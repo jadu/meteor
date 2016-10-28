@@ -22,7 +22,7 @@ class InputQuestionConfigurationLoader implements ConfigurationLoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function load($installDir, array $configuration = array())
+    public function load($installDir, array $configuration = [])
     {
         if (!isset($configuration['dbname']) || empty($configuration['dbname'])) {
             $configuration['dbname'] = $this->io->ask('Enter the database name for migrations');

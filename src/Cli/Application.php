@@ -88,10 +88,10 @@ class Application extends BaseApplication
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
-        $workingDir = rtrim($input->getParameterOption(array('--working-dir', '-d')), '/');
+        $workingDir = rtrim($input->getParameterOption(['--working-dir', '-d']), '/');
         if ($workingDir === '') {
             // Fallback to the old --patch-path option
-            $workingDir = rtrim($input->getParameterOption(array('--patch-path')), '/');
+            $workingDir = rtrim($input->getParameterOption(['--patch-path']), '/');
             if ($workingDir === '') {
                 // Lastly fallback to the current directory
                 $workingDir = getcwd();
@@ -123,7 +123,7 @@ class Application extends BaseApplication
      * @param Exception $exception
      * @param OutputInterface $output
      */
-    public function renderException($exception, $output)
+    public function renderException(Exception $exception, OutputInterface $output)
     {
         parent::renderException($exception, $output);
 
@@ -141,15 +141,15 @@ class Application extends BaseApplication
         }
 
         do {
-            $messages = array('', 'Error: '.get_class($exception), $exception->getMessage(), '', 'Exception trace:');
+            $messages = ['', 'Error: '.get_class($exception), $exception->getMessage(), '', 'Exception trace:'];
 
             $trace = $exception->getTrace();
-            array_unshift($trace, array(
+            array_unshift($trace, [
                 'function' => '',
                 'file' => $exception->getFile() !== null ? $exception->getFile() : 'n/a',
                 'line' => $exception->getLine() !== null ? $exception->getLine() : 'n/a',
-                'args' => array(),
-            ));
+                'args' => [],
+            ]);
 
             for ($i = 0, $count = count($trace); $i < $count; ++$i) {
                 $class = isset($trace[$i]['class']) ? $trace[$i]['class'] : '';

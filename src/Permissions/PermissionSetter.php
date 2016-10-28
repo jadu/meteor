@@ -47,7 +47,7 @@ class PermissionSetter
     {
         $targetDir = rtrim($targetDir, '/');
 
-        $permissionErrors = array();
+        $permissionErrors = [];
         foreach ($files as $file) {
             try {
                 $this->platform->setDefaultPermission($targetDir, $file);
@@ -73,7 +73,7 @@ class PermissionSetter
 
         $this->io->text(sprintf('Setting file permissions in <info>%s</>', $targetDir));
 
-        $permissionErrors = array();
+        $permissionErrors = [];
         $permissions = $this->permissionLoader->load($targetDir);
         if (empty($permissions)) {
             return;
@@ -119,20 +119,20 @@ class PermissionSetter
             $targetPath = $targetDir.'/'.$pattern;
             if (!file_exists($targetPath)) {
                 // File does not exist
-                return array();
+                return [];
             }
 
-            return array($targetPath);
+            return [$targetPath];
         }
 
         $basePath = $baseDir.'/'.$pattern;
         $baseDirname = dirname($basePath);
         if (!is_dir($baseDirname)) {
             // Directory does not exist
-            return array();
+            return [];
         }
 
-        $paths = array();
+        $paths = [];
         $finder = new Finder();
         $finder->in($baseDirname);
         $finder->ignoreVCS(true);

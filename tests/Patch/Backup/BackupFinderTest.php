@@ -18,36 +18,36 @@ class BackupFinderTest extends \PHPUnit_Framework_TestCase
         $this->configurationLoader = Mockery::mock('Meteor\Configuration\ConfigurationLoader');
         $this->backupFinder = new BackupFinder(new VersionComparer(), $this->configurationLoader);
 
-        vfsStream::setup('root', null, array(
-            'backups' => array(),
-        ));
+        vfsStream::setup('root', null, [
+            'backups' => [],
+        ]);
     }
 
     public function testFind()
     {
-        $config = array(
+        $config = [
             'name' => 'jadu/cms',
-            'package' => array(
+            'package' => [
                 'version' => 'VERSION',
-            ),
-        );
+            ],
+        ];
 
-        vfsStream::setup('root', null, array(
-            'backups' => array(
-                '20160701102030' => array(
-                    'to_patch' => array(
+        vfsStream::setup('root', null, [
+            'backups' => [
+                '20160701102030' => [
+                    'to_patch' => [
                         'VERSION' => '1.0.0',
-                    ),
-                ),
-            ),
+                    ],
+                ],
+            ],
             'VERSION' => '1.1.0',
-        ));
+        ]);
 
         $this->configurationLoader->shouldReceive('load')
             ->with(vfsStream::url('root/backups/20160701102030'))
-            ->andReturn(array(
+            ->andReturn([
                 'name' => 'jadu/cms',
-            ))
+            ])
             ->once();
 
         $backups = $this->backupFinder->find(vfsStream::url('root'), $config);
@@ -68,23 +68,23 @@ class BackupFinderTest extends \PHPUnit_Framework_TestCase
 
     public function testFindIgnoresBackupsWithoutMeteorConfig()
     {
-        $config = array(
+        $config = [
             'name' => 'jadu/cms',
-            'package' => array(
+            'package' => [
                 'version' => 'VERSION',
-            ),
-        );
+            ],
+        ];
 
-        vfsStream::setup('root', null, array(
-            'backups' => array(
-                '20160701102030' => array(
-                    'to_patch' => array(
+        vfsStream::setup('root', null, [
+            'backups' => [
+                '20160701102030' => [
+                    'to_patch' => [
                         'VERSION' => '1.0.0',
-                    ),
-                ),
-            ),
+                    ],
+                ],
+            ],
             'VERSION' => '1.1.0',
-        ));
+        ]);
 
         $this->configurationLoader->shouldReceive('load')
             ->with(vfsStream::url('root/backups/20160701102030'))
@@ -98,23 +98,23 @@ class BackupFinderTest extends \PHPUnit_Framework_TestCase
 
     public function testFindIgnoresBackupsWithAnInvalidMeteorConfig()
     {
-        $config = array(
+        $config = [
             'name' => 'jadu/cms',
-            'package' => array(
+            'package' => [
                 'version' => 'VERSION',
-            ),
-        );
+            ],
+        ];
 
-        vfsStream::setup('root', null, array(
-            'backups' => array(
-                '20160701102030' => array(
-                    'to_patch' => array(
+        vfsStream::setup('root', null, [
+            'backups' => [
+                '20160701102030' => [
+                    'to_patch' => [
                         'VERSION' => '1.0.0',
-                    ),
-                ),
-            ),
+                    ],
+                ],
+            ],
             'VERSION' => '1.1.0',
-        ));
+        ]);
 
         $this->configurationLoader->shouldReceive('load')
             ->with(vfsStream::url('root/backups/20160701102030'))
@@ -128,55 +128,55 @@ class BackupFinderTest extends \PHPUnit_Framework_TestCase
 
     public function testFindWithCombinedPackages()
     {
-        $config = array(
+        $config = [
             'name' => 'jadu/cms',
-            'package' => array(
+            'package' => [
                 'version' => 'VERSION',
-            ),
-            'combined' => array(
-                array(
+            ],
+            'combined' => [
+                [
                     'name' => 'jadu/xfp',
-                    'package' => array(
+                    'package' => [
                         'version' => 'XFP_VERSION',
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'name' => 'jadu/cp',
-                    'package' => array(
+                    'package' => [
                         'version' => 'CP_VERSION',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
-        vfsStream::setup('root', null, array(
-            'backups' => array(
-                '20160701102030' => array(
-                    'to_patch' => array(
+        vfsStream::setup('root', null, [
+            'backups' => [
+                '20160701102030' => [
+                    'to_patch' => [
                         'VERSION' => '1.0.0',
                         'XFP_VERSION' => '1.0.0',
                         'CP_VERSION' => '1.0.0',
-                    ),
-                ),
-            ),
+                    ],
+                ],
+            ],
             'VERSION' => '1.1.0',
             'XFP_VERSION' => '1.1.0',
             'CP_VERSION' => '1.1.0',
-        ));
+        ]);
 
         $this->configurationLoader->shouldReceive('load')
             ->with(vfsStream::url('root/backups/20160701102030'))
-            ->andReturn(array(
+            ->andReturn([
                 'name' => 'jadu/cms',
-                'combined' => array(
-                    array(
+                'combined' => [
+                    [
                         'name' => 'jadu/cp',
-                    ),
-                    array(
+                    ],
+                    [
                         'name' => 'jadu/xfp',
-                    ),
-                ),
-            ))
+                    ],
+                ],
+            ])
             ->once();
 
         $backups = $this->backupFinder->find(vfsStream::url('root'), $config);
@@ -208,55 +208,55 @@ class BackupFinderTest extends \PHPUnit_Framework_TestCase
 
     public function testFindWithDifferentCombinedPackages()
     {
-        $config = array(
+        $config = [
             'name' => 'jadu/cms',
-            'package' => array(
+            'package' => [
                 'version' => 'VERSION',
-            ),
-            'combined' => array(
-                array(
+            ],
+            'combined' => [
+                [
                     'name' => 'jadu/xfp',
-                    'package' => array(
+                    'package' => [
                         'version' => 'XFP_VERSION',
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'name' => 'jadu/cp',
-                    'package' => array(
+                    'package' => [
                         'version' => 'CP_VERSION',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
-        vfsStream::setup('root', null, array(
-            'backups' => array(
-                '20160701102030' => array(
-                    'to_patch' => array(
+        vfsStream::setup('root', null, [
+            'backups' => [
+                '20160701102030' => [
+                    'to_patch' => [
                         'VERSION' => '1.0.0',
                         'XFP_VERSION' => '1.0.0',
                         'CP_VERSION' => '1.0.0',
-                    ),
-                ),
-            ),
+                    ],
+                ],
+            ],
             'VERSION' => '1.1.0',
             'XFP_VERSION' => '1.1.0',
             'CP_VERSION' => '1.1.0',
-        ));
+        ]);
 
         $this->configurationLoader->shouldReceive('load')
             ->with(vfsStream::url('root/backups/20160701102030'))
-            ->andReturn(array(
+            ->andReturn([
                 'name' => 'jadu/cms',
-                'combined' => array(
-                    array(
+                'combined' => [
+                    [
                         'name' => 'jadu/xfp',
-                    ),
-                    array(
+                    ],
+                    [
                         'name' => 'jadu/poo',
-                    ),
-                ),
-            ))
+                    ],
+                ],
+            ])
             ->once();
 
         $backups = $this->backupFinder->find(vfsStream::url('root'), $config);
@@ -266,29 +266,29 @@ class BackupFinderTest extends \PHPUnit_Framework_TestCase
 
     public function testFindWhenBackupHasDifferentPackages()
     {
-        $config = array(
+        $config = [
             'name' => 'jadu/cms',
-            'package' => array(
+            'package' => [
                 'version' => 'VERSION',
-            ),
-        );
+            ],
+        ];
 
-        vfsStream::setup('root', null, array(
-            'backups' => array(
-                '20160701102030' => array(
-                    'to_patch' => array(
+        vfsStream::setup('root', null, [
+            'backups' => [
+                '20160701102030' => [
+                    'to_patch' => [
                         'VERSION' => '1.0.0',
-                    ),
-                ),
-            ),
+                    ],
+                ],
+            ],
             'VERSION' => '1.1.0',
-        ));
+        ]);
 
         $this->configurationLoader->shouldReceive('load')
             ->with(vfsStream::url('root/backups/20160701102030'))
-            ->andReturn(array(
+            ->andReturn([
                 'name' => 'jadu/xfp',
-            ))
+            ])
             ->once();
 
         $backups = $this->backupFinder->find(vfsStream::url('root'), $config);
@@ -298,29 +298,29 @@ class BackupFinderTest extends \PHPUnit_Framework_TestCase
 
     public function testFindWhenBackupIsNewerThanInstall()
     {
-        $config = array(
+        $config = [
             'name' => 'jadu/cms',
-            'package' => array(
+            'package' => [
                 'version' => 'VERSION',
-            ),
-        );
+            ],
+        ];
 
-        vfsStream::setup('root', null, array(
-            'backups' => array(
-                '20160701102030' => array(
-                    'to_patch' => array(
+        vfsStream::setup('root', null, [
+            'backups' => [
+                '20160701102030' => [
+                    'to_patch' => [
                         'VERSION' => '1.1.0',
-                    ),
-                ),
-            ),
+                    ],
+                ],
+            ],
             'VERSION' => '1.0.0',
-        ));
+        ]);
 
         $this->configurationLoader->shouldReceive('load')
             ->with(vfsStream::url('root/backups/20160701102030'))
-            ->andReturn(array(
+            ->andReturn([
                 'name' => 'jadu/cms',
-            ))
+            ])
             ->once();
 
         $backups = $this->backupFinder->find(vfsStream::url('root'), $config);

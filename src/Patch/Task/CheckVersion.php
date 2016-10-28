@@ -34,7 +34,7 @@ class CheckVersion
         $this->workingDir = $workingDir;
         $this->installDir = $installDir;
 
-        if (!in_array($operator, array(self::GREATER_THAN_OR_EQUAL, self::LESS_THAN_OR_EQUAL), true)) {
+        if (!in_array($operator, [self::GREATER_THAN_OR_EQUAL, self::LESS_THAN_OR_EQUAL], true)) {
             throw new InvalidArgumentException('Invalid operator');
         }
 

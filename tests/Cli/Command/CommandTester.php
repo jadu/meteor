@@ -39,9 +39,9 @@ class CommandTester
      *
      * @return int The command exit code
      */
-    public function execute(array $input, array $options = array())
+    public function execute(array $input, array $options = [])
     {
-        $input = array_merge(array('command' => $this->command->getName()), $input);
+        $input = array_merge(['command' => $this->command->getName()], $input);
 
         $this->input = new ArrayInput($input);
         $this->input->setInteractive(false);

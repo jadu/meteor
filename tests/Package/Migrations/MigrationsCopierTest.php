@@ -21,21 +21,21 @@ class MigrationsCopierTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnsConfig()
     {
-        $config = array(
+        $config = [
             'name' => 'test',
-        );
+        ];
 
         $this->assertSame($config, $this->migrationsCopier->copy('working', 'temp', $config));
     }
 
     public function testCopiesMigrations()
     {
-        $config = array(
+        $config = [
             'name' => 'test',
-            'migrations' => array(
+            'migrations' => [
                 'directory' => 'upgrades/migrations',
-            ),
-        );
+            ],
+        ];
 
         $this->filesystem->shouldReceive('copyDirectory')
             ->with('working/upgrades/migrations', 'temp/migrations/test')
@@ -46,20 +46,20 @@ class MigrationsCopierTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdatesMigrationsConfig()
     {
-        $config = array(
+        $config = [
             'name' => 'test',
-            'migrations' => array(
+            'migrations' => [
                 'directory' => 'upgrades/migrations',
-            ),
-        );
+            ],
+        ];
 
         $this->filesystem->shouldReceive('copyDirectory');
 
-        $this->assertSame(array(
+        $this->assertSame([
             'name' => 'test',
-            'migrations' => array(
+            'migrations' => [
                 'directory' => 'migrations/test',
-            ),
-        ), $this->migrationsCopier->copy('working', 'temp', $config));
+            ],
+        ], $this->migrationsCopier->copy('working', 'temp', $config));
     }
 }

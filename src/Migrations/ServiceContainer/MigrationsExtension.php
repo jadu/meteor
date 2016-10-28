@@ -65,7 +65,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
      */
     public function configParse(array $config)
     {
-        $extensionConfig = array();
+        $extensionConfig = [];
 
         if (isset($config['combined'])) {
             $extensionConfigKey = $this->getConfigKey();
@@ -138,21 +138,21 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadConnectionConfigurationLoader(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_CONNECTION_CONFIGURATION_LOADER_INPUT_OPTION, new Definition('Meteor\Migrations\Connection\Configuration\Loader\InputOptionConfigurationLoader', array(
+        $container->setDefinition(self::SERVICE_CONNECTION_CONFIGURATION_LOADER_INPUT_OPTION, new Definition('Meteor\Migrations\Connection\Configuration\Loader\InputOptionConfigurationLoader', [
             new Reference(IOExtension::SERVICE_IO),
-        )));
+        ]));
         $container->setDefinition(self::SERVICE_CONNECTION_CONFIGURATION_LOADER_SYSTEM, new Definition('Meteor\Migrations\Connection\Configuration\Loader\SystemConfigurationLoader'));
-        $container->setDefinition(self::SERVICE_CONNECTION_CONFIGURATION_LOADER_INPUT_QUESTION, new Definition('Meteor\Migrations\Connection\Configuration\Loader\InputQuestionConfigurationLoader', array(
+        $container->setDefinition(self::SERVICE_CONNECTION_CONFIGURATION_LOADER_INPUT_QUESTION, new Definition('Meteor\Migrations\Connection\Configuration\Loader\InputQuestionConfigurationLoader', [
             new Reference(IOExtension::SERVICE_IO),
-        )));
+        ]));
 
-        $container->setDefinition(self::SERVICE_CONNECTION_CONFIGURATION_LOADER, new Definition('Meteor\Migrations\Connection\Configuration\Loader\ChainedConfigurationLoader', array(
-            array(
+        $container->setDefinition(self::SERVICE_CONNECTION_CONFIGURATION_LOADER, new Definition('Meteor\Migrations\Connection\Configuration\Loader\ChainedConfigurationLoader', [
+            [
                 new Reference(self::SERVICE_CONNECTION_CONFIGURATION_LOADER_INPUT_OPTION),
                 new Reference(self::SERVICE_CONNECTION_CONFIGURATION_LOADER_SYSTEM),
                 new Reference(self::SERVICE_CONNECTION_CONFIGURATION_LOADER_INPUT_QUESTION),
-            ),
-        )));
+            ],
+        ]));
     }
 
     /**
@@ -160,9 +160,9 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadConnectionFactory(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_CONNECTION_FACTORY, new Definition('Meteor\Migrations\Connection\ConnectionFactory', array(
+        $container->setDefinition(self::SERVICE_CONNECTION_FACTORY, new Definition('Meteor\Migrations\Connection\ConnectionFactory', [
             new Reference(self::SERVICE_CONNECTION_CONFIGURATION_LOADER),
-        )));
+        ]));
     }
 
     /**
@@ -170,12 +170,12 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadConfigurationFactory(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_CONFIGURATION_FACTORY, new Definition('Meteor\Migrations\Configuration\ConfigurationFactory', array(
+        $container->setDefinition(self::SERVICE_CONFIGURATION_FACTORY, new Definition('Meteor\Migrations\Configuration\ConfigurationFactory', [
             new Reference(self::SERVICE_CONNECTION_FACTORY),
             new Reference(self::SERVICE_VERSION_FILE_MIGRATION_VERSION_STORAGE_FACTORY),
             new Reference(self::SERVICE_VERSION_FILE_MANAGER),
             new Reference(IOExtension::SERVICE_IO),
-        )));
+        ]));
     }
 
     /**
@@ -183,7 +183,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadExecuteDatabaseMigrationCommand(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Migrations\Cli\Command\ExecuteMigrationCommand', array(
+        $definition = new Definition('Meteor\Migrations\Cli\Command\ExecuteMigrationCommand', [
             'migrations:execute',
             '%'.self::PARAMETER_MIGRATIONS.'%',
             new Reference(IOExtension::SERVICE_IO),
@@ -191,7 +191,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
             new Reference(self::SERVICE_MIGRATOR),
             new Reference(LoggerExtension::SERVICE_LOGGER),
             MigrationsConstants::TYPE_DATABASE,
-        ));
+        ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
         $container->setDefinition(self::SERVICE_COMMAND_EXECUTE_DATABASE_MIGRATION, $definition);
     }
@@ -201,7 +201,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadExecuteFileMigrationCommand(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Migrations\Cli\Command\ExecuteMigrationCommand', array(
+        $definition = new Definition('Meteor\Migrations\Cli\Command\ExecuteMigrationCommand', [
             'file-migrations:execute',
             '%'.self::PARAMETER_MIGRATIONS.'%',
             new Reference(IOExtension::SERVICE_IO),
@@ -209,7 +209,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
             new Reference(self::SERVICE_MIGRATOR),
             new Reference(LoggerExtension::SERVICE_LOGGER),
             MigrationsConstants::TYPE_FILE,
-        ));
+        ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
         $container->setDefinition(self::SERVICE_COMMAND_EXECUTE_FILE_MIGRATION, $definition);
     }
@@ -219,13 +219,13 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadGenerateDatabaseMigrationCommand(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Migrations\Cli\Command\GenerateMigrationCommand', array(
+        $definition = new Definition('Meteor\Migrations\Cli\Command\GenerateMigrationCommand', [
             'migrations:generate',
             '%'.Application::PARAMETER_CONFIG.'%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(self::SERVICE_MIGRATION_GENERATOR),
             MigrationsConstants::TYPE_DATABASE,
-        ));
+        ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
         $container->setDefinition(self::SERVICE_COMMAND_GENERATE_DATABASE_MIGRATION, $definition);
     }
@@ -235,13 +235,13 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadGenerateFileMigrationCommand(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Migrations\Cli\Command\GenerateMigrationCommand', array(
+        $definition = new Definition('Meteor\Migrations\Cli\Command\GenerateMigrationCommand', [
             'file-migrations:generate',
             '%'.Application::PARAMETER_CONFIG.'%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(self::SERVICE_MIGRATION_GENERATOR),
             MigrationsConstants::TYPE_FILE,
-        ));
+        ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
         $container->setDefinition(self::SERVICE_COMMAND_GENERATE_FILE_MIGRATION, $definition);
     }
@@ -259,10 +259,10 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadMigrator(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_MIGRATOR, new Definition('Meteor\Migrations\Migrator', array(
+        $container->setDefinition(self::SERVICE_MIGRATOR, new Definition('Meteor\Migrations\Migrator', [
             new Reference(self::SERVICE_CONFIGURATION_FACTORY),
             new Reference(IOExtension::SERVICE_IO),
-        )));
+        ]));
     }
 
     /**
@@ -270,7 +270,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadMigrateDatabaseCommand(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Migrations\Cli\Command\MigrateCommand', array(
+        $definition = new Definition('Meteor\Migrations\Cli\Command\MigrateCommand', [
             'migrations:migrate',
             '%'.self::PARAMETER_MIGRATIONS.'%',
             new Reference(IOExtension::SERVICE_IO),
@@ -278,7 +278,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
             new Reference(self::SERVICE_MIGRATOR),
             new Reference(LoggerExtension::SERVICE_LOGGER),
             MigrationsConstants::TYPE_DATABASE,
-        ));
+        ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
         $container->setDefinition(self::SERVICE_COMMAND_MIGRATE_DATABASE, $definition);
     }
@@ -288,7 +288,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadMigrateFilesCommand(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Migrations\Cli\Command\MigrateCommand', array(
+        $definition = new Definition('Meteor\Migrations\Cli\Command\MigrateCommand', [
             'file-migrations:migrate',
             '%'.self::PARAMETER_MIGRATIONS.'%',
             new Reference(IOExtension::SERVICE_IO),
@@ -296,7 +296,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
             new Reference(self::SERVICE_MIGRATOR),
             new Reference(LoggerExtension::SERVICE_LOGGER),
             MigrationsConstants::TYPE_FILE,
-        ));
+        ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
         $container->setDefinition(self::SERVICE_COMMAND_MIGRATE_FILES, $definition);
     }
@@ -306,14 +306,14 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadDatabaseMigrationStatusCommand(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Migrations\Cli\Command\StatusCommand', array(
+        $definition = new Definition('Meteor\Migrations\Cli\Command\StatusCommand', [
             'migrations:status',
             '%'.self::PARAMETER_MIGRATIONS.'%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_STATUS_OUTPUTTER),
             MigrationsConstants::TYPE_DATABASE,
-        ));
+        ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
         $container->setDefinition(self::SERVICE_COMMAND_DATABASE_MIGRATION_STATUS, $definition);
     }
@@ -323,14 +323,14 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadFileMigrationStatusCommand(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Migrations\Cli\Command\StatusCommand', array(
+        $definition = new Definition('Meteor\Migrations\Cli\Command\StatusCommand', [
             'file-migrations:status',
             '%'.self::PARAMETER_MIGRATIONS.'%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_STATUS_OUTPUTTER),
             MigrationsConstants::TYPE_FILE,
-        ));
+        ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
         $container->setDefinition(self::SERVICE_COMMAND_FILE_MIGRATION_STATUS, $definition);
     }
@@ -340,10 +340,10 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadStatusOutputter(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_STATUS_OUTPUTTER, new Definition('Meteor\Migrations\Outputter\StatusOutputter', array(
+        $container->setDefinition(self::SERVICE_STATUS_OUTPUTTER, new Definition('Meteor\Migrations\Outputter\StatusOutputter', [
             new Reference(self::SERVICE_CONFIGURATION_FACTORY),
             new Reference(IOExtension::SERVICE_IO),
-        )));
+        ]));
     }
 
     /**
@@ -351,14 +351,14 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadDatabaseMigrationVersionCommand(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Migrations\Cli\Command\VersionCommand', array(
+        $definition = new Definition('Meteor\Migrations\Cli\Command\VersionCommand', [
             'migrations:version',
             '%'.self::PARAMETER_MIGRATIONS.'%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_VERSION_MANAGER),
             MigrationsConstants::TYPE_DATABASE,
-        ));
+        ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
         $container->setDefinition(self::SERVICE_COMMAND_DATABASE_MIGRATION_VERSION, $definition);
     }
@@ -368,14 +368,14 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadFileMigrationVersionCommand(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Migrations\Cli\Command\VersionCommand', array(
+        $definition = new Definition('Meteor\Migrations\Cli\Command\VersionCommand', [
             'file-migrations:version',
             '%'.self::PARAMETER_MIGRATIONS.'%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_VERSION_MANAGER),
             MigrationsConstants::TYPE_FILE,
-        ));
+        ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
         $container->setDefinition(self::SERVICE_COMMAND_FILE_MIGRATION_VERSION, $definition);
     }
@@ -398,9 +398,9 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
     {
         $container->setDefinition(
             self::SERVICE_VERSION_FILE_MIGRATION_VERSION_STORAGE_FACTORY,
-            new Definition('Meteor\Migrations\Version\FileMigrationVersionStorageFactory', array(
+            new Definition('Meteor\Migrations\Version\FileMigrationVersionStorageFactory', [
                 new Reference(FilesystemExtension::SERVICE_FILESYSTEM),
-            ))
+            ])
         );
     }
 
@@ -411,10 +411,10 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
     {
         $container->setDefinition(
             self::SERVICE_VERSION_MANAGER,
-            new Definition('Meteor\Migrations\Version\VersionManager', array(
+            new Definition('Meteor\Migrations\Version\VersionManager', [
                 new Reference(self::SERVICE_CONFIGURATION_FACTORY),
                 new Reference(IOExtension::SERVICE_IO),
-            ))
+            ])
         );
     }
 

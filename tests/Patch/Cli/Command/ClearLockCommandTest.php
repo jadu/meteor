@@ -17,7 +17,7 @@ class ClearLockCommandTest extends CommandTestCase
         $this->platform = Mockery::mock('Meteor\Platform\PlatformInterface');
         $this->locker = Mockery::mock('Meteor\Patch\Lock\Locker');
 
-        return new ClearLockCommand(null, array(), new NullIO(), $this->platform, $this->locker);
+        return new ClearLockCommand(null, [], new NullIO(), $this->platform, $this->locker);
     }
 
     public function testUnlocksInstall()
@@ -28,8 +28,8 @@ class ClearLockCommandTest extends CommandTestCase
             ->with($installDir)
             ->once();
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             '--install-dir' => $installDir,
-        ));
+        ]);
     }
 }

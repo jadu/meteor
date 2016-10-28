@@ -8,5 +8,5 @@ interface ConfigurationLoaderInterface
      * @param string $installDir
      * @param array $configuration
      */
-    public function load($installDir, array $configuration = array());
+    public function load($installDir, array $configuration = []);
 }

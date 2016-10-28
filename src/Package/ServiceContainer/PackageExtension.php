@@ -113,13 +113,13 @@ class PackageExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadCombinedPackageCombiner(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_COMBINED_PACKAGE_COMBINER, new Definition('Meteor\Package\Combined\PackageCombiner', array(
+        $container->setDefinition(self::SERVICE_COMBINED_PACKAGE_COMBINER, new Definition('Meteor\Package\Combined\PackageCombiner', [
             new Reference(ConfigurationExtension::SERVICE_LOADER),
             new Reference(FilesystemExtension::SERVICE_FILESYSTEM),
             new Reference(self::SERVICE_PACKAGE_EXTRACTOR),
             new Reference(self::SERVICE_MIGRATIONS_COPIER),
             new Reference(IOExtension::SERVICE_IO),
-        )));
+        ]));
     }
 
     /**
@@ -127,13 +127,13 @@ class PackageExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadCombinedPackageResolver(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_COMBINED_PACKAGE_RESOLVER, new Definition('Meteor\Package\Combined\CombinedPackageResolver', array(
+        $container->setDefinition(self::SERVICE_COMBINED_PACKAGE_RESOLVER, new Definition('Meteor\Package\Combined\CombinedPackageResolver', [
             new Reference(self::SERVICE_COMBINED_PACKAGE_COMBINER),
             new Reference(self::SERVICE_COMBINED_PACKAGE_DEPENDENCY_CHECKER),
             new Reference(FilesystemExtension::SERVICE_FILESYSTEM),
             new Reference(IOExtension::SERVICE_IO),
             new Reference(self::SERVICE_PROVIDER, ContainerInterface::NULL_ON_INVALID_REFERENCE),
-        )));
+        ]));
     }
 
     /**
@@ -149,10 +149,10 @@ class PackageExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadMigrationsCopier(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_MIGRATIONS_COPIER, new Definition('Meteor\Package\Migrations\MigrationsCopier', array(
+        $container->setDefinition(self::SERVICE_MIGRATIONS_COPIER, new Definition('Meteor\Package\Migrations\MigrationsCopier', [
             new Reference(FilesystemExtension::SERVICE_FILESYSTEM),
             new Reference(IOExtension::SERVICE_IO),
-        )));
+        ]));
     }
 
     /**
@@ -160,10 +160,10 @@ class PackageExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadPackageArchiver(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_PACKAGE_ARCHIVER, new Definition('Meteor\Package\PackageArchiver', array(
+        $container->setDefinition(self::SERVICE_PACKAGE_ARCHIVER, new Definition('Meteor\Package\PackageArchiver', [
             new Reference(FilesystemExtension::SERVICE_FILESYSTEM),
             new Reference(IOExtension::SERVICE_IO),
-        )));
+        ]));
     }
 
     /**
@@ -179,7 +179,7 @@ class PackageExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadPackageCreator(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_PACKAGE_CREATOR, new Definition('Meteor\Package\PackageCreator', array(
+        $container->setDefinition(self::SERVICE_PACKAGE_CREATOR, new Definition('Meteor\Package\PackageCreator', [
             new Reference(FilesystemExtension::SERVICE_FILESYSTEM),
             new Reference(self::SERVICE_PACKAGE_ARCHIVER),
             new Reference(self::SERVICE_PACKAGE_NAME_RESOLVER),
@@ -188,7 +188,7 @@ class PackageExtension extends ExtensionBase implements ExtensionInterface
             new Reference(self::SERVICE_COMPOSER_DEPENDENCY_CHECKER),
             new Reference(ConfigurationExtension::SERVICE_WRITER),
             new Reference(IOExtension::SERVICE_IO),
-        )));
+        ]));
     }
 
     /**
@@ -196,12 +196,12 @@ class PackageExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadPackageCommand(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Package\Cli\Command\PackageCommand', array(
+        $definition = new Definition('Meteor\Package\Cli\Command\PackageCommand', [
             null,
             '%'.Application::PARAMETER_CONFIG.'%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(self::SERVICE_PACKAGE_CREATOR),
-        ));
+        ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
         $container->setDefinition(self::SERVICE_COMMAND_PACKAGE, $definition);
     }

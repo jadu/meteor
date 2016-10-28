@@ -9,7 +9,7 @@ class TaskBus implements TaskBusInterface
     /**
      * @var array
      */
-    private $handlers = array();
+    private $handlers = [];
 
     /**
      * @param string $className

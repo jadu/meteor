@@ -22,7 +22,7 @@ class InputOptionConfigurationLoader implements ConfigurationLoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function load($installDir, array $configuration = array())
+    public function load($installDir, array $configuration = [])
     {
         if ($this->io->hasOption('db-name')) {
             $configuration['dbname'] = $this->io->getOption('db-name');

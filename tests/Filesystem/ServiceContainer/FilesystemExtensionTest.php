@@ -8,7 +8,7 @@ class FilesystemExtensionTest extends ExtensionTestCase
 {
     public function testServicesCanBeInstantiated()
     {
-        $container = $this->loadContainer(array());
+        $container = $this->loadContainer([]);
 
         foreach ($this->getServiceIds() as $serviceId) {
             $container->get($serviceId);
@@ -17,9 +17,9 @@ class FilesystemExtensionTest extends ExtensionTestCase
 
     private function getServiceIds()
     {
-        return array(
+        return [
             FilesystemExtension::SERVICE_FILESYSTEM,
             FilesystemExtension::SERVICE_FINDER_FACTORY,
-        );
+        ];
     }
 }

@@ -16,35 +16,35 @@ class UnixPlatformTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->filesystem = Mockery::mock('Meteor\Filesystem\Filesystem');
-        $this->installConfig = Mockery::mock('Meteor\Platform\Unix\InstallConfig', array(
+        $this->installConfig = Mockery::mock('Meteor\Platform\Unix\InstallConfig', [
             'getUser' => 'jadu',
             'getGroup' => 'jadu',
             'getWebUser' => 'jadu-www',
             'getWebGroup' => 'jadu-www',
-        ));
-        $this->installConfigLoader = Mockery::mock('Meteor\Platform\Unix\InstallConfigLoader', array(
+        ]);
+        $this->installConfigLoader = Mockery::mock('Meteor\Platform\Unix\InstallConfigLoader', [
             'load' => $this->installConfig,
-        ));
+        ]);
 
         $this->platform = new UnixPlatform($this->installConfigLoader, $this->filesystem);
         $this->platform->setInstallDir('install');
 
-        vfsStream::setup('root', null, array(
-            'jadu' => array(
-                'custom' => array(
+        vfsStream::setup('root', null, [
+            'jadu' => [
+                'custom' => [
                     'JaduCustom.php' => '<?php ?>',
-                ),
+                ],
                 'JaduConstants.php' => '<?php ?>',
-            ),
-            'public_html' => array(
+            ],
+            'public_html' => [
                 'file.txt' => 'Hello',
-            ),
-        ));
+            ],
+        ]);
     }
 
     public function testSetPermissionWithFile()
     {
-        $permission = Permission::create('', array('r', 'w'));
+        $permission = Permission::create('', ['r', 'w']);
 
         $this->filesystem->shouldReceive('chgrp')
             ->with('vfs://root/jadu/JaduConstants.php', 'jadu-www', false)
@@ -59,7 +59,7 @@ class UnixPlatformTest extends \PHPUnit_Framework_TestCase
 
     public function testSetPermissionWithFileAndNoPermissions()
     {
-        $permission = Permission::create('', array());
+        $permission = Permission::create('', []);
 
         $this->filesystem->shouldReceive('chgrp')
             ->with('vfs://root/jadu/JaduConstants.php', 'jadu-www', false)
@@ -74,7 +74,7 @@ class UnixPlatformTest extends \PHPUnit_Framework_TestCase
 
     public function testSetPermissionWithDirectory()
     {
-        $permission = Permission::create('', array('r', 'w', 'x', 'R'));
+        $permission = Permission::create('', ['r', 'w', 'x', 'R']);
 
         $this->filesystem->shouldReceive('chgrp')
             ->with('vfs://root/jadu/custom', 'jadu-www', true)
@@ -89,7 +89,7 @@ class UnixPlatformTest extends \PHPUnit_Framework_TestCase
 
     public function testSetPermissionWithDirectoryAndNoPermissions()
     {
-        $permission = Permission::create('', array());
+        $permission = Permission::create('', []);
 
         $this->filesystem->shouldReceive('chgrp')
             ->with('vfs://root/jadu/custom', 'jadu-www', false)
@@ -104,7 +104,7 @@ class UnixPlatformTest extends \PHPUnit_Framework_TestCase
 
     public function testSetPermissionWithFileIgnoresRecursiveFlag()
     {
-        $permission = Permission::create('', array('r', 'w', 'x', 'R'));
+        $permission = Permission::create('', ['r', 'w', 'x', 'R']);
 
         $this->filesystem->shouldReceive('chgrp')
             ->with('vfs://root/jadu/JaduConstants.php', 'jadu-www', false)

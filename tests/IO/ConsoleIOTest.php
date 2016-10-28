@@ -12,7 +12,7 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->input = new ArrayInput(array());
+        $this->input = new ArrayInput([]);
         $this->input->setInteractive(true);
 
         $this->output = new StreamOutput(fopen('php://memory', 'w', false));
@@ -52,11 +52,11 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
 
     public function testListing()
     {
-        $this->io->listing(array(
+        $this->io->listing([
             'Item 1',
             'Item 2',
             'Item 3',
-        ));
+        ]);
 
         $this->assertOutputEquals('listing');
     }
@@ -123,11 +123,11 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
 
     public function testTable()
     {
-        $this->io->table(array('Name', 'Age', 'Favourite food'), array(
-            array('Tom', '30', 'Chocolate'),
-            array('Lisa', '52', 'Strawberries'),
-            array('Adam', '24', 'Bread'),
-        ));
+        $this->io->table(['Name', 'Age', 'Favourite food'], [
+            ['Tom', '30', 'Chocolate'],
+            ['Lisa', '52', 'Strawberries'],
+            ['Adam', '24', 'Bread'],
+        ]);
 
         $this->assertOutputEquals('table');
     }

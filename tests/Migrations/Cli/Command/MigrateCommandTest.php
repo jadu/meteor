@@ -18,12 +18,12 @@ class MigrateCommandTest extends MigrationTestCase
         $this->platform = Mockery::mock('Meteor\Platform\PlatformInterface');
         $this->migrator = Mockery::mock('Meteor\Migrations\Migrator');
 
-        vfsStream::setup('root', null, array(
-            'working' => array(),
-            'install' => array(),
-        ));
+        vfsStream::setup('root', null, [
+            'working' => [],
+            'install' => [],
+        ]);
 
-        return new MigrateCommand('migrations:migrate', array(), new NullIO(), $this->platform, $this->migrator, new NullLogger(), MigrationsConstants::TYPE_DATABASE);
+        return new MigrateCommand('migrations:migrate', [], new NullIO(), $this->platform, $this->migrator, new NullLogger(), MigrationsConstants::TYPE_DATABASE);
     }
 
     public function testMigrateRunsMigrationsInOrder()
@@ -31,29 +31,29 @@ class MigrateCommandTest extends MigrationTestCase
         $workingDir = vfsStream::url('root/working');
         $installDir = vfsStream::url('root/install');
 
-        $config = array(
+        $config = [
             'name' => 'test',
-            'migrations' => array(
+            'migrations' => [
                 'name' => 'test',
                 'table' => 'JaduMigrationsXFP',
                 'namespace' => 'Migrations',
                 'directory' => 'upgrades',
-            ),
-            'combined' => array(
-                array(
+            ],
+            'combined' => [
+                [
                     'name' => 'test1',
-                    'migrations' => array(
+                    'migrations' => [
                         'table' => 'Migrations1',
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'name' => 'test2',
-                    'migrations' => array(
+                    'migrations' => [
                         'table' => 'Migrations2',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $this->command->setConfiguration(
             $this->extension->configParse($config)
@@ -77,9 +77,9 @@ class MigrateCommandTest extends MigrationTestCase
             ->ordered()
             ->once();
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
-        ));
+        ]);
     }
 }

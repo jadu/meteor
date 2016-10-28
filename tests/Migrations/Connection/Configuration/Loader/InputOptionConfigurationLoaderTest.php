@@ -28,7 +28,7 @@ class InputOptionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
         $this->io->shouldReceive('hasOption')
             ->andReturn(false);
 
-        $this->assertArraySubset(array('dbname' => 'test'), $this->loader->load('/path'));
+        $this->assertArraySubset(['dbname' => 'test'], $this->loader->load('/path'));
     }
 
     public function testLoadsUser()
@@ -44,7 +44,7 @@ class InputOptionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
         $this->io->shouldReceive('hasOption')
             ->andReturn(false);
 
-        $this->assertArraySubset(array('user' => 'test'), $this->loader->load('/path'));
+        $this->assertArraySubset(['user' => 'test'], $this->loader->load('/path'));
     }
 
     public function testLoadsDbPassword()
@@ -60,7 +60,7 @@ class InputOptionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
         $this->io->shouldReceive('hasOption')
             ->andReturn(false);
 
-        $this->assertArraySubset(array('password' => 'test'), $this->loader->load('/path'));
+        $this->assertArraySubset(['password' => 'test'], $this->loader->load('/path'));
     }
 
     public function testLoadsDbHost()
@@ -76,7 +76,7 @@ class InputOptionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
         $this->io->shouldReceive('hasOption')
             ->andReturn(false);
 
-        $this->assertArraySubset(array('host' => 'test'), $this->loader->load('/path'));
+        $this->assertArraySubset(['host' => 'test'], $this->loader->load('/path'));
     }
 
     public function testLoadDbDriver()
@@ -92,6 +92,6 @@ class InputOptionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
         $this->io->shouldReceive('hasOption')
             ->andReturn(false);
 
-        $this->assertArraySubset(array('driver' => 'test'), $this->loader->load('/path'));
+        $this->assertArraySubset(['driver' => 'test'], $this->loader->load('/path'));
     }
 }

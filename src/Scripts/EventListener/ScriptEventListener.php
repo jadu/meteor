@@ -22,9 +22,10 @@ class ScriptEventListener
 
     /**
      * @param Event $event
+     * @param string $eventName
      */
-    public function handleEvent(Event $event)
+    public function handleEvent(Event $event, $eventName)
     {
-        $this->scriptRunner->run($event->getName());
+        $this->scriptRunner->run($eventName);
     }
 }

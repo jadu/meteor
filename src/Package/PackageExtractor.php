@@ -43,7 +43,7 @@ class PackageExtractor
         $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
 
         foreach ($iterator as $file) {
-            if (in_array($file->getFilename(), array(ConfigurationLoader::CONFIG_NAME, ConfigurationLoader::PACKAGE_CONFIG_NAME), true)) {
+            if (in_array($file->getFilename(), [ConfigurationLoader::CONFIG_NAME, ConfigurationLoader::PACKAGE_CONFIG_NAME], true)) {
                 return $file->getPath();
             }
         }

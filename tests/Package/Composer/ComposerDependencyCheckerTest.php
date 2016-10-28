@@ -17,9 +17,9 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRequirementsReturnsRequirements()
     {
-        vfsStream::setup('root', null, array(
+        vfsStream::setup('root', null, [
             'composer.json' => file_get_contents(__DIR__.'/Fixtures/composer.json'),
-        ));
+        ]);
 
         $requirements = $this->checker->getRequirements(vfsStream::url('root'));
 
@@ -39,9 +39,9 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRequirementsIgnoresPhpExtensionRequirements()
     {
-        vfsStream::setup('root', null, array(
+        vfsStream::setup('root', null, [
             'composer.json' => file_get_contents(__DIR__.'/Fixtures/composer.json'),
-        ));
+        ]);
 
         $requirements = $this->checker->getRequirements(vfsStream::url('root'));
 
@@ -57,7 +57,7 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
     {
         vfsStream::setup('root');
 
-        $this->assertSame(array(), $this->checker->getRequirements(vfsStream::url('root')));
+        $this->assertSame([], $this->checker->getRequirements(vfsStream::url('root')));
     }
 
     /**
@@ -65,98 +65,98 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRequirementsThrowsExceptionWhenComposerJsonCannotBeParsed()
     {
-        vfsStream::setup('root', null, array(
+        vfsStream::setup('root', null, [
             'composer.json' => '!!!',
-        ));
+        ]);
 
         $this->checker->getRequirements(vfsStream::url('root'));
     }
 
     public function testAddRequirements()
     {
-        $requirements = array(
+        $requirements = [
             new ComposerRequirement('jadu/cms-dependencies', '~13.6.0'),
             new ComposerRequirement('symfony/symfony', '~2.6.11'),
-        );
+        ];
 
-        $this->assertSame(array(
-            'package' => array(
-                'composer' => array(
+        $this->assertSame([
+            'package' => [
+                'composer' => [
                     'jadu/cms-dependencies' => '~13.6.0',
                     'symfony/symfony' => '~2.6.11',
-                ),
-            ),
-        ), $this->checker->addRequirements($requirements, array()));
+                ],
+            ],
+        ], $this->checker->addRequirements($requirements, []));
     }
 
     public function testAddRequirementsReplacesExistingRequirements()
     {
-        $requirements = array(
+        $requirements = [
             new ComposerRequirement('jadu/cms-dependencies', '~13.6.0'),
             new ComposerRequirement('symfony/symfony', '~2.6.11'),
-        );
+        ];
 
-        $config = array(
-            'package' => array(
-                'composer' => array(
+        $config = [
+            'package' => [
+                'composer' => [
                     'guzzle/guzzle' => '^3.0',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
-        $this->assertSame(array(
-            'package' => array(
-                'composer' => array(
+        $this->assertSame([
+            'package' => [
+                'composer' => [
                     'jadu/cms-dependencies' => '~13.6.0',
                     'symfony/symfony' => '~2.6.11',
-                ),
-            ),
-        ), $this->checker->addRequirements($requirements, $config));
+                ],
+            ],
+        ], $this->checker->addRequirements($requirements, $config));
     }
 
     public function testCheckWhenHasNoRequirementsAndLockFileMissing()
     {
-        $this->checker->check(vfsStream::url('root'), array());
+        $this->checker->check(vfsStream::url('root'), []);
     }
 
     public function testCheckWhenRequiredPackagesInLockFile()
     {
-        vfsStream::setup('root', null, array(
+        vfsStream::setup('root', null, [
             'composer.lock' => file_get_contents(__DIR__.'/Fixtures/composer.lock'),
-        ));
+        ]);
 
-        $this->checker->check(vfsStream::url('root'), array(
-            'combined' => array(
-                array(
+        $this->checker->check(vfsStream::url('root'), [
+            'combined' => [
+                [
                     'name' => 'test1',
-                    'package' => array(
-                        'composer' => array(
+                    'package' => [
+                        'composer' => [
                             'jadu/cms-dependencies' => '~13.6.0',
-                        ),
-                    ),
-                ),
-            ),
-        ));
+                        ],
+                    ],
+                ],
+            ],
+        ]);
     }
 
     public function testCheckIsCaseInsensitive()
     {
-        vfsStream::setup('root', null, array(
+        vfsStream::setup('root', null, [
             'composer.lock' => file_get_contents(__DIR__.'/Fixtures/composer.lock'),
-        ));
+        ]);
 
-        $this->checker->check(vfsStream::url('root'), array(
-            'combined' => array(
-                array(
+        $this->checker->check(vfsStream::url('root'), [
+            'combined' => [
+                [
                     'name' => 'test1',
-                    'package' => array(
-                        'composer' => array(
+                    'package' => [
+                        'composer' => [
                             'jadu/CMS-dependencies' => '~13.6.0',
-                        ),
-                    ),
-                ),
-            ),
-        ));
+                        ],
+                    ],
+                ],
+            ],
+        ]);
     }
 
     /**
@@ -164,22 +164,22 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckThrowsExceptionWhenComposerLockCannotBeParsed()
     {
-        vfsStream::setup('root', null, array(
+        vfsStream::setup('root', null, [
             'composer.lock' => '!!!',
-        ));
+        ]);
 
-        $this->checker->check(vfsStream::url('root'), array(
-            'combined' => array(
-                array(
+        $this->checker->check(vfsStream::url('root'), [
+            'combined' => [
+                [
                     'name' => 'test1',
-                    'package' => array(
-                        'composer' => array(
+                    'package' => [
+                        'composer' => [
                             'jadu/cms-dependencies' => '~13.6.0',
-                        ),
-                    ),
-                ),
-            ),
-        ));
+                        ],
+                    ],
+                ],
+            ],
+        ]);
     }
 
     /**
@@ -187,18 +187,18 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckThrowsExceptionWhenHasRequiredPackagesAndLockFileMissing()
     {
-        $this->checker->check(vfsStream::url('root'), array(
-            'combined' => array(
-                array(
+        $this->checker->check(vfsStream::url('root'), [
+            'combined' => [
+                [
                     'name' => 'test1',
-                    'package' => array(
-                        'composer' => array(
+                    'package' => [
+                        'composer' => [
                             'jadu/cms-dependencies' => '~13.6.0',
-                        ),
-                    ),
-                ),
-            ),
-        ));
+                        ],
+                    ],
+                ],
+            ],
+        ]);
     }
 
     /**
@@ -206,22 +206,22 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckThrowsExceptionWhenRequiredPackageMissingFromLockFile()
     {
-        vfsStream::setup('root', null, array(
+        vfsStream::setup('root', null, [
             'composer.lock' => file_get_contents(__DIR__.'/Fixtures/composer.lock'),
-        ));
+        ]);
 
-        $this->checker->check(vfsStream::url('root'), array(
-            'combined' => array(
-                array(
+        $this->checker->check(vfsStream::url('root'), [
+            'combined' => [
+                [
                     'name' => 'test1',
-                    'package' => array(
-                        'composer' => array(
+                    'package' => [
+                        'composer' => [
                             'jadu/this-does-not-exist' => '~9.9.9',
-                        ),
-                    ),
-                ),
-            ),
-        ));
+                        ],
+                    ],
+                ],
+            ],
+        ]);
     }
 
     /**
@@ -229,21 +229,21 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCheckThrowsExceptionWhenVersionInLockFileDoesNotSatisfyRequiredPackageConstraint()
     {
-        vfsStream::setup('root', null, array(
+        vfsStream::setup('root', null, [
             'composer.lock' => file_get_contents(__DIR__.'/Fixtures/composer.lock'),
-        ));
+        ]);
 
-        $this->checker->check(vfsStream::url('root'), array(
-            'combined' => array(
-                array(
+        $this->checker->check(vfsStream::url('root'), [
+            'combined' => [
+                [
                     'name' => 'test1',
-                    'package' => array(
-                        'composer' => array(
+                    'package' => [
+                        'composer' => [
                             'jadu/cms-dependencies' => '~14.6.0',
-                        ),
-                    ),
-                ),
-            ),
-        ));
+                        ],
+                    ],
+                ],
+            ],
+        ]);
     }
 }

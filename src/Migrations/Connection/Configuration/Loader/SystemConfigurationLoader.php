@@ -9,7 +9,7 @@ class SystemConfigurationLoader implements ConfigurationLoaderInterface
     /**
      * {@inheritdoc}
      */
-    public function load($installDir, array $configuration = array())
+    public function load($installDir, array $configuration = [])
     {
         $path = $installDir.'/'.self::CONFIG_FILENAME;
 

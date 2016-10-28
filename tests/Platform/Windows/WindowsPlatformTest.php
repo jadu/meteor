@@ -16,22 +16,22 @@ class WindowsPlatformTest extends \PHPUnit_Framework_TestCase
         $this->processRunner = Mockery::mock('Meteor\Process\ProcessRunner');
         $this->platform = new WindowsPlatform($this->processRunner);
 
-        vfsStream::setup('root', null, array(
-            'jadu' => array(
-                'custom' => array(
+        vfsStream::setup('root', null, [
+            'jadu' => [
+                'custom' => [
                     'JaduCustom.php' => '<?php ?>',
-                ),
+                ],
                 'JaduConstants.php' => '<?php ?>',
-            ),
-            'public_html' => array(
+            ],
+            'public_html' => [
                 'file.txt' => 'Hello',
-            ),
-        ));
+            ],
+        ]);
     }
 
     public function testSetPermissionWithFile()
     {
-        $permission = Permission::create('', array('r', 'w', 'x'));
+        $permission = Permission::create('', ['r', 'w', 'x']);
 
         $this->processRunner->shouldReceive('run')
             ->with("icacls 'vfs://root/jadu/JaduConstants.php' /remove:g 'IIS_IUSRS' /grant 'IIS_IUSRS:RXWM' /Q")
@@ -42,7 +42,7 @@ class WindowsPlatformTest extends \PHPUnit_Framework_TestCase
 
     public function testSetPermissionWithDirectory()
     {
-        $permission = Permission::create('', array('r', 'w', 'x'));
+        $permission = Permission::create('', ['r', 'w', 'x']);
 
         $this->processRunner->shouldReceive('run')
             ->with("icacls 'vfs://root/jadu/custom' /remove:g 'IIS_IUSRS' /grant 'IIS_IUSRS:(OI)(CI)RXWM' /Q")
@@ -53,7 +53,7 @@ class WindowsPlatformTest extends \PHPUnit_Framework_TestCase
 
     public function testSetPermissionWithDirectoryAndRecursive()
     {
-        $permission = Permission::create('', array('r', 'w', 'x', 'R'));
+        $permission = Permission::create('', ['r', 'w', 'x', 'R']);
 
         $this->processRunner->shouldReceive('run')
             ->with("icacls 'vfs://root/jadu/custom' /remove:g 'IIS_IUSRS' /grant 'IIS_IUSRS:(OI)(CI)RXWM' /t /Q")
@@ -64,7 +64,7 @@ class WindowsPlatformTest extends \PHPUnit_Framework_TestCase
 
     public function testSetPermissionWithFileIgnoresRecursiveFlag()
     {
-        $permission = Permission::create('', array('r', 'w', 'x', 'R'));
+        $permission = Permission::create('', ['r', 'w', 'x', 'R']);
 
         $this->processRunner->shouldReceive('run')
             ->with("icacls 'vfs://root/jadu/JaduConstants.php' /remove:g 'IIS_IUSRS' /grant 'IIS_IUSRS:RXWM' /Q")
@@ -75,7 +75,7 @@ class WindowsPlatformTest extends \PHPUnit_Framework_TestCase
 
     public function testSetPermissionWithExecuteButNotWritePermission()
     {
-        $permission = Permission::create('', array('x'));
+        $permission = Permission::create('', ['x']);
 
         $this->processRunner->shouldReceive('run')
             ->with("icacls 'vfs://root/jadu/JaduConstants.php' /remove:g 'IIS_IUSRS' /grant 'IIS_IUSRS:RX' /Q")

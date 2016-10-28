@@ -132,7 +132,7 @@ class FileMigrationVersionStorage
                 $this->versions = explode("\n", file_get_contents($this->file));
                 $this->normaliseVersions();
             } else {
-                $this->versions = array();
+                $this->versions = [];
             }
         }
     }

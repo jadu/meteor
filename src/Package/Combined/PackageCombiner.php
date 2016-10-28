@@ -85,7 +85,7 @@ class PackageCombiner
         $this->io->text('Copying files into the working directory:');
 
         // Include everything in the patch
-        $include = array('/**');
+        $include = ['/**'];
 
         // Except vendor if excluded
         if ($excludeVendor) {
@@ -102,7 +102,7 @@ class PackageCombiner
         $packageConfig = $this->migrationsCopier->copy($extractedDir, $tempDir, $packageConfig);
 
         if (!isset($config['combined'])) {
-            $config['combined'] = array();
+            $config['combined'] = [];
         }
 
         if (isset($packageConfig['combined'])) {

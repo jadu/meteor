@@ -8,7 +8,7 @@ class ScriptsExtensionTest extends ExtensionTestCase
 {
     public function testServicesCanBeInstantiated()
     {
-        $container = $this->loadContainer(array());
+        $container = $this->loadContainer([]);
 
         foreach ($this->getServiceIds() as $serviceId) {
             $container->get($serviceId);
@@ -17,55 +17,55 @@ class ScriptsExtensionTest extends ExtensionTestCase
 
     private function getServiceIds()
     {
-        return array(
+        return [
             ScriptsExtension::SERVICE_EVENT_LISTENER,
             ScriptsExtension::SERVICE_SCRIPT_RUNNER,
-        );
+        ];
     }
 
     public function testConfigAllowsSingleCommands()
     {
-        $config = $this->processConfiguration(array(
-            'scripts' => array(
+        $config = $this->processConfiguration([
+            'scripts' => [
                 'test' => 'script',
-            ),
-        ));
+            ],
+        ]);
 
-        $this->assertArraySubset(array(
-            'scripts' => array(
-                'test' => array('script'),
-            ),
-        ), $config);
+        $this->assertArraySubset([
+            'scripts' => [
+                'test' => ['script'],
+            ],
+        ], $config);
     }
 
     public function testConfigAllowsGroupedCommands()
     {
-        $config = $this->processConfiguration(array(
-            'scripts' => array(
-                'test' => array('script1', 'script2'),
-            ),
-        ));
+        $config = $this->processConfiguration([
+            'scripts' => [
+                'test' => ['script1', 'script2'],
+            ],
+        ]);
 
-        $this->assertArraySubset(array(
-            'scripts' => array(
-                'test' => array('script1', 'script2'),
-            ),
-        ), $config);
+        $this->assertArraySubset([
+            'scripts' => [
+                'test' => ['script1', 'script2'],
+            ],
+        ], $config);
     }
 
     public function testConfigDoesNotNormalizeKeys()
     {
-        $config = $this->processConfiguration(array(
-            'scripts' => array(
-                'pre.patch.apply' => array('script'),
-            ),
-        ));
+        $config = $this->processConfiguration([
+            'scripts' => [
+                'pre.patch.apply' => ['script'],
+            ],
+        ]);
 
-        $this->assertArraySubset(array(
-            'scripts' => array(
-                'pre.patch.apply' => array('script'),
-            ),
-        ), $config);
+        $this->assertArraySubset([
+            'scripts' => [
+                'pre.patch.apply' => ['script'],
+            ],
+        ], $config);
     }
 
     /**
@@ -74,11 +74,11 @@ class ScriptsExtensionTest extends ExtensionTestCase
      */
     public function testConfigPreventsInfiniteRecursion()
     {
-        $this->processConfiguration(array(
-            'scripts' => array(
-                'test' => array('@test'),
-            ),
-        ));
+        $this->processConfiguration([
+            'scripts' => [
+                'test' => ['@test'],
+            ],
+        ]);
     }
 
     /**
@@ -87,12 +87,12 @@ class ScriptsExtensionTest extends ExtensionTestCase
      */
     public function testConfigPreventsInfiniteRecursionWithScriptReferences()
     {
-        $this->processConfiguration(array(
-            'scripts' => array(
-                'test1' => array('@test2'),
-                'test2' => array('@test1'),
-            ),
-        ));
+        $this->processConfiguration([
+            'scripts' => [
+                'test1' => ['@test2'],
+                'test2' => ['@test1'],
+            ],
+        ]);
     }
 
     /**
@@ -101,15 +101,15 @@ class ScriptsExtensionTest extends ExtensionTestCase
      */
     public function testConfigPreventsInfiniteRecursionWithDeepScriptReferences()
     {
-        $this->processConfiguration(array(
-            'scripts' => array(
-                'test1' => array('@test2'),
-                'test2' => array('@test3'),
-                'test3' => array('@test4'),
-                'test4' => array('@test5'),
-                'test5' => array('@test1'),
-            ),
-        ));
+        $this->processConfiguration([
+            'scripts' => [
+                'test1' => ['@test2'],
+                'test2' => ['@test3'],
+                'test3' => ['@test4'],
+                'test4' => ['@test5'],
+                'test5' => ['@test1'],
+            ],
+        ]);
     }
 
     /**
@@ -117,29 +117,29 @@ class ScriptsExtensionTest extends ExtensionTestCase
      */
     public function testConfigCannotContainMultiDimentionalScripts()
     {
-        $config = $this->processConfiguration(array(
-            'scripts' => array(
-                'test' => array(
-                    array('test'),
-                ),
-            ),
-        ));
+        $config = $this->processConfiguration([
+            'scripts' => [
+                'test' => [
+                    ['test'],
+                ],
+            ],
+        ]);
     }
 
     public function testLoadingMultipleConfigsWithReferencedScriptsDoesNotCauseCircularReferenceExceptionToBeThrown()
     {
-        $this->processConfiguration(array(
-            'scripts' => array(
-                'patch' => array('@test'),
-                'test' => array('test'),
-            ),
-        ));
+        $this->processConfiguration([
+            'scripts' => [
+                'patch' => ['@test'],
+                'test' => ['test'],
+            ],
+        ]);
 
-        $this->processConfiguration(array(
-            'scripts' => array(
-                'patch' => array('@test'),
-                'test' => array('test'),
-            ),
-        ));
+        $this->processConfiguration([
+            'scripts' => [
+                'patch' => ['@test'],
+                'test' => ['test'],
+            ],
+        ]);
     }
 }

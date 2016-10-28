@@ -8,7 +8,7 @@ class PatchExtensionTest extends ExtensionTestCase
 {
     public function testServicesCanBeInstantiated()
     {
-        $container = $this->loadContainer(array());
+        $container = $this->loadContainer([]);
 
         foreach ($this->getServiceIds() as $serviceId) {
             $container->get($serviceId);
@@ -17,7 +17,7 @@ class PatchExtensionTest extends ExtensionTestCase
 
     private function getServiceIds()
     {
-        return array(
+        return [
             PatchExtension::SERVICE_COMMAND_APPLY,
             PatchExtension::SERVICE_COMMAND_CLEAR_LOCK,
             PatchExtension::SERVICE_COMMAND_ROLLBACK,
@@ -37,6 +37,6 @@ class PatchExtensionTest extends ExtensionTestCase
             PatchExtension::SERVICE_TASK_MIGRATE_UP_HANDLER,
             PatchExtension::SERVICE_TASK_UPDATE_MIGRATION_VERSION_FILES_HANDLER,
             PatchExtension::SERVICE_VERSION_COMPARER,
-        );
+        ];
     }
 }

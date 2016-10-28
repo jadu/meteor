@@ -39,11 +39,11 @@ class BackupFinder
      */
     public function find($installDir, array $config)
     {
-        $backups = array();
+        $backups = [];
         $backupsDir = $installDir.'/backups';
         $packageNames = $this->getPackageNames($config);
 
-        $backupDirs = array();
+        $backupDirs = [];
         foreach (new DirectoryIterator($backupsDir) as $file) {
             if (!$file->isDot() && $file->isDir() && preg_match('/^\d{14}$/', $file->getFilename())) {
                 $backupDirs[] = $file->getPathname();
@@ -83,7 +83,7 @@ class BackupFinder
      */
     private function getPackageNames(array $config)
     {
-        $packageNames = array($config['name']);
+        $packageNames = [$config['name']];
 
         if (isset($config['combined'])) {
             foreach ($config['combined'] as $combinedConfig) {

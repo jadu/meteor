@@ -8,7 +8,7 @@ class PlatformExtensionTest extends ExtensionTestCase
 {
     public function testServicesCanBeInstantiated()
     {
-        $container = $this->loadContainer(array());
+        $container = $this->loadContainer([]);
 
         foreach ($this->getServiceIds() as $serviceId) {
             $container->get($serviceId);
@@ -17,11 +17,11 @@ class PlatformExtensionTest extends ExtensionTestCase
 
     private function getServiceIds()
     {
-        return array(
+        return [
             PlatformExtension::SERVICE_PLATFORM_UNIX,
             PlatformExtension::SERVICE_PLATFORM_WINDOWS,
             PlatformExtension::SERVICE_UNIX_INSTALL_CONFIG_LOADER,
-        );
+        ];
     }
 
     /**
@@ -33,7 +33,7 @@ class PlatformExtensionTest extends ExtensionTestCase
             define('PHP_WINDOWS_VERSION_BUILD', 1);
         }
 
-        $container = $this->loadContainer(array());
+        $container = $this->loadContainer([]);
 
         $this->assertInstanceOf(
             'Meteor\Platform\Windows\WindowsPlatform',

@@ -9,7 +9,7 @@ class ExtensionManager
     /**
      * @var ExtensionInterface[]
      */
-    private $extensions = array();
+    private $extensions = [];
 
     /**
      * @param ExtensionInterface[] $extensions

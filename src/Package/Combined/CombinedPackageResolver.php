@@ -66,7 +66,7 @@ class CombinedPackageResolver
             $config = $this->packageCombiner->combine($packagePath, $outputDir, $tempDir, $config, $excludeVendor);
         }
 
-        $requiredPackages = isset($config['package']['combine']) ? $config['package']['combine'] : array();
+        $requiredPackages = isset($config['package']['combine']) ? $config['package']['combine'] : [];
 
         if (!empty($requiredPackages) && $this->packageProvider !== null) {
             foreach ($requiredPackages as $packageName => $version) {

@@ -128,7 +128,7 @@ class Filesystem extends BaseFilesystem
      */
     public function findFiles($sourceDir, array $filters = null, $relative = true, $depth = null)
     {
-        $files = array();
+        $files = [];
 
         // Normalize dir
         $sourceDir = realpath($sourceDir);

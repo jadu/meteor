@@ -19,7 +19,7 @@ class ComposerDependencyChecker
         $jsonPath = $workingDir.'/composer.json';
 
         if (!file_exists($jsonPath)) {
-            return array();
+            return [];
         }
 
         $json = json_decode(file_get_contents($jsonPath), true);
@@ -27,7 +27,7 @@ class ComposerDependencyChecker
             throw ComposerDependenciesException::forInvalidJsonFile($jsonPath);
         }
 
-        $requirements = array();
+        $requirements = [];
         if (isset($json['require'])) {
             foreach ($json['require'] as $packageName => $versionConstraint) {
                 if ($packageName === 'php') {
@@ -51,7 +51,7 @@ class ComposerDependencyChecker
      */
     public function check($workingDir, array $config)
     {
-        $requirements = array();
+        $requirements = [];
         if (isset($config['combined'])) {
             foreach ($config['combined'] as $combinedConfig) {
                 if (isset($combinedConfig['package']) && isset($combinedConfig['package']['composer'])) {
@@ -76,14 +76,14 @@ class ComposerDependencyChecker
             throw ComposerDependenciesException::forInvalidLockFile($lockPath);
         }
 
-        $packages = array();
+        $packages = [];
         if (isset($lock['packages'])) {
             foreach ($lock['packages'] as $package) {
                 $packages[strtolower($package['name'])] = $package['version'];
             }
         }
 
-        $problems = array();
+        $problems = [];
         foreach ($requirements as $requirement) {
             if (!isset($packages[strtolower($requirement->getPackageName())])) {
                 $problems[] = new ComposerProblem($requirement, ComposerProblem::REASON_MISSING);
@@ -108,10 +108,10 @@ class ComposerDependencyChecker
     public function addRequirements(array $requirements, array $config)
     {
         if (!isset($config['package'])) {
-            $config['package'] = array();
+            $config['package'] = [];
         }
 
-        $config['package']['composer'] = array();
+        $config['package']['composer'] = [];
 
         foreach ($requirements as $requirement) {
             if ($requirement instanceof ComposerRequirement) {

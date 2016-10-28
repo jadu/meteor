@@ -17,12 +17,12 @@ class VersionCommandTest extends MigrationTestCase
         $this->platform = Mockery::mock('Meteor\Platform\PlatformInterface');
         $this->versionManager = Mockery::mock('Meteor\Migrations\Version\VersionManager');
 
-        vfsStream::setup('root', null, array(
-            'working' => array(),
-            'install' => array(),
-        ));
+        vfsStream::setup('root', null, [
+            'working' => [],
+            'install' => [],
+        ]);
 
-        return new VersionCommand('migrations:version', array(), new NullIO(), $this->platform, $this->versionManager, MigrationsConstants::TYPE_DATABASE);
+        return new VersionCommand('migrations:version', [], new NullIO(), $this->platform, $this->versionManager, MigrationsConstants::TYPE_DATABASE);
     }
 
     public function testMarkMigrated()
@@ -30,15 +30,15 @@ class VersionCommandTest extends MigrationTestCase
         $workingDir = vfsStream::url('root/working');
         $installDir = vfsStream::url('root/install');
 
-        $config = array(
+        $config = [
             'name' => 'test',
-            'migrations' => array(
+            'migrations' => [
                 'name' => 'test',
                 'table' => 'JaduMigrationsXFP',
                 'namespace' => 'Migrations',
                 'directory' => 'upgrades',
-            ),
-        );
+            ],
+        ];
 
         $this->command->setConfiguration(
             $this->extension->configParse($config)
@@ -49,13 +49,13 @@ class VersionCommandTest extends MigrationTestCase
             ->andReturn(true)
             ->once();
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             'package' => 'test',
             'version' => '20160701102030',
             '--add' => null,
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
-        ));
+        ]);
     }
 
     public function testMarkNotMigrated()
@@ -63,15 +63,15 @@ class VersionCommandTest extends MigrationTestCase
         $workingDir = vfsStream::url('root/working');
         $installDir = vfsStream::url('root/install');
 
-        $config = array(
+        $config = [
             'name' => 'test',
-            'migrations' => array(
+            'migrations' => [
                 'name' => 'test',
                 'table' => 'JaduMigrationsXFP',
                 'namespace' => 'Migrations',
                 'directory' => 'upgrades',
-            ),
-        );
+            ],
+        ];
 
         $this->command->setConfiguration(
             $this->extension->configParse($config)
@@ -82,13 +82,13 @@ class VersionCommandTest extends MigrationTestCase
             ->andReturn(true)
             ->once();
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             'package' => 'test',
             'version' => '20160701102030',
             '--delete' => null,
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
-        ));
+        ]);
     }
 
     public function testMarkAllMigrated()
@@ -96,15 +96,15 @@ class VersionCommandTest extends MigrationTestCase
         $workingDir = vfsStream::url('root/working');
         $installDir = vfsStream::url('root/install');
 
-        $config = array(
+        $config = [
             'name' => 'test',
-            'migrations' => array(
+            'migrations' => [
                 'name' => 'test',
                 'table' => 'JaduMigrationsXFP',
                 'namespace' => 'Migrations',
                 'directory' => 'upgrades',
-            ),
-        );
+            ],
+        ];
 
         $this->command->setConfiguration(
             $this->extension->configParse($config)
@@ -115,13 +115,13 @@ class VersionCommandTest extends MigrationTestCase
             ->andReturn(true)
             ->once();
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             'package' => 'test',
             '--add' => null,
             '--all' => true,
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
-        ));
+        ]);
 
         $this->assertSame(0, $this->tester->getStatusCode());
     }
@@ -131,15 +131,15 @@ class VersionCommandTest extends MigrationTestCase
         $workingDir = vfsStream::url('root/working');
         $installDir = vfsStream::url('root/install');
 
-        $config = array(
+        $config = [
             'name' => 'test',
-            'migrations' => array(
+            'migrations' => [
                 'name' => 'test',
                 'table' => 'JaduMigrationsXFP',
                 'namespace' => 'Migrations',
                 'directory' => 'upgrades',
-            ),
-        );
+            ],
+        ];
 
         $this->command->setConfiguration(
             $this->extension->configParse($config)
@@ -150,13 +150,13 @@ class VersionCommandTest extends MigrationTestCase
             ->andReturn(true)
             ->once();
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             'package' => 'test',
             '--delete' => null,
             '--all' => true,
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
-        ));
+        ]);
 
         $this->assertSame(0, $this->tester->getStatusCode());
     }
@@ -166,15 +166,15 @@ class VersionCommandTest extends MigrationTestCase
         $workingDir = vfsStream::url('root/working');
         $installDir = vfsStream::url('root/install');
 
-        $config = array(
+        $config = [
             'name' => 'test',
-            'migrations' => array(
+            'migrations' => [
                 'name' => 'test',
                 'table' => 'JaduMigrationsXFP',
                 'namespace' => 'Migrations',
                 'directory' => 'upgrades',
-            ),
-        );
+            ],
+        ];
 
         $this->command->setConfiguration(
             $this->extension->configParse($config)
@@ -183,12 +183,12 @@ class VersionCommandTest extends MigrationTestCase
         $this->versionManager->shouldReceive('markAllMigrated')
             ->never();
 
-        $this->tester->execute(array(
+        $this->tester->execute([
             '--add' => null,
             '--all' => true,
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
-        ));
+        ]);
 
         $this->assertSame(1, $this->tester->getStatusCode());
     }

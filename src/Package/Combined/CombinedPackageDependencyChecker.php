@@ -23,14 +23,14 @@ class CombinedPackageDependencyChecker
         }
 
         // Normalise package names and create a keyed array of configs
-        $combinedPackages = array();
+        $combinedPackages = [];
         if (isset($config['combined'])) {
             foreach ($config['combined'] as $combinedConfig) {
                 $combinedPackages[strtolower($combinedConfig['name'])] = $combinedConfig;
             }
         }
 
-        $problems = array();
+        $problems = [];
         foreach ($requirements as $requirement) {
             if (!isset($combinedPackages[strtolower($requirement->getPackageName())])) {
                 $problems[] = new CombinedPackageProblem($requirement, CombinedPackageProblem::REASON_MISSING);
@@ -64,7 +64,7 @@ class CombinedPackageDependencyChecker
      */
     private function resolveRequirements(array $config)
     {
-        $requirements = array();
+        $requirements = [];
 
         if (isset($config['package']) && isset($config['package']['combine'])) {
             foreach ($config['package']['combine'] as $packageName => $version) {

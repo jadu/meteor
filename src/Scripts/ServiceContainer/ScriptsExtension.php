@@ -28,17 +28,17 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
     /**
      * @var array
      */
-    private $eventNames = array();
+    private $eventNames = [];
 
     /**
      * @var array
      */
-    private $scripts = array();
+    private $scripts = [];
 
     /**
      * @var array
      */
-    private $referenced = array();
+    private $referenced = [];
 
     /**
      * Returns the extension config key.
@@ -68,7 +68,7 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
      */
     public function configParse(array $config)
     {
-        $extensionConfig = array();
+        $extensionConfig = [];
         $extensionConfig[] = parent::configParse($config);
 
         if (isset($config['combined'])) {
@@ -102,7 +102,7 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
                 ->beforeNormalization()
                     ->ifString()
                     ->then(function ($value) {
-                        return array($value);
+                        return [$value];
                     })
                 ->end()
                 ->prototype('scalar')->end()
@@ -122,7 +122,7 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
         $this->scripts = $scripts;
 
         // NB: Resetting so loading multiple script configs does not cause circular references
-        $this->referenced = array();
+        $this->referenced = [];
 
         foreach (array_keys($scripts) as $name) {
             // NB: Exceptions will be caught and used as the error message
@@ -174,9 +174,9 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadEventListener(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_EVENT_LISTENER, new Definition('Meteor\Scripts\EventListener\ScriptEventListener', array(
+        $container->setDefinition(self::SERVICE_EVENT_LISTENER, new Definition('Meteor\Scripts\EventListener\ScriptEventListener', [
             new Reference(self::SERVICE_SCRIPT_RUNNER),
-        )));
+        ]));
     }
 
     /**
@@ -184,21 +184,21 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadScriptRunner(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_SCRIPT_RUNNER, new Definition('Meteor\Scripts\ScriptRunner', array(
+        $container->setDefinition(self::SERVICE_SCRIPT_RUNNER, new Definition('Meteor\Scripts\ScriptRunner', [
             new Reference(ProcessExtension::SERVICE_PROCESS_RUNNER),
             new Reference(IOExtension::SERVICE_IO),
             '%'.self::PARAMETER_SCRIPTS.'%',
-        )));
+        ]));
     }
 
     private function loadRunCommand(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Scripts\Cli\Command\RunCommand', array(
+        $definition = new Definition('Meteor\Scripts\Cli\Command\RunCommand', [
             null,
             '%'.Application::PARAMETER_CONFIG.'%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(self::SERVICE_SCRIPT_RUNNER),
-        ));
+        ]);
 
         $definition->addTag(CliExtension::TAG_COMMAND);
         $container->setDefinition(self::SERVICE_COMMAND_RUN, $definition);
@@ -212,7 +212,7 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
         $definition = $container->getDefinition(EventDispatcherExtension::SERVICE_EVENT_DISPATCHER);
 
         foreach ($this->eventNames as $eventName) {
-            $definition->addMethodCall('addListener', array($eventName, array(new Reference(self::SERVICE_EVENT_LISTENER), 'handleEvent')));
+            $definition->addMethodCall('addListener', [$eventName, [new Reference(self::SERVICE_EVENT_LISTENER), 'handleEvent']]);
         }
     }
 }

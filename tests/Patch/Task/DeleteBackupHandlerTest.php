@@ -14,10 +14,10 @@ class DeleteBackupHandlerTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->io = new NullIO();
-        $this->filesystem = Mockery::mock('Meteor\Filesystem\Filesystem', array(
-            'findNewFiles' => array(),
+        $this->filesystem = Mockery::mock('Meteor\Filesystem\Filesystem', [
+            'findNewFiles' => [],
             'copyDirectory' => null,
-        ));
+        ]);
 
         $this->handler = new DeleteBackupHandler($this->io, $this->filesystem);
     }

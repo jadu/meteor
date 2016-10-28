@@ -17,7 +17,7 @@ class PermissionLoader
      */
     public function load($installDir)
     {
-        $permissions = array();
+        $permissions = [];
 
         // Load all permissions files in the path
         $finder = new Finder();

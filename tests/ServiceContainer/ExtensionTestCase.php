@@ -43,7 +43,7 @@ abstract class ExtensionTestCase extends \PHPUnit_Framework_TestCase
             $this->extensionManager
         );
 
-        $this->input = new ArrayInput(array());
+        $this->input = new ArrayInput([]);
         $this->output = new NullOutput();
     }
 
@@ -72,7 +72,7 @@ abstract class ExtensionTestCase extends \PHPUnit_Framework_TestCase
 
     public function createExtensions()
     {
-        return array(
+        return [
             new CliExtension(),
             new ConfigurationExtension(),
             new EventDispatcherExtension(),
@@ -90,6 +90,6 @@ abstract class ExtensionTestCase extends \PHPUnit_Framework_TestCase
             new PlatformExtension(),
             new ProcessExtension(),
             new ScriptsExtension(),
-        );
+        ];
     }
 }

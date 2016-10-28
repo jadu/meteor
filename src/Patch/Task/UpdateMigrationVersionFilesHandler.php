@@ -44,7 +44,7 @@ class UpdateMigrationVersionFilesHandler
      */
     public function handle(UpdateMigrationVersionFiles $task, array $config)
     {
-        $migrationConfigs = array();
+        $migrationConfigs = [];
         if (isset($config['migrations'])) {
             $migrationConfigs[$config['name']] = $config['migrations'];
         }

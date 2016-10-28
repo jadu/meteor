@@ -49,10 +49,10 @@ class GoogleDrivePackageProviderExtension extends ExtensionBase implements Exten
                 ->end()
                 ->arrayNode('folders')
                     ->normalizeKeys(false)
-                    ->defaultValue(array(
+                    ->defaultValue([
                         'jadu/cms' => '0B3tlQeNsllCKY2tzbFpUUkI2OGM',
                         'jadu/xfp' => '0B2h2-RgE2WidOHRhZVNUbUc1Z0E',
-                    ))
+                    ])
                     ->prototype('scalar')->end()
                 ->end()
             ->end()
@@ -80,12 +80,12 @@ class GoogleDrivePackageProviderExtension extends ExtensionBase implements Exten
         $container->setParameter(self::PARAMETER_BINARY, $config['binary']);
         $container->setParameter(self::PARAMETER_FOLDERS, $config['folders']);
 
-        $definition = new Definition('Meteor\Package\Provider\GoogleDrive\GoogleDrivePackageProvider', array(
+        $definition = new Definition('Meteor\Package\Provider\GoogleDrive\GoogleDrivePackageProvider', [
             new Reference(ProcessExtension::SERVICE_PROCESS_RUNNER),
             new Reference(IOExtension::SERVICE_IO),
             '%'.self::PARAMETER_BINARY.'%',
             '%'.self::PARAMETER_FOLDERS.'%',
-        ));
+        ]);
         $container->setDefinition(PackageExtension::SERVICE_PROVIDER_PREFIX.'.'.self::PROVIDER_NAME, $definition);
     }
 

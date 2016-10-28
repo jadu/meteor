@@ -18,14 +18,14 @@ class ConfigurationWriterTest extends \PHPUnit_Framework_TestCase
     public function testWritesJsonFileToGivenPath()
     {
         $path = vfsStream::url('root/meteor.package.json');
-        $config = array(
+        $config = [
             'name' => 'jadu/xfp',
-            'package' => array(
-                'files' => array(
+            'package' => [
+                'files' => [
                     '/**',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $expectedJson = <<<JSON
 {
@@ -47,11 +47,11 @@ JSON;
     public function testRemovesEmptyValues()
     {
         $path = vfsStream::url('root/meteor.package.json');
-        $config = array(
+        $config = [
             'name' => 'jadu/xfp',
-            'package' => array(),
+            'package' => [],
             'migrations' => null,
-        );
+        ];
 
         $expectedJson = <<<JSON
 {

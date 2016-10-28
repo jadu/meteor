@@ -40,14 +40,14 @@ class Version<version> extends AbstractMigration
 PHP;
 
         $code = str_replace(
-            array(
+            [
                 '<namespace>',
                 '<version>',
-            ),
-            array(
+            ],
+            [
                 $namespace,
                 $version,
-            ),
+            ],
             $template
         );
 
