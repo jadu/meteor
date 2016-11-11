@@ -59,22 +59,14 @@ class ScriptRunner
      * Process each script type.
      *
      * @param string $scriptName
-     *
-     * @return bool
      */
     public function run($scriptName)
     {
-        $result = false;
-
         foreach ($this->scripts as $scripts) {
-            if (!isset($scripts[$scriptName])) {
-                continue;
+            if (isset($scripts[$scriptName]) && !empty($scripts[$scriptName])) {
+                $this->runScripts($scriptName, $scripts);
             }
-
-            $result = $this->runScripts($scriptName, $scripts);
         }
-
-        return $result;
     }
 
     /**
@@ -83,11 +75,11 @@ class ScriptRunner
      *
      * @param $scriptName
      * @param $scripts
-     *
-     * @return bool
      */
     private function runScripts($scriptName, $scripts)
     {
+        $this->io->text(sprintf('Running scripts for "%s"', $scriptName));
+
         foreach ($scripts[$scriptName] as $script) {
             if (strpos($script, '@') === 0) {
                 // NB: Infinite recursion detection happens when processing the config
@@ -96,9 +88,10 @@ class ScriptRunner
                 return $this->runScripts($script, $scripts);
             }
 
+            $this->io->text(sprintf('$ "%s" in "%s"', $script, $this->getWorkingDir()));
             $this->processRunner->run($script, $this->getWorkingDir());
         }
 
-        return true;
+        $this->io->newLine();
     }
 }
