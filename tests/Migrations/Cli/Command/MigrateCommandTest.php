@@ -60,19 +60,19 @@ class MigrateCommandTest extends MigrationTestCase
         );
 
         $this->migrator->shouldReceive('migrate')
-            ->with($workingDir, $installDir, $config['combined'][0]['migrations'], MigrationsConstants::TYPE_DATABASE, 'latest')
+            ->with($workingDir, $installDir, $config['combined'][0]['migrations'], MigrationsConstants::TYPE_DATABASE, 'latest', false)
             ->andReturn(true)
             ->ordered()
             ->once();
 
         $this->migrator->shouldReceive('migrate')
-            ->with($workingDir, $installDir, $config['combined'][1]['migrations'], MigrationsConstants::TYPE_DATABASE, 'latest')
+            ->with($workingDir, $installDir, $config['combined'][1]['migrations'], MigrationsConstants::TYPE_DATABASE, 'latest', false)
             ->andReturn(true)
             ->ordered()
             ->once();
 
         $this->migrator->shouldReceive('migrate')
-            ->with($workingDir, $installDir, $config['migrations'], MigrationsConstants::TYPE_DATABASE, 'latest')
+            ->with($workingDir, $installDir, $config['migrations'], MigrationsConstants::TYPE_DATABASE, 'latest', false)
             ->andReturn(true)
             ->ordered()
             ->once();

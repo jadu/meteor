@@ -43,7 +43,7 @@ class MigrateDownHandler
     public function handle(MigrateDown $task, array $config)
     {
         if (isset($config['migrations'])) {
-            $result = $this->runMigrations($task->type, $task->backupDir, $task->workingDir, $task->installDir, $config);
+            $result = $this->runMigrations($task->type, $task->backupDir, $task->workingDir, $task->installDir, $task->ignoreUnavailableMigrations, $config);
             if (!$result) {
                 return false;
             }
@@ -54,7 +54,7 @@ class MigrateDownHandler
             $combinedConfigs = array_reverse($config['combined']);
             foreach ($combinedConfigs as $combinedConfig) {
                 if (isset($combinedConfig['migrations'])) {
-                    $result = $this->runMigrations($task->type, $task->backupDir, $task->workingDir, $task->installDir, $combinedConfig);
+                    $result = $this->runMigrations($task->type, $task->backupDir, $task->workingDir, $task->installDir, $task->ignoreUnavailableMigrations, $combinedConfig);
                     if (!$result) {
                         return false;
                     }
@@ -70,11 +70,12 @@ class MigrateDownHandler
      * @param string $backupDir
      * @param string $workingDir
      * @param string $installDir
+     * @param bool $ignoreUnavailableMigrations
      * @param array $config
      *
      * @return bool
      */
-    private function runMigrations($type, $backupDir, $workingDir, $installDir, array $config)
+    private function runMigrations($type, $backupDir, $workingDir, $installDir, $ignoreUnavailableMigrations, array $config)
     {
         $this->io->text(sprintf('Running <info>%s</> %s migrations', $config['name'], $type));
 
@@ -90,7 +91,8 @@ class MigrateDownHandler
             $installDir,
             $config['migrations'],
             $type,
-            $version
+            $version,
+            $ignoreUnavailableMigrations
         );
     }
 }

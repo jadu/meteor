@@ -109,6 +109,8 @@ class RollbackCommand extends AbstractPatchCommand
 
         $this->addOption('skip-lock', null, InputOption::VALUE_NONE, 'Skip any existing lock files to force a rollback');
         $this->addOption('skip-scripts', null, InputOption::VALUE_NONE, 'Skip script execution');
+        $this->addOption('ignore-unavailable-migrations', null, InputOption::VALUE_NONE, 'Ignore unavailable migrations.');
+
         $this->strategy->configureRollbackCommand($this->getDefinition());
 
         parent::configure();

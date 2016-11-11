@@ -37,10 +37,11 @@ class Migrator
      * @param array $config
      * @param string $type
      * @param string $version
+     * @param bool $ignoreUnavailableMigrations
      *
      * @return bool
      */
-    public function migrate($patchDir, $installDir, array $config, $type, $version)
+    public function migrate($patchDir, $installDir, array $config, $type, $version, $ignoreUnavailableMigrations)
     {
         $configuration = $this->configurationFactory->createConfiguration($type, $config, $patchDir, $installDir);
         $executedMigrations = $configuration->getMigratedVersions();
@@ -91,11 +92,13 @@ class Migrator
                 $this->io->text(' * '.$configuration->formatVersion($executedUnavailableMigration).' (<comment>'.$executedUnavailableMigration.'</>)');
             }
 
-            $confirmation = $this->io->askConfirmation('Are you sure you wish to continue?', true);
-            if (!$confirmation) {
-                $this->io->error('Migrations cancelled.');
+            if (!$ignoreUnavailableMigrations) {
+                $confirmation = $this->io->askConfirmation('Are you sure you wish to continue?', false);
+                if (!$confirmation) {
+                    $this->io->error('Migrations cancelled.');
 
-                return false;
+                    return false;
+                }
             }
         }
 

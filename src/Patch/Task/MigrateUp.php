@@ -20,14 +20,21 @@ class MigrateUp
     public $type;
 
     /**
+     * @var bool
+     */
+    public $ignoreUnavailableMigrations;
+
+    /**
      * @param string $workingDir
      * @param string $installDir
      * @param string $type
+     * @param bool $ignoreUnavailableMigrations
      */
-    public function __construct($workingDir, $installDir, $type)
+    public function __construct($workingDir, $installDir, $type, $ignoreUnavailableMigrations)
     {
         $this->workingDir = $workingDir;
         $this->installDir = $installDir;
         $this->type = $type;
+        $this->ignoreUnavailableMigrations = $ignoreUnavailableMigrations;
     }
 }
