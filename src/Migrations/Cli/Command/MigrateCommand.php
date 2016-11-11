@@ -9,6 +9,7 @@ use Meteor\Patch\Cli\Command\AbstractPatchCommand;
 use Meteor\Platform\PlatformInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class MigrateCommand extends AbstractPatchCommand
@@ -66,6 +67,7 @@ EOT;
         $this->setDescription('Execute a migration to a specified version or the latest available version.');
         $this->addArgument('package', InputArgument::OPTIONAL);
         $this->addArgument('version', InputArgument::OPTIONAL, 'The version number (YYYYMMDDHHMMSS) or alias (first, prev, next, latest) to migrate to.', 'latest');
+        $this->addOption('ignore-unavailable-migrations', null, InputOption::VALUE_NONE, 'Ignore unavailable migrations.');
         $this->setHelp($help);
 
         parent::configure();
@@ -99,7 +101,8 @@ EOT;
                     $installDir,
                     $migrationConfig,
                     $this->type,
-                    'latest'
+                    'latest',
+                    (bool) $this->io->getOption('ignore-unavailable-migrations')
                 );
             }
 
@@ -123,7 +126,8 @@ EOT;
             $installDir,
             $config[$packageName],
             $this->type,
-            $this->io->getArgument('version')
+            $this->io->getArgument('version'),
+            (bool) $this->io->getOption('ignore-unavailable-migrations')
         );
 
         if (!$result) {

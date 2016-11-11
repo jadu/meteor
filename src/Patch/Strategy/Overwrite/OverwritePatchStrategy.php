@@ -53,11 +53,11 @@ class OverwritePatchStrategy implements PatchStrategyInterface
         $tasks[] = new CopyFiles($patchFilesDir, $installDir);
 
         if (!$options['skip-db-migrations']) {
-            $tasks[] = new MigrateUp($patchDir, $installDir, MigrationsConstants::TYPE_DATABASE);
+            $tasks[] = new MigrateUp($patchDir, $installDir, MigrationsConstants::TYPE_DATABASE, (bool) $options['ignore-unavailable-migrations']);
         }
 
         if (!$options['skip-file-migrations']) {
-            $tasks[] = new MigrateUp($patchDir, $installDir, MigrationsConstants::TYPE_FILE);
+            $tasks[] = new MigrateUp($patchDir, $installDir, MigrationsConstants::TYPE_FILE, (bool) $options['ignore-unavailable-migrations']);
         }
 
         return $tasks;
@@ -95,11 +95,11 @@ class OverwritePatchStrategy implements PatchStrategyInterface
         $tasks[] = new CopyFiles($backupFilesDir, $installDir);
 
         if (!$options['skip-db-migrations']) {
-            $tasks[] = new MigrateDown($backupDir, $patchDir, $installDir, MigrationsConstants::TYPE_DATABASE);
+            $tasks[] = new MigrateDown($backupDir, $patchDir, $installDir, MigrationsConstants::TYPE_DATABASE, (bool) $options['ignore-unavailable-migrations']);
         }
 
         if (!$options['skip-file-migrations']) {
-            $tasks[] = new MigrateDown($backupDir, $patchDir, $installDir, MigrationsConstants::TYPE_FILE);
+            $tasks[] = new MigrateDown($backupDir, $patchDir, $installDir, MigrationsConstants::TYPE_FILE, (bool) $options['ignore-unavailable-migrations']);
         }
 
         foreach ($intermediateBackupDirs as $intermediateBackupDir) {

@@ -100,6 +100,8 @@ class ApplyCommand extends AbstractPatchCommand
 
         $this->addOption('skip-lock', null, InputOption::VALUE_NONE, 'Skip any existing lock files to force a patch');
         $this->addOption('skip-scripts', null, InputOption::VALUE_NONE, 'Skip script execution');
+        $this->addOption('ignore-unavailable-migrations', null, InputOption::VALUE_NONE, 'Ignore unavailable migrations.');
+
         $this->strategy->configureApplyCommand($this->getDefinition());
 
         parent::configure();

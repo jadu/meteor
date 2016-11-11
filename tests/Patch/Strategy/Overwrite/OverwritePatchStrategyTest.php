@@ -21,6 +21,7 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
             'skip-db-migrations' => false,
             'skip-file-migrations' => false,
             'skip-version-check' => false,
+            'ignore-unavailable-migrations' => false,
         ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
@@ -62,11 +63,13 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Meteor\Patch\Task\MigrateUp', $tasks[9]);
         $this->assertSame('patch', $tasks[9]->workingDir);
         $this->assertSame('install', $tasks[9]->installDir);
+        $this->assertFalse($tasks[9]->ignoreUnavailableMigrations);
         $this->assertSame(MigrationsConstants::TYPE_DATABASE, $tasks[9]->type);
 
         $this->assertInstanceOf('Meteor\Patch\Task\MigrateUp', $tasks[10]);
         $this->assertSame('patch', $tasks[10]->workingDir);
         $this->assertSame('install', $tasks[10]->installDir);
+        $this->assertFalse($tasks[10]->ignoreUnavailableMigrations);
         $this->assertSame(MigrationsConstants::TYPE_FILE, $tasks[10]->type);
     }
 
@@ -77,6 +80,7 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
             'skip-db-migrations' => false,
             'skip-file-migrations' => false,
             'skip-version-check' => true,
+            'ignore-unavailable-migrations' => false,
         ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
@@ -97,6 +101,7 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
             'skip-db-migrations' => false,
             'skip-file-migrations' => true,
             'skip-version-check' => false,
+            'ignore-unavailable-migrations' => false,
         ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
@@ -118,6 +123,7 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
             'skip-db-migrations' => true,
             'skip-file-migrations' => false,
             'skip-version-check' => false,
+            'ignore-unavailable-migrations' => false,
         ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
@@ -139,6 +145,7 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
             'skip-db-migrations' => true,
             'skip-file-migrations' => true,
             'skip-version-check' => false,
+            'ignore-unavailable-migrations' => false,
         ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
@@ -158,6 +165,7 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
             'skip-db-migrations' => false,
             'skip-file-migrations' => false,
             'skip-version-check' => false,
+            'ignore-unavailable-migrations' => false,
         ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
@@ -177,6 +185,7 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
             'skip-db-migrations' => false,
             'skip-file-migrations' => false,
             'skip-version-check' => false,
+            'ignore-unavailable-migrations' => false,
         ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
@@ -202,12 +211,14 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('backups/1', $tasks[5]->backupDir);
         $this->assertSame('patch', $tasks[5]->workingDir);
         $this->assertSame('install', $tasks[5]->installDir);
+        $this->assertFalse($tasks[5]->ignoreUnavailableMigrations);
         $this->assertSame(MigrationsConstants::TYPE_DATABASE, $tasks[5]->type);
 
         $this->assertInstanceOf('Meteor\Patch\Task\MigrateDown', $tasks[6]);
         $this->assertSame('backups/1', $tasks[6]->backupDir);
         $this->assertSame('patch', $tasks[6]->workingDir);
         $this->assertSame('install', $tasks[6]->installDir);
+        $this->assertFalse($tasks[6]->ignoreUnavailableMigrations);
         $this->assertSame(MigrationsConstants::TYPE_FILE, $tasks[6]->type);
 
         $this->assertInstanceOf('Meteor\Patch\Task\DeleteBackup', $tasks[7]);
@@ -220,6 +231,7 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
             'skip-db-migrations' => true,
             'skip-file-migrations' => false,
             'skip-version-check' => false,
+            'ignore-unavailable-migrations' => false,
         ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
@@ -237,6 +249,7 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
             'skip-db-migrations' => false,
             'skip-file-migrations' => true,
             'skip-version-check' => false,
+            'ignore-unavailable-migrations' => false,
         ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
@@ -254,6 +267,7 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
             'skip-db-migrations' => true,
             'skip-file-migrations' => true,
             'skip-version-check' => false,
+            'ignore-unavailable-migrations' => false,
         ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
@@ -269,6 +283,7 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
             'skip-db-migrations' => false,
             'skip-file-migrations' => false,
             'skip-version-check' => true,
+            'ignore-unavailable-migrations' => false,
         ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
@@ -286,6 +301,7 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
             'skip-db-migrations' => false,
             'skip-file-migrations' => false,
             'skip-version-check' => false,
+            'ignore-unavailable-migrations' => false,
         ]);
 
         $this->assertInstanceOf('Meteor\Patch\Task\DeleteBackup', $tasks[7]);

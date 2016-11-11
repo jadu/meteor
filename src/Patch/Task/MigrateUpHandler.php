@@ -36,7 +36,7 @@ class MigrateUpHandler
         if (isset($config['combined'])) {
             foreach ($config['combined'] as $combinedConfig) {
                 if (isset($combinedConfig['migrations'])) {
-                    $result = $this->runMigrations($task->type, $task->workingDir, $task->installDir, $combinedConfig);
+                    $result = $this->runMigrations($task->type, $task->workingDir, $task->installDir, $task->ignoreUnavailableMigrations, $combinedConfig);
                     if (!$result) {
                         return false;
                     }
@@ -45,7 +45,7 @@ class MigrateUpHandler
         }
 
         if (isset($config['migrations'])) {
-            $result = $this->runMigrations($task->type, $task->workingDir, $task->installDir, $config);
+            $result = $this->runMigrations($task->type, $task->workingDir, $task->installDir, $task->ignoreUnavailableMigrations, $config);
             if (!$result) {
                 return false;
             }
@@ -58,11 +58,12 @@ class MigrateUpHandler
      * @param string $type
      * @param string $workingDir
      * @param string $installDir
+     * @param bool $ignoreUnavailableMigrations
      * @param array $config
      *
      * @return bool
      */
-    private function runMigrations($type, $workingDir, $installDir, array $config)
+    private function runMigrations($type, $workingDir, $installDir, $ignoreUnavailableMigrations, array $config)
     {
         $this->io->text(sprintf('Running <info>%s</> %s migrations', $config['name'], $type));
 
@@ -71,7 +72,8 @@ class MigrateUpHandler
             $installDir,
             $config['migrations'],
             $type,
-            'latest'
+            'latest',
+            $ignoreUnavailableMigrations
         );
     }
 }

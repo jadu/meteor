@@ -81,7 +81,53 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
             ->with('up', false, false)
             ->once();
 
-        $this->assertTrue($this->migrator->migrate('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest'));
+        $this->assertTrue($this->migrator->migrate('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest', false));
+    }
+
+    public function testMigrateHaltsWhenUnavailableMigrationsFound()
+    {
+        $config = [];
+
+        $version1 = $this->createVersion('20160701000000');
+        $version2 = $this->createVersion('20160702000000');
+        $version3 = $this->createVersion('20160703000000');
+
+        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', [
+            'getMigrations' => [
+                $version1->getVersion() => $version1,
+                $version2->getVersion() => $version2,
+                $version3->getVersion() => $version3,
+            ],
+            'getMigratedVersions' => [
+                $version2->getVersion(),
+                $version3->getVersion(),
+            ],
+            'getAvailableVersions' => [
+                $version1->getVersion(),
+                $version3->getVersion(),
+            ],
+            'getCurrentVersion' => $version1->getVersion(),
+            'getMigrationsToExecute' => [
+                $version2,
+                $version3,
+            ],
+            'resolveVersionAlias' => $version3->getVersion(),
+        ]);
+
+        $configuration->shouldReceive('formatVersion')
+            ->andReturnUsing(function ($version) {
+                return (string) $version;
+            });
+
+        $this->configurationFactory->shouldReceive('createConfiguration')
+            ->with(MigrationsConstants::TYPE_DATABASE, $config, 'patch', 'install')
+            ->andReturn($configuration)
+            ->once();
+
+        $version1->shouldReceive('execute')
+            ->never();
+
+        $this->assertFalse($this->migrator->migrate('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest', false));
     }
 
     public function testMigrateReturnsTrueWhenNoMigrationsToExecute()
@@ -132,7 +178,56 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
         $version3->shouldReceive('execute')
             ->never();
 
-        $this->assertTrue($this->migrator->migrate('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest'));
+        $this->assertTrue($this->migrator->migrate('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest', false));
+    }
+
+    public function testMigrateIgnoresUnavailableMigrations()
+    {
+        $config = [];
+
+        $version1 = $this->createVersion('20160701000000');
+        $version2 = $this->createVersion('20160702000000');
+        $version3 = $this->createVersion('20160703000000');
+
+        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', [
+            'getMigrations' => [
+                $version1->getVersion() => $version1,
+                $version2->getVersion() => $version2,
+                $version3->getVersion() => $version3,
+            ],
+            'getMigratedVersions' => [
+                $version2->getVersion(),
+                $version3->getVersion(),
+            ],
+            'getAvailableVersions' => [
+                $version1->getVersion(),
+                $version3->getVersion(),
+            ],
+            'getCurrentVersion' => $version1->getVersion(),
+            'getMigrationsToExecute' => [
+                $version3,
+            ],
+            'resolveVersionAlias' => $version3->getVersion(),
+        ]);
+
+        $configuration->shouldReceive('formatVersion')
+            ->andReturnUsing(function ($version) {
+                return (string) $version;
+            });
+
+        $this->configurationFactory->shouldReceive('createConfiguration')
+            ->with(MigrationsConstants::TYPE_DATABASE, $config, 'patch', 'install')
+            ->andReturn($configuration)
+            ->once();
+
+        $version1->shouldReceive('execute')
+            ->never();
+
+        $version3->shouldReceive('execute')
+            ->with('up', false, false)
+            ->once();
+
+        $this->assertTrue($this->migrator->migrate('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest', true));
     }
 
     public function testExecuteUp()

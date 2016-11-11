@@ -37,11 +37,11 @@ class MigrateDownHandlerTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->migrator->shouldReceive('migrate')
-            ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_FILE, '12345')
+            ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_FILE, '12345', false)
             ->andReturn(true)
             ->once();
 
-        $task = new MigrateDown('backups/1', 'working', 'install', MigrationsConstants::TYPE_FILE);
+        $task = new MigrateDown('backups/1', 'working', 'install', MigrationsConstants::TYPE_FILE, false);
         $this->handler->handle($task, $config);
     }
 
@@ -60,11 +60,11 @@ class MigrateDownHandlerTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->migrator->shouldReceive('migrate')
-            ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_DATABASE, '12345')
+            ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_DATABASE, '12345', false)
             ->andReturn(true)
             ->once();
 
-        $task = new MigrateDown('backups/1', 'working', 'install', MigrationsConstants::TYPE_DATABASE);
+        $task = new MigrateDown('backups/1', 'working', 'install', MigrationsConstants::TYPE_DATABASE, false);
         $this->handler->handle($task, $config);
     }
 
@@ -87,11 +87,11 @@ class MigrateDownHandlerTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->migrator->shouldReceive('migrate')
-            ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, '12345')
+            ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, '12345', false)
             ->andReturn(true)
             ->once();
 
-        $task = new MigrateDown('backups/1', 'working', 'install', MigrationsConstants::TYPE_FILE);
+        $task = new MigrateDown('backups/1', 'working', 'install', MigrationsConstants::TYPE_FILE, false);
         $this->handler->handle($task, $config);
     }
 
@@ -125,7 +125,7 @@ class MigrateDownHandlerTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->migrator->shouldReceive('migrate')
-            ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_FILE, '12345')
+            ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_FILE, '12345', false)
             ->andReturn(true)
             ->ordered()
             ->once();
@@ -137,7 +137,7 @@ class MigrateDownHandlerTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->migrator->shouldReceive('migrate')
-            ->with('working', 'install', $config['combined'][1]['migrations'], MigrationsConstants::TYPE_FILE, '12345')
+            ->with('working', 'install', $config['combined'][1]['migrations'], MigrationsConstants::TYPE_FILE, '12345', false)
             ->andReturn(true)
             ->ordered()
             ->once();
@@ -149,12 +149,12 @@ class MigrateDownHandlerTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->migrator->shouldReceive('migrate')
-            ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, '12345')
+            ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, '12345', false)
             ->andReturn(true)
             ->ordered()
             ->once();
 
-        $task = new MigrateDown('backups/1', 'working', 'install', MigrationsConstants::TYPE_FILE);
+        $task = new MigrateDown('backups/1', 'working', 'install', MigrationsConstants::TYPE_FILE, false);
         $this->handler->handle($task, $config);
     }
 
@@ -179,15 +179,15 @@ class MigrateDownHandlerTest extends \PHPUnit_Framework_TestCase
             ->andReturn('0');
 
         $this->migrator->shouldReceive('migrate')
-            ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_FILE, '0')
+            ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_FILE, '0', false)
             ->andReturn(false)
             ->once();
 
         $this->migrator->shouldReceive('migrate')
-            ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, '0')
+            ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, '0', false)
             ->never();
 
-        $task = new MigrateDown('backups/1', 'working', 'install', MigrationsConstants::TYPE_FILE);
+        $task = new MigrateDown('backups/1', 'working', 'install', MigrationsConstants::TYPE_FILE, false);
         $this->handler->handle($task, $config);
     }
 
@@ -214,15 +214,15 @@ class MigrateDownHandlerTest extends \PHPUnit_Framework_TestCase
             ->andReturn('0');
 
         $this->migrator->shouldReceive('migrate')
-            ->with('working', 'install', $config['combined'][1]['migrations'], MigrationsConstants::TYPE_FILE, '0')
+            ->with('working', 'install', $config['combined'][1]['migrations'], MigrationsConstants::TYPE_FILE, '0', false)
             ->andReturn(false)
             ->once();
 
         $this->migrator->shouldReceive('migrate')
-            ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, '0')
+            ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, '0', false)
             ->never();
 
-        $task = new MigrateDown('backups/1', 'working', 'install', MigrationsConstants::TYPE_FILE);
+        $task = new MigrateDown('backups/1', 'working', 'install', MigrationsConstants::TYPE_FILE, false);
         $this->handler->handle($task, $config);
     }
 }

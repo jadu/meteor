@@ -30,11 +30,11 @@ class MigrateUpHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->migrator->shouldReceive('migrate')
-            ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_FILE, 'latest')
+            ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_FILE, 'latest', false)
             ->andReturn(true)
             ->once();
 
-        $task = new MigrateUp('working', 'install', MigrationsConstants::TYPE_FILE);
+        $task = new MigrateUp('working', 'install', MigrationsConstants::TYPE_FILE, false);
         $this->handler->handle($task, $config);
     }
 
@@ -48,11 +48,11 @@ class MigrateUpHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->migrator->shouldReceive('migrate')
-            ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_DATABASE, 'latest')
+            ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_DATABASE, 'latest', false)
             ->andReturn(true)
             ->once();
 
-        $task = new MigrateUp('working', 'install', MigrationsConstants::TYPE_DATABASE);
+        $task = new MigrateUp('working', 'install', MigrationsConstants::TYPE_DATABASE, false);
         $this->handler->handle($task, $config);
     }
 
@@ -70,11 +70,11 @@ class MigrateUpHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->migrator->shouldReceive('migrate')
-            ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, 'latest')
+            ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, 'latest', false)
             ->andReturn(true)
             ->once();
 
-        $task = new MigrateUp('working', 'install', MigrationsConstants::TYPE_FILE);
+        $task = new MigrateUp('working', 'install', MigrationsConstants::TYPE_FILE, false);
         $this->handler->handle($task, $config);
     }
 
@@ -102,24 +102,24 @@ class MigrateUpHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->migrator->shouldReceive('migrate')
-            ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, 'latest')
+            ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, 'latest', false)
             ->andReturn(true)
             ->ordered()
             ->once();
 
         $this->migrator->shouldReceive('migrate')
-            ->with('working', 'install', $config['combined'][1]['migrations'], MigrationsConstants::TYPE_FILE, 'latest')
+            ->with('working', 'install', $config['combined'][1]['migrations'], MigrationsConstants::TYPE_FILE, 'latest', false)
             ->andReturn(true)
             ->ordered()
             ->once();
 
         $this->migrator->shouldReceive('migrate')
-            ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_FILE, 'latest')
+            ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_FILE, 'latest', false)
             ->andReturn(true)
             ->ordered()
             ->once();
 
-        $task = new MigrateUp('working', 'install', MigrationsConstants::TYPE_FILE);
+        $task = new MigrateUp('working', 'install', MigrationsConstants::TYPE_FILE, false);
         $this->handler->handle($task, $config);
     }
 
@@ -141,15 +141,15 @@ class MigrateUpHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->migrator->shouldReceive('migrate')
-            ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_FILE, 'latest')
+            ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_FILE, 'latest', false)
             ->andReturn(false)
             ->once();
 
         $this->migrator->shouldReceive('migrate')
-            ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, 'latest')
+            ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, 'latest', false)
             ->never();
 
-        $task = new MigrateUp('working', 'install', MigrationsConstants::TYPE_FILE);
+        $task = new MigrateUp('working', 'install', MigrationsConstants::TYPE_FILE, false);
         $this->handler->handle($task, $config);
     }
 
@@ -173,15 +173,15 @@ class MigrateUpHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->migrator->shouldReceive('migrate')
-            ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, 'latest')
+            ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, 'latest', false)
             ->andReturn(false)
             ->once();
 
         $this->migrator->shouldReceive('migrate')
-            ->with('working', 'install', $config['combined'][1]['migrations'], MigrationsConstants::TYPE_FILE, 'latest')
+            ->with('working', 'install', $config['combined'][1]['migrations'], MigrationsConstants::TYPE_FILE, 'latest', false)
             ->never();
 
-        $task = new MigrateUp('working', 'install', MigrationsConstants::TYPE_FILE);
+        $task = new MigrateUp('working', 'install', MigrationsConstants::TYPE_FILE, false);
         $this->handler->handle($task, $config);
     }
 }

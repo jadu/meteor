@@ -25,16 +25,23 @@ class MigrateDown
     public $type;
 
     /**
+     * @var bool
+     */
+    public $ignoreUnavailableMigrations;
+
+    /**
      * @param string $backupDir
      * @param string $workingDir
      * @param string $installDir
      * @param string $type
+     * @param bool $ignoreUnavailableMigrations
      */
-    public function __construct($backupDir, $workingDir, $installDir, $type)
+    public function __construct($backupDir, $workingDir, $installDir, $type, $ignoreUnavailableMigrations)
     {
         $this->backupDir = $backupDir;
         $this->workingDir = $workingDir;
         $this->installDir = $installDir;
         $this->type = $type;
+        $this->ignoreUnavailableMigrations = $ignoreUnavailableMigrations;
     }
 }
