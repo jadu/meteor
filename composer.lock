@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4b41d23ed66bb4eab41ee4201db73eed",
-    "content-hash": "098440cf4a81133d7785a196e26f1e9e",
+    "hash": "b84a3549bd04f713e07b5b95b2db2e6b",
+    "content-hash": "04856d3036e630bb66438063848903bb",
     "packages": [
         {
             "name": "composer/semver",
@@ -540,44 +540,38 @@
         },
         {
             "name": "doctrine/migrations",
-            "version": "v1.2.2",
+            "version": "v1.0.0-alpha3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations.git",
-                "reference": "6b70c2c4484c02878743929bb3cd3fdbf41193a6"
+                "reference": "d2d18ef671b47a7d48fae54806adac87e82fe8e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/6b70c2c4484c02878743929bb3cd3fdbf41193a6",
-                "reference": "6b70c2c4484c02878743929bb3cd3fdbf41193a6",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/d2d18ef671b47a7d48fae54806adac87e82fe8e9",
+                "reference": "d2d18ef671b47a7d48fae54806adac87e82fe8e9",
                 "shasum": ""
             },
             "require": {
-                "doctrine/dbal": "~2.2",
-                "php": ">=5.4.0",
-                "symfony/console": "~2.3|~3.0",
-                "symfony/yaml": "~2.3|~3.0"
+                "doctrine/dbal": "~2.0",
+                "php": ">=5.3.2"
             },
             "require-dev": {
-                "doctrine/coding-standard": "dev-master",
-                "doctrine/orm": "2.*",
-                "johnkary/phpunit-speedtrap": "~1.0@dev",
-                "mockery/mockery": "^0.9.4",
-                "phpunit/phpunit": "~4.7",
-                "satooshi/php-coveralls": "0.6.*"
+                "symfony/console": "2.*",
+                "symfony/yaml": "2.*"
             },
-            "bin": [
-                "bin/doctrine-migrations"
-            ],
+            "suggest": {
+                "symfony/console": "to run the migration from the console"
+            },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "v1.1.x-dev"
+                    "dev-master": "1.0.x-dev"
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Doctrine\\DBAL\\Migrations\\": "lib/Doctrine/DBAL/Migrations"
+                "psr-0": {
+                    "Doctrine\\DBAL\\Migrations": "lib"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -592,10 +586,6 @@
                 {
                     "name": "Jonathan Wage",
                     "email": "jonwage@gmail.com"
-                },
-                {
-                    "name": "Michael Simonson",
-                    "email": "contact@mikesimonson.com"
                 }
             ],
             "description": "Database Schema migrations using Doctrine DBAL",
@@ -604,7 +594,7 @@
                 "database",
                 "migrations"
             ],
-            "time": "2016-01-07 21:28:50"
+            "time": "2015-03-22 13:09:02"
         },
         {
             "name": "psr/log",
@@ -2722,7 +2712,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "doctrine/migrations": 15
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
