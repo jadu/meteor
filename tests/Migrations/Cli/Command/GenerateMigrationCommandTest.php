@@ -39,5 +39,7 @@ class GenerateMigrationCommandTest extends CommandTestCase
         $this->tester->execute([
             '--working-dir' => $workingDir,
         ]);
+
+        $this->assertRegExp('/upgrades\/Version\d{14}\.php/', $this->tester->getDisplay());
     }
 }
