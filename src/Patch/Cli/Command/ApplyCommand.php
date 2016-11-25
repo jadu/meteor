@@ -88,7 +88,7 @@ class ApplyCommand extends AbstractPatchCommand
         $this->eventDispatcher = $eventDispatcher;
         $this->scriptRunner = $scriptRunner;
         $this->logger = $logger;
-        $this->phpVersion = $phpVersion;
+        $this->setPhpVersion($phpVersion);
 
         parent::__construct($name, $config, $io, $platform);
     }
@@ -114,7 +114,23 @@ class ApplyCommand extends AbstractPatchCommand
      */
     public function setPhpVersion($version)
     {
+        // Check if the current version has metadata in it
+        // example : 5.6.0-1ubuntu3.25
+        $metadataPos = strpos($version, '-');
+        if ($metadataPos !== false) {
+            $version = substr($version, 0, $metadataPos);
+        }
+
         $this->phpVersion = $version;
+    }
+
+    /**
+     * Returns the current set php version
+     * @return string|void
+     */
+    public function getPhpVersion()
+    {
+        return $this->phpVersion;
     }
 
     /**
@@ -151,8 +167,10 @@ class ApplyCommand extends AbstractPatchCommand
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
+     *
+     * @return int|null
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

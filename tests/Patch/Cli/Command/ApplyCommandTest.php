@@ -225,6 +225,87 @@ class ApplyCommandTest extends CommandTestCase
         ]);
     }
 
+    public function testAppliesPatchWithPhpVersionMetadata()
+    {
+        $workingDir = vfsStream::url('root/patch');
+        $installDir = vfsStream::url('root/install');
+
+        $config = [
+            'name' => 'test',
+            'package' => [
+                "php" => ">=5.3.2"
+            ],
+        ];
+        $this->command->setConfiguration($config);
+        $this->command->setPhpVersion('5.6.0-1ubuntu3.25');
+
+        $this->platform->shouldReceive('setInstallDir')
+            ->with($installDir)
+            ->once();
+
+        $this->scriptRunner->shouldReceive('setWorkingDir')
+            ->with($installDir)
+            ->once();
+
+        $this->logger->shouldReceive('enable')
+            ->once();
+
+        $this->locker->shouldReceive('lock')
+            ->with($installDir)
+            ->once();
+
+        $this->eventDispatcher->shouldReceive('dispatch')
+            ->with(PatchEvents::PRE_APPLY, Mockery::any())
+            ->once();
+
+        $tasks = [
+            new \stdClass(),
+            new \stdClass(),
+        ];
+        $this->strategy->shouldReceive('apply')
+            ->with($workingDir, $installDir, Mockery::any())
+            ->andReturn($tasks)
+            ->once();
+
+        $this->taskBus->shouldReceive('run')
+            ->with($tasks[0], $config)
+            ->andReturn(true)
+            ->once();
+
+        $this->taskBus->shouldReceive('run')
+            ->with($tasks[1], $config)
+            ->andReturn(true)
+            ->once();
+
+        $this->eventDispatcher->shouldReceive('dispatch')
+            ->with(PatchEvents::POST_APPLY, Mockery::any())
+            ->once();
+
+        $this->locker->shouldReceive('unlock')
+            ->with($installDir)
+            ->once();
+
+        $this->tester->execute([
+            '--working-dir' => $workingDir,
+            '--install-dir' => $installDir,
+        ]);
+    }
+
+    public function testPhpVersionConstraintWithVersionMetadata()
+    {
+        $config = [
+            'name' => 'test',
+            'package' => [
+                "php" => ">=5.3.2"
+            ],
+        ];
+
+        $this->command->setConfiguration($config);
+        $this->command->setPhpVersion('5.6.0-1ubuntu3.25');
+
+        $this->assertEquals('5.6.0', $this->command->getPhpVersion());
+    }
+
     /**
      * @expectedException Meteor\Patch\Exception\PhpVersionException
      * @expectedExceptionMessage Your PHP version (5.4.0) is not sufficient enough for the package "package/second", which requires >=5.6
