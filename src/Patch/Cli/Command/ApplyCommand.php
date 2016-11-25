@@ -116,9 +116,9 @@ class ApplyCommand extends AbstractPatchCommand
     {
         // Check if the current version has metadata in it
         // example : 5.6.0-1ubuntu3.25
-        if (count(explode('-', $version)) > 1) {
-            $versionWithMetadata = explode('-', $version);
-            $version = $versionWithMetadata[0];
+        $metadataPos = strpos($version, '-');
+        if ($metadataPos !== false) {
+            $version = substr($version, 0, $metadataPos);
         }
 
         $this->phpVersion = $version;

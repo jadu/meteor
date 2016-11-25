@@ -302,7 +302,7 @@ class ApplyCommandTest extends CommandTestCase
 
         $this->command->setConfiguration($config);
         $this->command->setPhpVersion('5.6.0-1ubuntu3.25');
-        
+
         $this->assertEquals('5.6.0', $this->command->getPhpVersion());
     }
 
