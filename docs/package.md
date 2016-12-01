@@ -34,32 +34,46 @@ package filename is provided then Meteor will ignore the option and use the defa
             "/**"
         ],
         "version": "VERSION",
-        "combine": ["jadu/cms"]
+        "combine": {
+        	"jadu/cms": "15.0.0"
+        }
     }
 }
 ```
 
 ### files (optional)
 
-The files section is a list of paths to include within the package.
+The files parameter is a list of paths to include within the package.
 
 Paths can also be excluded from the package by prefixing the path with an `!`, for example `!/composer.json` will exclude `/composer.json` from the package.
 
 ### version (optional)
 
-The version section specifies the name of the file containing the version information for this package.
+The version parameter specifies the name of the file containing the version information for this package.
 
 ### combine (optional)
 
-The combine section is a list of packages that must be passed in to the `--combine` option when creating a package.
+The combine parameter is a list of required packages and corresponding versions.
+
+### provider (optional)
+
+The provider parameter specifies how to fetch packages to combine automatically if not passed via the `--combine` option.
+
+Available providers:
+* `gdrive` (available with the GoogleDrivePackageProvider extension)
 
 ## Combining packages
 
-When building a package multiple other packages can be combined with it. The benefit of doing so is that only a single patch
-needs to be applied.
+When building a package multiple packages can be combined with it so that only a single patch needs to be applied.
 
 ```
 php meteor.phar package --combine=cms.zip --combine=module.zip
 ```
 
 In the above example all of the required files and migrations from `cms.zip` and `module.zip` will be included in the package.
+
+If a package provider has been configured then the `--combine` options can be omitted and the relevant package will be downloaded automatically.
+
+```
+php meteor.phar package
+```

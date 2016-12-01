@@ -22,8 +22,10 @@ Meteor will look for the config files in the following order:
         "files": [
             "/**"
         ],
-        "version": "VERSION",
-        "combine": ["jadu/cms"]
+        "version": "EXAMPLE_VERSION",
+        "combine": {
+            "jadu/cms": "15.0.0"
+        }
     },
     "migrations": {
         "name": "CMS",
