@@ -4,7 +4,8 @@
 /composer.phar
 /docs/.sass-cache
 /docs/_site
-/docs/node_modules
+/docs/node_modules/*
+!/docs/node_modules/bootstrap/
 /php-cs-fixer.phar
 /phpunit.xml
 /vendor/
