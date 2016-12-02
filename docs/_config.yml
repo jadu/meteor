@@ -1,0 +1,24 @@
+title: Meteor
+email: meteor@jadu.net
+description: 'A packaging and deployment tool for the Jadu Continuum platform.'
+url: 'http://jadu.github.io/meteor'
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+gems:
+  - jemoji
+sass:
+  style: compressed
+  sass_dir: _sass
+collections:
+  docs:
+    output: true
+    permalink: '/docs/:path/'
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - Gruntfile.js
+  - node_modules
+include:
+  - _pages

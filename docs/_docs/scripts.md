@@ -1,3 +1,6 @@
+---
+layout: docs
+---
 # Scripts
 
 A script is a command-line executable command that can be run by Meteor during command processes.
@@ -25,6 +28,16 @@ Each script must have a unique name and a command-line executable command. If re
 
 When scripts are executed with the `run` command the current working directory set as the `--working-dir` option value.
 However, when scripts are executed with the `patch:apply` or `patch:rollback` commands then the  `--install-dir` option value is used as the current working directory instead.
+
+Multiple scripts can be run for an event:
+
+```json
+{
+    "scripts": {
+        "patch.post-apply": ["@clear-cache", "@rebuild-htaccess"],
+    }
+}
+```
 
 ## Referencing scripts
 

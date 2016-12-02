@@ -1,3 +1,6 @@
+---
+layout: docs
+---
 # Migrations
 
 There are two different types of migrations, database migrations and file migrations.

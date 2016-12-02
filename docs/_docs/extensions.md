@@ -1,3 +1,6 @@
+---
+layout: docs
+---
 # Extensions
 
 Extensions provide a clean and easy way to extend Meteor functionality at runtime.

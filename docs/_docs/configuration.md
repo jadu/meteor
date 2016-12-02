@@ -1,3 +1,6 @@
+---
+layout: docs
+---
 # Configuration
 
 Meteor is configured through a JSON config file found in the working directory.
@@ -22,8 +25,10 @@ Meteor will look for the config files in the following order:
         "files": [
             "/**"
         ],
-        "version": "VERSION",
-        "combine": ["jadu/cms"]
+        "version": "EXAMPLE_VERSION",
+        "combine": {
+            "jadu/cms": "15.0.0"
+        }
     },
     "migrations": {
         "name": "CMS",
@@ -39,6 +44,6 @@ Each extension (including standard extensions) have their own configuration sect
 
 More information about each section:
 
-* [patch](patch.md#configuration)
-* [package](package.md#configuration)
-* [migrations](migrations.md#configuration)
+* [patch](/docs/patch#configuration)
+* [package](/docs/package#configuration)
+* [migrations](/docs/migrations#configuration)
