@@ -1,3 +1,6 @@
+---
+layout: docs
+---
 # Scripts
 
 A script is a command-line executable command that can be run by Meteor during command processes.

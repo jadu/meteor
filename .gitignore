@@ -2,7 +2,8 @@
 /box.json
 /box.phar
 /composer.phar
-/docs/_book
+/docs/.sass-cache
+/docs/_site
 /docs/node_modules
 /php-cs-fixer.phar
 /phpunit.xml

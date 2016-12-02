@@ -1,13 +1,10 @@
+---
+permalink: /
+layout: default
+---
 # Meteor
 
 Meteor is a packaging and deployment tool for the Jadu Continuum platform.
-
-* [Patching](patch.md)
-* [Packaging](package.md)
-* [Migrations](migrations.md)
-* [Scripts](scripts.md)
-* [Configuration](configuration.md)
-* [Extensions](extensions.md)
 
 ## Installation
 

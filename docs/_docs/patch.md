@@ -1,3 +1,6 @@
+---
+layout: docs
+---
 # Patching
 
 ## Applying a patch

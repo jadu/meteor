@@ -1,3 +1,6 @@
+---
+layout: docs
+---
 # Packaging
 
 ## Creating a package
