@@ -6,7 +6,7 @@ layout: default
 {% assign docs = site.docs | sort: 'sort_title' %}
 
 <ul>
-	{% for doc in docs %}
-		<li><a href="{{ site.baseurl }}{{ doc.url }}">{{ doc.title }}</a></li>
-	{% endfor %}
+  {% for doc in docs %}
+    <li><a href="{{ site.baseurl }}{{ doc.url }}">{{ doc.title }}</a></li>
+  {% endfor %}
 </ul>
