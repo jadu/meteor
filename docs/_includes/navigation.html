@@ -1,25 +1,14 @@
----
-permalink: /
-layout: default
----
-# What is Meteor?
-
-Meteor is a packaging and deployment tool for the Jadu Continuum platform.
-
-### Guides
-
+{% assign docs = site.docs | sort: 'title' %}
 {% assign guides = site.guides | sort: 'title' %}
 
+<h4>Guides</h4>
 <ul>
   {% for guide in guides %}
     <li><a href="{{ site.baseurl }}{{ guide.url }}">{{ guide.title }}</a></li>
   {% endfor %}
 </ul>
 
-### Documentation
-
-{% assign docs = site.docs | sort: 'title' %}
-
+<h4>Documentation</h4>
 <ul>
   {% for doc in docs %}
     <li><a href="{{ site.baseurl }}{{ doc.url }}">{{ doc.title }}</a></li>

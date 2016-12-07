@@ -1,8 +1,8 @@
 ---
+title: Extensions
 layout: docs
+toc: true
 ---
-# Extensions
-
 Extensions provide a clean and easy way to extend Meteor functionality at runtime.
 
 Meteor uses the [Symfony Dependency Injection component](http://symfony.com/doc/current/components/dependency_injection/introduction.html) to standardize the way objects are constructed in the application. An extension can

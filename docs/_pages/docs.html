@@ -3,7 +3,7 @@ permalink: /docs/
 layout: default
 ---
 
-{% assign docs = site.docs | sort: 'sort_title' %}
+{% assign docs = site.docs | sort: 'title' %}
 
 <ul>
   {% for doc in docs %}

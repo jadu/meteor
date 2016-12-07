@@ -1,13 +1,16 @@
 ---
+title: Package
 layout: docs
+toc: true
 ---
-# Packaging
-
 ## Creating a package
 
 ```
 php meteor.phar package
 ```
+
+View a recording of a package being created:
+<script type="text/javascript" src="https://asciinema.org/a/2y1ayr9ac9vteg9i5xdp6b8h3.js" id="asciicast-2y1ayr9ac9vteg9i5xdp6b8h3" async></script>
 
 The output directory will default to `./output` and the filename will be generated from the name and version configuration.
 For example if the name of your package is `jadu/test` and have a version file containing `1.0.0` then your package will be

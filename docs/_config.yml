@@ -7,7 +7,7 @@ kramdown:
   input: GFM
   hard_wrap: false
 gems:
-  - jemoji
+  - jekyll-toc
 sass:
   style: compressed
   sass_dir: _sass
@@ -15,6 +15,9 @@ collections:
   docs:
     output: true
     permalink: '/docs/:path/'
+  guides:
+    output: true
+    permalink: '/guides/:path/'
 exclude:
   - Gemfile
   - Gemfile.lock

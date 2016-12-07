@@ -1,8 +1,8 @@
 ---
+title: Migrations
 layout: docs
+toc: true
 ---
-# Migrations
-
 There are two different types of migrations, database migrations and file migrations.
 
 ## Database migrations

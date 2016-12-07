@@ -1,8 +1,8 @@
 ---
+title: Configuration
 layout: docs
+toc: true
 ---
-# Configuration
-
 Meteor is configured through a JSON config file found in the working directory.
 
 ## Resolving the config file

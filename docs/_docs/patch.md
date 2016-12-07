@@ -1,8 +1,8 @@
 ---
+title: Patching
 layout: docs
+toc: true
 ---
-# Patching
-
 ## Applying a patch
 
 A Meteor package is a ZIP archive containing all of the required code files and a `meteor.phar` binary used to apply the patch.
@@ -16,6 +16,9 @@ php meteor.phar patch:apply
 
 Meteor will now begin applying the patch to your installation using the default options.
 
+View a recording of a patch being applied:
+<script type="text/javascript" src="https://asciinema.org/a/7iz18307vbaaymu9tikdl9oi0.js" id="asciicast-7iz18307vbaaymu9tikdl9oi0" async></script>
+
 ## Rolling back a patch
 
 If a patch went wrong and could not complete you can roll back to the latest backup (created by Meteor when patching) using the `patch:rollback` command.
@@ -26,6 +29,9 @@ The command should be run from within the package that needs to be rolled back.
 cd package
 php meteor.phar patch:rollback
 ```
+
+View a recording of a patch being rolled back:
+<script type="text/javascript" src="https://asciinema.org/a/403zitlz5dly1gc8ksgr7cu4c.js" id="asciicast-403zitlz5dly1gc8ksgr7cu4c" async></script>
 
 Meteor will find the most recent compatible backup then restore the backed up files and migrate down the database/file migrations. If there are multiple backups available
 to rollback to then Meteor will ask you to choose a backup. If the most recent backup is not selected then the intermediate backups will be removed after the rollback has completed.
@@ -60,6 +66,6 @@ php meteor.phar patch:rollback --skip-file-migrations
 }
 ```
 
-### patch (optional)
+**patch (optional)**
 
 Defaults to: `overwrite`
