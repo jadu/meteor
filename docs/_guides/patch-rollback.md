@@ -27,6 +27,6 @@ View a recording of a patch being rolled back:
 ## Multiple-server environments
 
 When rolling back a patch on a multi-server environment it is reccomended to only run the database down migrations on one of the servers.
-Use the `--skip-migrations` option to not run the migrations when applying the patch.
+Use the `--skip-db-migrations` option to not run the migrations when applying the patch.
 
     php meteor.phar patch:rollback --skip-db-migrations
