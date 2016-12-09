@@ -48,7 +48,7 @@ class ExecuteMigrationCommand extends AbstractPatchCommand
 
     protected function configure()
     {
-        $help = <<<EOT
+        $help = <<<'EOT'
 The <info>%command.name%</info> command executes a single migration version up or down manually:
 
     <info>%command.full_name% jadu/cms YYYYMMDDHHMMSS</info>

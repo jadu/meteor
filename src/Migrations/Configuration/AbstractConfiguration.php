@@ -34,8 +34,8 @@ abstract class AbstractConfiguration extends DoctrineConfiguration
      * Register a single migration version to be executed by a AbstractMigration
      * class.
      *
-     * @param string $version The version of the migration in the format YYYYMMDDHHMMSS.
-     * @param string $class   The migration class to execute for the version.
+     * @param string $version The version of the migration in the format YYYYMMDDHHMMSS
+     * @param string $class   The migration class to execute for the version
      *
      * @return Version
      *

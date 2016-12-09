@@ -37,7 +37,7 @@ class GoogleDrivePackageProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Meteor\Package\Provider\Exception\PackageNotFoundException
+     * @expectedException \Meteor\Package\Provider\Exception\PackageNotFoundException
      */
     public function testDownloadThrowsExceptionWhenPackageFolderNotConfigured()
     {
@@ -45,7 +45,7 @@ class GoogleDrivePackageProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Meteor\Package\Provider\Exception\PackageNotFoundException
+     * @expectedException \Meteor\Package\Provider\Exception\PackageNotFoundException
      */
     public function testDownloadThrowsExceptionWhenPackageNotDownloaded()
     {

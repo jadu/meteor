@@ -2,7 +2,9 @@
 
 namespace Meteor\Cli;
 
+use Composer\Autoload\ClassLoader;
 use Exception;
+use Meteor\Autoload\ServiceContainer\AutoloadExtension;
 use Meteor\Cli\ServiceContainer\CliExtension;
 use Meteor\Configuration\ConfigurationLoader;
 use Meteor\Configuration\Exception\ConfigurationLoadingException;
@@ -21,6 +23,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class Application extends BaseApplication
 {
     const PARAMETER_CONFIG = 'config';
+    const PARAMETER_WORKING_DIR = 'working_dir';
 
     /**
      * @var ConfigurationLoader
@@ -31,6 +34,11 @@ class Application extends BaseApplication
      * @var ExtensionManager
      */
     private $extensionManager;
+
+    /**
+     * @var ClassLoader
+     */
+    private $classLoader;
 
     /**
      * @var ContainerInterface
@@ -55,11 +63,13 @@ class Application extends BaseApplication
      * @param string $version
      * @param ConfigurationLoader $configurationLoader
      * @param ExtensionManager $extensionManager
+     * @param ClassLoader $classLoader
      */
-    public function __construct($name, $version, ConfigurationLoader $configurationLoader, ExtensionManager $extensionManager)
+    public function __construct($name, $version, ConfigurationLoader $configurationLoader, ExtensionManager $extensionManager, ClassLoader $classLoader)
     {
         $this->configurationLoader = $configurationLoader;
         $this->extensionManager = $extensionManager;
+        $this->classLoader = $classLoader;
 
         parent::__construct($name, $version);
     }
@@ -181,9 +191,11 @@ class Application extends BaseApplication
     private function createContainer(InputInterface $input, OutputInterface $output, array $config, $workingDir)
     {
         $container = new ContainerBuilder();
+        $container->set(AutoloadExtension::SERVICE_CLASS_LOADER, $this->classLoader);
         $container->set(CliExtension::SERVICE_INPUT, $input);
         $container->set(CliExtension::SERVICE_OUTPUT, $output);
         $container->set(ConfigurationExtension::SERVICE_LOADER, $this->configurationLoader);
+        $container->setParameter(self::PARAMETER_WORKING_DIR, $workingDir);
 
         $extension = new ContainerLoader($this->configurationLoader, $this->extensionManager);
         $config = $extension->load($container, $config, $workingDir);

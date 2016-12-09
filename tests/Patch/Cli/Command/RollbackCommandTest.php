@@ -211,7 +211,7 @@ class RollbackCommandTest extends CommandTestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testThrowsExceptionWhenWorkingDirIsTheSameAsTheInstallDir()
     {

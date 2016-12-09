@@ -2,6 +2,8 @@
 
 namespace Meteor;
 
+use Composer\Autoload\ClassLoader;
+use Meteor\Autoload\ServiceContainer\AutoloadExtension;
 use Meteor\Cli\Application;
 use Meteor\Cli\ServiceContainer\CliExtension;
 use Meteor\Configuration\ConfigurationLoader;
@@ -45,6 +47,7 @@ class ApplicationFactory
     protected function getDefaultExtensions()
     {
         return [
+            new AutoloadExtension(),
             new CliExtension(),
             new ConfigurationExtension(),
             new EventDispatcherExtension(),
@@ -63,14 +66,16 @@ class ApplicationFactory
     }
 
     /**
+     * @param ClassLoader $classLoader
+     *
      * @return Application
      */
-    public function createApplication()
+    public function createApplication(ClassLoader $classLoader)
     {
         $extensionManager = $this->createExtensionManager();
         $configurationLoader = $this->createConfigurationLoader($extensionManager);
 
-        return new Application($this->getName(), $this->getVersion(), $configurationLoader, $extensionManager);
+        return new Application($this->getName(), $this->getVersion(), $configurationLoader, $extensionManager, $classLoader);
     }
 
     /**

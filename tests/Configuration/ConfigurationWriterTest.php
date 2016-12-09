@@ -27,7 +27,7 @@ class ConfigurationWriterTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $expectedJson = <<<JSON
+        $expectedJson = <<<'JSON'
 {
     "name": "jadu/xfp",
     "package": {
@@ -53,7 +53,7 @@ JSON;
             'migrations' => null,
         ];
 
-        $expectedJson = <<<JSON
+        $expectedJson = <<<'JSON'
 {
     "name": "jadu/xfp"
 }

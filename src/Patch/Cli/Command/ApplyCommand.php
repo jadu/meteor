@@ -125,7 +125,8 @@ class ApplyCommand extends AbstractPatchCommand
     }
 
     /**
-     * Returns the current set php version
+     * Returns the current set php version.
+     *
      * @return string|void
      */
     public function getPhpVersion()

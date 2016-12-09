@@ -40,7 +40,7 @@ class VersionCommand extends AbstractPatchCommand
 
     protected function configure()
     {
-        $help = <<<EOT
+        $help = <<<'EOT'
 The <info>%command.name%</info> command allows you to manually add, delete or synchronize migration versions:
 
     <info>%command.full_name% jadu/cms YYYYMMDDHHMMSS --add</info>
@@ -107,7 +107,7 @@ EOT;
             }
         }
 
-        $markMigrated = (boolean) $input->getOption('add');
+        $markMigrated = (bool) $input->getOption('add');
 
         if ($this->io->getOption('all') === true) {
             if ($markMigrated) {

@@ -39,7 +39,7 @@ class CombinedPackageDependencyCheckerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Meteor\Package\Combined\Exception\CombinedPackageDependenciesException
+     * @expectedException \Meteor\Package\Combined\Exception\CombinedPackageDependenciesException
      */
     public function testCheckThrowsExceptionWhenRequiredPackageMissing()
     {
@@ -55,7 +55,7 @@ class CombinedPackageDependencyCheckerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Meteor\Package\Combined\Exception\CombinedPackageDependenciesException
+     * @expectedException \Meteor\Package\Combined\Exception\CombinedPackageDependenciesException
      */
     public function testChecksRequirementsRecursively()
     {
@@ -108,7 +108,7 @@ class CombinedPackageDependencyCheckerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Meteor\Package\Combined\Exception\CombinedPackageDependenciesException
+     * @expectedException \Meteor\Package\Combined\Exception\CombinedPackageDependenciesException
      */
     public function testCheckThrowsExceptionWhenVersionRequirementIsNotMet()
     {
@@ -138,7 +138,7 @@ class CombinedPackageDependencyCheckerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Meteor\Package\Combined\Exception\CombinedPackageDependenciesException
+     * @expectedException \Meteor\Package\Combined\Exception\CombinedPackageDependenciesException
      */
     public function testChecksVersionRequirementsRecursively()
     {
