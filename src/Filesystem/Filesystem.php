@@ -58,8 +58,9 @@ class Filesystem extends BaseFilesystem
     public function ensureDirectoryExists($path)
     {
         if (!is_dir($path)) {
-            if (file_exists($path)) {
-                throw new RuntimeException(sprintf('"%s" exists and is not a directory.', $path));
+            if (file_exists($path) || is_link($path)) {
+                // Either the file exists or it is a broken symlink
+                throw new RuntimeException(sprintf('The path "%s" exists and is not a directory.', $path));
             }
 
             $this->mkdir($path);
