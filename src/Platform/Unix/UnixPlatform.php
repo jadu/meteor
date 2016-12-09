@@ -89,7 +89,7 @@ class UnixPlatform implements PlatformInterface
     /**
      * @param string $path
      *
-     * @return octal
+     * @return int
      */
     private function getDefaultMode($path)
     {

@@ -2,7 +2,7 @@
 
 namespace Meteor\ServiceContainer;
 
-abstract class ExtensionBase
+abstract class ExtensionBase implements ExtensionInterface
 {
     /**
      * {@inheritdoc}

@@ -22,7 +22,7 @@ class FileMigrationVersion extends Version
      */
     public function __construct(Configuration $configuration, $version, $class, SchemaDiffProviderInterface $schemaProvider = null, FileMigrationVersionStorage $versionStorage = null)
     {
-        parent::__construct($configuration, $version, $class, $schemaProvider);
+        parent::__construct($configuration, $version, $class);
 
         $this->versionStorage = $versionStorage;
     }

@@ -106,6 +106,7 @@ class AutoloadExtension extends ExtensionBase implements ExtensionInterface
     /**
      * @param array|string $paths
      * @param string $workingDir
+     *
      * @return array
      */
     private function normalizePaths($paths, $rootPath)

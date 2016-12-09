@@ -5,7 +5,7 @@ namespace Meteor\Patch\Task;
 class DeleteBackup
 {
     /**
-     * @var sting
+     * @var string
      */
     public $backupDir;
 

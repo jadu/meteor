@@ -145,7 +145,7 @@ class PackageCreator
             $this->io->debug(sprintf('Creating archive <info>%s</>', $outputFile));
             $this->packageArchiver->archive($tempDir, $outputFile, $fileName);
 
-            $this->io->success(sprintf('Package created successfully', $outputFile));
+            $this->io->success('Package created successfully');
             $this->io->text(sprintf('The package is located at: <info>%s</>', realpath($outputFile)));
             $this->io->newLine();
         } catch (CombinedPackageDependenciesException $exception) {

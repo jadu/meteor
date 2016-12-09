@@ -11,7 +11,7 @@ class InstallConfigLoader
     /**
      * @param string $path
      *
-     * @return JaduInstallConfig
+     * @return InstallConfig
      */
     public function load($path)
     {

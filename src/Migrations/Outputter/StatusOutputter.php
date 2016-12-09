@@ -2,7 +2,9 @@
 
 namespace Meteor\Migrations\Outputter;
 
+use InvalidArgumentException;
 use Meteor\IO\IOInterface;
+use Meteor\Migrations\Configuration\AbstractConfiguration;
 use Meteor\Migrations\Configuration\ConfigurationFactory;
 use Meteor\Migrations\MigrationsConstants;
 
