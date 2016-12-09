@@ -26,3 +26,5 @@ The `psr-4` path type will add the given prefix and paths to the class loader.
     }
 }
 ```
+
+The paths added to the class loader will be prepended with the package root path, e.g. `/path/to/package/to_patch`.
