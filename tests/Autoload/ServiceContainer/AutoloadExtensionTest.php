@@ -41,7 +41,7 @@ JSON;
         $prefixes = $container->get(AutoloadExtension::SERVICE_CLASS_LOADER)->getPrefixes();
 
         $this->assertArraySubset([
-            'Test_' => ['src/'],
+            'Test_' => [vfsStream::url('root/to_patch/vendor/test/test/src/')],
         ], $prefixes);
     }
 
@@ -79,7 +79,7 @@ JSON;
         $prefixes = $container->get(AutoloadExtension::SERVICE_CLASS_LOADER)->getPrefixesPsr4();
 
         $this->assertArraySubset([
-            'Test\\' => ['src/'],
+            'Test\\' => [vfsStream::url('root/to_patch/vendor/test/test/src/')],
         ], $prefixes);
     }
 
@@ -114,7 +114,7 @@ JSON;
 
         $classMap = $container->get(AutoloadExtension::SERVICE_CLASS_LOADER)->getClassMap();
 
-        $this->assertArraySubset(['file.php'], $classMap);
+        $this->assertArraySubset([vfsStream::url('root/to_patch/vendor/test/test/file.php')], $classMap);
     }
 
     /**
@@ -139,12 +139,12 @@ JSON;
                     'Jadu\\' => 'src/',
                 ],
             ],
-        ]);
+        ], '/path/to/working');
 
         $prefixes = $container->get(AutoloadExtension::SERVICE_CLASS_LOADER)->getPrefixesPsr4();
 
         $this->assertArraySubset([
-            'Jadu\\' => ['src/'],
+            'Jadu\\' => ['/path/to/working/src/'],
         ], $prefixes);
     }
 
@@ -156,12 +156,12 @@ JSON;
                     'Jadu\\' => ['src/', 'tests/'],
                 ],
             ],
-        ]);
+        ], '/path/to/working');
 
         $prefixes = $container->get(AutoloadExtension::SERVICE_CLASS_LOADER)->getPrefixesPsr4();
 
         $this->assertArraySubset([
-            'Jadu\\' => ['src/', 'tests/'],
+            'Jadu\\' => ['/path/to/working/src/', '/path/to/working/tests/'],
         ], $prefixes);
     }
 

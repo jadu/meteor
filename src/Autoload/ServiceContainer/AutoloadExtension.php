@@ -68,7 +68,8 @@ class AutoloadExtension extends ExtensionBase implements ExtensionInterface
 
         if (isset($config['composer'])) {
             foreach ($config['composer'] as $packageName) {
-                $composerJsonPath = $workingDir.'/'.PackageConstants::PATCH_DIR.'/vendor/'.$packageName.'/composer.json';
+                $packagePath = $workingDir.'/'.PackageConstants::PATCH_DIR.'/vendor/'.$packageName;
+                $composerJsonPath = $packagePath.'/composer.json';
                 if (!file_exists($composerJsonPath)) {
                     throw new RuntimeException(sprintf('Unable to find "%s" to fetch autoload paths', $composerJsonPath));
                 }
@@ -78,18 +79,18 @@ class AutoloadExtension extends ExtensionBase implements ExtensionInterface
                 if (isset($json['autoload'])) {
                     if (isset($json['autoload']['psr-0'])) {
                         foreach ($json['autoload']['psr-0'] as $prefix => $paths) {
-                            $classLoader->add($prefix, $paths);
+                            $classLoader->add($prefix, $this->normalizePaths($paths, $packagePath));
                         }
                     }
 
                     if (isset($json['autoload']['psr-4'])) {
                         foreach ($json['autoload']['psr-4'] as $prefix => $paths) {
-                            $classLoader->addPsr4($prefix, $paths);
+                            $classLoader->addPsr4($prefix, $this->normalizePaths($paths, $packagePath));
                         }
                     }
 
                     if (isset($json['autoload']['classmap'])) {
-                        $classLoader->addClassMap($json['autoload']['classmap']);
+                        $classLoader->addClassMap($this->normalizePaths($json['autoload']['classmap'], $packagePath));
                     }
                 }
             }
@@ -97,9 +98,30 @@ class AutoloadExtension extends ExtensionBase implements ExtensionInterface
 
         if (isset($config['psr-4'])) {
             foreach ($config['psr-4'] as $namespace => $paths) {
-                $classLoader->addPsr4($namespace, $paths);
+                $classLoader->addPsr4($namespace, $this->normalizePaths($paths, $workingDir));
             }
         }
+    }
+
+    /**
+     * @param array|string $paths
+     * @param string $workingDir
+     * @return array
+     */
+    private function normalizePaths($paths, $rootPath)
+    {
+        $rootPath = rtrim($rootPath, '/').'/';
+
+        if (!is_array($paths)) {
+            $paths = [$paths];
+        }
+
+        $normalizedPaths = [];
+        foreach ($paths as $path) {
+            $normalizedPaths[] = $rootPath.ltrim($path, '/');
+        }
+
+        return $normalizedPaths;
     }
 
     /**
