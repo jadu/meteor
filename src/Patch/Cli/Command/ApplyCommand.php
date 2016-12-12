@@ -107,7 +107,7 @@ class ApplyCommand extends AbstractPatchCommand
         $this->setName('patch:apply');
         $this->setDescription('Applies a patch');
 
-        $this->addOption('skip-manifest', null, InputOption::VALUE_NONE, 'Skip the manifest check');
+        $this->addOption('skip-verify', null, InputOption::VALUE_NONE, 'Skip the package verification');
         $this->addOption('skip-lock', null, InputOption::VALUE_NONE, 'Skip any existing lock files to force a patch');
         $this->addOption('skip-scripts', null, InputOption::VALUE_NONE, 'Skip script execution');
         $this->addOption('ignore-unavailable-migrations', null, InputOption::VALUE_NONE, 'Ignore unavailable migrations.');
@@ -203,7 +203,7 @@ class ApplyCommand extends AbstractPatchCommand
 
         $this->io->title(sprintf('Applying the <info>%s</> patch', $config['name']));
 
-        if (!$this->io->getOption('skip-manifest')) {
+        if (!$this->io->getOption('skip-verify')) {
             $this->manifestChecker->check($workingDir);
         }
 

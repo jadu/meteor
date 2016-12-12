@@ -56,6 +56,18 @@ php meteor.phar patch:apply --skip-file-migrations
 php meteor.phar patch:rollback --skip-file-migrations
 ```
 
+## Skipping the package verification
+
+```
+php meteor.phar patch:apply --skip-verify
+```
+
+If at any time you want to just verify the package the following command can be used:
+
+```
+php meteor.phar patch:verify
+```
+
 ## Configuration
 
 ```json
