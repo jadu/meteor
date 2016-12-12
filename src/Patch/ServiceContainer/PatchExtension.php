@@ -31,7 +31,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     const PARAMETER_STRATEGY = 'patch.strategy';
     const SERVICE_BACKUP_FINDER = 'patch.backup.finder';
     const SERVICE_COMMAND_APPLY = 'patch.cli.command.apply';
-    const SERVICE_COMMAND_CHECK_MANIFEST = 'patch.cli.command.check_manifest';
+    const SERVICE_COMMAND_VERIFY = 'patch.cli.command.verify';
     const SERVICE_COMMAND_CLEAR_LOCK = 'patch.cli.command.clear_lock';
     const SERVICE_COMMAND_ROLLBACK = 'patch.cli.command.rollback';
     const SERVICE_COMMAND_VERSION_INFO = 'patch.cli.command.version_info';
@@ -125,7 +125,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
         $this->loadUpdateMigrationVersionFilesTaskHandler($container);
         $this->loadTaskBus($container);
         $this->loadApplyCommand($container);
-        $this->loadCheckManifestCommand($container);
+        $this->loadVerifyCommand($container);
         $this->loadClearLockCommand($container);
         $this->loadRollbackCommand($container);
         $this->loadVersionInfoCommand($container);
@@ -370,11 +370,11 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     /**
      * @param ContailerBuilder $container
      */
-    private function loadCheckManifestCommand(ContainerBuilder $container)
+    private function loadVerifyCommand(ContainerBuilder $container)
     {
         $this->loadManifestChecker($container);
 
-        $definition = new Definition('Meteor\Patch\Cli\Command\CheckManifestCommand', [
+        $definition = new Definition('Meteor\Patch\Cli\Command\VerifyCommand', [
             null,
             '%'.Application::PARAMETER_CONFIG.'%',
             new Reference(IOExtension::SERVICE_IO),
@@ -382,7 +382,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
             new Reference(self::SERVICE_MANIFEST_CHECKER),
         ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
-        $container->setDefinition(self::SERVICE_COMMAND_CHECK_MANIFEST, $definition);
+        $container->setDefinition(self::SERVICE_COMMAND_VERIFY, $definition);
     }
 
     /**

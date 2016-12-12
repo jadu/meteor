@@ -9,7 +9,7 @@ use Meteor\Platform\PlatformInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CheckManifestCommand extends AbstractPatchCommand
+class VerifyCommand extends AbstractPatchCommand
 {
     /**
      * @var ManifestChecker
@@ -32,7 +32,7 @@ class CheckManifestCommand extends AbstractPatchCommand
 
     protected function configure()
     {
-        $this->setName('patch:check-manifest');
+        $this->setName('patch:verify');
         $this->setDescription('Verifies the package contents against the manifest.');
 
         parent::configure();
