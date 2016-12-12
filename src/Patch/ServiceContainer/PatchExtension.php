@@ -31,10 +31,12 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     const PARAMETER_STRATEGY = 'patch.strategy';
     const SERVICE_BACKUP_FINDER = 'patch.backup.finder';
     const SERVICE_COMMAND_APPLY = 'patch.cli.command.apply';
+    const SERVICE_COMMAND_CHECK_MANIFEST = 'patch.cli.command.check_manifest';
     const SERVICE_COMMAND_CLEAR_LOCK = 'patch.cli.command.clear_lock';
     const SERVICE_COMMAND_ROLLBACK = 'patch.cli.command.rollback';
     const SERVICE_COMMAND_VERSION_INFO = 'patch.cli.command.version_info';
     const SERVICE_LOCKER = 'patch.locker';
+    const SERVICE_MANIFEST_CHECKER = 'patch.manifest_checker';
     const SERVICE_STRATEGY_PREFIX = 'patch.strategy';
     const SERVICE_STRATEGY = 'patch.strategy';
     const SERVICE_TASK_BUS = 'patch.task_bus';
@@ -123,6 +125,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
         $this->loadUpdateMigrationVersionFilesTaskHandler($container);
         $this->loadTaskBus($container);
         $this->loadApplyCommand($container);
+        $this->loadCheckManifestCommand($container);
         $this->loadClearLockCommand($container);
         $this->loadRollbackCommand($container);
         $this->loadVersionInfoCommand($container);
@@ -355,12 +358,41 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
             new Reference(self::SERVICE_TASK_BUS),
             new Reference(self::SERVICE_STRATEGY),
             new Reference(self::SERVICE_LOCKER),
+            new Reference(self::SERVICE_MANIFEST_CHECKER),
             new Reference(EventDispatcherExtension::SERVICE_EVENT_DISPATCHER),
             new Reference(ScriptsExtension::SERVICE_SCRIPT_RUNNER),
             new Reference(LoggerExtension::SERVICE_LOGGER),
         ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
         $container->setDefinition(self::SERVICE_COMMAND_APPLY, $definition);
+    }
+
+    /**
+     * @param ContailerBuilder $container
+     */
+    private function loadCheckManifestCommand(ContainerBuilder $container)
+    {
+        $this->loadManifestChecker($container);
+
+        $definition = new Definition('Meteor\Patch\Cli\Command\CheckManifestCommand', [
+            null,
+            '%'.Application::PARAMETER_CONFIG.'%',
+            new Reference(IOExtension::SERVICE_IO),
+            new Reference(PlatformExtension::SERVICE_PLATFORM),
+            new Reference(self::SERVICE_MANIFEST_CHECKER),
+        ]);
+        $definition->addTag(CliExtension::TAG_COMMAND);
+        $container->setDefinition(self::SERVICE_COMMAND_CHECK_MANIFEST, $definition);
+    }
+
+    /**
+     * @param ContailerBuilder $container
+     */
+    private function loadManifestChecker(ContainerBuilder $container)
+    {
+        $container->setDefinition(self::SERVICE_MANIFEST_CHECKER, new Definition('Meteor\Patch\Manifest\ManifestChecker', [
+            new Reference(IOExtension::SERVICE_IO),
+        ]));
     }
 
     /**
