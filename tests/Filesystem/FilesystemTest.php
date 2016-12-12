@@ -6,7 +6,6 @@ use Meteor\Filesystem\Finder\FinderFactory;
 use Meteor\IO\NullIO;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
-use RuntimeException;
 use Symfony\Component\Finder\Finder;
 
 class FilesystemTest extends \PHPUnit_Framework_TestCase
@@ -71,7 +70,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      */
     public function testEnsureDirectoryExistsThrowsExceptionIfFileExists()
     {

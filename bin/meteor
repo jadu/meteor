@@ -32,4 +32,4 @@ if (ini_get('date.timezone') === '') {
 }
 
 $factory = new ApplicationFactory();
-$factory->createApplication()->run();
+$factory->createApplication($loader)->run();

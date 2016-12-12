@@ -15,7 +15,7 @@ class SystemConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadsFromSystemXml()
     {
-        $systemXml = <<<XML
+        $systemXml = <<<'XML'
 <?xml version="1.0" encoding="utf-8" ?>
 <system xmlns:config="http://www.jadu.co.uk/schema/config">
     <db_host>localhost</db_host>
@@ -45,7 +45,7 @@ XML;
 
     public function testUsesPdoMysqlForMysql()
     {
-        $systemXml = <<<XML
+        $systemXml = <<<'XML'
 <?xml version="1.0" encoding="utf-8" ?>
 <system xmlns:config="http://www.jadu.co.uk/schema/config">
     <db_host>localhost</db_host>
@@ -75,7 +75,7 @@ XML;
 
     public function testUsesSqlsrvForMssql()
     {
-        $systemXml = <<<XML
+        $systemXml = <<<'XML'
 <?xml version="1.0" encoding="utf-8" ?>
 <system xmlns:config="http://www.jadu.co.uk/schema/config">
     <db_host>localhost</db_host>
@@ -105,7 +105,7 @@ XML;
 
     public function testLoadDoesNotReturnConfigurationWhenDsnUsed()
     {
-        $systemXml = <<<XML
+        $systemXml = <<<'XML'
 <?xml version="1.0" encoding="utf-8" ?>
 <system xmlns:config="http://www.jadu.co.uk/schema/config">
     <db_host>localhost</db_host>

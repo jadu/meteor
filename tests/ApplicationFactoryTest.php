@@ -2,6 +2,7 @@
 
 namespace Meteor;
 
+use Composer\Autoload\ClassLoader;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\StreamOutput;
 
@@ -13,7 +14,7 @@ class ApplicationFactoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $factory = new ApplicationFactory();
-        $this->application = $factory->createApplication();
+        $this->application = $factory->createApplication(new ClassLoader());
         $this->application->setAutoExit(false);
 
         $this->output = new StreamOutput(fopen('php://memory', 'w', false));

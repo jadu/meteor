@@ -61,7 +61,7 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Meteor\Package\Composer\Exception\ComposerDependenciesException
+     * @expectedException \Meteor\Package\Composer\Exception\ComposerDependenciesException
      */
     public function testGetRequirementsThrowsExceptionWhenComposerJsonCannotBeParsed()
     {
@@ -160,7 +160,7 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Meteor\Package\Composer\Exception\ComposerDependenciesException
+     * @expectedException \Meteor\Package\Composer\Exception\ComposerDependenciesException
      */
     public function testCheckThrowsExceptionWhenComposerLockCannotBeParsed()
     {
@@ -183,7 +183,7 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Meteor\Package\Composer\Exception\ComposerDependenciesException
+     * @expectedException \Meteor\Package\Composer\Exception\ComposerDependenciesException
      */
     public function testCheckThrowsExceptionWhenHasRequiredPackagesAndLockFileMissing()
     {
@@ -202,7 +202,7 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Meteor\Package\Composer\Exception\ComposerDependenciesException
+     * @expectedException \Meteor\Package\Composer\Exception\ComposerDependenciesException
      */
     public function testCheckThrowsExceptionWhenRequiredPackageMissingFromLockFile()
     {
@@ -225,7 +225,7 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Meteor\Package\Composer\Exception\ComposerDependenciesException
+     * @expectedException \Meteor\Package\Composer\Exception\ComposerDependenciesException
      */
     public function testCheckThrowsExceptionWhenVersionInLockFileDoesNotSatisfyRequiredPackageConstraint()
     {

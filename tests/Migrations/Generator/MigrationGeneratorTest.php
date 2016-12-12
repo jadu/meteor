@@ -2,7 +2,6 @@
 
 namespace Meteor\Migrations\Generator;
 
-use InvalidArgumentException;
 use org\bovigo\vfs\vfsStream;
 
 class MigrationGeneratorTest extends \PHPUnit_Framework_TestCase
@@ -50,7 +49,7 @@ PHP;
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testGenerateThrowsExceptionWhenMigrationsDirectoryDoesNotExist()
     {

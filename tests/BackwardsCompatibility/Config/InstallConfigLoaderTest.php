@@ -15,7 +15,7 @@ class InstallConfigLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testLoad()
     {
-        $installConf = <<<CONF
+        $installConf = <<<'CONF'
 JADU_VERSION="1.12"
 VERBOSE=
 GNU="yes"
@@ -84,7 +84,7 @@ CONF;
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Unable to find install.conf file
      */
     public function testLoadThrowsExceptionWhenFileDoesNotExist()
@@ -95,7 +95,7 @@ CONF;
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Unable to parse install.conf file
      */
     public function testLoadThrowsExceptionWhenFileCannotBeParsed()

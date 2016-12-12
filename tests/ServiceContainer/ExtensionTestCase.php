@@ -2,6 +2,8 @@
 
 namespace Meteor\ServiceContainer;
 
+use Composer\Autoload\ClassLoader;
+use Meteor\Autoload\ServiceContainer\AutoloadExtension;
 use Meteor\Cli\Application;
 use Meteor\Cli\ServiceContainer\CliExtension;
 use Meteor\Configuration\ConfigurationLoader;
@@ -30,6 +32,7 @@ abstract class ExtensionTestCase extends \PHPUnit_Framework_TestCase
     protected $configurationLoader;
     protected $extensionManager;
     protected $containerLoader;
+    protected $classLoader;
     protected $input;
     protected $output;
 
@@ -43,17 +46,20 @@ abstract class ExtensionTestCase extends \PHPUnit_Framework_TestCase
             $this->extensionManager
         );
 
+        $this->classLoader = new ClassLoader();
         $this->input = new ArrayInput([]);
         $this->output = new NullOutput();
     }
 
-    protected function loadContainer(array $config)
+    protected function loadContainer(array $config, $workingDir = null)
     {
         $container = new ContainerBuilder();
 
+        $container->set(AutoloadExtension::SERVICE_CLASS_LOADER, $this->classLoader);
         $container->set(CliExtension::SERVICE_INPUT, $this->input);
         $container->set(CliExtension::SERVICE_OUTPUT, $this->output);
         $container->set(ConfigurationExtension::SERVICE_LOADER, $this->configurationLoader);
+        $container->setParameter(Application::PARAMETER_WORKING_DIR, $workingDir);
 
         $config = $this->containerLoader->load($container, $config, null);
         $container->setParameter(Application::PARAMETER_CONFIG, $config);
@@ -73,6 +79,7 @@ abstract class ExtensionTestCase extends \PHPUnit_Framework_TestCase
     public function createExtensions()
     {
         return [
+            new AutoloadExtension(),
             new CliExtension(),
             new ConfigurationExtension(),
             new EventDispatcherExtension(),

@@ -79,7 +79,7 @@ class ConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testParseReturnsConfigAsArray()
     {
-        $json = <<<JSON
+        $json = <<<'JSON'
 {
     "name": "jadu/xfp",
     "migrations": {
@@ -103,7 +103,7 @@ JSON;
     }
 
     /**
-     * @expectedException Meteor\Configuration\Exception\ConfigurationLoadingException
+     * @expectedException \Meteor\Configuration\Exception\ConfigurationLoadingException
      */
     public function testParseThrowsExceptionWhenFileCannotBeRead()
     {
@@ -113,7 +113,7 @@ JSON;
     }
 
     /**
-     * @expectedException Meteor\Configuration\Exception\ConfigurationLoadingException
+     * @expectedException \Meteor\Configuration\Exception\ConfigurationLoadingException
      */
     public function testParseThrowsExceptionWhenJsonCannotBeParsed()
     {
@@ -126,7 +126,7 @@ JSON;
 
     public function testLoad()
     {
-        $json = <<<JSON
+        $json = <<<'JSON'
 {
     "name": "jadu/xfp"
 }
@@ -148,7 +148,7 @@ JSON;
 
     public function testLoadCombined()
     {
-        $json = <<<JSON
+        $json = <<<'JSON'
 {
     "name": "jadu/xfp",
     "combined": [
@@ -180,7 +180,7 @@ JSON;
 
     public function testLoadIgnoresUnrecognisedOptionsWhenNotStrict()
     {
-        $json = <<<JSON
+        $json = <<<'JSON'
 {
     "name": "jadu/xfp",
     "test_unrecognised": true
@@ -202,7 +202,7 @@ JSON;
     }
 
     /**
-     * @expectedException Meteor\Configuration\Exception\ConfigurationLoadingException
+     * @expectedException \Meteor\Configuration\Exception\ConfigurationLoadingException
      */
     public function testCannotProcessBeforeTreeIsBuild()
     {

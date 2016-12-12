@@ -2,6 +2,8 @@
 
 namespace Meteor\Configuration;
 
+use RuntimeException;
+
 class ConfigurationWriter
 {
     /**

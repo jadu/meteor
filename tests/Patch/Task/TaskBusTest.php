@@ -2,7 +2,6 @@
 
 namespace Meteor\Patch\Task;
 
-use InvalidArgumentException;
 use Mockery;
 
 class TaskBusTest extends \PHPUnit_Framework_TestCase
@@ -31,7 +30,7 @@ class TaskBusTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testThrowsExceptionWhenMissingHandler()
     {

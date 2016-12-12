@@ -45,7 +45,7 @@ class ExtensionManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Meteor\ServiceContainer\Exception\ExtensionInitializationException
+     * @expectedException \Meteor\ServiceContainer\Exception\ExtensionInitializationException
      */
     public function testActivateExtensionThrowsExceptionWhenClassNotFound()
     {
@@ -53,7 +53,7 @@ class ExtensionManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Meteor\ServiceContainer\Exception\ExtensionInitializationException
+     * @expectedException \Meteor\ServiceContainer\Exception\ExtensionInitializationException
      */
     public function testActivateExtensionThrowsExceptionWhenNotImplementingExceptionInterface()
     {

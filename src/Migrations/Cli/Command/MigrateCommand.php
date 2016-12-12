@@ -48,7 +48,7 @@ class MigrateCommand extends AbstractPatchCommand
 
     protected function configure()
     {
-        $help = <<<EOT
+        $help = <<<'EOT'
 The <info>%command.name%</info> command executes a migration to a specified version or the latest available version:
 
     <info>%command.full_name%</>

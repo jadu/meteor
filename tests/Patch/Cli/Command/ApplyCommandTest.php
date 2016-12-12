@@ -117,7 +117,7 @@ class ApplyCommandTest extends CommandTestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testThrowsExceptionWhenWorkingDirIsTheSameAsTheInstallDir()
     {
@@ -201,7 +201,7 @@ class ApplyCommandTest extends CommandTestCase
     }
 
     /**
-     * @expectedException Meteor\Patch\Exception\PhpVersionException
+     * @expectedException \Meteor\Patch\Exception\PhpVersionException
      * @expectedExceptionMessage Your PHP version (5.6.0) is not sufficient enough for the package "test", which requires >=7
      */
     public function testPhpVersionConstraint()
@@ -233,7 +233,7 @@ class ApplyCommandTest extends CommandTestCase
         $config = [
             'name' => 'test',
             'package' => [
-                "php" => ">=5.3.2"
+                'php' => '>=5.3.2',
             ],
         ];
         $this->command->setConfiguration($config);
@@ -296,7 +296,7 @@ class ApplyCommandTest extends CommandTestCase
         $config = [
             'name' => 'test',
             'package' => [
-                "php" => ">=5.3.2"
+                'php' => '>=5.3.2',
             ],
         ];
 
@@ -307,7 +307,7 @@ class ApplyCommandTest extends CommandTestCase
     }
 
     /**
-     * @expectedException Meteor\Patch\Exception\PhpVersionException
+     * @expectedException \Meteor\Patch\Exception\PhpVersionException
      * @expectedExceptionMessage Your PHP version (5.4.0) is not sufficient enough for the package "package/second", which requires >=5.6
      */
     public function testCombinedPhpVersionConstraint()

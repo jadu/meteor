@@ -37,7 +37,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
         $this->logger->log(['test', 'hello', 'goodbye', '']);
 
-        $expected = <<<LOG
+        $expected = <<<'LOG'
 [2016-07-01T08:00:00+00:00/32.76MB] test
 [2016-07-01T08:00:00+00:00/32.76MB] hello
 [2016-07-01T08:00:00+00:00/32.76MB] goodbye
@@ -56,7 +56,7 @@ LOG;
         $this->logger->log('goodbye');
         $this->logger->log('');
 
-        $expected = <<<LOG
+        $expected = <<<'LOG'
 [2016-07-01T08:00:00+00:00/32.76MB] test
 [2016-07-01T08:00:00+00:00/32.76MB] hello
 [2016-07-01T08:00:00+00:00/32.76MB] goodbye
@@ -72,7 +72,7 @@ LOG;
 
         $this->logger->log("this\nis\na\ntest");
 
-        $expected = <<<LOG
+        $expected = <<<'LOG'
 [2016-07-01T08:00:00+00:00/32.76MB] this
 [2016-07-01T08:00:00+00:00/32.76MB] is
 [2016-07-01T08:00:00+00:00/32.76MB] a
@@ -88,7 +88,7 @@ LOG;
 
         $this->logger->log('<error>Error</>');
 
-        $expected = <<<LOG
+        $expected = <<<'LOG'
 [2016-07-01T08:00:00+00:00/32.76MB] Error
 LOG;
 
@@ -101,7 +101,7 @@ LOG;
 
         $this->logger->log('test     ');
 
-        $expected = <<<LOG
+        $expected = <<<'LOG'
 [2016-07-01T08:00:00+00:00/32.76MB] test
 LOG;
 

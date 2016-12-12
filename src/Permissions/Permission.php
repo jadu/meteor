@@ -47,7 +47,7 @@ class Permission
      * @param string $pattern
      * @param array $modes
      *
-     * @return FilePermission
+     * @return Permission
      */
     public static function create($pattern, array $modes)
     {

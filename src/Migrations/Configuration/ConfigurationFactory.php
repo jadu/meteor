@@ -3,6 +3,7 @@
 namespace Meteor\Migrations\Configuration;
 
 use Doctrine\DBAL\Migrations\OutputWriter;
+use InvalidArgumentException;
 use Meteor\IO\IOInterface;
 use Meteor\Migrations\Connection\ConnectionFactory;
 use Meteor\Migrations\MigrationsConstants;
