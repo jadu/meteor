@@ -9,6 +9,8 @@ Updated Symfony components to 3.1.x.
 * Fix migration file path output in the success message ([#53](https://github.com/jadu/meteor/pull/53)).
 * Check whether the path is a broken symlink ([#62](https://github.com/jadu/meteor/pull/62)).
 * Allow autoload paths to be registered ([#63](https://github.com/jadu/meteor/pull/63)).
+* Verify package contents before applying the patch ([#65](https://github.com/jadu/meteor/pull/65)).
+* Add --default option to reset default permissions of files ([#67](https://github.com/jadu/meteor/pull/67)).
 
 ## v2.3.0
 
