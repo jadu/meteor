@@ -21,7 +21,7 @@ class PermissionLoader
 
         // Load all permissions files in the path
         $finder = new Finder();
-        foreach ($finder->in($installDir.self::PERMISSIONS_CONFIG_DIR)->files() as $fileInfo) {
+        foreach ($finder->in($installDir . self::PERMISSIONS_CONFIG_DIR)->files() as $fileInfo) {
             $file = $fileInfo->openFile();
             while (!$file->eof()) {
                 $line = trim($file->fgets());

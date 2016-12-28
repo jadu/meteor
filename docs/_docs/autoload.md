@@ -10,8 +10,10 @@ It is possible to add additional autoload paths to the Meteor class loader. This
 The `composer` path type will load the `composer.json` of the specified Composer packages and add any `psr-0`, `psr-4` or `classmap` paths it finds.
 
 ```json
-"autoload": {
-    "composer": ["jadu/test"]
+{
+    "autoload": {
+        "composer": ["jadu/test"]
+    }
 }
 ```
 
@@ -20,9 +22,11 @@ The `composer` path type will load the `composer.json` of the specified Composer
 The `psr-4` path type will add the given prefix and paths to the class loader.
 
 ```json
-"autoload": {
-    "psr-4": {
-        "Jadu\\": "jadu/"
+{
+    "autoload": {
+        "psr-4": {
+            "Jadu\\": "jadu/"
+        }
     }
 }
 ```

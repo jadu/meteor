@@ -67,7 +67,7 @@ class PackageCombinerTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->filesystem->shouldReceive('copyDirectory')
-            ->with($extractedDir.'/to_patch', $tempDir.'/to_patch', ['/**'])
+            ->with($extractedDir . '/to_patch', $tempDir . '/to_patch', ['/**'])
             ->ordered()
             ->once();
 
@@ -127,7 +127,7 @@ class PackageCombinerTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->filesystem->shouldReceive('copyDirectory')
-            ->with($extractedDir.'/to_patch', $tempDir.'/to_patch', ['/**', '!/vendor'])
+            ->with($extractedDir . '/to_patch', $tempDir . '/to_patch', ['/**', '!/vendor'])
             ->ordered()
             ->once();
 
@@ -332,7 +332,7 @@ class PackageCombinerTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->filesystem->shouldReceive('copyDirectory')
-            ->with($packagePath.'/to_patch', $tempDir.'/to_patch', Mockery::any())
+            ->with($packagePath . '/to_patch', $tempDir . '/to_patch', Mockery::any())
             ->ordered()
             ->once();
 

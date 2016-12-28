@@ -33,7 +33,7 @@ class GenerateMigrationCommandTest extends CommandTestCase
         ]);
 
         $this->migrationGenerator->shouldReceive('generate')
-            ->with(Mockery::any(), 'Migrations', $workingDir.'/upgrades')
+            ->with(Mockery::any(), 'Migrations', $workingDir . '/upgrades')
             ->once();
 
         $this->tester->execute([

@@ -13,7 +13,7 @@ class Locker
      */
     public function lock($path)
     {
-        $lockPath = $path.'/'.self::FILENAME;
+        $lockPath = $path . '/' . self::FILENAME;
         if (!file_exists($lockPath)) {
             $lockFile = fopen($lockPath, 'w+');
             if (flock($lockFile, LOCK_EX)) {
@@ -33,7 +33,7 @@ class Locker
      */
     public function unlock($path)
     {
-        $lockPath = $path.'/'.self::FILENAME;
+        $lockPath = $path . '/' . self::FILENAME;
         if (!file_exists($lockPath)) {
             return false;
         }

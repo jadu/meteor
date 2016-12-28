@@ -110,7 +110,7 @@ class PackageCreator
 
             $this->io->text('Copying files into the working directory:');
             $filesFilter = isset($config['package']['files']) ? $config['package']['files'] : null;
-            $this->filesystem->copyDirectory($workingDir, $tempDir.'/'.PackageConstants::PATCH_DIR, $filesFilter);
+            $this->filesystem->copyDirectory($workingDir, $tempDir . '/' . PackageConstants::PATCH_DIR, $filesFilter);
 
             // Copy migrations into place and update configuration
             $config = $this->migrationsCopier->copy($workingDir, $tempDir, $config);
@@ -132,7 +132,7 @@ class PackageCreator
 
             // Write out the configuration to the built config that will contain combined package configs
             $this->io->debug('Writing meteor.json.package config file');
-            $this->configurationWriter->write($tempDir.'/'.ConfigurationLoader::PACKAGE_CONFIG_NAME, $config);
+            $this->configurationWriter->write($tempDir . '/' . ConfigurationLoader::PACKAGE_CONFIG_NAME, $config);
 
             // When Meteor is run using the Phar then add the PHAR to the package
             $this->addPharToPackage($tempDir, $pharPath);
@@ -141,7 +141,7 @@ class PackageCreator
             $fileName = $this->packageNameResolver->resolve($fileName, $workingDir, $config);
 
             // Create the archive
-            $outputFile = $outputDir.'/'.$fileName.'.zip';
+            $outputFile = $outputDir . '/' . $fileName . '.zip';
             $this->io->debug(sprintf('Creating archive <info>%s</>', $outputFile));
             $this->packageArchiver->archive($tempDir, $outputFile, $fileName);
 
@@ -241,7 +241,7 @@ class PackageCreator
         }
 
         $this->io->debug('Adding Phar archive to the package');
-        $this->filesystem->copy($pharPath, $tempDir.'/meteor.phar', true);
+        $this->filesystem->copy($pharPath, $tempDir . '/meteor.phar', true);
     }
 
     /**

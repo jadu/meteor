@@ -64,7 +64,7 @@ class UnixPlatform implements PlatformInterface
         $owningGroup = strpos($path, 'jadu/') === 0 ? $this->installConfig->getGroup() : $this->installConfig->getWebGroup();
 
         $baseDir = rtrim($baseDir, '/');
-        $path = $baseDir.'/'.$path;
+        $path = $baseDir . '/' . $path;
 
         $this->filesystem->chgrp($path, $owningGroup);
         $this->filesystem->chown($path, $this->installConfig->getUser());
@@ -115,7 +115,7 @@ class UnixPlatform implements PlatformInterface
             $groupMode += 1;
         }
 
-        return octdec('00'.$groupMode.'0') | (is_dir($path) ? 0700 : 0600);
+        return octdec('00' . $groupMode . '0') | (is_dir($path) ? 0700 : 0600);
     }
 
     /**

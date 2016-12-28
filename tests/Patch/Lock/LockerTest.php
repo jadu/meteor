@@ -19,7 +19,7 @@ class LockerTest extends \PHPUnit_Framework_TestCase
     {
         $this->locker->lock(vfsStream::url('root'));
 
-        $this->assertTrue(is_file(vfsStream::url('root/'.Locker::FILENAME)));
+        $this->assertTrue(is_file(vfsStream::url('root/' . Locker::FILENAME)));
     }
 
     /**
@@ -36,7 +36,7 @@ class LockerTest extends \PHPUnit_Framework_TestCase
         $this->locker->lock(vfsStream::url('root'));
         $this->assertTrue($this->locker->unlock(vfsStream::url('root')));
 
-        $this->assertFalse(is_file(vfsStream::url('root/'.Locker::FILENAME)));
+        $this->assertFalse(is_file(vfsStream::url('root/' . Locker::FILENAME)));
     }
 
     public function testUnlockReturnsFalseIfNotLocked()

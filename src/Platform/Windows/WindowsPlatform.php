@@ -50,7 +50,7 @@ class WindowsPlatform implements PlatformInterface
     {
         $user = 'IIS_IUSRS';
 
-        $grant = $user.':';
+        $grant = $user . ':';
         if (is_dir($path)) {
             $grant .= '(OI)(CI)';
         }

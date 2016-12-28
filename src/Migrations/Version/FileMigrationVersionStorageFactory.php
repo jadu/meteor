@@ -29,9 +29,9 @@ class FileMigrationVersionStorageFactory
      */
     public function create($installDir, $table)
     {
-        $storageDir = $installDir.'/'.self::STORAGE_DIR;
+        $storageDir = $installDir . '/' . self::STORAGE_DIR;
         $this->filesystem->ensureDirectoryExists($storageDir);
 
-        return new FileMigrationVersionStorage($storageDir.'/'.strtolower($table));
+        return new FileMigrationVersionStorage($storageDir . '/' . strtolower($table));
     }
 }

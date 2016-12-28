@@ -80,7 +80,7 @@ class Logger implements LoggerInterface
         $lines = $this->splitMessageLines($messages);
         $lines = $this->formatLines($lines);
 
-        file_put_contents($this->path, implode("\n", $lines)."\n", FILE_APPEND | LOCK_EX);
+        file_put_contents($this->path, implode("\n", $lines) . "\n", FILE_APPEND | LOCK_EX);
     }
 
     /**
@@ -152,6 +152,6 @@ class Logger implements LoggerInterface
      */
     private function prependTimestamp($line)
     {
-        return '['.date('c').'/'.round(memory_get_usage() / 1048576, 2).'MB] '.$line;
+        return '[' . date('c') . '/' . round(memory_get_usage() / 1048576, 2) . 'MB] ' . $line;
     }
 }

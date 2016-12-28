@@ -38,7 +38,7 @@ class CombinedPackageDependencyChecker
                 $combinedConfig = $combinedPackages[strtolower($requirement->getPackageName())];
                 if (isset($combinedConfig['package']['version'])) {
                     $version = '0'; // Default version if the version file is not found
-                    $versionFile = $tempDir.'/'.PackageConstants::PATCH_DIR.'/'.$combinedConfig['package']['version'];
+                    $versionFile = $tempDir . '/' . PackageConstants::PATCH_DIR . '/' . $combinedConfig['package']['version'];
                     if (file_exists($versionFile)) {
                         $version = trim(file_get_contents($versionFile));
                     }

@@ -54,9 +54,9 @@ class GenerateMigrationCommand extends AbstractCommand
             $this->io->error('Migrations not configured');
         }
 
-        $path = $this->getWorkingDir().'/'.$config['migrations']['directory'];
+        $path = $this->getWorkingDir() . '/' . $config['migrations']['directory'];
         if ($this->type === MigrationsConstants::TYPE_FILE) {
-            $path .= '/'.FileConfiguration::MIGRATION_DIRECTORY;
+            $path .= '/' . FileConfiguration::MIGRATION_DIRECTORY;
         }
 
         $timestamp = date('YmdHis');

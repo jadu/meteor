@@ -35,7 +35,7 @@ class VersionInfoCommandTest extends CommandTestCase
         $this->taskBus->shouldReceive('run')
             ->with(
                 Mockery::on(function (DisplayVersionInfo $task) use ($that, $workingDir, $installDir) {
-                    $that->assertSame($workingDir.'/to_patch', $task->workingDir);
+                    $that->assertSame($workingDir . '/to_patch', $task->workingDir);
                     $that->assertSame($installDir, $task->installDir);
 
                     return true;

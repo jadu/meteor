@@ -18,7 +18,7 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
     public function testGetRequirementsReturnsRequirements()
     {
         vfsStream::setup('root', null, [
-            'composer.json' => file_get_contents(__DIR__.'/Fixtures/composer.json'),
+            'composer.json' => file_get_contents(__DIR__ . '/Fixtures/composer.json'),
         ]);
 
         $requirements = $this->checker->getRequirements(vfsStream::url('root'));
@@ -40,7 +40,7 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
     public function testGetRequirementsIgnoresPhpExtensionRequirements()
     {
         vfsStream::setup('root', null, [
-            'composer.json' => file_get_contents(__DIR__.'/Fixtures/composer.json'),
+            'composer.json' => file_get_contents(__DIR__ . '/Fixtures/composer.json'),
         ]);
 
         $requirements = $this->checker->getRequirements(vfsStream::url('root'));
@@ -122,7 +122,7 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
     public function testCheckWhenRequiredPackagesInLockFile()
     {
         vfsStream::setup('root', null, [
-            'composer.lock' => file_get_contents(__DIR__.'/Fixtures/composer.lock'),
+            'composer.lock' => file_get_contents(__DIR__ . '/Fixtures/composer.lock'),
         ]);
 
         $this->checker->check(vfsStream::url('root'), [
@@ -142,7 +142,7 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
     public function testCheckIsCaseInsensitive()
     {
         vfsStream::setup('root', null, [
-            'composer.lock' => file_get_contents(__DIR__.'/Fixtures/composer.lock'),
+            'composer.lock' => file_get_contents(__DIR__ . '/Fixtures/composer.lock'),
         ]);
 
         $this->checker->check(vfsStream::url('root'), [
@@ -207,7 +207,7 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
     public function testCheckThrowsExceptionWhenRequiredPackageMissingFromLockFile()
     {
         vfsStream::setup('root', null, [
-            'composer.lock' => file_get_contents(__DIR__.'/Fixtures/composer.lock'),
+            'composer.lock' => file_get_contents(__DIR__ . '/Fixtures/composer.lock'),
         ]);
 
         $this->checker->check(vfsStream::url('root'), [
@@ -230,7 +230,7 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
     public function testCheckThrowsExceptionWhenVersionInLockFileDoesNotSatisfyRequiredPackageConstraint()
     {
         vfsStream::setup('root', null, [
-            'composer.lock' => file_get_contents(__DIR__.'/Fixtures/composer.lock'),
+            'composer.lock' => file_get_contents(__DIR__ . '/Fixtures/composer.lock'),
         ]);
 
         $this->checker->check(vfsStream::url('root'), [

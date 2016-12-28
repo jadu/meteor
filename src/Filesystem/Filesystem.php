@@ -42,7 +42,7 @@ class Filesystem extends BaseFilesystem
             $tempDir = sys_get_temp_dir();
         }
 
-        $path = $tempDir.'/'.uniqid('meteor_tmp_');
+        $path = $tempDir . '/' . uniqid('meteor_tmp_');
         $this->mkdir($path);
 
         return $path;
@@ -101,8 +101,8 @@ class Filesystem extends BaseFilesystem
         $this->io->progressStart($fileCount);
 
         foreach ($files as $file) {
-            $sourcePathname = $sourceDir.'/'.$file;
-            $targetPathname = $targetDir.'/'.$file;
+            $sourcePathname = $sourceDir . '/' . $file;
+            $targetPathname = $targetDir . '/' . $file;
 
             if (is_dir($sourcePathname)) {
                 $this->ensureDirectoryExists($targetPathname);
@@ -165,7 +165,7 @@ class Filesystem extends BaseFilesystem
         $files = $this->findFiles($baseDir);
 
         return array_values(array_filter($files, function ($file) use ($targetDir) {
-            return !file_exists($targetDir.'/'.$file);
+            return !file_exists($targetDir . '/' . $file);
         }));
     }
 
@@ -178,8 +178,8 @@ class Filesystem extends BaseFilesystem
     public function getRelativePath($baseDir, $path)
     {
         // Add a directory separator as a suffix to ensure a full match
-        $baseDir = rtrim($baseDir, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
+        $baseDir = rtrim($baseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 
-        return preg_replace('/^'.preg_quote($baseDir, '/').'/', '', $path);
+        return preg_replace('/^' . preg_quote($baseDir, '/') . '/', '', $path);
     }
 }

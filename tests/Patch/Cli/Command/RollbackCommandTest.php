@@ -80,7 +80,7 @@ class RollbackCommandTest extends CommandTestCase
             ->once();
 
         $this->versionComparer->shouldReceive('comparePackage')
-            ->with($workingDir.'/to_patch', $installDir, $config)
+            ->with($workingDir . '/to_patch', $installDir, $config)
             ->andReturn([])
             ->once();
 
@@ -156,7 +156,7 @@ class RollbackCommandTest extends CommandTestCase
             ->with($installDir);
 
         $this->versionComparer->shouldReceive('comparePackage')
-            ->with($workingDir.'/to_patch', $installDir, $config)
+            ->with($workingDir . '/to_patch', $installDir, $config)
             ->andReturn([]);
 
         $backups = [
@@ -233,7 +233,7 @@ class RollbackCommandTest extends CommandTestCase
         $this->command->setConfiguration($config);
 
         $this->versionComparer->shouldReceive('comparePackage')
-            ->with($workingDir.'/to_patch', $installDir, $config)
+            ->with($workingDir . '/to_patch', $installDir, $config)
             ->andReturn([])
             ->once();
 
@@ -286,7 +286,7 @@ class RollbackCommandTest extends CommandTestCase
         $this->command->setConfiguration($config);
 
         $this->versionComparer->shouldReceive('comparePackage')
-            ->with($workingDir.'/to_patch', $installDir, $config)
+            ->with($workingDir . '/to_patch', $installDir, $config)
             ->andReturn([])
             ->once();
 

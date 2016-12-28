@@ -41,7 +41,7 @@ class FinderFactory
                 foreach ($patterns as $patternData) {
                     list($pattern, $negate) = $patternData;
 
-                    $filepath = preg_replace('/^'.preg_quote($path.'/', '/').'/', '', $file->getPathname());
+                    $filepath = preg_replace('/^' . preg_quote($path . '/', '/') . '/', '', $file->getPathname());
                     if (preg_match($pattern, $filepath)) {
                         if ($negate) {
                             return false;
@@ -81,9 +81,9 @@ class FinderFactory
         }
 
         // Remove delimiters as well as caret (^) and dollar sign ($) from the regex produced by Glob
-        $pattern .= substr(Glob::toRegex($filter, false), 2, -2).'(?=$|/)';
+        $pattern .= substr(Glob::toRegex($filter, false), 2, -2) . '(?=$|/)';
 
-        $pattern = '/'.str_replace('/', '\/', $pattern).'/';
+        $pattern = '/' . str_replace('/', '\/', $pattern) . '/';
 
         return [$pattern, $negate];
     }

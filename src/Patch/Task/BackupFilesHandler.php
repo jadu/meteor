@@ -48,11 +48,11 @@ class BackupFilesHandler
 
         // Copy the files from the install that exist in the patch to the backup
         $this->io->text('Copying files from the install to the backup:');
-        $files = $this->filesystem->findFiles($task->patchDir.'/'.PackageConstants::PATCH_DIR);
-        $this->filesystem->copyFiles($files, $task->installDir, $task->backupDir.'/'.PackageConstants::PATCH_DIR);
+        $files = $this->filesystem->findFiles($task->patchDir . '/' . PackageConstants::PATCH_DIR);
+        $this->filesystem->copyFiles($files, $task->installDir, $task->backupDir . '/' . PackageConstants::PATCH_DIR);
 
         // Copy the meteor.json into the backup
         $configPath = $this->configurationLoader->resolve($task->patchDir);
-        $this->filesystem->copy($configPath, $task->backupDir.'/meteor.json.package', true);
+        $this->filesystem->copy($configPath, $task->backupDir . '/meteor.json.package', true);
     }
 }

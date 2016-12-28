@@ -352,7 +352,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     {
         $definition = new Definition('Meteor\Patch\Cli\Command\ApplyCommand', [
             null,
-            '%'.Application::PARAMETER_CONFIG.'%',
+            '%' . Application::PARAMETER_CONFIG . '%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_TASK_BUS),
@@ -376,7 +376,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
 
         $definition = new Definition('Meteor\Patch\Cli\Command\VerifyCommand', [
             null,
-            '%'.Application::PARAMETER_CONFIG.'%',
+            '%' . Application::PARAMETER_CONFIG . '%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_MANIFEST_CHECKER),
@@ -404,7 +404,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
 
         $definition = new Definition('Meteor\Patch\Cli\Command\ClearLockCommand', [
             null,
-            '%'.Application::PARAMETER_CONFIG.'%',
+            '%' . Application::PARAMETER_CONFIG . '%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_LOCKER),
@@ -428,7 +428,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     {
         $definition = new Definition('Meteor\Patch\Cli\Command\RollbackCommand', [
             null,
-            '%'.Application::PARAMETER_CONFIG.'%',
+            '%' . Application::PARAMETER_CONFIG . '%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_VERSION_COMPARER),
@@ -451,7 +451,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     {
         $definition = new Definition('Meteor\Patch\Cli\Command\VersionInfoCommand', [
             null,
-            '%'.Application::PARAMETER_CONFIG.'%',
+            '%' . Application::PARAMETER_CONFIG . '%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_TASK_BUS),
@@ -474,7 +474,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     public function process(ContainerBuilder $container)
     {
         $strategyName = $container->getParameter(self::PARAMETER_STRATEGY);
-        $strategyServiceId = self::SERVICE_STRATEGY_PREFIX.'.'.$strategyName;
+        $strategyServiceId = self::SERVICE_STRATEGY_PREFIX . '.' . $strategyName;
 
         if (!$container->has($strategyServiceId)) {
             throw new InvalidArgumentException(sprintf('Unable to find patch strategy `%s`.', $strategyName));

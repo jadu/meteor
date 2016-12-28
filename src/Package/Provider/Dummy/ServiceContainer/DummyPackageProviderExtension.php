@@ -57,7 +57,7 @@ class DummyPackageProviderExtension extends ExtensionBase implements ExtensionIn
     private function loadProvider(ContainerBuilder $container, array $config)
     {
         $definition = new Definition('Meteor\Package\Provider\Dummy\DummyPackageProvider');
-        $container->setDefinition(PackageExtension::SERVICE_PROVIDER_PREFIX.'.'.self::PROVIDER_NAME, $definition);
+        $container->setDefinition(PackageExtension::SERVICE_PROVIDER_PREFIX . '.' . self::PROVIDER_NAME, $definition);
     }
 
     /**

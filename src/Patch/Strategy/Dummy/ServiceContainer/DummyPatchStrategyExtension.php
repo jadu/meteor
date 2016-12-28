@@ -56,7 +56,7 @@ class DummyPatchStrategyExtension extends ExtensionBase implements ExtensionInte
     private function loadStrategy(ContainerBuilder $container)
     {
         $definition = new Definition('Meteor\Patch\Strategy\Dummy\DummyPatchStrategy');
-        $container->setDefinition(PatchExtension::SERVICE_STRATEGY_PREFIX.'.'.self::STRATEGY_NAME, $definition);
+        $container->setDefinition(PatchExtension::SERVICE_STRATEGY_PREFIX . '.' . self::STRATEGY_NAME, $definition);
     }
 
     /**

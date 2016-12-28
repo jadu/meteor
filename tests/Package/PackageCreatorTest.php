@@ -71,7 +71,7 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->filesystem->shouldReceive('copyDirectory')
-            ->with($workingDir, $tempDir.'/to_patch', null)
+            ->with($workingDir, $tempDir . '/to_patch', null)
             ->ordered()
             ->once();
 
@@ -88,12 +88,12 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->configurationWriter->shouldReceive('write')
-            ->with($tempDir.'/meteor.json.package', $config)
+            ->with($tempDir . '/meteor.json.package', $config)
             ->ordered()
             ->once();
 
         $this->packageArchiver->shouldReceive('archive')
-            ->with($tempDir, $outputDir.'/package.zip', 'package')
+            ->with($tempDir, $outputDir . '/package.zip', 'package')
             ->ordered()
             ->once();
 
@@ -136,7 +136,7 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->filesystem->shouldReceive('copyDirectory')
-            ->with($workingDir, $tempDir.'/to_patch', null)
+            ->with($workingDir, $tempDir . '/to_patch', null)
             ->ordered()
             ->once();
 
@@ -150,12 +150,12 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             ->never();
 
         $this->configurationWriter->shouldReceive('write')
-            ->with($tempDir.'/meteor.json.package', $config)
+            ->with($tempDir . '/meteor.json.package', $config)
             ->ordered()
             ->once();
 
         $this->packageArchiver->shouldReceive('archive')
-            ->with($tempDir, $outputDir.'/package.zip', 'package')
+            ->with($tempDir, $outputDir . '/package.zip', 'package')
             ->ordered()
             ->once();
 
@@ -200,7 +200,7 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->filesystem->shouldReceive('copyDirectory')
-            ->with($workingDir, $tempDir.'/to_patch', ['/**'])
+            ->with($workingDir, $tempDir . '/to_patch', ['/**'])
             ->ordered()
             ->once();
 
@@ -237,12 +237,12 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->configurationWriter->shouldReceive('write')
-            ->with($tempDir.'/meteor.json.package', $config)
+            ->with($tempDir . '/meteor.json.package', $config)
             ->ordered()
             ->once();
 
         $this->packageArchiver->shouldReceive('archive')
-            ->with($tempDir, $outputDir.'/package.zip', 'package')
+            ->with($tempDir, $outputDir . '/package.zip', 'package')
             ->ordered()
             ->once();
 
@@ -286,7 +286,7 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->filesystem->shouldReceive('copyDirectory')
-            ->with($workingDir, $tempDir.'/to_patch', ['/**'])
+            ->with($workingDir, $tempDir . '/to_patch', ['/**'])
             ->ordered()
             ->once();
 
@@ -309,17 +309,17 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->configurationWriter->shouldReceive('write')
-            ->with($tempDir.'/meteor.json.package', $config)
+            ->with($tempDir . '/meteor.json.package', $config)
             ->ordered()
             ->once();
 
         $this->filesystem->shouldReceive('copy')
-            ->with('meteor.phar', $tempDir.'/meteor.phar', true)
+            ->with('meteor.phar', $tempDir . '/meteor.phar', true)
             ->ordered()
             ->once();
 
         $this->packageArchiver->shouldReceive('archive')
-            ->with($tempDir, $outputDir.'/package.zip', 'package')
+            ->with($tempDir, $outputDir . '/package.zip', 'package')
             ->ordered()
             ->once();
 

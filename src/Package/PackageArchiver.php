@@ -60,20 +60,20 @@ class PackageArchiver
         $hashes = [];
 
         foreach ($files as $file) {
-            $relativePath = preg_replace('/^'.preg_quote($sourceDir.'/', '/').'/', '', $file->getPathname());
+            $relativePath = preg_replace('/^' . preg_quote($sourceDir . '/', '/') . '/', '', $file->getPathname());
             $hashes[$relativePath] = sha1_file($file->getPathname());
 
             // Prefix all paths with the package name
-            $packagePath = $packageName.'/'.$relativePath;
+            $packagePath = $packageName . '/' . $relativePath;
             $zip->addFile($file->getPathname(), $packagePath);
 
-            $this->io->debug(' > '.$packagePath);
+            $this->io->debug(' > ' . $packagePath);
         }
 
         // Store the file hashes in the manifest file
-        $manifestPath = $sourceDir.'/'.ManifestChecker::MANIFEST_FILENAME;
+        $manifestPath = $sourceDir . '/' . ManifestChecker::MANIFEST_FILENAME;
         file_put_contents($manifestPath, json_encode($hashes, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-        $zip->addFile($manifestPath, $packageName.'/'.basename($manifestPath));
+        $zip->addFile($manifestPath, $packageName . '/' . basename($manifestPath));
 
         $zip->close();
     }

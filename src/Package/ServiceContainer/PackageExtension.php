@@ -198,7 +198,7 @@ class PackageExtension extends ExtensionBase implements ExtensionInterface
     {
         $definition = new Definition('Meteor\Package\Cli\Command\PackageCommand', [
             null,
-            '%'.Application::PARAMETER_CONFIG.'%',
+            '%' . Application::PARAMETER_CONFIG . '%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(self::SERVICE_PACKAGE_CREATOR),
         ]);
@@ -224,7 +224,7 @@ class PackageExtension extends ExtensionBase implements ExtensionInterface
             return;
         }
 
-        $providerServiceId = self::SERVICE_PROVIDER_PREFIX.'.'.$providerName;
+        $providerServiceId = self::SERVICE_PROVIDER_PREFIX . '.' . $providerName;
         if (!$container->has($providerServiceId)) {
             throw new InvalidArgumentException(sprintf('Unable to find package provider "%s".', $providerName));
         }

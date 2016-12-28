@@ -114,7 +114,7 @@ class VersionFileManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->versionFileManager->setCurrentVersion('20160601102030', vfsStream::url('root'), $table, $versionFilename);
 
-        $this->assertSame('20160601102030', file_get_contents(vfsStream::url('root/'.$expectedVersionFileName)));
+        $this->assertSame('20160601102030', file_get_contents(vfsStream::url('root/' . $expectedVersionFileName)));
     }
 
     public function setCurrentVersionProvider()

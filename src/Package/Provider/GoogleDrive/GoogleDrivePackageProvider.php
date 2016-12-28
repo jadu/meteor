@@ -51,14 +51,14 @@ class GoogleDrivePackageProvider implements PackageProviderInterface
             throw new PackageNotFoundException(sprintf('The Google Drive folder for the "%s" package has not been configured.', $packageName));
         }
 
-        $file = $version.'.zip';
+        $file = $version . '.zip';
         $folderId = $this->packageFolders[$packageName];
 
         $query = sprintf("name = '%s' and '%s' in parents", $file, $folderId);
         $this->processRunner->run(sprintf('%s download query %s --force', $this->binaryPath, escapeshellarg($query)), $tempDir);
 
-        if (file_exists($tempDir.'/'.$file)) {
-            return $tempDir.'/'.$file;
+        if (file_exists($tempDir . '/' . $file)) {
+            return $tempDir . '/' . $file;
         }
 
         throw new PackageNotFoundException(sprintf('Unable to find "%s" in the Google Drive folder "%s".', $file, $folderId));

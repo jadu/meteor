@@ -121,7 +121,7 @@ class ConsoleIO implements IOInterface
      */
     public function ask($question, $default = null)
     {
-        $question = sprintf(" <info>%s</info>%s:\n > ", $question, $default !== null ? ' [<comment>'.$default.'</>]' : '');
+        $question = sprintf(" <info>%s</info>%s:\n > ", $question, $default !== null ? ' [<comment>' . $default . '</>]' : '');
         $question = new Question($question, $default);
 
         return $this->askQuestion($question);
@@ -507,10 +507,10 @@ class ConsoleIO implements IOInterface
 
         foreach ($lines as $i => &$line) {
             if (null !== $type) {
-                $line = 0 === $i ? $type.$line : $lineIndentation.$line;
+                $line = 0 === $i ? $type . $line : $lineIndentation . $line;
             }
 
-            $line = $prefix.$line;
+            $line = $prefix . $line;
             $line .= str_repeat(' ', $this->lineLength - Helper::strlenWithoutDecoration($this->output->getFormatter(), $line));
 
             if ($style) {

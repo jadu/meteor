@@ -33,7 +33,7 @@ class ConsoleIOTest extends \PHPUnit_Framework_TestCase
 
     private function assertOutputEquals($fixture)
     {
-        $this->assertSame(file_get_contents(__DIR__.'/Fixtures/'.$fixture.'.txt'), $this->getOutput());
+        $this->assertSame(file_get_contents(__DIR__ . '/Fixtures/' . $fixture . '.txt'), $this->getOutput());
     }
 
     public function testTitle()

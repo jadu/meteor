@@ -47,12 +47,12 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('install', $tasks[5]->installDir);
 
         $this->assertInstanceOf('Meteor\Patch\Task\BackupFiles', $tasks[6]);
-        $this->assertSame('install/backups/'.date('YmdHis'), $tasks[6]->backupDir);
+        $this->assertSame('install/backups/' . date('YmdHis'), $tasks[6]->backupDir);
         $this->assertSame('patch', $tasks[6]->patchDir);
         $this->assertSame('install', $tasks[6]->installDir);
 
         $this->assertInstanceOf('Meteor\Patch\Task\UpdateMigrationVersionFiles', $tasks[7]);
-        $this->assertSame('install/backups/'.date('YmdHis'), $tasks[7]->backupDir);
+        $this->assertSame('install/backups/' . date('YmdHis'), $tasks[7]->backupDir);
         $this->assertSame('patch', $tasks[7]->patchDir);
         $this->assertSame('install', $tasks[7]->installDir);
 

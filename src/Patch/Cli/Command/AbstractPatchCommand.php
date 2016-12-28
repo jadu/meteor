@@ -79,6 +79,6 @@ abstract class AbstractPatchCommand extends AbstractCommand
     protected function getLogPath($workingDir)
     {
         // Store logs in the current working directory
-        return $workingDir.'/logs/meteor-'.date('YmdHis').'.log';
+        return $workingDir . '/logs/meteor-' . date('YmdHis') . '.log';
     }
 }

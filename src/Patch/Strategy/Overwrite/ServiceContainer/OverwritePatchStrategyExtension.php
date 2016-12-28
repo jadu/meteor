@@ -56,7 +56,7 @@ class OverwritePatchStrategyExtension extends ExtensionBase implements Extension
     private function loadStrategy(ContainerBuilder $container)
     {
         $definition = new Definition('Meteor\Patch\Strategy\Overwrite\OverwritePatchStrategy');
-        $container->setDefinition(PatchExtension::SERVICE_STRATEGY_PREFIX.'.'.self::STRATEGY_NAME, $definition);
+        $container->setDefinition(PatchExtension::SERVICE_STRATEGY_PREFIX . '.' . self::STRATEGY_NAME, $definition);
     }
 
     /**

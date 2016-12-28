@@ -3,7 +3,6 @@
 namespace Meteor\Patch\Cli\Command;
 
 use Meteor\IO\IOInterface;
-use Meteor\Patch\Lock\Locker;
 use Meteor\Patch\Manifest\ManifestChecker;
 use Meteor\Platform\PlatformInterface;
 use Symfony\Component\Console\Input\InputInterface;

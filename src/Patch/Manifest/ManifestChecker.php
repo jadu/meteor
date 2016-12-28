@@ -26,7 +26,7 @@ class ManifestChecker
      */
     public function check($workingDir)
     {
-        $manifestFile = $workingDir.'/'.self::MANIFEST_FILENAME;
+        $manifestFile = $workingDir . '/' . self::MANIFEST_FILENAME;
         if (!file_exists($manifestFile)) {
             // The manifest did not exist
             return false;
@@ -41,7 +41,7 @@ class ManifestChecker
 
         $errors = [];
         foreach ($manifest as $path => $hash) {
-            $workingPath = $workingDir.'/'.$path;
+            $workingPath = $workingDir . '/' . $path;
             if (!file_exists($workingPath)) {
                 $errors[] = sprintf('"%s" does not exist', $path);
             }

@@ -31,14 +31,14 @@ class CheckModuleCmsDependencyHandler
      */
     public function handle(CheckModuleCmsDependency $task)
     {
-        $cmsModuleDependencyFile = $task->workingDir.'/'.self::MODULE_CMS_DEPENDENCY_FILE;
+        $cmsModuleDependencyFile = $task->workingDir . '/' . self::MODULE_CMS_DEPENDENCY_FILE;
         if (!file_exists($cmsModuleDependencyFile)) {
             // There is no CMS module dependency to check
             return true;
         }
 
-        $workingDirCmsVersionFile = $task->workingDir.'/'.self::CMS_VERSION_FILE;
-        $installDirCmsVersionFile = $task->installDir.'/'.self::CMS_VERSION_FILE;
+        $workingDirCmsVersionFile = $task->workingDir . '/' . self::CMS_VERSION_FILE;
+        $installDirCmsVersionFile = $task->installDir . '/' . self::CMS_VERSION_FILE;
         if (!file_exists($installDirCmsVersionFile) && !file_exists($workingDirCmsVersionFile)) {
             // The CMS version file could not be found
             return true;
@@ -48,7 +48,7 @@ class CheckModuleCmsDependencyHandler
 
         // NB: For backwards compatibility the default operator is `>=`, however `==` can still be used to specify the versions must be equal
         if (preg_match('/^\d+\.\d+\.\d+$/', $cmsVersionRequirement)) {
-            $cmsVersionRequirement = '>='.$cmsVersionRequirement;
+            $cmsVersionRequirement = '>=' . $cmsVersionRequirement;
         }
 
         if (file_exists($workingDirCmsVersionFile)) {

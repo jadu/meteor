@@ -17,8 +17,8 @@ class VersionFileManager
     public function getCurrentVersion($path, $table, $versionFilename)
     {
         $versionFile = $this->getVersionFile($table, $versionFilename);
-        if (file_exists($path.'/'.$versionFile)) {
-            $currentVesion = trim(file_get_contents($path.'/'.$versionFile));
+        if (file_exists($path . '/' . $versionFile)) {
+            $currentVesion = trim(file_get_contents($path . '/' . $versionFile));
             if ($currentVesion !== '') {
                 return $currentVesion;
             }
@@ -37,7 +37,7 @@ class VersionFileManager
     {
         $versionFile = $this->getVersionFile($table, $versionFilename);
 
-        file_put_contents($path.'/'.$versionFile, $currentVersion);
+        file_put_contents($path . '/' . $versionFile, $currentVersion);
     }
 
     /**
@@ -55,6 +55,6 @@ class VersionFileManager
             }
         }
 
-        return strtoupper($table).'_'.$versionFilename;
+        return strtoupper($table) . '_' . $versionFilename;
     }
 }

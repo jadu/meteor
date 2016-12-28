@@ -83,7 +83,7 @@ class ConfigurationFactory
         $configuration = $this->create('Meteor\Migrations\Configuration\DatabaseConfiguration', $config, $patchDir, $installDir);
 
         // NB: This will attempt to connect to the database
-        $configuration->registerMigrationsFromDirectory($patchDir.'/'.$config['directory']);
+        $configuration->registerMigrationsFromDirectory($patchDir . '/' . $config['directory']);
 
         return $configuration;
     }
@@ -97,14 +97,14 @@ class ConfigurationFactory
      */
     public function createFileConfiguration(array $config, $patchDir, $installDir)
     {
-        $config['directory'] = $config['directory'].'/'.FileConfiguration::MIGRATION_DIRECTORY;
+        $config['directory'] = $config['directory'] . '/' . FileConfiguration::MIGRATION_DIRECTORY;
         $configuration = $this->create('Meteor\Migrations\Configuration\FileConfiguration', $config, $patchDir, $installDir);
 
         $versionStorage = $this->fileMigrationVersionStorageFactory->create($installDir, $config['table']);
         $configuration->setVersionStorage($versionStorage);
 
         // NB: This will attempt to connect to the database
-        $configuration->registerMigrationsFromDirectory($patchDir.'/'.$config['directory']);
+        $configuration->registerMigrationsFromDirectory($patchDir . '/' . $config['directory']);
 
         if (!$versionStorage->isInitialised()) {
             // The version storage file does not exist yet, create using the migration status file if available
@@ -131,7 +131,7 @@ class ConfigurationFactory
         $configuration->setName($config['name']);
         $configuration->setMigrationsNamespace($config['namespace']);
         $configuration->setMigrationsTableName($config['table']);
-        $configuration->setMigrationsDirectory($patchDir.'/'.$config['directory']);
+        $configuration->setMigrationsDirectory($patchDir . '/' . $config['directory']);
 
         // Set the install dir for use within migrations
         $configuration->setJaduPath($installDir);

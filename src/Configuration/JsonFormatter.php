@@ -62,7 +62,7 @@ class JsonFormatter
                         $l = strlen($match[1]);
 
                         if ($l % 2) {
-                            return str_repeat('\\', $l - 1).mb_convert_encoding(
+                            return str_repeat('\\', $l - 1) . mb_convert_encoding(
                                 pack('H*', $match[2]),
                                 'UTF-8',
                                 'UCS-2BE'
@@ -73,7 +73,7 @@ class JsonFormatter
                     }, $buffer);
                 }
 
-                $result .= $buffer.$char;
+                $result .= $buffer . $char;
                 $buffer = '';
                 continue;
             }
