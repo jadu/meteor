@@ -4,6 +4,7 @@ namespace Meteor\Permissions\ServiceContainer;
 
 use Meteor\Cli\Application;
 use Meteor\Cli\ServiceContainer\CliExtension;
+use Meteor\Filesystem\ServiceContainer\FilesystemExtension;
 use Meteor\IO\ServiceContainer\IOExtension;
 use Meteor\Platform\ServiceContainer\PlatformExtension;
 use Meteor\ServiceContainer\ExtensionBase;
@@ -84,6 +85,7 @@ class PermissionsExtension extends ExtensionBase implements ExtensionInterface
             '%' . Application::PARAMETER_CONFIG . '%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PlatformExtension::SERVICE_PLATFORM),
+            new Reference(FilesystemExtension::SERVICE_FILESYSTEM),
             new Reference(self::SERVICE_PERMISSION_SETTER),
         ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
