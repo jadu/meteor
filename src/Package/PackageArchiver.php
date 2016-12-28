@@ -4,6 +4,7 @@ namespace Meteor\Package;
 
 use Meteor\Filesystem\Filesystem;
 use Meteor\IO\IOInterface;
+use Meteor\Patch\Manifest\ManifestChecker;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RuntimeException;
@@ -53,16 +54,26 @@ class PackageArchiver
 
         $this->filesystem->ensureDirectoryExists(dirname($targetFile));
 
-        $this->io->debug('Adding files to the archive');
+        $this->io->text('Archiving the package files');
         $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($sourceDir, RecursiveDirectoryIterator::SKIP_DOTS));
 
-        foreach ($files as $file) {
-            // Prefix all paths with the package name
-            $relativePath = $packageName . '/' . preg_replace('/^' . preg_quote($sourceDir . '/', '/') . '/', '', $file->getPathname());
-            $zip->addFile($file->getPathname(), $relativePath);
+        $hashes = [];
 
-            $this->io->debug(' > ' . $relativePath);
+        foreach ($files as $file) {
+            $relativePath = preg_replace('/^' . preg_quote($sourceDir . '/', '/') . '/', '', $file->getPathname());
+            $hashes[$relativePath] = sha1_file($file->getPathname());
+
+            // Prefix all paths with the package name
+            $packagePath = $packageName . '/' . $relativePath;
+            $zip->addFile($file->getPathname(), $packagePath);
+
+            $this->io->debug(' > ' . $packagePath);
         }
+
+        // Store the file hashes in the manifest file
+        $manifestPath = $sourceDir . '/' . ManifestChecker::MANIFEST_FILENAME;
+        file_put_contents($manifestPath, json_encode($hashes, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $zip->addFile($manifestPath, $packageName . '/' . basename($manifestPath));
 
         $zip->close();
     }

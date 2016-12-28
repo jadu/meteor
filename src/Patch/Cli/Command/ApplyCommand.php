@@ -9,6 +9,7 @@ use Meteor\Logger\LoggerInterface;
 use Meteor\Patch\Event\PatchEvents;
 use Meteor\Patch\Exception\PhpVersionException;
 use Meteor\Patch\Lock\Locker;
+use Meteor\Patch\Manifest\ManifestChecker;
 use Meteor\Patch\Strategy\PatchStrategyInterface;
 use Meteor\Patch\Task\TaskBusInterface;
 use Meteor\Platform\PlatformInterface;
@@ -35,6 +36,11 @@ class ApplyCommand extends AbstractPatchCommand
      * @var Locker
      */
     private $locker;
+
+    /**
+     * @var ManifestChecker
+     */
+    private $manifestChecker;
 
     /**
      * @var EventDispatcherInterface
@@ -64,6 +70,7 @@ class ApplyCommand extends AbstractPatchCommand
      * @param TaskBusInterface $taskBus
      * @param PatchStrategyInterface $strategy
      * @param Locker $locker
+     * @param ManifestChecker $manifestChecker
      * @param EventDispatcherInterface $eventDispatcher
      * @param ScriptRunner $scriptRunner
      * @param LoggerInterface $logger
@@ -77,6 +84,7 @@ class ApplyCommand extends AbstractPatchCommand
         TaskBusInterface $taskBus,
         PatchStrategyInterface $strategy,
         Locker $locker,
+        ManifestChecker $manifestChecker,
         EventDispatcherInterface $eventDispatcher,
         ScriptRunner $scriptRunner,
         LoggerInterface $logger,
@@ -85,6 +93,7 @@ class ApplyCommand extends AbstractPatchCommand
         $this->taskBus = $taskBus;
         $this->strategy = $strategy;
         $this->locker = $locker;
+        $this->manifestChecker = $manifestChecker;
         $this->eventDispatcher = $eventDispatcher;
         $this->scriptRunner = $scriptRunner;
         $this->logger = $logger;
@@ -98,6 +107,7 @@ class ApplyCommand extends AbstractPatchCommand
         $this->setName('patch:apply');
         $this->setDescription('Applies a patch');
 
+        $this->addOption('skip-verify', null, InputOption::VALUE_NONE, 'Skip the package verification');
         $this->addOption('skip-lock', null, InputOption::VALUE_NONE, 'Skip any existing lock files to force a patch');
         $this->addOption('skip-scripts', null, InputOption::VALUE_NONE, 'Skip script execution');
         $this->addOption('ignore-unavailable-migrations', null, InputOption::VALUE_NONE, 'Ignore unavailable migrations.');
@@ -192,6 +202,13 @@ class ApplyCommand extends AbstractPatchCommand
         $this->logger->enable($this->getLogPath($workingDir));
 
         $this->io->title(sprintf('Applying the <info>%s</> patch', $config['name']));
+
+        if (!$this->io->getOption('skip-verify')) {
+            $result = $this->manifestChecker->check($workingDir);
+            if ($result === false) {
+                return 1;
+            }
+        }
 
         if (!$this->io->getOption('skip-lock')) {
             $this->locker->lock($installDir);

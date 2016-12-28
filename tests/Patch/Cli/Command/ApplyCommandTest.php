@@ -5,6 +5,7 @@ namespace Meteor\Patch\Cli\Command;
 use Meteor\Cli\Command\CommandTestCase;
 use Meteor\IO\NullIO;
 use Meteor\Patch\Event\PatchEvents;
+use Meteor\Patch\Manifest\ManifestChecker;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
 
@@ -14,6 +15,7 @@ class ApplyCommandTest extends CommandTestCase
     private $strategy;
     private $platform;
     private $locker;
+    private $manifestChecker;
     private $eventDispatcher;
     private $scriptRunner;
     private $logger;
@@ -31,6 +33,7 @@ class ApplyCommandTest extends CommandTestCase
             'setInstallDir' => null,
         ]);
         $this->locker = Mockery::mock('Meteor\Patch\Lock\Locker');
+        $this->manifestChecker = Mockery::mock(ManifestChecker::class);
         $this->eventDispatcher = Mockery::mock('Symfony\Component\EventDispatcher\EventDispatcherInterface', [
             'dispatch' => null,
         ]);
@@ -50,6 +53,7 @@ class ApplyCommandTest extends CommandTestCase
             $this->taskBus,
             $this->strategy,
             $this->locker,
+            $this->manifestChecker,
             $this->eventDispatcher,
             $this->scriptRunner,
             $this->logger
@@ -73,6 +77,10 @@ class ApplyCommandTest extends CommandTestCase
             ->once();
 
         $this->logger->shouldReceive('enable')
+            ->once();
+
+        $this->manifestChecker->shouldReceive('check')
+            ->with($workingDir)
             ->once();
 
         $this->locker->shouldReceive('lock')
@@ -130,6 +138,73 @@ class ApplyCommandTest extends CommandTestCase
         ]);
     }
 
+    public function testDoesCheckManifestWhenSkipVerifyOptionSpecified()
+    {
+        $workingDir = vfsStream::url('root/patch');
+        $installDir = vfsStream::url('root/install');
+
+        $config = ['name' => 'test'];
+        $this->command->setConfiguration($config);
+
+        $this->logger->shouldReceive('enable')
+            ->once();
+
+        $this->manifestChecker->shouldReceive('check')
+            ->never();
+
+        $this->locker->shouldReceive('lock')
+            ->with($installDir)
+            ->once();
+
+        $tasks = [new \stdClass()];
+        $this->strategy->shouldReceive('apply')
+            ->with($workingDir, $installDir, Mockery::any())
+            ->andReturn($tasks)
+            ->once();
+
+        $this->taskBus->shouldReceive('run')
+            ->with($tasks[0], $config)
+            ->andReturn(true)
+            ->once();
+
+        $this->locker->shouldReceive('unlock')
+            ->with($installDir)
+            ->once();
+
+        $this->tester->execute([
+            '--working-dir' => $workingDir,
+            '--install-dir' => $installDir,
+            '--skip-verify' => null,
+        ]);
+    }
+
+    public function testStopsApplyingIfManifestCheckReturnsFalse()
+    {
+        $workingDir = vfsStream::url('root/patch');
+        $installDir = vfsStream::url('root/install');
+
+        $config = ['name' => 'test'];
+        $this->command->setConfiguration($config);
+
+        $this->logger->shouldReceive('enable')
+            ->once();
+
+        $this->manifestChecker->shouldReceive('check')
+            ->with($workingDir)
+            ->andReturn(false)
+            ->once();
+
+        $this->taskBus->shouldReceive('run')
+            ->never();
+
+        $this->tester->execute([
+            '--working-dir' => $workingDir,
+            '--install-dir' => $installDir,
+        ]);
+
+        $this->assertSame(1, $this->tester->getStatusCode());
+    }
+
     public function testDoesNotLockWhenSkipLockOptionSpecified()
     {
         $workingDir = vfsStream::url('root/patch');
@@ -139,6 +214,10 @@ class ApplyCommandTest extends CommandTestCase
         $this->command->setConfiguration($config);
 
         $this->logger->shouldReceive('enable')
+            ->once();
+
+        $this->manifestChecker->shouldReceive('check')
+            ->with($workingDir)
             ->once();
 
         $this->locker->shouldReceive('lock')
@@ -174,6 +253,10 @@ class ApplyCommandTest extends CommandTestCase
         $this->command->setConfiguration($config);
 
         $this->logger->shouldReceive('enable')
+            ->once();
+
+        $this->manifestChecker->shouldReceive('check')
+            ->with($workingDir)
             ->once();
 
         $this->locker->shouldReceive('lock')
@@ -248,6 +331,10 @@ class ApplyCommandTest extends CommandTestCase
             ->once();
 
         $this->logger->shouldReceive('enable')
+            ->once();
+
+        $this->manifestChecker->shouldReceive('check')
+            ->with($workingDir)
             ->once();
 
         $this->locker->shouldReceive('lock')
@@ -360,6 +447,9 @@ class ApplyCommandTest extends CommandTestCase
             ->with($installDir);
 
         $this->logger->shouldReceive('enable');
+
+        $this->manifestChecker->shouldReceive('check')
+            ->with($workingDir);
 
         $this->locker->shouldReceive('lock')
             ->with($installDir);
