@@ -204,7 +204,10 @@ class ApplyCommand extends AbstractPatchCommand
         $this->io->title(sprintf('Applying the <info>%s</> patch', $config['name']));
 
         if (!$this->io->getOption('skip-verify')) {
-            $this->manifestChecker->check($workingDir);
+            $result = $this->manifestChecker->check($workingDir);
+            if ($result === false) {
+                return 1;
+            }
         }
 
         if (!$this->io->getOption('skip-lock')) {

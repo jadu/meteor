@@ -32,11 +32,11 @@ class ManifestChecker
             return false;
         }
 
-        $manifest = json_decode(file_get_contents($manifestFile));
-        if (!$manifest) {
+        $manifest = json_decode(file_get_contents($manifestFile), true);
+        if (!is_array($manifest)) {
             $this->io->error('The package manifest could not be read.');
 
-            return;
+            return false;
         }
 
         $errors = [];
@@ -44,9 +44,7 @@ class ManifestChecker
             $workingPath = $workingDir . '/' . $path;
             if (!file_exists($workingPath)) {
                 $errors[] = sprintf('"%s" does not exist', $path);
-            }
-
-            if (!hash_equals($hash, sha1_file($workingPath))) {
+            } elseif (!hash_equals($hash, sha1_file($workingPath))) {
                 $errors[] = sprintf('"%s" does not match the expected file contents', $path);
             }
         }
