@@ -58,10 +58,10 @@ class PackageArchiver
 
         foreach ($files as $file) {
             // Prefix all paths with the package name
-            $relativePath = $packageName.'/'.preg_replace('/^'.preg_quote($sourceDir.'/', '/').'/', '', $file->getPathname());
+            $relativePath = $packageName . '/' . preg_replace('/^' . preg_quote($sourceDir . '/', '/') . '/', '', $file->getPathname());
             $zip->addFile($file->getPathname(), $relativePath);
 
-            $this->io->debug(' > '.$relativePath);
+            $this->io->debug(' > ' . $relativePath);
         }
 
         $zip->close();

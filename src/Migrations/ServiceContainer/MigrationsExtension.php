@@ -185,7 +185,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
     {
         $definition = new Definition('Meteor\Migrations\Cli\Command\ExecuteMigrationCommand', [
             'migrations:execute',
-            '%'.self::PARAMETER_MIGRATIONS.'%',
+            '%' . self::PARAMETER_MIGRATIONS . '%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_MIGRATOR),
@@ -203,7 +203,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
     {
         $definition = new Definition('Meteor\Migrations\Cli\Command\ExecuteMigrationCommand', [
             'file-migrations:execute',
-            '%'.self::PARAMETER_MIGRATIONS.'%',
+            '%' . self::PARAMETER_MIGRATIONS . '%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_MIGRATOR),
@@ -221,7 +221,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
     {
         $definition = new Definition('Meteor\Migrations\Cli\Command\GenerateMigrationCommand', [
             'migrations:generate',
-            '%'.Application::PARAMETER_CONFIG.'%',
+            '%' . Application::PARAMETER_CONFIG . '%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(self::SERVICE_MIGRATION_GENERATOR),
             MigrationsConstants::TYPE_DATABASE,
@@ -237,7 +237,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
     {
         $definition = new Definition('Meteor\Migrations\Cli\Command\GenerateMigrationCommand', [
             'file-migrations:generate',
-            '%'.Application::PARAMETER_CONFIG.'%',
+            '%' . Application::PARAMETER_CONFIG . '%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(self::SERVICE_MIGRATION_GENERATOR),
             MigrationsConstants::TYPE_FILE,
@@ -272,7 +272,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
     {
         $definition = new Definition('Meteor\Migrations\Cli\Command\MigrateCommand', [
             'migrations:migrate',
-            '%'.self::PARAMETER_MIGRATIONS.'%',
+            '%' . self::PARAMETER_MIGRATIONS . '%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_MIGRATOR),
@@ -290,7 +290,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
     {
         $definition = new Definition('Meteor\Migrations\Cli\Command\MigrateCommand', [
             'file-migrations:migrate',
-            '%'.self::PARAMETER_MIGRATIONS.'%',
+            '%' . self::PARAMETER_MIGRATIONS . '%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_MIGRATOR),
@@ -308,7 +308,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
     {
         $definition = new Definition('Meteor\Migrations\Cli\Command\StatusCommand', [
             'migrations:status',
-            '%'.self::PARAMETER_MIGRATIONS.'%',
+            '%' . self::PARAMETER_MIGRATIONS . '%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_STATUS_OUTPUTTER),
@@ -325,7 +325,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
     {
         $definition = new Definition('Meteor\Migrations\Cli\Command\StatusCommand', [
             'file-migrations:status',
-            '%'.self::PARAMETER_MIGRATIONS.'%',
+            '%' . self::PARAMETER_MIGRATIONS . '%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_STATUS_OUTPUTTER),
@@ -353,7 +353,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
     {
         $definition = new Definition('Meteor\Migrations\Cli\Command\VersionCommand', [
             'migrations:version',
-            '%'.self::PARAMETER_MIGRATIONS.'%',
+            '%' . self::PARAMETER_MIGRATIONS . '%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_VERSION_MANAGER),
@@ -370,7 +370,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
     {
         $definition = new Definition('Meteor\Migrations\Cli\Command\VersionCommand', [
             'file-migrations:version',
-            '%'.self::PARAMETER_MIGRATIONS.'%',
+            '%' . self::PARAMETER_MIGRATIONS . '%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_VERSION_MANAGER),

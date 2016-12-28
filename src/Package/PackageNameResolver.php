@@ -43,7 +43,7 @@ class PackageNameResolver
         $fileName = preg_replace('/[^a-z0-9_\-\.]+/i', '_', $config['name']);
 
         if (isset($config['package']) && isset($config['package']['version'])) {
-            $versionFile = $workingDir.'/'.$config['package']['version'];
+            $versionFile = $workingDir . '/' . $config['package']['version'];
             if (!file_exists($versionFile)) {
                 throw new RuntimeException(sprintf('Unable to find version file "%s"', $versionFile));
             }
@@ -53,7 +53,7 @@ class PackageNameResolver
             $version = trim($version, '_');
 
             if ($version !== '') {
-                $fileName .= '_'.$version;
+                $fileName .= '_' . $version;
             }
         }
 

@@ -17,7 +17,7 @@ class VersionComparer
     public function compare($patchDir, $installDir, $packageName, $versionFile)
     {
         $patchDir = rtrim($patchDir, '/');
-        $patchVersionFile = $patchDir.'/'.$versionFile;
+        $patchVersionFile = $patchDir . '/' . $versionFile;
         if (!file_exists($patchVersionFile)) {
             throw new RuntimeException(sprintf('Unable to find version file "%s"', $patchVersionFile));
         }
@@ -25,7 +25,7 @@ class VersionComparer
         $patchVersion = $this->readVersion($patchVersionFile);
 
         $installDir = rtrim($installDir, '/');
-        $installVersionFile = $installDir.'/'.$versionFile;
+        $installVersionFile = $installDir . '/' . $versionFile;
         if (file_exists($installVersionFile)) {
             $installVersion = $this->readVersion($installVersionFile);
         } else {

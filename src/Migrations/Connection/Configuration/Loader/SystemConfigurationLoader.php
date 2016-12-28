@@ -11,7 +11,7 @@ class SystemConfigurationLoader implements ConfigurationLoaderInterface
      */
     public function load($installDir, array $configuration = [])
     {
-        $path = $installDir.'/'.self::CONFIG_FILENAME;
+        $path = $installDir . '/' . self::CONFIG_FILENAME;
 
         if (!file_exists($path) || !is_readable($path)) {
             return $configuration;

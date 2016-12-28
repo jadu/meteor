@@ -68,8 +68,8 @@ class AutoloadExtension extends ExtensionBase implements ExtensionInterface
 
         if (isset($config['composer'])) {
             foreach ($config['composer'] as $packageName) {
-                $packagePath = $workingDir.'/'.PackageConstants::PATCH_DIR.'/vendor/'.$packageName;
-                $composerJsonPath = $packagePath.'/composer.json';
+                $packagePath = $workingDir . '/' . PackageConstants::PATCH_DIR . '/vendor/' . $packageName;
+                $composerJsonPath = $packagePath . '/composer.json';
                 if (!file_exists($composerJsonPath)) {
                     throw new RuntimeException(sprintf('Unable to find "%s" to fetch autoload paths', $composerJsonPath));
                 }
@@ -111,7 +111,7 @@ class AutoloadExtension extends ExtensionBase implements ExtensionInterface
      */
     private function normalizePaths($paths, $rootPath)
     {
-        $rootPath = rtrim($rootPath, '/').'/';
+        $rootPath = rtrim($rootPath, '/') . '/';
 
         if (!is_array($paths)) {
             $paths = [$paths];
@@ -119,7 +119,7 @@ class AutoloadExtension extends ExtensionBase implements ExtensionInterface
 
         $normalizedPaths = [];
         foreach ($paths as $path) {
-            $normalizedPaths[] = $rootPath.ltrim($path, '/');
+            $normalizedPaths[] = $rootPath . ltrim($path, '/');
         }
 
         return $normalizedPaths;

@@ -16,7 +16,7 @@ class ComposerDependencyChecker
      */
     public function getRequirements($workingDir)
     {
-        $jsonPath = $workingDir.'/composer.json';
+        $jsonPath = $workingDir . '/composer.json';
 
         if (!file_exists($jsonPath)) {
             return [];
@@ -66,7 +66,7 @@ class ComposerDependencyChecker
             return true;
         }
 
-        $lockPath = $workingDir.'/composer.lock';
+        $lockPath = $workingDir . '/composer.lock';
         if (!file_exists($lockPath)) {
             throw ComposerDependenciesException::forMissingLockFile($lockPath);
         }

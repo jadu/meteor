@@ -81,7 +81,7 @@ class PermissionsExtension extends ExtensionBase implements ExtensionInterface
     {
         $definition = new Definition('Meteor\Permissions\Cli\Command\ResetPermissionsCommand', [
             null,
-            '%'.Application::PARAMETER_CONFIG.'%',
+            '%' . Application::PARAMETER_CONFIG . '%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_PERMISSION_SETTER),

@@ -83,10 +83,10 @@ class GoogleDrivePackageProviderExtension extends ExtensionBase implements Exten
         $definition = new Definition('Meteor\Package\Provider\GoogleDrive\GoogleDrivePackageProvider', [
             new Reference(ProcessExtension::SERVICE_PROCESS_RUNNER),
             new Reference(IOExtension::SERVICE_IO),
-            '%'.self::PARAMETER_BINARY.'%',
-            '%'.self::PARAMETER_FOLDERS.'%',
+            '%' . self::PARAMETER_BINARY . '%',
+            '%' . self::PARAMETER_FOLDERS . '%',
         ]);
-        $container->setDefinition(PackageExtension::SERVICE_PROVIDER_PREFIX.'.'.self::PROVIDER_NAME, $definition);
+        $container->setDefinition(PackageExtension::SERVICE_PROVIDER_PREFIX . '.' . self::PROVIDER_NAME, $definition);
     }
 
     /**

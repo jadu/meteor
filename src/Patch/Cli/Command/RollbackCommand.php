@@ -135,7 +135,7 @@ class RollbackCommand extends AbstractPatchCommand
         $this->scriptRunner->setWorkingDir($installDir);
 
         $packageValid = true;
-        $versions = $this->versionComparer->comparePackage($workingDir.'/'.PackageConstants::PATCH_DIR, $installDir, $config);
+        $versions = $this->versionComparer->comparePackage($workingDir . '/' . PackageConstants::PATCH_DIR, $installDir, $config);
         foreach ($versions as $version) {
             if ($version->isLessThan()) {
                 // The version in the package is less than the version in the install so the package is not valid

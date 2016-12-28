@@ -62,7 +62,7 @@ class CheckDiskSpaceHandler
             return true;
         }
 
-        $this->io->warning('Patching will reduce free disk space to less than '.self::REQUIRED_FREE_SPACE_PERCENT.'%');
+        $this->io->warning('Patching will reduce free disk space to less than ' . self::REQUIRED_FREE_SPACE_PERCENT . '%');
 
         // Try removing old backups
         $this->removeOldBackups($task->installDir, $config);

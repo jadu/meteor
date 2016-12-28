@@ -55,6 +55,6 @@ PHP;
             throw new InvalidArgumentException(sprintf('Migrations directory `%s` does not exist.', $path));
         }
 
-        file_put_contents($path.'/Version'.$version.'.php', $code);
+        file_put_contents($path . '/Version' . $version . '.php', $code);
     }
 }

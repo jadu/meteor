@@ -15,7 +15,7 @@ class InstallConfigLoader
      */
     public function load($path)
     {
-        $configPath = $path.'/'.self::CONFIG_NAME;
+        $configPath = $path . '/' . self::CONFIG_NAME;
         if (!file_exists($configPath)) {
             throw new InvalidArgumentException(sprintf('Unable to open install.conf file "%s"', $configPath));
         }

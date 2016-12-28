@@ -26,7 +26,7 @@ class ExtensionManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testActivateExtensionWithAbsolutePathFile()
     {
-        $this->extensionManager->activateExtension(__DIR__.'/Fixtures/absolute_extension.php', null);
+        $this->extensionManager->activateExtension(__DIR__ . '/Fixtures/absolute_extension.php', null);
 
         $this->assertSame(
             ['Meteor\ServiceContainer\Test\TestAbsoluteFileExtension'],
@@ -36,7 +36,7 @@ class ExtensionManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testActivateExtensionWithRelativePathFile()
     {
-        $this->extensionManager->activateExtension('relative_extension.php', __DIR__.'/Fixtures');
+        $this->extensionManager->activateExtension('relative_extension.php', __DIR__ . '/Fixtures');
 
         $this->assertSame(
             ['Meteor\ServiceContainer\Test\TestRelativeFileExtension'],

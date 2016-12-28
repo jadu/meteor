@@ -55,7 +55,7 @@ class StatusOutputter
             } elseif ($version === '0') {
                 $formattedVersions[$alias] = '<comment>0</comment>';
             } else {
-                $formattedVersions[$alias] = $configuration->formatVersion($version).' (<comment>'.$version.'</comment>)';
+                $formattedVersions[$alias] = $configuration->formatVersion($version) . ' (<comment>' . $version . '</comment>)';
             }
         }
 
@@ -74,9 +74,9 @@ class StatusOutputter
             ['Next version', $formattedVersions['next']],
             ['Latest version', $formattedVersions['latest']],
             ['Executed migrations', count($executedMigrations)],
-            ['Executed unavailable migrations', $numExecutedUnavailableMigrations > 0 ? '<error>'.$numExecutedUnavailableMigrations.'</error>' : 0],
+            ['Executed unavailable migrations', $numExecutedUnavailableMigrations > 0 ? '<error>' . $numExecutedUnavailableMigrations . '</error>' : 0],
             ['Available migrations', count($availableMigrations)],
-            ['New migrations', $newMigrations > 0 ? '<question>'.$newMigrations.'</question>' : 0],
+            ['New migrations', $newMigrations > 0 ? '<question>' . $newMigrations . '</question>' : 0],
         ];
 
         $this->io->table([], $rows);

@@ -46,7 +46,7 @@ class VersionInfoCommand extends AbstractPatchCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $task = new DisplayVersionInfo(
-            $this->getWorkingDir().'/'.PackageConstants::PATCH_DIR,
+            $this->getWorkingDir() . '/' . PackageConstants::PATCH_DIR,
             $this->getInstallDir()
         );
 

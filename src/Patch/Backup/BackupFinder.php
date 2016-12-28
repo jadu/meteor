@@ -40,7 +40,7 @@ class BackupFinder
     public function find($installDir, array $config)
     {
         $backups = [];
-        $backupsDir = $installDir.'/backups';
+        $backupsDir = $installDir . '/backups';
         $packageNames = $this->getPackageNames($config);
 
         $backupDirs = [];
@@ -59,7 +59,7 @@ class BackupFinder
 
                 // Check that the backup contains the same packages
                 if ($packageNames === $backupPackageNames) {
-                    $versions = $this->versionComparer->comparePackage($backupDir.'/'.PackageConstants::PATCH_DIR, $installDir, $config);
+                    $versions = $this->versionComparer->comparePackage($backupDir . '/' . PackageConstants::PATCH_DIR, $installDir, $config);
                     $backup = new Backup($backupDir, $versions);
 
                     if ($backup->isValid()) {

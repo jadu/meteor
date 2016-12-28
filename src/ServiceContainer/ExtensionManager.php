@@ -58,7 +58,7 @@ class ExtensionManager
             $extensionFile = $locator;
         } else {
             // Relative paths should be relatvie from the working directory
-            $extensionFile = $workingDir.'/'.$locator;
+            $extensionFile = $workingDir . '/' . $locator;
         }
 
         if (file_exists($extensionFile)) {

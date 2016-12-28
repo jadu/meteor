@@ -89,7 +89,7 @@ class Migrator
         if ($executedUnavailableMigrations) {
             $this->io->note(sprintf('You have %s previously executed migrations that are not registered migrations.', count($executedUnavailableMigrations)));
             foreach ($executedUnavailableMigrations as $executedUnavailableMigration) {
-                $this->io->text(' * '.$configuration->formatVersion($executedUnavailableMigration).' (<comment>'.$executedUnavailableMigration.'</>)');
+                $this->io->text(' * ' . $configuration->formatVersion($executedUnavailableMigration) . ' (<comment>' . $executedUnavailableMigration . '</>)');
             }
 
             if (!$ignoreUnavailableMigrations) {

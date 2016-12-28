@@ -93,8 +93,8 @@ class PackageCombiner
         }
 
         $this->filesystem->copyDirectory(
-            $extractedDir.'/'.PackageConstants::PATCH_DIR,
-            $tempDir.'/'.PackageConstants::PATCH_DIR,
+            $extractedDir . '/' . PackageConstants::PATCH_DIR,
+            $tempDir . '/' . PackageConstants::PATCH_DIR,
             $include
         );
 

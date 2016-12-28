@@ -24,7 +24,7 @@ class FinderFactoryTest extends \PHPUnit_Framework_TestCase
 
         $foundFiles = [];
         foreach ($finder as $file) {
-            $foundFiles[] = preg_replace('/^'.preg_quote(vfsStream::url('root').'/', '/').'/', '', $file->getPathname());
+            $foundFiles[] = preg_replace('/^' . preg_quote(vfsStream::url('root') . '/', '/') . '/', '', $file->getPathname());
         }
 
         $this->assertEquals($expectedFiles, $foundFiles);

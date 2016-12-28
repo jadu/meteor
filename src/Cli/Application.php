@@ -79,7 +79,7 @@ class Application extends BaseApplication
      */
     public function getHelp()
     {
-        return self::$logo.parent::getHelp();
+        return self::$logo . parent::getHelp();
     }
 
     protected function getDefaultInputDefinition()
@@ -151,7 +151,7 @@ class Application extends BaseApplication
         }
 
         do {
-            $messages = ['', 'Error: '.get_class($exception), $exception->getMessage(), '', 'Exception trace:'];
+            $messages = ['', 'Error: ' . get_class($exception), $exception->getMessage(), '', 'Exception trace:'];
 
             $trace = $exception->getTrace();
             array_unshift($trace, [

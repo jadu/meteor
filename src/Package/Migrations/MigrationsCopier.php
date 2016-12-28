@@ -38,11 +38,11 @@ class MigrationsCopier
     {
         if (isset($config['migrations'])) {
             $this->io->text('Adding migrations to the package:');
-            $migrationDirectory = 'migrations/'.$config['name'];
+            $migrationDirectory = 'migrations/' . $config['name'];
 
             $this->filesystem->copyDirectory(
-                $workingDir.'/'.$config['migrations']['directory'],
-                $tempDir.'/'.$migrationDirectory
+                $workingDir . '/' . $config['migrations']['directory'],
+                $tempDir . '/' . $migrationDirectory
             );
 
             $config['migrations']['directory'] = $migrationDirectory;

@@ -152,9 +152,9 @@ class ConfigurationLoader
         $paths = array_filter(
             [
                 // NB: The package from packages should chosen first
-                $path.'/'.self::PACKAGE_CONFIG_NAME,
-                $path.'/'.self::CONFIG_NAME,
-                $path.'/'.self::DIST_CONFIG_NAME,
+                $path . '/' . self::PACKAGE_CONFIG_NAME,
+                $path . '/' . self::CONFIG_NAME,
+                $path . '/' . self::DIST_CONFIG_NAME,
             ],
             'is_file'
         );

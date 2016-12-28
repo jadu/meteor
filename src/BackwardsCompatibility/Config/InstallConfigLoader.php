@@ -14,7 +14,7 @@ class InstallConfigLoader
 {
     public function load($path)
     {
-        $configPath = $path.'/install.conf';
+        $configPath = $path . '/install.conf';
         if (!file_exists($configPath)) {
             throw new InvalidArgumentException('Unable to find install.conf file');
         }

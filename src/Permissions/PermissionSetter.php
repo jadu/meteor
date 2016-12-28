@@ -52,7 +52,7 @@ class PermissionSetter
             try {
                 $this->platform->setDefaultPermission($targetDir, $file);
             } catch (Exception $exception) {
-                $permissionErrors[] = $targetDir.'/'.$file;
+                $permissionErrors[] = $targetDir . '/' . $file;
             }
         }
 
@@ -116,7 +116,7 @@ class PermissionSetter
     private function resolvePattern($baseDir, $targetDir, $pattern)
     {
         if (strpos($pattern, '*') === false) {
-            $targetPath = $targetDir.'/'.$pattern;
+            $targetPath = $targetDir . '/' . $pattern;
             if (!file_exists($targetPath)) {
                 // File does not exist
                 return [];
@@ -125,7 +125,7 @@ class PermissionSetter
             return [$targetPath];
         }
 
-        $basePath = $baseDir.'/'.$pattern;
+        $basePath = $baseDir . '/' . $pattern;
         $baseDirname = dirname($basePath);
         if (!is_dir($baseDirname)) {
             // Directory does not exist
@@ -147,7 +147,7 @@ class PermissionSetter
         foreach ($finder->depth('== 0') as $fileInfo) {
             $filePath = $fileInfo->getPathname();
             if ($baseDir !== $targetDir) {
-                $filePath = $targetDir.preg_replace('/'.preg_quote($baseDir, '/').'/', '', $filePath);
+                $filePath = $targetDir . preg_replace('/' . preg_quote($baseDir, '/') . '/', '', $filePath);
             }
 
             $paths[] = $filePath;

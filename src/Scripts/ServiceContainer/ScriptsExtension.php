@@ -187,7 +187,7 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
         $container->setDefinition(self::SERVICE_SCRIPT_RUNNER, new Definition('Meteor\Scripts\ScriptRunner', [
             new Reference(ProcessExtension::SERVICE_PROCESS_RUNNER),
             new Reference(IOExtension::SERVICE_IO),
-            '%'.self::PARAMETER_SCRIPTS.'%',
+            '%' . self::PARAMETER_SCRIPTS . '%',
         ]));
     }
 
@@ -195,7 +195,7 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
     {
         $definition = new Definition('Meteor\Scripts\Cli\Command\RunCommand', [
             null,
-            '%'.Application::PARAMETER_CONFIG.'%',
+            '%' . Application::PARAMETER_CONFIG . '%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(self::SERVICE_SCRIPT_RUNNER),
         ]);

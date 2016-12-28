@@ -79,7 +79,7 @@ abstract class DoctrineConfiguration extends Configuration
             foreach ($this->migrationVersions as $migration) {
                 $migratedVersions[] = sprintf("'%s'", $migration->getVersion());
             }
-            $where = ' WHERE version IN ('.implode(', ', $migratedVersions).')';
+            $where = ' WHERE version IN (' . implode(', ', $migratedVersions) . ')';
         }
 
         $sql = sprintf('SELECT version FROM %s%s ORDER BY version DESC',

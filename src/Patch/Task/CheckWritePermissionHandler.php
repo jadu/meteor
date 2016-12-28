@@ -26,7 +26,7 @@ class CheckWritePermissionHandler
      */
     public function handle(CheckWritePermission $task)
     {
-        if (!is_dir($task->targetDir) || !is_writeable($task->targetDir)) {
+        if (!is_dir($task->targetDir) || !is_writable($task->targetDir)) {
             $this->io->error(sprintf('Unable to write to "%s"', $task->targetDir));
 
             return false;
