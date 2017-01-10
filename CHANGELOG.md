@@ -2,7 +2,7 @@
 
 Dropped PHP 5.3 support. The minimum required PHP version is now 5.6.
 
-Updated Symfony components to 3.1.x.
+Updated Symfony components to 3.2.x.
 
 * Output which scripts are being executed ([#55](https://github.com/jadu/meteor/pull/55)).
 * Default to not ignoring unavailable migrations ([#54](https://github.com/jadu/meteor/pull/54)).
