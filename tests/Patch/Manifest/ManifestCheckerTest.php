@@ -20,9 +20,9 @@ class ManifestCheckerTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
-    public function testReturnsFalseIfManifestFileDoesNotExist()
+    public function testReturnsTrueIfManifestFileDoesNotExist()
     {
-        $this->assertFalse($this->manifestChecker->check(vfsStream::url('root')));
+        $this->assertTrue($this->manifestChecker->check(vfsStream::url('root')));
     }
 
     public function testReturnsFalseIfManifestFileCouldNotBeParsed()
