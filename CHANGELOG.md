@@ -1,3 +1,7 @@
+## v3.0.1
+
+* Allow the manifest file to be missing ([#68](https://github.com/jadu/meteor/pull/68)).
+
 ## v3.0.0
 
 Dropped PHP 5.3 support. The minimum required PHP version is now 5.6.
