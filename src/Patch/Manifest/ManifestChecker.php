@@ -29,7 +29,7 @@ class ManifestChecker
         $manifestFile = $workingDir . '/' . self::MANIFEST_FILENAME;
         if (!file_exists($manifestFile)) {
             // The manifest did not exist
-            return false;
+            return true;
         }
 
         $manifest = json_decode(file_get_contents($manifestFile), true);
