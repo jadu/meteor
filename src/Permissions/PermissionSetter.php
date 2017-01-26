@@ -79,24 +79,25 @@ class PermissionSetter
             return;
         }
 
-        $this->io->progressStart(count($permissions));
-
         foreach ($permissions as $permission) {
-            $this->io->debug(sprintf('%s <info>%s</>', $permission->getPattern(), $permission->getModeString()));
-
             $files = $this->resolvePattern($baseDir, $targetDir, $permission->getPattern());
-            foreach ($files as $file) {
-                try {
-                    $this->platform->setPermission($file, $permission);
-                } catch (Exception $exception) {
-                    $permissionErrors[] = sprintf('%s (%s)', $file, $permission->getModeString());
+            if (!empty($files)) {
+                $this->io->text(sprintf('%s <info>%s</>', $permission->getPattern(), $permission->getModeString()));
+                $this->io->progressStart(count($files));
+
+                foreach ($files as $file) {
+                    try {
+                        $this->platform->setPermission($file, $permission);
+                    } catch (Exception $exception) {
+                        $permissionErrors[] = sprintf('%s (%s)', $file, $permission->getModeString());
+                    }
+
+                    $this->io->progressAdvance();
                 }
+
+                $this->io->progressFinish();
             }
-
-            $this->io->progressAdvance();
         }
-
-        $this->io->progressFinish();
 
         if (!empty($permissionErrors)) {
             $this->io->warning('Unable to set permissions correctly for some files. They should be set manually or by running `meteor permissions:reset` with the correct permission.');
@@ -116,8 +117,9 @@ class PermissionSetter
     private function resolvePattern($baseDir, $targetDir, $pattern)
     {
         if (strpos($pattern, '*') === false) {
+            $basePath = $baseDir . '/' . $pattern;
             $targetPath = $targetDir . '/' . $pattern;
-            if (!file_exists($targetPath)) {
+            if (!file_exists($basePath) || !file_exists($targetPath)) {
                 // File does not exist
                 return [];
             }
