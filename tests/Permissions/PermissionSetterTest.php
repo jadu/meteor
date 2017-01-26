@@ -81,6 +81,35 @@ class PermissionSetterTest extends \PHPUnit_Framework_TestCase
         $this->permissionSetter->setPermissions(vfsStream::url('root/base'), vfsStream::url('root/target'));
     }
 
+    public function testSetPermissionsWhenPathDoesNotExistInBaseDir()
+    {
+        vfsStream::setup('root', null, array(
+            'base' => array(
+                'var' => array(),
+            ),
+            'target' => array(
+                'var' => array(
+                    'config' => array(
+                        'system.xml' => '',
+                    ),
+                ),
+            ),
+        ));
+
+        $permission = new Permission('var/config');
+
+        $this->permissionLoader->shouldReceive('load')
+            ->with(vfsStream::url('root/target'))
+            ->andReturn(array($permission))
+            ->once();
+
+        $this->platform->shouldReceive('setPermission')
+            ->with(vfsStream::url('root/target/var/config'), $permission)
+            ->never();
+
+        $this->permissionSetter->setPermissions(vfsStream::url('root/base'), vfsStream::url('root/target'));
+    }
+
     public function testSetPermissionsWithWildcardPattern()
     {
         vfsStream::setup('root', null, array(
@@ -116,6 +145,42 @@ class PermissionSetterTest extends \PHPUnit_Framework_TestCase
         $this->platform->shouldReceive('setPermission')
             ->with(vfsStream::url('root/target/var/config/constants.xml'), $permission)
             ->once();
+
+        $this->permissionSetter->setPermissions(vfsStream::url('root/base'), vfsStream::url('root/target'));
+    }
+
+    public function testSetPermissionsWithWildcardPatternWhenPathDoesNotExistInBaseDir()
+    {
+        vfsStream::setup('root', null, array(
+            'base' => array(
+                'var' => array(
+                    'config' => array(),
+                ),
+            ),
+            'target' => array(
+                'var' => array(
+                    'config' => array(
+                        'system.xml' => '',
+                        'constants.xml' => '',
+                    ),
+                ),
+            ),
+        ));
+
+        $permission = new Permission('var/config/*.xml');
+
+        $this->permissionLoader->shouldReceive('load')
+            ->with(vfsStream::url('root/target'))
+            ->andReturn(array($permission))
+            ->once();
+
+        $this->platform->shouldReceive('setPermission')
+            ->with(vfsStream::url('root/target/var/config/system.xml'), $permission)
+            ->never();
+
+        $this->platform->shouldReceive('setPermission')
+            ->with(vfsStream::url('root/target/var/config/constants.xml'), $permission)
+            ->never();
 
         $this->permissionSetter->setPermissions(vfsStream::url('root/base'), vfsStream::url('root/target'));
     }
