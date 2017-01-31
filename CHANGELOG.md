@@ -1,3 +1,11 @@
+## v3.0.3
+
+* Fix issue with autoload paths not being found when creating a package ([#71](https://github.com/jadu/meteor/pull/71)).
+
+## v3.0.2
+
+* Fixes issue with permissions being set on non-package paths ([#69](https://github.com/jadu/meteor/pull/69)).
+
 ## v3.0.1
 
 * Allow the manifest file to be missing ([#68](https://github.com/jadu/meteor/pull/68)).
