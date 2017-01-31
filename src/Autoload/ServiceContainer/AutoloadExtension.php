@@ -64,11 +64,16 @@ class AutoloadExtension extends ExtensionBase implements ExtensionInterface
     public function load(ContainerBuilder $container, array $config)
     {
         $workingDir = $container->getParameter(Application::PARAMETER_WORKING_DIR);
+        // Adjust path to vendor if within a package
+        if (is_dir($workingDir . '/' . PackageConstants::PATCH_DIR)) {
+            $workingDir .= '/' . PackageConstants::PATCH_DIR;
+        }
+
         $classLoader = $container->get(self::SERVICE_CLASS_LOADER);
 
         if (isset($config['composer'])) {
             foreach ($config['composer'] as $packageName) {
-                $packagePath = $workingDir . '/' . PackageConstants::PATCH_DIR . '/vendor/' . $packageName;
+                $packagePath = $workingDir . '/vendor/' . $packageName;
                 $composerJsonPath = $packagePath . '/composer.json';
                 if (!file_exists($composerJsonPath)) {
                     throw new RuntimeException(sprintf('Unable to find "%s" to fetch autoload paths', $composerJsonPath));
