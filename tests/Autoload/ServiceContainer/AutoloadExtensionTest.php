@@ -117,6 +117,42 @@ JSON;
         $this->assertArraySubset([vfsStream::url('root/to_patch/vendor/test/test/file.php')], $classMap);
     }
 
+    public function testAddsComposerPackagesFromRootVendor()
+    {
+        $composerJson = <<<'JSON'
+{
+    "name": "test/test",
+    "autoload": {
+        "psr-0": {
+            "Test_": "src/"
+        }
+    }
+}
+JSON;
+
+        vfsStream::setup('root', null, [
+            'vendor' => [
+                'test' => [
+                    'test' => [
+                        'composer.json' => $composerJson,
+                    ],
+                ],
+            ],
+        ]);
+
+        $container = $this->loadContainer([
+            'autoload' => [
+                'composer' => ['test/test'],
+            ],
+        ], vfsStream::url('root'));
+
+        $prefixes = $container->get(AutoloadExtension::SERVICE_CLASS_LOADER)->getPrefixes();
+
+        $this->assertArraySubset([
+            'Test_' => [vfsStream::url('root/vendor/test/test/src/')],
+        ], $prefixes);
+    }
+
     /**
      * @expectedException \RuntimeException
      */
