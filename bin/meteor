@@ -4,6 +4,12 @@
 error_reporting(-1);
 ini_set('display_errors', true);
 
+// Check PHP version
+if (PHP_VERSION_ID <= 50600) {
+    print "Error: Meteor requires PHP >= 5.6.0.\n";
+    exit(1);
+}
+
 use Meteor\ApplicationFactory;
 
 define('METEOR_BIN_PATH', __FILE__);
