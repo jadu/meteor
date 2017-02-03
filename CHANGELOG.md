@@ -1,3 +1,8 @@
+## 3.1.0
+
+* Move migration step before set permissions step ([#75](https://github.com/jadu/meteor/pull/75)).
+* Display an error when using an unsupported PHP version ([#73](https://github.com/jadu/meteor/pull/73)).
+
 ## v3.0.3
 
 * Fix issue with autoload paths not being found when creating a package ([#71](https://github.com/jadu/meteor/pull/71)).
