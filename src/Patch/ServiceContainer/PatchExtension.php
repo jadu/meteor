@@ -51,6 +51,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     const SERVICE_TASK_DISPLAY_VERSION_INFO_HANDLER = 'patch.task.display_version_info_handler';
     const SERVICE_TASK_MIGRATE_DOWN_HANDLER = 'patch.task.migrate_down_handler';
     const SERVICE_TASK_MIGRATE_UP_HANDLER = 'patch.task.migrate_up_handler';
+    const SERVICE_TASK_SET_PERMISSIONS_HANDLER = 'patch.task.set_permissions_handler';
     const SERVICE_TASK_UPDATE_MIGRATION_VERSION_FILES_HANDLER = 'patch.task.update_database_migration_version_files_handler';
     const SERVICE_VERSION_COMPARER = 'patch.version.comparer';
     const TAG_TASK_HANDLER = 'patch.task_handler';
@@ -122,6 +123,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
         $this->loadDisplayVersionInfoTaskHandler($container);
         $this->loadMigrateDownTaskHandler($container);
         $this->loadMigrateUpTaskHandler($container);
+        $this->loadSetPermissionsHandler($container);
         $this->loadUpdateMigrationVersionFilesTaskHandler($container);
         $this->loadTaskBus($container);
         $this->loadApplyCommand($container);
@@ -326,6 +328,22 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
         ]);
 
         $container->setDefinition(self::SERVICE_TASK_MIGRATE_UP_HANDLER, $definition);
+    }
+
+    /**
+     * @param ContailerBuilder $container
+     */
+    private function loadSetPermissionsHandler(ContainerBuilder $container)
+    {
+        $definition = new Definition('Meteor\Patch\Task\SetPermissionsHandler', [
+            new Reference(IOExtension::SERVICE_IO),
+            new Reference(PermissionsExtension::SERVICE_PERMISSION_SETTER),
+        ]);
+        $definition->addTag(self::TAG_TASK_HANDLER, [
+            'task' => 'Meteor\Patch\Task\SetPermissions',
+        ]);
+
+        $container->setDefinition(self::SERVICE_TASK_SET_PERMISSIONS_HANDLER, $definition);
     }
 
     /**

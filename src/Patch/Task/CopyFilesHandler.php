@@ -46,6 +46,5 @@ class CopyFilesHandler
         $newFiles = $this->filesystem->findNewFiles($task->sourceDir, $task->targetDir);
         $this->filesystem->copyDirectory($task->sourceDir, $task->targetDir);
         $this->permissionSetter->setDefaultPermissions($newFiles, $task->targetDir);
-        $this->permissionSetter->setPermissions($task->sourceDir, $task->targetDir);
     }
 }

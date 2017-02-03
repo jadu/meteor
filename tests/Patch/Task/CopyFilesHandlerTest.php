@@ -22,7 +22,6 @@ class CopyFilesHandlerTest extends \PHPUnit_Framework_TestCase
         ]);
         $this->permissionSetter = Mockery::mock('Meteor\Permissions\PermissionSetter', [
             'setDefaultPermissions' => null,
-            'setPermissions' => null,
         ]);
         $this->handler = new CopyFilesHandler($this->io, $this->filesystem, $this->permissionSetter);
     }
@@ -49,11 +48,6 @@ class CopyFilesHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->permissionSetter->shouldReceive('setDefaultPermissions')
             ->with($newFiles, 'target')
-            ->ordered()
-            ->once();
-
-        $this->permissionSetter->shouldReceive('setPermissions')
-            ->with('source', 'target')
             ->ordered()
             ->once();
 

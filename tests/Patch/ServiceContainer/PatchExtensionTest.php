@@ -35,6 +35,7 @@ class PatchExtensionTest extends ExtensionTestCase
             PatchExtension::SERVICE_TASK_DISPLAY_VERSION_INFO_HANDLER,
             PatchExtension::SERVICE_TASK_MIGRATE_DOWN_HANDLER,
             PatchExtension::SERVICE_TASK_MIGRATE_UP_HANDLER,
+            PatchExtension::SERVICE_TASK_SET_PERMISSIONS_HANDLER,
             PatchExtension::SERVICE_TASK_UPDATE_MIGRATION_VERSION_FILES_HANDLER,
             PatchExtension::SERVICE_VERSION_COMPARER,
         ];
