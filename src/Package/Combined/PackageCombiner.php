@@ -76,7 +76,7 @@ class PackageCombiner
         if ($this->hasCombinedPackage($packageConfig['name'], $config)) {
             $this->io->note(sprintf('The %s package has already been combined', $packageConfig['name']));
 
-            return;
+            return [];
         }
 
         $this->io->text(sprintf('Found package: <info>%s</>', $packageConfig['name']));

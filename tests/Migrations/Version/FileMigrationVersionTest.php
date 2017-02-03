@@ -22,7 +22,7 @@ class FileMigrationVersionTest extends \PHPUnit_Framework_TestCase
             'getOutputWriter' => Mockery::mock('Doctrine\DBAL\Migrations\OutputWriter'),
         ]);
         $this->versionStorage = Mockery::mock('Meteor\Migrations\Version\FileMigrationVersionStorage');
-        $this->version = new FileMigrationVersion($this->configuration, '12345', 'stdClass', null, $this->versionStorage);
+        $this->version = new FileMigrationVersion($this->configuration, '12345', 'stdClass', $this->versionStorage);
     }
 
     public function testMarkMigrated()
