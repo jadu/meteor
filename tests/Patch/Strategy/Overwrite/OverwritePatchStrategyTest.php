@@ -71,6 +71,10 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('install', $tasks[10]->installDir);
         $this->assertFalse($tasks[10]->ignoreUnavailableMigrations);
         $this->assertSame(MigrationsConstants::TYPE_FILE, $tasks[10]->type);
+
+        $this->assertInstanceOf('Meteor\Patch\Task\SetPermissions', $tasks[11]);
+        $this->assertSame('patch/to_patch', $tasks[11]->sourceDir);
+        $this->assertSame('install', $tasks[11]->targetDir);
     }
 
     public function testApplyCanSkipVersionCheck()
@@ -92,6 +96,7 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Meteor\Patch\Task\CopyFiles', $tasks[6]);
         $this->assertInstanceOf('Meteor\Patch\Task\MigrateUp', $tasks[7]);
         $this->assertInstanceOf('Meteor\Patch\Task\MigrateUp', $tasks[8]);
+        $this->assertInstanceOf('Meteor\Patch\Task\SetPermissions', $tasks[9]);
     }
 
     public function testApplyCanSkipFileMigrations()
@@ -114,6 +119,7 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Meteor\Patch\Task\UpdateMigrationVersionFiles', $tasks[7]);
         $this->assertInstanceOf('Meteor\Patch\Task\CopyFiles', $tasks[8]);
         $this->assertInstanceOf('Meteor\Patch\Task\MigrateUp', $tasks[9]);
+        $this->assertInstanceOf('Meteor\Patch\Task\SetPermissions', $tasks[10]);
     }
 
     public function testApplyCanSkipDbMigrations()
@@ -136,6 +142,7 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Meteor\Patch\Task\UpdateMigrationVersionFiles', $tasks[7]);
         $this->assertInstanceOf('Meteor\Patch\Task\CopyFiles', $tasks[8]);
         $this->assertInstanceOf('Meteor\Patch\Task\MigrateUp', $tasks[9]);
+        $this->assertInstanceOf('Meteor\Patch\Task\SetPermissions', $tasks[10]);
     }
 
     public function testApplyCanSkipDbAndFileMigrations()
@@ -156,6 +163,7 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Meteor\Patch\Task\BackupFiles', $tasks[5]);
         $this->assertInstanceOf('Meteor\Patch\Task\UpdateMigrationVersionFiles', $tasks[6]);
         $this->assertInstanceOf('Meteor\Patch\Task\CopyFiles', $tasks[7]);
+        $this->assertInstanceOf('Meteor\Patch\Task\SetPermissions', $tasks[8]);
     }
 
     public function testApplyCanSkipBackup()
@@ -177,6 +185,7 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Meteor\Patch\Task\CopyFiles', $tasks[6]);
         $this->assertInstanceOf('Meteor\Patch\Task\MigrateUp', $tasks[7]);
         $this->assertInstanceOf('Meteor\Patch\Task\MigrateUp', $tasks[8]);
+        $this->assertInstanceOf('Meteor\Patch\Task\SetPermissions', $tasks[9]);
     }
 
     public function testRollback()
@@ -221,8 +230,12 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($tasks[6]->ignoreUnavailableMigrations);
         $this->assertSame(MigrationsConstants::TYPE_FILE, $tasks[6]->type);
 
-        $this->assertInstanceOf('Meteor\Patch\Task\DeleteBackup', $tasks[7]);
-        $this->assertSame('backups/1', $tasks[7]->backupDir);
+        $this->assertInstanceOf('Meteor\Patch\Task\SetPermissions', $tasks[7]);
+        $this->assertSame('backups/1/to_patch', $tasks[7]->sourceDir);
+        $this->assertSame('install', $tasks[7]->targetDir);
+
+        $this->assertInstanceOf('Meteor\Patch\Task\DeleteBackup', $tasks[8]);
+        $this->assertSame('backups/1', $tasks[8]->backupDir);
     }
 
     public function testRollbackCanSkipDbMigrations()
@@ -240,7 +253,8 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Meteor\Patch\Task\CheckDatabaseConnection', $tasks[3]);
         $this->assertInstanceOf('Meteor\Patch\Task\CopyFiles', $tasks[4]);
         $this->assertInstanceOf('Meteor\Patch\Task\MigrateDown', $tasks[5]);
-        $this->assertInstanceOf('Meteor\Patch\Task\DeleteBackup', $tasks[6]);
+        $this->assertInstanceOf('Meteor\Patch\Task\SetPermissions', $tasks[6]);
+        $this->assertInstanceOf('Meteor\Patch\Task\DeleteBackup', $tasks[7]);
     }
 
     public function testRollbackCanSkipFileMigrations()
@@ -258,7 +272,8 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Meteor\Patch\Task\CheckDatabaseConnection', $tasks[3]);
         $this->assertInstanceOf('Meteor\Patch\Task\CopyFiles', $tasks[4]);
         $this->assertInstanceOf('Meteor\Patch\Task\MigrateDown', $tasks[5]);
-        $this->assertInstanceOf('Meteor\Patch\Task\DeleteBackup', $tasks[6]);
+        $this->assertInstanceOf('Meteor\Patch\Task\SetPermissions', $tasks[6]);
+        $this->assertInstanceOf('Meteor\Patch\Task\DeleteBackup', $tasks[7]);
     }
 
     public function testRollbackCanSkipDbAndFileMigrations()
@@ -274,7 +289,8 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Meteor\Patch\Task\DisplayVersionInfo', $tasks[1]);
         $this->assertInstanceOf('Meteor\Patch\Task\CheckVersion', $tasks[2]);
         $this->assertInstanceOf('Meteor\Patch\Task\CopyFiles', $tasks[3]);
-        $this->assertInstanceOf('Meteor\Patch\Task\DeleteBackup', $tasks[4]);
+        $this->assertInstanceOf('Meteor\Patch\Task\SetPermissions', $tasks[4]);
+        $this->assertInstanceOf('Meteor\Patch\Task\DeleteBackup', $tasks[5]);
     }
 
     public function testRollbackCanSkipVersionCheck()
@@ -292,7 +308,8 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Meteor\Patch\Task\CopyFiles', $tasks[3]);
         $this->assertInstanceOf('Meteor\Patch\Task\MigrateDown', $tasks[4]);
         $this->assertInstanceOf('Meteor\Patch\Task\MigrateDown', $tasks[5]);
-        $this->assertInstanceOf('Meteor\Patch\Task\DeleteBackup', $tasks[6]);
+        $this->assertInstanceOf('Meteor\Patch\Task\SetPermissions', $tasks[6]);
+        $this->assertInstanceOf('Meteor\Patch\Task\DeleteBackup', $tasks[7]);
     }
 
     public function testRollbackDeletesIntermediateBackups()
@@ -304,13 +321,13 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
             'ignore-unavailable-migrations' => false,
         ]);
 
-        $this->assertInstanceOf('Meteor\Patch\Task\DeleteBackup', $tasks[7]);
-        $this->assertSame('backups/1', $tasks[7]->backupDir);
-
         $this->assertInstanceOf('Meteor\Patch\Task\DeleteBackup', $tasks[8]);
-        $this->assertSame('backups/2', $tasks[8]->backupDir);
+        $this->assertSame('backups/1', $tasks[8]->backupDir);
 
         $this->assertInstanceOf('Meteor\Patch\Task\DeleteBackup', $tasks[9]);
-        $this->assertSame('backups/3', $tasks[9]->backupDir);
+        $this->assertSame('backups/2', $tasks[9]->backupDir);
+
+        $this->assertInstanceOf('Meteor\Patch\Task\DeleteBackup', $tasks[10]);
+        $this->assertSame('backups/3', $tasks[10]->backupDir);
     }
 }

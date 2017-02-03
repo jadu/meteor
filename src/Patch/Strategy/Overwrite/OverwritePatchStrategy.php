@@ -16,6 +16,7 @@ use Meteor\Patch\Task\DeleteBackup;
 use Meteor\Patch\Task\DisplayVersionInfo;
 use Meteor\Patch\Task\MigrateDown;
 use Meteor\Patch\Task\MigrateUp;
+use Meteor\Patch\Task\SetPermissions;
 use Meteor\Patch\Task\UpdateMigrationVersionFiles;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputOption;
@@ -60,6 +61,8 @@ class OverwritePatchStrategy implements PatchStrategyInterface
             $tasks[] = new MigrateUp($patchDir, $installDir, MigrationsConstants::TYPE_FILE, (bool) $options['ignore-unavailable-migrations']);
         }
 
+        $tasks[] = new SetPermissions($patchFilesDir, $installDir);
+
         return $tasks;
     }
 
@@ -101,6 +104,8 @@ class OverwritePatchStrategy implements PatchStrategyInterface
         if (!$options['skip-file-migrations']) {
             $tasks[] = new MigrateDown($backupDir, $patchDir, $installDir, MigrationsConstants::TYPE_FILE, (bool) $options['ignore-unavailable-migrations']);
         }
+
+        $tasks[] = new SetPermissions($backupFilesDir, $installDir);
 
         foreach ($intermediateBackupDirs as $intermediateBackupDir) {
             $tasks[] = new DeleteBackup($intermediateBackupDir);
