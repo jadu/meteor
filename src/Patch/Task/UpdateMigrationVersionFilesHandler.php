@@ -39,8 +39,6 @@ class UpdateMigrationVersionFilesHandler
     /**
      * @param UpdateMigrationVersionFiles $task
      * @param array $config
-     *
-     * @return bool
      */
     public function handle(UpdateMigrationVersionFiles $task, array $config)
     {

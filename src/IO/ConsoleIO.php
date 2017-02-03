@@ -48,7 +48,7 @@ class ConsoleIO implements IOInterface
     private $lineLength;
 
     /**
-     * @var ProgressBar
+     * @var ProgressBar|null
      */
     private $progressBar;
 
@@ -483,6 +483,7 @@ class ConsoleIO implements IOInterface
     private function createBlock($messages, $type = null, $style = null, $prefix = ' ', $padding = false, $escape = false)
     {
         $indentLength = 0;
+        $lineIndentation = '';
         $prefixLength = Helper::strlenWithoutDecoration($this->output->getFormatter(), $prefix);
         $lines = [];
 

@@ -77,6 +77,6 @@ class FileConfiguration extends AbstractConfiguration implements JaduPathAwareCo
      */
     protected function createMigration($version, $class)
     {
-        return new FileMigrationVersion($this, $version, $class, null, $this->versionStorage);
+        return new FileMigrationVersion($this, $version, $class, $this->versionStorage);
     }
 }
