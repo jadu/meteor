@@ -103,11 +103,11 @@ class PackageCreator
     {
         $this->io->title(sprintf('Creating package for <info>%s</>', $config['name']));
 
-        try {
-            // Initialise the filesystem
-            $this->filesystem->ensureDirectoryExists($outputDir);
-            $tempDir = $this->filesystem->createTempDirectory($outputDir);
+        // Initialise the filesystem
+        $this->filesystem->ensureDirectoryExists($outputDir);
+        $tempDir = $this->filesystem->createTempDirectory($outputDir);
 
+        try {
             $this->io->text('Copying files into the working directory:');
             $filesFilter = isset($config['package']['files']) ? $config['package']['files'] : null;
             $this->filesystem->copyDirectory($workingDir, $tempDir . '/' . PackageConstants::PATCH_DIR, $filesFilter);

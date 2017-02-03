@@ -93,6 +93,8 @@ EOT;
                 return 1;
             }
 
+            $result = null;
+
             foreach ($config as $packageName => $migrationConfig) {
                 $this->io->text(sprintf('Running <info>%s</> %s migrations', $packageName, $this->type));
 
