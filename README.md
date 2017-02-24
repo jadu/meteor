@@ -23,6 +23,10 @@ Once `box` has been installed run the following command:
 1. Update the Meteor version in the internal `meteor-ant` project ([see package.xml](https://gitlab.hq.jadu.net/engineering/meteor-ant/blob/master/package.xml#L4)).
 1. Create a new tag of `meteor-ant`, where the tag name matches the main Meteor version.
 
+## Documentation
+
+The documentation is hosted on GitHub Pages using Jekyll from the `master` branch in the `docs` directory.
+
 ## Design goals
 
 - Extensible
