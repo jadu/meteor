@@ -4,7 +4,7 @@ layout: docs
 toc: true
 ---
 
-## Meteor is locked
+### Meteor is locked
 
 ```
 Unable to create lock file. This may be due to failure during a previous attempt to apply this package.
@@ -18,7 +18,7 @@ php meteor.phar patch:clear-lock
 
 After the lock file is cleared you can try the patch again.
 
-## Package verification errors
+### Package verification errors
 
 ```
 The patch cannot be applied as the package could not be verified against the manifest.
@@ -28,7 +28,7 @@ This error means that some of the files from the package were not extracted corr
 
 On some Windows environments if the package is being extracted at a path that is too long (i.e. lots of nested directories with long names) then the ZIP may fail to be extracted. In this case try extracting the package in a higher level or shorter named directory.
 
-## Previously executed migrations that are not registered migrations
+### Previously executed migrations that are not registered migrations
 
 ```
 Running database migrations
