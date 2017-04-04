@@ -36,7 +36,7 @@ if ((!$loader = includeIfExists(__DIR__.'/../vendor/autoload.php')) &&
     exit(1);
 }
 
-AnnotationRegistry::registerLoader([$loader, 'loadClass']);
+//AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 
 // Set the default timezone
 if (ini_get('date.timezone') === '') {
