@@ -11,6 +11,10 @@ if (PHP_VERSION_ID <= 50600) {
 }
 
 use Meteor\ApplicationFactory;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\DBAL\Types\Type;
+
+Type::addType('unicodetext', 'Jadu\DoctrineTypes\UnicodeTextType');
 
 define('METEOR_BIN_PATH', __FILE__);
 
@@ -31,6 +35,8 @@ if ((!$loader = includeIfExists(__DIR__.'/../vendor/autoload.php')) &&
 
     exit(1);
 }
+
+AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 
 // Set the default timezone
 if (ini_get('date.timezone') === '') {
