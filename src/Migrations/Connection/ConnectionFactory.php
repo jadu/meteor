@@ -5,6 +5,7 @@ namespace Meteor\Migrations\Connection;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\PDOMySql\Driver;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Types\Type;
 use Meteor\Migrations\Connection\Configuration\Loader\ConfigurationLoaderInterface;
 use Meteor\Migrations\Connection\Platform\SQLServer2008Platform;
 
@@ -44,6 +45,7 @@ class ConnectionFactory
      */
     public function createConnection(array $configuration)
     {
+        Type::addType('unicodetext', 'Jadu\DoctrineTypes\UnicodeTextType');
         return DriverManager::getConnection($configuration);
     }
 
