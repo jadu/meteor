@@ -3,7 +3,6 @@
 namespace Meteor\Migrations;
 
 use Meteor\IO\NullIO;
-use Meteor\Migrations\Configuration\ConfigurationFactory;
 use Mockery;
 
 class MigratorTest extends \PHPUnit_Framework_TestCase

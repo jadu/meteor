@@ -46,6 +46,7 @@ class ConnectionFactory
     public function createConnection(array $configuration)
     {
         Type::addType('unicodetext', 'Jadu\DoctrineTypes\UnicodeTextType');
+
         return DriverManager::getConnection($configuration);
     }
 

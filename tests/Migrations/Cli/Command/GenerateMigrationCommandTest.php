@@ -4,7 +4,6 @@ namespace Meteor\Migrations\Cli\Command;
 
 use Meteor\Cli\Command\CommandTestCase;
 use Meteor\IO\NullIO;
-use Meteor\Migrations\Generator\MigrationGenerator;
 use Meteor\Migrations\MigrationsConstants;
 use Mockery;
 

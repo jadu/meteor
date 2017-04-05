@@ -2,7 +2,6 @@
 
 namespace Meteor\Filesystem;
 
-use Meteor\Filesystem\Finder\FinderFactory;
 use Meteor\IO\NullIO;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
