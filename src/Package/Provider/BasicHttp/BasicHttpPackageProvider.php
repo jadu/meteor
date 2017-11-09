@@ -1,13 +1,13 @@
 <?php
 
-namespace Meteor\Package\Provider\JaduGiedi;
+namespace Meteor\Package\Provider\BasicHttp;
 
 use GuzzleHttp\Client;
 use Meteor\IO\IOInterface;
 use Meteor\Package\Provider\Exception\PackageNotFoundException;
 use Meteor\Package\Provider\PackageProviderInterface;
 
-class JaduGiediPackageProvider implements PackageProviderInterface
+class BasicHttpPackageProvider implements PackageProviderInterface
 {
 
     /**
@@ -57,7 +57,7 @@ class JaduGiediPackageProvider implements PackageProviderInterface
         $packageURL = $baseUrl . $file;
         try {
             $response = $this->httpClient->request('GET', $packageURL, ['sink' => $tempDir . '/' . $file]);
-            if ($response->getStatusCode() === 200 && $response->getStatusCode() == 200 && file_exists($tempDir . '/' . $file)) {
+            if ($response->getStatusCode() == 200 && file_exists($tempDir . '/' . $file)) {
                 return $tempDir . '/' . $file;
             }
         } catch (\Exception $e) {

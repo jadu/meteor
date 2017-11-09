@@ -1,6 +1,6 @@
 <?php
 
-namespace Meteor\Package\Provider\JaduGiedi\ServiceContainer;
+namespace Meteor\Package\Provider\BasicHttp\ServiceContainer;
 
 use GuzzleHttp\Client;
 use Meteor\IO\ServiceContainer\IOExtension;
@@ -13,10 +13,10 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
-class JaduGiediPackageProviderExtension extends ExtensionBase implements ExtensionInterface
+class BasicHttpPackageProviderExtension extends ExtensionBase implements ExtensionInterface
 {
-    const PROVIDER_NAME = 'giedi';
-    const PARAMETER_BASE_URLS = 'giedi_package_provider.base_urls';
+    const PROVIDER_NAME = 'http';
+    const PARAMETER_BASE_URLS = 'http_package_provider.base_urls';
 
     /**
      * Returns the extension config key.
@@ -25,7 +25,7 @@ class JaduGiediPackageProviderExtension extends ExtensionBase implements Extensi
      */
     public function getConfigKey()
     {
-        return 'giedi_package_provider';
+        return 'http_package_provider';
     }
 
     /**
@@ -40,19 +40,6 @@ class JaduGiediPackageProviderExtension extends ExtensionBase implements Extensi
      */
     public function configure(ArrayNodeDefinition $builder)
     {
-        $builder
-            ->addDefaultsIfNotSet()
-            ->children()
-                ->arrayNode('base_urls')
-                    ->normalizeKeys(false)
-                    ->defaultValue([
-                        'jadu/cms' => 'http://giedi.hq.jadu.net/packages/cms/',
-                        'jadu/xfp' => 'http://giedi.hq.jadu.net/packages/xfp/',
-                    ])
-                    ->prototype('scalar')->end()
-                ->end()
-            ->end()
-        ->end();
     }
 
     /**
@@ -75,10 +62,10 @@ class JaduGiediPackageProviderExtension extends ExtensionBase implements Extensi
     {
         $container->setParameter(self::PARAMETER_BASE_URLS, $config['base_urls']);
 
-        $definition = new Definition('Meteor\Package\Provider\JaduGiedi\JaduGiediPackageProvider', [
+        $definition = new Definition('Meteor\Package\Provider\BasicHttp\BasicHttpPackageProvider', [
             new Reference(IOExtension::SERVICE_IO),
             '%' . self::PARAMETER_BASE_URLS . '%',
-            new Client(['verify' => false,'allow_redirects' => false])
+            new Client(['verify' => false])
         ]);
         $container->setDefinition(PackageExtension::SERVICE_PROVIDER_PREFIX . '.' . self::PROVIDER_NAME, $definition);
     }
