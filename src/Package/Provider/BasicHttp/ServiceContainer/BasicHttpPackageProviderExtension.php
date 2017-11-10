@@ -37,9 +37,26 @@ class BasicHttpPackageProviderExtension extends ExtensionBase implements Extensi
 
     /**
      * {@inheritdoc}
+     *
+     * "http_package_provider": {
+     *      "base_urls": {
+     *           "jadu/cms": "http://provider.domain.com/packages/cms/".
+     *           "jadu/xfp": "http://provider.domain.com/packages/xfp/".
+     *      }
+     * }
      */
     public function configure(ArrayNodeDefinition $builder)
     {
+        $builder
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->arrayNode('base_urls')
+                    ->normalizeKeys(false)
+                    ->defaultValue([])
+                    ->prototype('scalar')->end()
+                    ->end()
+                ->end()
+            ->end();
     }
 
     /**

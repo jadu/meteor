@@ -26,7 +26,7 @@ class BasicHttpPackageProvider implements PackageProviderInterface
     private $httpClient;
 
     /**
-     * JaduGiediPackageProvider constructor.
+     * BasicHttpPackageProvider constructor.
      *
      * @param IOInterface $io
      * @param array $packageBaseUrls
@@ -49,7 +49,7 @@ class BasicHttpPackageProvider implements PackageProviderInterface
     public function download($packageName, $version, $tempDir)
     {
         if (!isset($this->packageBaseUrls[$packageName])) {
-            throw new PackageNotFoundException(sprintf('The Giedi base url for the "%s" package has not been configured. %s are the packages that are registered.', $packageName, implode(', ', array_keys($this->packageBaseUrls))));
+            throw new PackageNotFoundException(sprintf('The HTTP base url for the "%s" package has not been configured.', $packageName));
         }
         $file = $version . '.zip';
         $baseUrl = $this->packageBaseUrls[$packageName];
@@ -62,7 +62,7 @@ class BasicHttpPackageProvider implements PackageProviderInterface
             }
         } catch (\Exception $e) {
         }
-        throw new PackageNotFoundException(sprintf('Unable to download "%s" package form giedi.', $packageName));
+        throw new PackageNotFoundException(sprintf('Unable to download "%s" package form the package provider.', $packageName));
 
     }
 }
