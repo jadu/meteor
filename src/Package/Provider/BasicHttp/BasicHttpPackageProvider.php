@@ -2,6 +2,7 @@
 
 namespace Meteor\Package\Provider\BasicHttp;
 
+use Exception;
 use GuzzleHttp\Client;
 use Meteor\IO\IOInterface;
 use Meteor\Package\Provider\Exception\PackageNotFoundException;
@@ -9,7 +10,6 @@ use Meteor\Package\Provider\PackageProviderInterface;
 
 class BasicHttpPackageProvider implements PackageProviderInterface
 {
-
     /**
      * @var IOInterface
      */
@@ -54,13 +54,13 @@ class BasicHttpPackageProvider implements PackageProviderInterface
         $file = $version . '.zip';
         $baseUrl = $this->packageBaseUrls[$packageName];
 
-        $packageURL = $baseUrl . $file;
+        $packageUrl = $baseUrl . $file;
         try {
-            $response = $this->httpClient->request('GET', $packageURL, ['sink' => $tempDir . '/' . $file]);
+            $response = $this->httpClient->request('GET', $packageUrl, ['sink' => $tempDir . '/' . $file]);
             if ($response->getStatusCode() == 200 && file_exists($tempDir . '/' . $file)) {
                 return $tempDir . '/' . $file;
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
         throw new PackageNotFoundException(sprintf('Unable to download "%s" package form the package provider.', $packageName));
 
