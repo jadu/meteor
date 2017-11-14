@@ -18,8 +18,8 @@
         "composer/semver": "^1.4"
     },
     "require-dev": {
-        "phpunit/phpunit": "*",
-        "mockery/mockery": "*",
+        "phpunit/phpunit": "~5.7.23",
+        "mockery/mockery": "~0.9",
         "mikey179/vfsStream": "*"
     },
     "autoload": {
