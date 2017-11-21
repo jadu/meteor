@@ -3,7 +3,6 @@
 namespace Meteor\Patch\Task;
 
 use Meteor\IO\NullIO;
-use Meteor\Migrations\Configuration\ConfigurationFactory;
 use Meteor\Migrations\MigrationsConstants;
 use Meteor\Migrations\Version\VersionFileManager;
 use Mockery;

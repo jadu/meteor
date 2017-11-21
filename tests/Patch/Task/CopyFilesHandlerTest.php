@@ -3,7 +3,6 @@
 namespace Meteor\Patch\Task;
 
 use Meteor\IO\NullIO;
-use Meteor\Permissions\PermissionSetter;
 use Mockery;
 
 class CopyFilesHandlerTest extends \PHPUnit_Framework_TestCase

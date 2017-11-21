@@ -2,7 +2,6 @@
 
 namespace Meteor\Package\Combined;
 
-use Meteor\Filesystem\Filesystem;
 use Meteor\IO\NullIO;
 use Mockery;
 

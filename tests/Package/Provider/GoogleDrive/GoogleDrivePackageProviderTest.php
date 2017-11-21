@@ -3,7 +3,6 @@
 namespace Meteor\Package\Provider\GoogleDrive;
 
 use Meteor\IO\NullIO;
-use Meteor\Process\ProcessRunner;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
 

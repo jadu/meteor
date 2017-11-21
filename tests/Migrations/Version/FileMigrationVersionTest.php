@@ -2,8 +2,6 @@
 
 namespace Meteor\Migrations\Version;
 
-use Doctrine\DBAL\Migrations\Configuration\Configuration;
-use Doctrine\DBAL\Migrations\Version;
 use Mockery;
 
 class FileMigrationVersionTest extends \PHPUnit_Framework_TestCase

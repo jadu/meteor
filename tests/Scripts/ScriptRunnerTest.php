@@ -3,7 +3,6 @@
 namespace Meteor\Scripts;
 
 use Meteor\IO\NullIO;
-use Meteor\Process\ProcessRunner;
 use Mockery;
 
 class ScriptRunnerTest extends \PHPUnit_Framework_TestCase

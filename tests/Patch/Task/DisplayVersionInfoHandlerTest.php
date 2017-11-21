@@ -2,7 +2,6 @@
 
 namespace Meteor\Patch\Task;
 
-use Meteor\Patch\Version\VersionComparer;
 use Meteor\Patch\Version\VersionDiff;
 use Mockery;
 

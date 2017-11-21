@@ -3,7 +3,6 @@
 namespace Meteor\Patch\Task;
 
 use Meteor\IO\NullIO;
-use Meteor\Patch\Version\VersionComparer;
 use Meteor\Patch\Version\VersionDiff;
 use Mockery;
 

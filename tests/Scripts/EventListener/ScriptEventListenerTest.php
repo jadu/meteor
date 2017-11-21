@@ -2,7 +2,6 @@
 
 namespace Meteor\Scripts\EventListener;
 
-use Meteor\Scripts\ScriptRunner;
 use Mockery;
 use Symfony\Component\EventDispatcher\Event;
 
