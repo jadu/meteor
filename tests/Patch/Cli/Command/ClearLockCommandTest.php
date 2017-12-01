@@ -4,7 +4,6 @@ namespace Meteor\Patch\Cli\Command;
 
 use Meteor\Cli\Command\CommandTestCase;
 use Meteor\IO\NullIO;
-use Meteor\Patch\Lock\Locker;
 use Mockery;
 
 class ClearLockCommandTest extends CommandTestCase

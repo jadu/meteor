@@ -2,8 +2,6 @@
 
 namespace Meteor\Package\Combined;
 
-use Meteor\Configuration\ConfigurationLoader;
-use Meteor\Filesystem\Filesystem;
 use Meteor\IO\NullIO;
 use Mockery;
 use org\bovigo\vfs\vfsStream;

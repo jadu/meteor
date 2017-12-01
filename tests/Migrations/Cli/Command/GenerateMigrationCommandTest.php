@@ -4,7 +4,6 @@ namespace Meteor\Migrations\Cli\Command;
 
 use Meteor\Cli\Command\CommandTestCase;
 use Meteor\IO\NullIO;
-use Meteor\Migrations\Generator\MigrationGenerator;
 use Meteor\Migrations\MigrationsConstants;
 use Mockery;
 
@@ -40,6 +39,6 @@ class GenerateMigrationCommandTest extends CommandTestCase
             '--working-dir' => $workingDir,
         ]);
 
-        $this->assertRegExp('/upgrades\/Version\d{14}\.php/', $this->tester->getDisplay());
+        $this->assertRegExp('/Version\d{14}\.php/', $this->tester->getDisplay());
     }
 }
