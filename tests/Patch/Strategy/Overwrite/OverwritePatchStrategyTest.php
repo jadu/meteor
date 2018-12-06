@@ -23,7 +23,6 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
             'skip-version-check' => false,
             'ignore-unavailable-migrations' => false,
         ]);
-
         $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
         $this->assertSame('install', $tasks[0]->targetDir);
 
@@ -99,6 +98,28 @@ class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Meteor\Patch\Task\SetPermissions', $tasks[9]);
     }
 
+    public function testApplyCanLimitBackups()
+    {
+        $tasks = $this->strategy->apply('patch', 'install', [
+            'limit-backups' => 5,
+            'skip-backup' => false,
+            'skip-db-migrations' => false,
+            'skip-file-migrations' => false,
+            'skip-version-check' => true,
+            'ignore-unavailable-migrations' => false,
+        ]);
+        $this->assertInstanceOf('Meteor\Patch\Task\CheckWritePermission', $tasks[0]);
+        $this->assertInstanceOf('Meteor\Patch\Task\DisplayVersionInfo', $tasks[1]);
+        $this->assertInstanceOf('Meteor\Patch\Task\CheckDatabaseConnection', $tasks[2]);
+        $this->assertInstanceOf('Meteor\Patch\Task\LimitBackups', $tasks[3]);
+        $this->assertInstanceOf('Meteor\Patch\Task\CheckDiskSpace', $tasks[4]);
+        $this->assertInstanceOf('Meteor\Patch\Task\BackupFiles', $tasks[5]);
+        $this->assertInstanceOf('Meteor\Patch\Task\UpdateMigrationVersionFiles', $tasks[6]);
+        $this->assertInstanceOf('Meteor\Patch\Task\CopyFiles', $tasks[7]);
+        $this->assertInstanceOf('Meteor\Patch\Task\MigrateUp', $tasks[8]);
+        $this->assertInstanceOf('Meteor\Patch\Task\MigrateUp', $tasks[9]);
+        $this->assertInstanceOf('Meteor\Patch\Task\SetPermissions', $tasks[10]);
+    }
     public function testApplyCanSkipFileMigrations()
     {
         $tasks = $this->strategy->apply('patch', 'install', [
