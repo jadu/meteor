@@ -29,8 +29,8 @@ class ScriptRunner
 
     /**
      * @param ProcessRunner $processRunner
-     * @param IOInterface $io
-     * @param array $scripts
+     * @param IOInterface   $io
+     * @param array         $scripts
      */
     public function __construct(ProcessRunner $processRunner, IOInterface $io, array $scripts)
     {
@@ -84,14 +84,13 @@ class ScriptRunner
             if (strpos($script, '@') === 0) {
                 // NB: Infinite recursion detection happens when processing the config
                 $script = substr($script, 1);
-
-                return $this->runScripts($script, $scripts);
+                $this->runScripts($script, $scripts);
+            } else {
+                $this->io->text(sprintf('$ "%s" in "%s"', $script, $this->getWorkingDir()));
+                $this->processRunner->run($script, $this->getWorkingDir());
             }
-
-            $this->io->text(sprintf('$ "%s" in "%s"', $script, $this->getWorkingDir()));
-            $this->processRunner->run($script, $this->getWorkingDir());
         }
-
         $this->io->newLine();
     }
 }
+
