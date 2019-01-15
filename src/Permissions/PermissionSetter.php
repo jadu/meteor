@@ -25,14 +25,19 @@ class PermissionSetter
     private $io;
 
     /**
+     * @var array
+     */
+    private $postApplyPermissions = [
+        'var/cache/*' => 'rwxR'
+    ];
+
+    /**
      * @param PlatformInterface $platform
-     * @param PermissionLoader $permissionLoader
-     * @param IOInterface $io
+     * @param PermissionLoader  $permissionLoader
+     * @param IOInterface       $io
      */
     public function __construct(
-        PlatformInterface $platform,
-        PermissionLoader $permissionLoader,
-        IOInterface $io
+        PlatformInterface $platform, PermissionLoader $permissionLoader, IOInterface $io
     ) {
         $this->platform = $platform;
         $this->permissionLoader = $permissionLoader;
@@ -40,7 +45,7 @@ class PermissionSetter
     }
 
     /**
-     * @param array $files
+     * @param array  $files
      * @param string $targetDir
      */
     public function setDefaultPermissions(array $files, $targetDir)
@@ -81,6 +86,44 @@ class PermissionSetter
 
         foreach ($permissions as $permission) {
             $files = $this->resolvePattern($baseDir, $targetDir, $permission->getPattern());
+
+            if (!empty($files)) {
+                $this->io->text(sprintf('%s <info>%s</>', $permission->getPattern(), $permission->getModeString()));
+                $this->io->progressStart(count($files));
+
+                foreach ($files as $file) {
+                    try {
+                        $this->platform->setPermission($file, $permission);
+                    } catch (Exception $exception) {
+                        $permissionErrors[] = sprintf('%s (%s)', $file, $permission->getModeString());
+                    }
+
+                    $this->io->progressAdvance();
+                }
+
+                $this->io->progressFinish();
+            }
+        }
+
+        if (!empty($permissionErrors)) {
+            $this->io->warning('Unable to set permissions correctly for some files. They should be set manually or by running `meteor permissions:reset` with the correct permission.');
+            $this->io->listing($permissionErrors);
+        }
+
+        $this->io->newLine();
+    }
+
+
+    /**
+     * @param string $targetDir
+     */
+    public function setPostApplyPermissions($targetDir)
+    {
+        $permissions = $this->permissionLoader->loadFromArray($this->postApplyPermissions);
+        $this->io->text(sprintf('Setting post apply file permissions in <info>%s</>', $targetDir));
+
+        foreach ($permissions as $permission) {
+            $files = $this->resolvePattern($targetDir, $targetDir, $permission->getPattern());
             if (!empty($files)) {
                 $this->io->text(sprintf('%s <info>%s</>', $permission->getPattern(), $permission->getModeString()));
                 $this->io->progressStart(count($files));
@@ -119,6 +162,7 @@ class PermissionSetter
         if (strpos($pattern, '*') === false) {
             $basePath = $baseDir . '/' . $pattern;
             $targetPath = $targetDir . '/' . $pattern;
+
             if (!file_exists($basePath) || !file_exists($targetPath)) {
                 // File does not exist
                 return [];
@@ -156,5 +200,10 @@ class PermissionSetter
         }
 
         return $paths;
+    }
+
+    public function getPostApplyPermissions()
+    {
+        return $this->postApplyPermissions;
     }
 }

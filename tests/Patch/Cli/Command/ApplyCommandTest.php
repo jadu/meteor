@@ -7,11 +7,14 @@ use Meteor\Cli\Command\CommandTestCase;
 use Meteor\IO\NullIO;
 use Meteor\Patch\Event\PatchEvents;
 use Meteor\Patch\Manifest\ManifestChecker;
+use Meteor\Permissions\PermissionSetter;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
 
 class ApplyCommandTest extends CommandTestCase
 {
+
+
     private $taskBus;
     private $strategy;
     private $platform;
@@ -20,6 +23,7 @@ class ApplyCommandTest extends CommandTestCase
     private $eventDispatcher;
     private $scriptRunner;
     private $logger;
+    protected $permissionSetter;
 
     public function createCommand()
     {
@@ -43,6 +47,7 @@ class ApplyCommandTest extends CommandTestCase
             'setWorkingDir' => null,
         ]);
         $this->logger = Mockery::mock('Meteor\Logger\LoggerInterface');
+        $this->permissionSetter = Mockery::mock(PermissionSetter::class,['setPostApplyPermissions' => null]);
 
         $this->strategy->shouldReceive('configureApplyCommand')
             ->once();
@@ -58,7 +63,8 @@ class ApplyCommandTest extends CommandTestCase
             $this->manifestChecker,
             $this->eventDispatcher,
             $this->scriptRunner,
-            $this->logger
+            $this->logger,
+            $this->permissionSetter
         );
     }
 
@@ -83,6 +89,10 @@ class ApplyCommandTest extends CommandTestCase
 
         $this->manifestChecker->shouldReceive('check')
             ->with($workingDir)
+            ->once();
+
+        $this->permissionSetter->shouldReceive('setPostApplyPermissions')
+            ->with($installDir)
             ->once();
 
         $this->locker->shouldReceive('lock')
@@ -167,6 +177,10 @@ class ApplyCommandTest extends CommandTestCase
         $this->taskBus->shouldReceive('run')
             ->with($tasks[0], $config)
             ->andReturn(true)
+            ->once();
+
+        $this->permissionSetter->shouldReceive('setPostApplyPermissions')
+            ->with($installDir)
             ->once();
 
         $this->locker->shouldReceive('unlock')
@@ -553,4 +567,51 @@ class ApplyCommandTest extends CommandTestCase
             '--log-dir' => '/testlog'
         ]);
     }
+
+
+    public function testDoesNotSetPostApplyPermissionIfSkipVerifyOptionSpecified()
+    {
+        $workingDir = vfsStream::url('root/patch');
+        $installDir = vfsStream::url('root/install');
+
+        $config = ['name' => 'test'];
+        $this->command->setConfiguration($config);
+
+        $this->logger->shouldReceive('enable')
+            ->once();
+
+        $this->manifestChecker->shouldReceive('check')
+            ->with($workingDir)
+            ->once();
+
+        $this->permissionSetter->shouldReceive('setPostApplyPermissions')
+            ->with($installDir)
+            ->never();
+
+        $this->locker->shouldReceive('lock')
+            ->with($installDir)
+            ->once();
+
+        $tasks = [new \stdClass()];
+        $this->strategy->shouldReceive('apply')
+            ->with($workingDir, $installDir, Mockery::any())
+            ->andReturn($tasks)
+            ->once();
+
+        $this->taskBus->shouldReceive('run')
+            ->with($tasks[0], $config)
+            ->andReturn(true)
+            ->once();
+
+        $this->locker->shouldReceive('unlock')
+            ->with($installDir)
+            ->once();
+
+        $this->tester->execute([
+            '--working-dir' => $workingDir,
+            '--install-dir' => $installDir,
+            '--skip-post-apply-permissions' => null,
+        ]);
+    }
+
 }
