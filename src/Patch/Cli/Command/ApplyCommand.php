@@ -80,10 +80,11 @@ class ApplyCommand extends AbstractPatchCommand
      * @param EventDispatcherInterface $eventDispatcher
      * @param ScriptRunner             $scriptRunner
      * @param LoggerInterface          $logger
+     * @param PermissionSetter         $permissionSetter
      * @param string                   $phpVersion
      */
     public function __construct(
-        $name, array $config, IOInterface $io, PlatformInterface $platform, TaskBusInterface $taskBus, PatchStrategyInterface $strategy, Locker $locker, ManifestChecker $manifestChecker, EventDispatcherInterface $eventDispatcher, ScriptRunner $scriptRunner, LoggerInterface $logger, $phpVersion = PHP_VERSION
+        $name, array $config, IOInterface $io, PlatformInterface $platform, TaskBusInterface $taskBus, PatchStrategyInterface $strategy, Locker $locker, ManifestChecker $manifestChecker, EventDispatcherInterface $eventDispatcher, ScriptRunner $scriptRunner, LoggerInterface $logger, PermissionSetter $permissionSetter, $phpVersion = PHP_VERSION
     ) {
         $this->taskBus = $taskBus;
         $this->strategy = $strategy;
@@ -92,6 +93,7 @@ class ApplyCommand extends AbstractPatchCommand
         $this->eventDispatcher = $eventDispatcher;
         $this->scriptRunner = $scriptRunner;
         $this->logger = $logger;
+        $this->permissionSetter = $permissionSetter;
         $this->setPhpVersion($phpVersion);
 
         parent::__construct($name, $config, $io, $platform);
@@ -228,7 +230,7 @@ class ApplyCommand extends AbstractPatchCommand
         }
 
         if (!$this->io->getOption('skip-post-apply-permissions')) {
-            //$this->permissionSetter->setPostApplyPermissions($installDir);
+            $this->permissionSetter->setPostApplyPermissions($installDir);
         }
 
         if (!$this->io->getOption('skip-lock')) {
