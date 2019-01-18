@@ -28,7 +28,8 @@ class PermissionSetter
      * @var array
      */
     private $postApplyPermissions = [
-        'var/cache/*' => 'rwxR'
+        'var/cache/*' => 'rwxR',
+        'logs/*' => 'rwxR'
     ];
 
     /**
