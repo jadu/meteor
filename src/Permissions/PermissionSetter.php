@@ -29,7 +29,7 @@ class PermissionSetter
      */
     private $postApplyPermissions = [
         'var/cache/*' => 'rwxR',
-        'logs/*' => 'rwxR'
+        'logs/*' => 'rwx'
     ];
 
     /**
@@ -208,3 +208,4 @@ class PermissionSetter
         return $this->postApplyPermissions;
     }
 }
+
