@@ -40,3 +40,21 @@ Running database migrations
 ```
 
 This warning means that some migrations that were previously executed do not exist within the package. This may be because they were deleted or potentially renamed. If these are core migrations (`jadu/cms` or `jadu/xfp`) then check with Support as this should not happen. To avoid this happening do not rename migration verisons after a patch has been applied. If you need to remove a migration then simply empty the `up` and `down` methods.
+
+### Database connection error
+
+If the first stages of deployment take a long time (e.g. due to network latency) then it is possible that the database
+connection may timeout before the migrations are applied. In this case you may see and error such as:
+
+```
+Error: PDOException
+SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
+```
+
+To progress from this error, you will need to first clear the lock file and then re-apply the package, skipping the
+backup step, which should have completed successfully in the previous run:
+
+```
+php meteor.phar patch:clear-lock
+php meteor.phar patch:apply --skip-backup
+```
