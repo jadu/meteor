@@ -43,18 +43,33 @@ This warning means that some migrations that were previously executed do not exi
 
 ### Database connection error
 
-If the first stages of deployment take a long time (e.g. due to network latency) then it is possible that the database
-connection may timeout before the migrations are applied. In this case you may see and error such as:
+If the first stages of deployment take a long time (e.g. due to network latency if the files are on an NFS share) then it is possible that the database connection may timeout before the migrations are applied. In this case you may see an error such as:
 
 ```
 Error: PDOException
 SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
 ```
 
-To progress from this error, you will need to first clear the lock file and then re-apply the package, skipping the
-backup step, which should have completed successfully in the previous run:
+After creating an automatic back-up it will initially connect to the database to store the current progress of migrations in the back-up. If it has stalled at this stage then the last notice before the error will be:
+
+```
+Storing current migration status in the backup
+```
+
+You will need to first clear the lock file, and then re-apply the package; skipping the backup step, which should have completed successfully in the previous run:
 
 ```
 php meteor.phar patch:clear-lock
 php meteor.phar patch:apply --skip-backup
 ```
+
+If it has progressed passed this, and has copied the files from the package as well then again you will need to again clear the lock file; but this time you will need to specifically perform migrations, file migrations, setting of permissions, and any standard post-patch actions you may take such as clearing and/or warming of cache.
+
+```
+php meteor.phar patch:clear-lock
+php meteor.phar migrations:migrate
+php meteor.phar file-migrations:migrate
+php meteor.phar patch:set-permissions
+```
+
+*Note:* If the file copying and/or back-up was slow enough for the database connection to time-out, then the `set-permissions` command will also take a similar amount of time to complete.
