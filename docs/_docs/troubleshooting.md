@@ -63,7 +63,7 @@ php meteor.phar patch:clear-lock
 php meteor.phar patch:apply --skip-backup
 ```
 
-If it has progressed passed this, and has copied the files from the package as well then again you will need to again clear the lock file; but this time you will need to specifically perform migrations, file migrations, setting of permissions, and any standard post-patch actions you may take such as clearing and/or warming of cache.
+If it has progressed passed this, and has copied the files from the package as well then again you will need to clear the lock file; but this time you will need to specifically perform migrations, file migrations, setting of permissions, and any standard post-patch actions you may take such as clearing and/or warming of cache.
 
 ```
 php meteor.phar patch:clear-lock
