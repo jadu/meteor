@@ -40,3 +40,36 @@ Running database migrations
 ```
 
 This warning means that some migrations that were previously executed do not exist within the package. This may be because they were deleted or potentially renamed. If these are core migrations (`jadu/cms` or `jadu/xfp`) then check with Support as this should not happen. To avoid this happening do not rename migration verisons after a patch has been applied. If you need to remove a migration then simply empty the `up` and `down` methods.
+
+### Database connection error
+
+If the first stages of deployment take a long time (e.g. due to network latency if the files are on an NFS share) then it is possible that the database connection may timeout before the migrations are applied. In this case you may see an error such as:
+
+```
+Error: PDOException
+SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
+```
+
+After creating an automatic back-up it will initially connect to the database to store the current progress of migrations in the back-up. If it has stalled at this stage then the last notice before the error will be:
+
+```
+Storing current migration status in the backup
+```
+
+You will need to first clear the lock file, and then re-apply the package; skipping the backup step, which should have completed successfully in the previous run:
+
+```
+php meteor.phar patch:clear-lock
+php meteor.phar patch:apply --skip-backup
+```
+
+If it has progressed passed this, and has copied the files from the package as well then again you will need to clear the lock file; but this time you will need to specifically perform migrations, file migrations, setting of permissions, and any standard post-patch actions you may take such as clearing and/or warming of cache.
+
+```
+php meteor.phar patch:clear-lock
+php meteor.phar migrations:migrate
+php meteor.phar file-migrations:migrate
+php meteor.phar patch:set-permissions
+```
+
+*Note:* If the file copying and/or back-up was slow enough for the database connection to time-out, then the `set-permissions` command will also take a similar amount of time to complete.
