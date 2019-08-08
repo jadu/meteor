@@ -4,7 +4,7 @@ namespace Meteor\Migrations\Configuration;
 
 use Doctrine\DBAL\Migrations\Version;
 
-class DatabaseConfiguration extends AbstractConfiguration implements JaduPathAwareConfigurationInterface
+class DatabaseConfiguration extends AbstractConfiguration implements JaduPathAwareConfigurationInterface, OutputConsoleAwareConfigurationInterface
 {
     /**
      * {@inheritdoc}

@@ -135,6 +135,7 @@ class ConfigurationFactory
 
         // Set the install dir for use within migrations
         $configuration->setJaduPath($installDir);
+        $configuration->setOutput($this->io);
 
         return $configuration;
     }

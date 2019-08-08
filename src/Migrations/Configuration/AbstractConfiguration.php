@@ -4,6 +4,7 @@ namespace Meteor\Migrations\Configuration;
 
 use Doctrine\DBAL\Migrations\MigrationException;
 use Doctrine\DBAL\Migrations\Version;
+use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class AbstractConfiguration extends DoctrineConfiguration
 {
@@ -13,6 +14,11 @@ abstract class AbstractConfiguration extends DoctrineConfiguration
      * @var string
      */
     private $jaduPath;
+
+    /**
+     * @var OutputInterface
+     */
+    private $output;
 
     /**
      * @return string
@@ -65,4 +71,21 @@ abstract class AbstractConfiguration extends DoctrineConfiguration
      * @return Version
      */
     abstract protected function createMigration($version, $class);
+
+    /**
+     * @return OutputInterface
+     */
+    public function getOutput()
+    {
+        return $this->output;
+    }
+
+    /**
+     * @param OutputInterface $output
+     */
+    public function setOutput($output)
+    {
+        $this->output = $output;
+    }
+
 }
