@@ -135,7 +135,7 @@ class ConfigurationFactory
 
         // Set the install dir for use within migrations
         $configuration->setJaduPath($installDir);
-        $configuration->setOutput($this->io);
+        $configuration->setDebugLogger($this->getDebugOutputWriter());
 
         return $configuration;
     }
@@ -149,6 +149,19 @@ class ConfigurationFactory
 
         return new OutputWriter(function ($message) use ($io) {
             return $io->writeln($message);
+        });
+    }
+
+
+    /**
+     * @return OutputWriter
+     */
+    private function getDebugOutputWriter()
+    {
+        $io = $this->io;
+
+        return new OutputWriter(function ($message) use ($io) {
+            return $io->debug($message);
         });
     }
 }

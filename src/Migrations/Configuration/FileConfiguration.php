@@ -6,7 +6,7 @@ use Doctrine\DBAL\Migrations\Version;
 use Meteor\Migrations\Version\FileMigrationVersion;
 use Meteor\Migrations\Version\FileMigrationVersionStorage;
 
-class FileConfiguration extends AbstractConfiguration implements JaduPathAwareConfigurationInterface, OutputConsoleAwareConfigurationInterface
+class FileConfiguration extends AbstractConfiguration implements JaduPathAwareConfigurationInterface, DebugLoggerIOConsoleAwareConfigurationInterface
 {
     const MIGRATION_DIRECTORY = 'filesystem';
 

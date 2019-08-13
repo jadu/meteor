@@ -18,7 +18,23 @@ abstract class AbstractConfiguration extends DoctrineConfiguration
     /**
      * @var OutputInterface
      */
-    private $output;
+    private $debugLogger;
+
+    /**
+     * @return OutputInterface
+     */
+    public function getDebugLogger()
+    {
+        return $this->debugLogger;
+    }
+
+    /**
+     * @param OutputInterface $debugLogger
+     */
+    public function setDebugLogger($debugLogger)
+    {
+        $this->debugLogger = $debugLogger;
+    }
 
     /**
      * @return string
@@ -71,21 +87,4 @@ abstract class AbstractConfiguration extends DoctrineConfiguration
      * @return Version
      */
     abstract protected function createMigration($version, $class);
-
-    /**
-     * @return OutputInterface
-     */
-    public function getOutput()
-    {
-        return $this->output;
-    }
-
-    /**
-     * @param OutputInterface $output
-     */
-    public function setOutput($output)
-    {
-        $this->output = $output;
-    }
-
 }
