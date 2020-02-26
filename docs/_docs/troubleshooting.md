@@ -72,4 +72,4 @@ php meteor.phar file-migrations:migrate
 php meteor.phar permissions:reset
 ```
 
-*Note:* If the file copying and/or back-up was slow enough for the database connection to time-out, then the `set-permissions` command will also take a similar amount of time to complete.
+*Note:* If the file copying and/or back-up was slow enough for the database connection to time-out, then the `permissions:reset` command will also take a similar amount of time to complete.
