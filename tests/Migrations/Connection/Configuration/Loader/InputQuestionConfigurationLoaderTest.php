@@ -26,6 +26,7 @@ class InputQuestionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
             'user' => 'user',
             'password' => 'password',
             'host' => 'host',
+            'port' => 'port',
             'driver' => 'driver',
         ];
 
@@ -45,6 +46,7 @@ class InputQuestionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
             'user' => '',
             'password' => 'password',
             'host' => 'host',
+            'port' => 'port',
             'driver' => 'driver',
         ];
 
@@ -64,6 +66,7 @@ class InputQuestionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
             'user' => 'user',
             'password' => '',
             'host' => 'host',
+            'port' => 'port',
             'driver' => 'driver',
         ];
 
@@ -83,11 +86,32 @@ class InputQuestionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
             'user' => 'user',
             'password' => 'password',
             'host' => '',
+            'port' => 'port',
             'driver' => 'driver',
         ];
 
         $this->assertArraySubset([
             'host' => 'host',
+        ], $this->loader->load('install', $configuration));
+    }
+
+    public function testAsksForPortWhenNotSet()
+    {
+        $this->io->shouldReceive('ask')
+            ->andReturn('port')
+            ->once();
+
+        $configuration = [
+            'dbname' => 'dbname',
+            'user' => 'user',
+            'password' => 'password',
+            'host' => 'host',
+            'port' => '',
+            'driver' => 'driver',
+        ];
+
+        $this->assertArraySubset([
+            'port' => 'port',
         ], $this->loader->load('install', $configuration));
     }
 
@@ -102,6 +126,7 @@ class InputQuestionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
             'user' => 'user',
             'password' => 'password',
             'host' => 'host',
+            'port' => 'port',
             'driver' => '',
         ];
 
