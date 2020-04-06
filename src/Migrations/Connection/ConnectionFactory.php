@@ -6,6 +6,9 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\PDOMySql\Driver;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Types\Type;
+use DOMDocument;
+use Jadu\Bundle\EncryptionBundle\Encryptor\AesCbcEncryptor;
+use Jadu\Bundle\EncryptionBundle\Type\EncryptedTextType;
 use Meteor\Migrations\Connection\Configuration\Loader\ConfigurationLoaderInterface;
 use Meteor\Migrations\Connection\Platform\SQLServer2008Platform;
 
@@ -42,12 +45,23 @@ class ConnectionFactory
 
     /**
      * @param array $configuration
+     * @param $installDir
+     * @return Connection
+     * @throws \Doctrine\DBAL\DBALException
      */
-    public function createConnection(array $configuration)
+    public function createConnection(array $configuration, $installDir)
     {
         Type::addType('unicodetext', 'Jadu\DoctrineTypes\UnicodeTextType');
+        Type::addType(EncryptedTextType::ENCRYPTED_TEXT_TYPE, EncryptedTextType::class);
 
-        return DriverManager::getConnection($configuration);
+        $type = Type::getType(EncryptedTextType::ENCRYPTED_TEXT_TYPE);
+        if ($type instanceof EncryptedTextType) {
+            $type->setEncryptor(new AesCbcEncryptor(
+               $this->getEncryptionKey($installDir)
+            ));
+        }
+
+            return DriverManager::getConnection($configuration);
     }
 
     /**
@@ -64,7 +78,7 @@ class ConnectionFactory
                 $configuration['platform'] = new SQLServer2008Platform();
             }
 
-            $this->connection = $this->createConnection($configuration);
+            $this->connection = $this->createConnection($configuration, $installDir);
 
             // Map enum to string (http://docs.doctrine-project.org/en/latest/cookbook/mysql-enums.html)
             $this->connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
@@ -74,5 +88,22 @@ class ConnectionFactory
         }
 
         return $this->connection;
+    }
+
+    private function getEncryptionKey($installDir)
+    {
+        $configFile = $installDir . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'constants.xml';
+
+        if (file_exists($configFile)) {
+            $dom = new DOMDocument();
+            $dom->load($configFile);
+
+            $nodes = $dom->getElementsByTagName('encryption_key');
+
+            if ($nodes->length > 0) {
+                return trim($nodes->item(0)->textContent);
+            }
+        }
+        return '';
     }
 }
