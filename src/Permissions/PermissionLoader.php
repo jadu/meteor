@@ -36,4 +36,18 @@ class PermissionLoader
 
         return $permissions;
     }
+
+    public function loadFromArray($permissions)
+    {
+        $loadedPermissions = [];
+        foreach ($permissions as $path => $permission) {
+            if (!preg_match('/([rwx]{1,4})$/i', $permission)) {
+                continue;
+            }
+
+            $loadedPermissions[] = Permission::create($path, str_split($permission));
+        }
+
+        return $loadedPermissions;
+    }
 }

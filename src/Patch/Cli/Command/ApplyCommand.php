@@ -12,6 +12,7 @@ use Meteor\Patch\Lock\Locker;
 use Meteor\Patch\Manifest\ManifestChecker;
 use Meteor\Patch\Strategy\PatchStrategyInterface;
 use Meteor\Patch\Task\TaskBusInterface;
+use Meteor\Permissions\PermissionSetter;
 use Meteor\Platform\PlatformInterface;
 use Meteor\Scripts\ScriptRunner;
 use Symfony\Component\Console\Input\InputInterface;
@@ -58,37 +59,32 @@ class ApplyCommand extends AbstractPatchCommand
     private $logger;
 
     /**
+     * @var PermissionSetter
+     */
+    private $permissionSetter;
+
+    /**
      * @var string
      */
     private $phpVersion;
 
     /**
-     * @param string $name
-     * @param array $config
-     * @param IOInterface $io
-     * @param PlatformInterface $platform
-     * @param TaskBusInterface $taskBus
-     * @param PatchStrategyInterface $strategy
-     * @param Locker $locker
-     * @param ManifestChecker $manifestChecker
+     * @param string                   $name
+     * @param array                    $config
+     * @param IOInterface              $io
+     * @param PlatformInterface        $platform
+     * @param TaskBusInterface         $taskBus
+     * @param PatchStrategyInterface   $strategy
+     * @param Locker                   $locker
+     * @param ManifestChecker          $manifestChecker
      * @param EventDispatcherInterface $eventDispatcher
-     * @param ScriptRunner $scriptRunner
-     * @param LoggerInterface $logger
-     * @param string $phpVersion
+     * @param ScriptRunner             $scriptRunner
+     * @param LoggerInterface          $logger
+     * @param PermissionSetter         $permissionSetter
+     * @param string                   $phpVersion
      */
     public function __construct(
-        $name,
-        array $config,
-        IOInterface $io,
-        PlatformInterface $platform,
-        TaskBusInterface $taskBus,
-        PatchStrategyInterface $strategy,
-        Locker $locker,
-        ManifestChecker $manifestChecker,
-        EventDispatcherInterface $eventDispatcher,
-        ScriptRunner $scriptRunner,
-        LoggerInterface $logger,
-        $phpVersion = PHP_VERSION
+        $name, array $config, IOInterface $io, PlatformInterface $platform, TaskBusInterface $taskBus, PatchStrategyInterface $strategy, Locker $locker, ManifestChecker $manifestChecker, EventDispatcherInterface $eventDispatcher, ScriptRunner $scriptRunner, LoggerInterface $logger, PermissionSetter $permissionSetter, $phpVersion = PHP_VERSION
     ) {
         $this->taskBus = $taskBus;
         $this->strategy = $strategy;
@@ -97,6 +93,7 @@ class ApplyCommand extends AbstractPatchCommand
         $this->eventDispatcher = $eventDispatcher;
         $this->scriptRunner = $scriptRunner;
         $this->logger = $logger;
+        $this->permissionSetter = $permissionSetter;
         $this->setPhpVersion($phpVersion);
 
         parent::__construct($name, $config, $io, $platform);
@@ -110,6 +107,8 @@ class ApplyCommand extends AbstractPatchCommand
         $this->addOption('skip-verify', null, InputOption::VALUE_NONE, 'Skip the package verification');
         $this->addOption('skip-lock', null, InputOption::VALUE_NONE, 'Skip any existing lock files to force a patch');
         $this->addOption('skip-scripts', null, InputOption::VALUE_NONE, 'Skip script execution');
+        $this->addOption('skip-post-apply-permissions', null, InputOption::VALUE_NONE, 'Skip resetting permissions on post-apply');
+
         $this->addOption('ignore-unavailable-migrations', null, InputOption::VALUE_NONE, 'Ignore unavailable migrations.');
 
         $this->strategy->configureApplyCommand($this->getDefinition());
@@ -228,6 +227,10 @@ class ApplyCommand extends AbstractPatchCommand
 
         if (!$this->io->getOption('skip-scripts')) {
             $this->eventDispatcher->dispatch(PatchEvents::POST_APPLY, new Event());
+        }
+
+        if (!$this->io->getOption('skip-post-apply-permissions')) {
+            $this->permissionSetter->setPostApplyPermissions($installDir);
         }
 
         if (!$this->io->getOption('skip-lock')) {
