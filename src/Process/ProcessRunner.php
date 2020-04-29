@@ -36,7 +36,10 @@ class ProcessRunner
     public function run($command, $cwd = null, $callback = null, $timeout = self::DEFAULT_TIMEOUT)
     {
         $process = new Process($command);
-        $process->setWorkingDirectory($cwd);
+        if ($cwd) {
+            $process->setWorkingDirectory($cwd);
+        }
+
         $process->setTimeout($timeout);
 
         $this->io->debug(sprintf('Running command "%s" in "%s"', $command, $cwd !== null ? $cwd : getcwd()));
