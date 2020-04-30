@@ -48,6 +48,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     const SERVICE_TASK_CHECK_WRITE_PERMISSION_HANDLER = 'patch.task.check_write_permission_handler';
     const SERVICE_TASK_COPY_FILES_HANDLER = 'patch.task.copy_files_handler';
     const SERVICE_TASK_DELETE_BACKUP_HANDLER = 'patch.task.delete_backup_handler';
+    const SERVICE_TASK_DELETE_VENDOR_FOLDER = 'patch.task.delete_vendor_folder';
     const SERVICE_TASK_DISPLAY_VERSION_INFO_HANDLER = 'patch.task.display_version_info_handler';
     const SERVICE_TASK_MIGRATE_DOWN_HANDLER = 'patch.task.migrate_down_handler';
     const SERVICE_TASK_MIGRATE_UP_HANDLER = 'patch.task.migrate_up_handler';
@@ -120,6 +121,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
         $this->loadCheckWritePermissionTaskHandler($container);
         $this->loadCopyFilesHandler($container);
         $this->loadDeleteBackupHandler($container);
+        $this->loadDeleteVendorHandler($container);
         $this->loadDisplayVersionInfoTaskHandler($container);
         $this->loadMigrateDownTaskHandler($container);
         $this->loadMigrateUpTaskHandler($container);
@@ -279,6 +281,22 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
         ]);
 
         $container->setDefinition(self::SERVICE_TASK_DELETE_BACKUP_HANDLER, $definition);
+    }
+
+    /**
+     * @param ContailerBuilder $container
+     */
+    private function loadDeleteVendorHandler(ContainerBuilder $container)
+    {
+        $definition = new Definition('Meteor\Patch\Task\DeleteVendorHandler', [
+            new Reference(IOExtension::SERVICE_IO),
+            new Reference(FilesystemExtension::SERVICE_FILESYSTEM),
+        ]);
+        $definition->addTag(self::TAG_TASK_HANDLER, [
+            'task' => 'Meteor\Patch\Task\DeleteVendor',
+        ]);
+
+        $container->setDefinition(self::SERVICE_TASK_DELETE_VENDOR_FOLDER, $definition);
     }
 
     /**

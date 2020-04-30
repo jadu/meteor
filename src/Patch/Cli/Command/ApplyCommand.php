@@ -111,6 +111,7 @@ class ApplyCommand extends AbstractPatchCommand
         $this->addOption('skip-lock', null, InputOption::VALUE_NONE, 'Skip any existing lock files to force a patch');
         $this->addOption('skip-scripts', null, InputOption::VALUE_NONE, 'Skip script execution');
         $this->addOption('ignore-unavailable-migrations', null, InputOption::VALUE_NONE, 'Ignore unavailable migrations.');
+        $this->addOption('clear-vendor', null, InputOption::VALUE_NONE, 'Clear vendor folder.');
 
         $this->strategy->configureApplyCommand($this->getDefinition());
 
@@ -218,7 +219,10 @@ class ApplyCommand extends AbstractPatchCommand
             $this->eventDispatcher->dispatch(PatchEvents::PRE_APPLY, new Event());
         }
 
-        $tasks = $this->strategy->apply($workingDir, $installDir, $this->io->getOptions());
+        $options = $this->io->getOptions();
+        $options['clear-vendor'] = $this->io->getOption('clear-vendor') || (isset($config['clear-vendor']) && boolval($config['clear-vendor']) === true );
+
+        $tasks = $this->strategy->apply($workingDir, $installDir, $options);
         foreach ($tasks as $task) {
             $result = $this->taskBus->run($task, $this->getConfiguration());
             if ($result === false) {

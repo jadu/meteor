@@ -13,6 +13,7 @@ use Meteor\Patch\Task\CheckVersion;
 use Meteor\Patch\Task\CheckWritePermission;
 use Meteor\Patch\Task\CopyFiles;
 use Meteor\Patch\Task\DeleteBackup;
+use Meteor\Patch\Task\DeleteVendor;
 use Meteor\Patch\Task\DisplayVersionInfo;
 use Meteor\Patch\Task\MigrateDown;
 use Meteor\Patch\Task\MigrateUp;
@@ -49,6 +50,10 @@ class OverwritePatchStrategy implements PatchStrategyInterface
         if (!$options['skip-backup']) {
             $tasks[] = new BackupFiles($backupDir, $patchDir, $installDir);
             $tasks[] = new UpdateMigrationVersionFiles($backupDir, $patchDir, $installDir);
+        }
+
+        if (isset($options['clear-vendor']) && $options['clear-vendor']) {
+            $tasks[] = new DeleteVendor($installDir);
         }
 
         $tasks[] = new CopyFiles($patchFilesDir, $installDir);
@@ -94,7 +99,6 @@ class OverwritePatchStrategy implements PatchStrategyInterface
         if (!$options['skip-db-migrations'] || !$options['skip-file-migrations']) {
             $tasks[] = new CheckDatabaseConnection($installDir);
         }
-
         $tasks[] = new CopyFiles($backupFilesDir, $installDir);
 
         if (!$options['skip-db-migrations']) {
