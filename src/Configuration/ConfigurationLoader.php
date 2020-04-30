@@ -56,6 +56,9 @@ class ConfigurationLoader
 
         $childrenNode->scalarNode('name')->defaultValue(uniqid('package'))->end();
         $childrenNode->arrayNode('extensions')->prototype('scalar')->end();
+        $extraChildrenNode = $childrenNode->arrayNode('extra')->children();
+        $extraChildrenNode->booleanNode('clearVendor')->defaultFalse()->end();
+        $extraChildrenNode->end();
 
         foreach ($extensions as $extension) {
             $extension->configure($childrenNode->arrayNode($extension->getConfigKey()));
@@ -66,6 +69,8 @@ class ConfigurationLoader
 
         $combinedChildrenNode->scalarNode('name')->defaultValue(uniqid('package'))->end();
         $combinedChildrenNode->arrayNode('extensions')->prototype('scalar')->end();
+
+
 
         // Build the combined section to allow all extension configs
         foreach ($extensions as $extension) {

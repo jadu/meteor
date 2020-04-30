@@ -19,6 +19,6 @@ class DeleteVendor
 
     public function getVendorFolder()
     {
-        return $this->installDir . '/vendor';
+        return $this->installDir . DIRECTORY_SEPARATOR .  'vendor';
     }
 }

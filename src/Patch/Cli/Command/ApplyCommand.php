@@ -220,7 +220,7 @@ class ApplyCommand extends AbstractPatchCommand
         }
 
         $options = $this->io->getOptions();
-        $options['clear-vendor'] = $this->io->getOption('clear-vendor') || (isset($config['clear-vendor']) && boolval($config['clear-vendor']) === true );
+        $options['clear-vendor'] = $this->io->getOption('clear-vendor') || (isset($config['extra']['clearVendor']) && boolval($config['extra']['clearVendor']) === true );
 
         $tasks = $this->strategy->apply($workingDir, $installDir, $options);
         foreach ($tasks as $task) {
