@@ -81,3 +81,23 @@ php meteor.phar patch:verify
 **patch (optional)**
 
 Defaults to: `overwrite`
+
+## Delete `vendor` before patching
+
+If at any time you want delete the vendor folder before the patch, the following command can be used:
+
+```
+php meteor.phar patch:apply --clear-vendor
+```
+
+You can use also use the meteor.json configuration to automate the clearing the vendor
+
+```json
+{
+    "extra": {
+        "clearVendor": true
+    }
+}
+```
+
+> By default, the vendor is not cleared during the patch. unless one of the above options is specified explicitly.
