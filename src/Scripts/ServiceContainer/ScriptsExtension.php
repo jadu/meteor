@@ -69,7 +69,6 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
     public function configParse(array $config)
     {
         $extensionConfig = [];
-        $extensionConfig[] = parent::configParse($config);
 
         if (isset($config['combined'])) {
             $extensionConfigKey = $this->getConfigKey();
@@ -79,6 +78,10 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
                 }
             }
         }
+
+        // Put the current script as last executed batch
+        // Otherwise combined scripts take precedence
+        $extensionConfig[] = parent::configParse($config);
 
         return $extensionConfig;
     }
@@ -120,7 +123,6 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
     public function validateScripts(array $scripts)
     {
         $this->scripts = $scripts;
-
         // NB: Resetting so loading multiple script configs does not cause circular references
         $this->referenced = [];
 
@@ -136,23 +138,27 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
      * Check for circular references.
      *
      * @param string $name
+     *
+     * @param array $seen
+     *
+     * @throws CircularScriptReferenceException
+     * @throws ScriptReferenceException
      */
-    private function checkCircularReference($name)
+    private function checkCircularReference($name, $seen = [])
     {
-        $this->referenced[$name] = true;
-
+        $seen[] = $name;
         foreach ($this->scripts[$name] as $command) {
             if (strpos($command, '@') === 0) {
                 $command = substr($command, 1);
                 if (!isset($this->scripts[$command])) {
                     throw new ScriptReferenceException(sprintf('Unable to find referenced script "%s"', $command));
-                }
+                }co
 
-                if (isset($this->referenced[$command])) {
+                if (in_array($command, $seen, true)) {
                     throw new CircularScriptReferenceException(sprintf('Circular reference detected in "%s" to "%s"', $name, $command));
                 }
 
-                $this->checkCircularReference($command);
+                $this->checkCircularReference($command, $seen);
             }
         }
     }
