@@ -78,7 +78,7 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
                 }
             }
         }
-        
+
         return $extensionConfig;
     }
 
@@ -148,7 +148,7 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
                 $command = substr($command, 1);
                 if (!isset($this->scripts[$command])) {
                     throw new ScriptReferenceException(sprintf('Unable to find referenced script "%s"', $command));
-                }co
+                }
 
                 if (in_array($command, $seen, true)) {
                     throw new CircularScriptReferenceException(sprintf('Circular reference detected in "%s" to "%s"', $name, $command));
