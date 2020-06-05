@@ -106,7 +106,7 @@ array(
 
 For more details examples and information about the `ContainerBuilder` class please see the [Symfony docs](http://symfony.com/doc/current/components/dependency_injection/introduction.html#basic-usage) on this subject.
 
-Note: It is reccomended to use class constants for service names and parameter names to avoid duplication of hard-coded strings.
+Note: It is recommended to use class constants for service names and parameter names to avoid duplication of hard-coded strings.
 
 ## Extension points
 
