@@ -110,7 +110,7 @@ class CheckDiskSpaceHandler
         // Do not remove the latest backups that can be kept
         $backups = array_slice($backups, self::MAX_BACKUPS);
 
-        $this->io->text(sprintf('It is reccomended to keep a maximum of %d backups. To free up some disk space the following %d backups should be removed: ', self::MAX_BACKUPS, count($backups)));
+        $this->io->text(sprintf('It is recommended to keep a maximum of %d backups. To free up some disk space the following %d backups should be removed: ', self::MAX_BACKUPS, count($backups)));
 
         // Get just the backup directory names
         $backupDirs = array_map(function ($backup) {
