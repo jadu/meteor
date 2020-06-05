@@ -1,3 +1,4 @@
+* Updated Doctrine Migrations to 1.5.0
 * Adds correction to permission reset command in Troubleshooting documentation ([#94](https://github.com/jadu/meteor/pull/94)).
 
 ## v3.1.0
