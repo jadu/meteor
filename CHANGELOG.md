@@ -1,3 +1,5 @@
+* Adds correction to permission reset command in Troubleshooting documentation ([#94](https://github.com/jadu/meteor/pull/94)).
+
 ## v3.1.0
 
 * Move migration step before set permissions step ([#75](https://github.com/jadu/meteor/pull/75)).
