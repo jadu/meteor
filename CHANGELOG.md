@@ -1,3 +1,4 @@
+* Fixed issues with running multiple scripts in the script runner
 * Adds correction to permission reset command in Troubleshooting documentation ([#94](https://github.com/jadu/meteor/pull/94)).
 
 ## v3.1.0
