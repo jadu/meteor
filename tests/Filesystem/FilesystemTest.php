@@ -196,6 +196,37 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
         $this->filesystem->findFiles($sourceDir, ['/**']);
     }
 
+    public function testFindFilesWithFiltersRealFinderFactory()
+    {
+        vfsStream::setup('root', null, [
+            'public_html' => [
+                'index.html' => '',
+            ],
+            'var' => [
+                'config' => [
+                    'system.xml' => '',
+                ],
+                'file.cache' => ''
+            ],
+        ]);
+
+        $sourceDir = vfsStream::url('root');
+
+        $filters = ['!/var'];
+
+        $finder = new Finder();
+        $finder->in($sourceDir);
+
+        $filesystem = new Filesystem(new FinderFactory(), $this->io);
+
+        $files = $filesystem->findFiles($sourceDir, $filters);
+
+        $this->assertEquals([
+            'public_html',
+            'public_html/index.html',
+        ], $files);
+    }
+
     public function testFindNewFiles()
     {
         vfsStream::setup('root', null, [

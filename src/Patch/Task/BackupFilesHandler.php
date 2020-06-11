@@ -60,7 +60,8 @@ class BackupFilesHandler
 
         // Backup everything that is marked as a swap_folder
         foreach ($swapFolders as $swapFolder) {
-            $this->filesystem->copyDirectory($task->installDir . $swapFolder, $task->backupDir . $swapFolder);
+            $this->io->debug(sprintf("Backing up %s to %s", $task->installDir . $swapFolder, $task->backupDir . '/' . PackageConstants::PATCH_DIR . $swapFolder));
+            $this->filesystem->copyDirectory($task->installDir . $swapFolder, $task->backupDir . '/' . PackageConstants::PATCH_DIR . $swapFolder);
         }
 
         // Copy the meteor.json into the backup

@@ -14,15 +14,20 @@ class CopyFilesHandlerTest extends PHPUnit_Framework_TestCase
     private $filesystem;
     private $permissionSetter;
     private $handler;
-    private $config = [];
+    private $defaultConfig = [];
+    private $swapFoldersConfig = [];
 
     public function setUp()
     {
-        $this->config['patch']['swap_folders'] = [];
+        $this->defaultConfig['patch']['swap_folders'] = [];
+        $this->swapFoldersConfig['patch']['swap_folders'] = [
+            '/vendor',
+        ];
         $this->io = new NullIO();
         $this->filesystem = Mockery::mock(Filesystem::class, [
             'findNewFiles' => [],
             'copyDirectory' => null,
+            'swapDirectory' => null,
         ]);
         $this->permissionSetter = Mockery::mock(PermissionSetter::class, [
             'setDefaultPermissions' => null,
@@ -36,7 +41,7 @@ class CopyFilesHandlerTest extends PHPUnit_Framework_TestCase
             ->with('source', 'target', [])
             ->once();
 
-        $this->handler->handle(new CopyFiles('source', 'target'), $this->config);
+        $this->handler->handle(new CopyFiles('source', 'target'), $this->defaultConfig);
     }
 
     public function testSetsPermissions()
@@ -55,34 +60,34 @@ class CopyFilesHandlerTest extends PHPUnit_Framework_TestCase
             ->ordered()
             ->once();
 
-        $this->handler->handle(new CopyFiles('source', 'target'), $this->config);
+        $this->handler->handle(new CopyFiles('source', 'target'), $this->defaultConfig);
     }
 
-    public function testHandlesSwapFoldersConfig()
+    public function testExcludesSwapFoldersFromCopyDirectory()
     {
-        $config = [];
-        $config['patch']['swap_folders'] = [
-            '/vendor',
-        ];
-
-        $newFiles = [
-            'test',
-        ];
-
-        $this->filesystem->shouldReceive('findNewFiles')
+         $this->filesystem->shouldReceive('copyDirectory')
             ->with('source', 'target', ['!/vendor'])
-            ->andReturn($newFiles)
             ->once();
 
-         $this->filesystem->shouldReceive('swapDirectory')
+        $this->handler->handle(new CopyFiles('source', 'target'), $this->swapFoldersConfig);
+    }
+
+    public function testExcludesSwapFoldersFromFindNewFiles()
+    {
+         $this->filesystem->shouldReceive('findNewFiles')
+            ->with('source', 'target', ['!/vendor'])
+            ->andReturn([])
+            ->once();
+
+        $this->handler->handle(new CopyFiles('source', 'target'), $this->swapFoldersConfig);
+    }
+
+    public function testProcessesSwapFolders()
+    {
+        $this->filesystem->shouldReceive('swapDirectory')
             ->with('source', 'target', '/vendor')
             ->once();
 
-        $this->permissionSetter->shouldReceive('setDefaultPermissions')
-            ->with($newFiles, 'target')
-            ->ordered()
-            ->once();
-
-        $this->handler->handle(new CopyFiles('source', 'target'), $config);
+        $this->handler->handle(new CopyFiles('source', 'target'), $this->swapFoldersConfig);
     }
 }

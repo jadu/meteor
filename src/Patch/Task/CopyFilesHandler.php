@@ -45,15 +45,16 @@ class CopyFilesHandler
 
         $swapFolders = $config['patch']['swap_folders'];
 
-        $findFilters = [];
+        $excludeFilters = [];
         foreach ($swapFolders as $swapFolder) {
-            $findFilters[] = '!' . $swapFolder;
+            $excludeFilters[] = '!' . $swapFolder;
         }
 
-        $newFiles = $this->filesystem->findNewFiles($task->sourceDir, $task->targetDir, $findFilters);
-        $this->filesystem->copyDirectory($task->sourceDir, $task->targetDir, $swapFolders);
+        $newFiles = $this->filesystem->findNewFiles($task->sourceDir, $task->targetDir, $excludeFilters);
+        $this->filesystem->copyDirectory($task->sourceDir, $task->targetDir, $excludeFilters);
 
         foreach ($swapFolders as $swapFolder) {
+            $this->io->debug(sprintf("Swapping %s into %s", $swapFolder, $task->targetDir));
             $this->filesystem->swapDirectory($task->sourceDir, $task->targetDir, $swapFolder);
         }
 

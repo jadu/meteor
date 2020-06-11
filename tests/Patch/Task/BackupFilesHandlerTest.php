@@ -86,7 +86,7 @@ class BackupFilesHandlerTest extends PHPUnit_Framework_TestCase
         ];
 
         $this->filesystem->shouldReceive('copyDirectory')
-            ->with('install/vendor', 'install/backups/20160701000000/vendor')
+            ->with('install/vendor', 'install/backups/20160701000000/to_patch/vendor')
             ->andReturn([])
             ->once();
 

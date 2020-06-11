@@ -119,6 +119,7 @@ class FinderFactoryTest extends \PHPUnit_Framework_TestCase
                     '!/*VERSION',
                 ],
                 [
+                    'var',
                     'var/XFP_VERSION',
                 ],
             ],
@@ -196,6 +197,7 @@ class FinderFactoryTest extends \PHPUnit_Framework_TestCase
                     '!/vendor',
                 ],
                 [
+                    'public_html',
                     'public_html/.htaccess',
                 ],
             ],

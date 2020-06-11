@@ -26,7 +26,7 @@ class FinderFactory
             $finder->depth($depth);
         }
 
-        if ($filters !== null) {
+        if (!empty($filters)) {
             $patterns = [];
             foreach ($filters as $filter) {
                 $patterns[] = $this->generatePattern($filter);
@@ -48,7 +48,7 @@ class FinderFactory
                         }
 
                         $include = true;
-                    } elseif ($negate && !$file->isDir()) {
+                    } elseif ($negate) {
                         $include = true;
                     }
                 }
