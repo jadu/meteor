@@ -43,8 +43,20 @@ class CopyFilesHandler
     {
         $this->io->text(sprintf('Copying files into the install <info>%s</>', $task->targetDir));
 
-        $newFiles = $this->filesystem->findNewFiles($task->sourceDir, $task->targetDir);
-        $this->filesystem->copyDirectory($task->sourceDir, $task->targetDir);
+        $swapFolders = $config['patch']['swap_folders'];
+
+        $findFilters = [];
+        foreach ($swapFolders as $swapFolder) {
+            $findFilters[] = '!' . $swapFolder;
+        }
+
+        $newFiles = $this->filesystem->findNewFiles($task->sourceDir, $task->targetDir, $findFilters);
+        $this->filesystem->copyDirectory($task->sourceDir, $task->targetDir, $swapFolders);
+
+        foreach ($swapFolders as $swapFolder) {
+            $this->filesystem->swapDirectory($task->sourceDir, $task->targetDir, $swapFolder);
+        }
+
         $this->permissionSetter->setDefaultPermissions($newFiles, $task->targetDir);
     }
 }

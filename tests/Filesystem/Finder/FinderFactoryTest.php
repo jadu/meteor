@@ -181,6 +181,24 @@ class FinderFactoryTest extends \PHPUnit_Framework_TestCase
                     'public_html/.htaccess',
                 ],
             ],
+            [
+                [
+                    'public_html' => [
+                        '.htaccess' => '',
+                    ],
+                    'vendor' => [
+                        'org' => [
+                            'package' => 'file.html'
+                        ]
+                    ]
+                ],
+                [
+                    '!/vendor',
+                ],
+                [
+                    'public_html/.htaccess',
+                ],
+            ],
         ];
     }
 }

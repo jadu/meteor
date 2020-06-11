@@ -155,14 +155,15 @@ class Filesystem extends BaseFilesystem
     /**
      * Returns files that do not exist in the target directory.
      *
-     * @param array $files
+     * @param string $baseDir
      * @param string $targetDir
+     * @param array $filters
      *
      * @return array
      */
-    public function findNewFiles($baseDir, $targetDir)
+    public function findNewFiles($baseDir, $targetDir, array $filters = [])
     {
-        $files = $this->findFiles($baseDir);
+        $files = $this->findFiles($baseDir, $filters);
 
         return array_values(array_filter($files, function ($file) use ($targetDir) {
             return !file_exists($targetDir . '/' . $file);
@@ -181,5 +182,50 @@ class Filesystem extends BaseFilesystem
         $baseDir = rtrim($baseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 
         return preg_replace('/^' . preg_quote($baseDir, '/') . '/', '', $path);
+    }
+
+    /**
+     * Remove the directory and all of its contents
+     *
+     * @param string $directory
+     */
+    public function removeDirectory($directory)
+    {
+        if (file_exists($directory) && is_dir($directory)) {
+            $objects = scandir($directory);
+            foreach ($objects as $object) {
+                if ($object != '.' && $object != '..') {
+                    if (is_dir($directory . '/' . $object)) {
+                        $this->removeDirectory($directory . '/' . $object);
+                    } else {
+                        unlink($directory . '/' . $object);
+                    }
+                }
+            }
+
+            rmdir($directory);
+        }
+    }
+
+    /**
+     * Copy $swapDirectory from $sourceDir to a temporary location, then remove $swapDirectory from $targetDir and
+     * replace it with the temporary copy. Used to quickly move a directory of items into place, completely removing
+     * anything in the existing target location.
+     *
+     * Example usage: swapDirectory('/package', '/install/home', '/vendor')
+     *
+     * @param string $sourceDir
+     * @param string $targetDir
+     * @param string $swapDirectory
+     */
+    public function swapDirectory($sourceDir, $targetDir, $swapDirectory)
+    {
+        $tempTarget = uniqid($swapDirectory);
+
+        $this->copyDirectory($sourceDir . $swapDirectory, $targetDir . $tempTarget);
+
+        $this->removeDirectory($targetDir . $swapDirectory);
+
+        rename($targetDir . $tempTarget, $targetDir . $swapDirectory);
     }
 }

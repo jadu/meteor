@@ -48,6 +48,8 @@ class FinderFactory
                         }
 
                         $include = true;
+                    } elseif ($negate && !$file->isDir()) {
+                        $include = true;
                     }
                 }
 

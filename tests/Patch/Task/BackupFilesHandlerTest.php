@@ -2,25 +2,31 @@
 
 namespace Meteor\Patch\Task;
 
+use Meteor\Configuration\ConfigurationLoader;
+use Meteor\Filesystem\Filesystem;
 use Meteor\IO\NullIO;
 use Mockery;
+use PHPUnit_Framework_TestCase;
 
-class BackupFilesHandlerTest extends \PHPUnit_Framework_TestCase
+class BackupFilesHandlerTest extends PHPUnit_Framework_TestCase
 {
     private $filesystem;
     private $configurationLoader;
     private $io;
     private $handler;
+    private $config = [];
 
     public function setUp()
     {
-        $this->filesystem = Mockery::mock('Meteor\Filesystem\Filesystem', [
+        $this->config['patch']['swap_folders'] = [];
+        $this->filesystem = Mockery::mock(Filesystem::class, [
             'ensureDirectoryExists' => null,
             'findFiles' => [],
             'copyFiles' => null,
             'copy' => null,
+            'copyDirectory' => null,
         ]);
-        $this->configurationLoader = Mockery::mock('Meteor\Configuration\configurationLoader', [
+        $this->configurationLoader = Mockery::mock(ConfigurationLoader::class, [
             'resolve' => null,
         ]);
         $this->io = new NullIO();
@@ -32,7 +38,7 @@ class BackupFilesHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $patchFiles = ['VERSION'];
         $this->filesystem->shouldReceive('findFiles')
-            ->with('patch/to_patch')
+            ->with('patch/to_patch', [])
             ->andReturn($patchFiles)
             ->once();
 
@@ -40,7 +46,7 @@ class BackupFilesHandlerTest extends \PHPUnit_Framework_TestCase
             ->with($patchFiles, 'install', 'install/backups/20160701000000/to_patch')
             ->once();
 
-        $this->handler->handle(new BackupFiles('install/backups/20160701000000', 'patch', 'install'), []);
+        $this->handler->handle(new BackupFiles('install/backups/20160701000000', 'patch', 'install'), $this->config);
     }
 
     public function testCopiesMeteorConfigIntoBackupFromPatch()
@@ -54,6 +60,36 @@ class BackupFilesHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('patch/meteor.json.package', 'install/backups/20160701000000/meteor.json.package', true)
             ->once();
 
-        $this->handler->handle(new BackupFiles('install/backups/20160701000000', 'patch', 'install'), []);
+        $this->handler->handle(new BackupFiles('install/backups/20160701000000', 'patch', 'install'), $this->config);
+    }
+
+    public function testSwapFoldersAreExcludedFromNormalBackupCopy()
+    {
+        $config = [];
+        $config['patch']['swap_folders'] = [
+            '/vendor',
+        ];
+
+        $this->filesystem->shouldReceive('findFiles')
+            ->with('patch/to_patch', ['!/vendor'])
+            ->andReturn([])
+            ->once();
+
+        $this->handler->handle(new BackupFiles('install/backups/20160701000000', 'patch', 'install'), $config);
+    }
+
+    public function testSwapFoldersAreFullyBackedUp()
+    {
+        $config = [];
+        $config['patch']['swap_folders'] = [
+            '/vendor',
+        ];
+
+        $this->filesystem->shouldReceive('copyDirectory')
+            ->with('install/vendor', 'install/backups/20160701000000/vendor')
+            ->andReturn([])
+            ->once();
+
+        $this->handler->handle(new BackupFiles('install/backups/20160701000000', 'patch', 'install'), $config);
     }
 }
