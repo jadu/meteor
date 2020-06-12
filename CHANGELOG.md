@@ -1,3 +1,4 @@
+* Add support for 'swap_folder' configuration option, allowing certain folders to be marked for slightly different patch strategy whereby the existing folder is removed and replaced entirely by the folder from the package.
 * Adds correction to permission reset command in Troubleshooting documentation ([#94](https://github.com/jadu/meteor/pull/94)).
 
 ## v3.1.0
