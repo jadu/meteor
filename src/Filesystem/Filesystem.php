@@ -220,12 +220,16 @@ class Filesystem extends BaseFilesystem
      */
     public function replaceDirectory($sourceDir, $targetDir, $replaceDirectory)
     {
+        $this->io->text(sprintf('Replacing directory <info>%s</>', $targetDir . $replaceDirectory));
+
         $tempTarget = uniqid($replaceDirectory);
 
         $this->copyDirectory($sourceDir . $replaceDirectory, $targetDir . $tempTarget);
 
+        $this->io->debug(sprintf("Removing %s", $targetDir . $replaceDirectory));
         $this->removeDirectory($targetDir . $replaceDirectory);
 
+        $this->io->debug(sprintf("Renaming %s to %s", $targetDir . $tempTarget, $targetDir . $replaceDirectory));
         rename($targetDir . $tempTarget, $targetDir . $replaceDirectory);
     }
 }

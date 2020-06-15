@@ -15,19 +15,19 @@ class CopyFilesHandlerTest extends PHPUnit_Framework_TestCase
     private $permissionSetter;
     private $handler;
     private $defaultConfig = [];
-    private $swapFoldersConfig = [];
+    private $replaceDirectoriesConfig = [];
 
     public function setUp()
     {
-        $this->defaultConfig['patch']['swap_folders'] = [];
-        $this->swapFoldersConfig['patch']['swap_folders'] = [
+        $this->defaultConfig['patch']['replace_directories'] = [];
+        $this->replaceDirectoriesConfig['patch']['replace_directories'] = [
             '/vendor',
         ];
         $this->io = new NullIO();
         $this->filesystem = Mockery::mock(Filesystem::class, [
             'findNewFiles' => [],
             'copyDirectory' => null,
-            'swapDirectory' => null,
+            'replaceDirectory' => null,
         ]);
         $this->permissionSetter = Mockery::mock(PermissionSetter::class, [
             'setDefaultPermissions' => null,
@@ -69,25 +69,25 @@ class CopyFilesHandlerTest extends PHPUnit_Framework_TestCase
             ->with('source', 'target', ['!/vendor'])
             ->once();
 
-        $this->handler->handle(new CopyFiles('source', 'target'), $this->swapFoldersConfig);
+        $this->handler->handle(new CopyFiles('source', 'target'), $this->replaceDirectoriesConfig);
     }
 
-    public function testExcludesSwapFoldersFromFindNewFiles()
+    public function testExcludesReplaceDirectoriesFromFindNewFiles()
     {
          $this->filesystem->shouldReceive('findNewFiles')
             ->with('source', 'target', ['!/vendor'])
             ->andReturn([])
             ->once();
 
-        $this->handler->handle(new CopyFiles('source', 'target'), $this->swapFoldersConfig);
+        $this->handler->handle(new CopyFiles('source', 'target'), $this->replaceDirectoriesConfig);
     }
 
-    public function testProcessesSwapFolders()
+    public function testProcessesReplaceDirectories()
     {
-        $this->filesystem->shouldReceive('swapDirectory')
+        $this->filesystem->shouldReceive('replaceDirectory')
             ->with('source', 'target', '/vendor')
             ->once();
 
-        $this->handler->handle(new CopyFiles('source', 'target'), $this->swapFoldersConfig);
+        $this->handler->handle(new CopyFiles('source', 'target'), $this->replaceDirectoriesConfig);
     }
 }

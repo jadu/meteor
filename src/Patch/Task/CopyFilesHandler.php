@@ -54,7 +54,6 @@ class CopyFilesHandler
         $this->filesystem->copyDirectory($task->sourceDir, $task->targetDir, $excludeFilters);
 
         foreach ($replaceDirectories as $directory) {
-            $this->io->debug(sprintf("Replacing directory %s in %s", $directory, $task->targetDir));
             $this->filesystem->replaceDirectory($task->sourceDir, $task->targetDir, $directory);
         }
 

@@ -18,7 +18,7 @@ class BackupFilesHandlerTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->config['patch']['swap_folders'] = [];
+        $this->config['patch']['replace_directories'] = [];
         $this->filesystem = Mockery::mock(Filesystem::class, [
             'ensureDirectoryExists' => null,
             'findFiles' => [],
@@ -63,30 +63,25 @@ class BackupFilesHandlerTest extends PHPUnit_Framework_TestCase
         $this->handler->handle(new BackupFiles('install/backups/20160701000000', 'patch', 'install'), $this->config);
     }
 
-    public function testSwapFoldersAreExcludedFromNormalBackupCopy()
+    public function testReplaceDirectoriesAreExcludedFromNormalBackupCopy()
     {
         $config = [];
-        $config['patch']['swap_folders'] = [
+        $config['patch']['replace_directories'] = [
             '/vendor',
         ];
 
         $this->filesystem->shouldReceive('findFiles')
             ->with('patch/to_patch', ['!/vendor'])
-            ->andReturn([])
+            ->andReturn(['patch'])
             ->once();
 
-        $this->handler->handle(new BackupFiles('install/backups/20160701000000', 'patch', 'install'), $config);
-    }
+        $this->filesystem->shouldReceive('findFiles')
+            ->with('install/vendor')
+            ->andReturn(['vendor'])
+            ->once();
 
-    public function testSwapFoldersAreFullyBackedUp()
-    {
-        $config = [];
-        $config['patch']['swap_folders'] = [
-            '/vendor',
-        ];
-
-        $this->filesystem->shouldReceive('copyDirectory')
-            ->with('install/vendor', 'install/backups/20160701000000/to_patch/vendor')
+        $this->filesystem->shouldReceive('copyFiles')
+            ->with(['patch', 'vendor'], 'install', 'install/backups/20160701000000/to_patch')
             ->andReturn([])
             ->once();
 
