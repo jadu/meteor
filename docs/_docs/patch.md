@@ -73,11 +73,22 @@ php meteor.phar patch:verify
 ```json
 {
     "patch": {
-        "strategy": "overwrite"
+        "strategy": "overwrite",
+        "replace_directories": [
+            '/vendor'
+        ]
     }
 }
 ```
 
-**patch (optional)**
+### strategy (optional)
 
-Defaults to: `overwrite`
+Defaults to: `overwrite` - files are copied from the package over the top of the same location in the install.
+
+### replace_directories (optional)
+
+List of directories that should be removed from the install before the version in the package is copied in. This is
+useful for directories like `/vendor`, where the contents may change significantly between releases and tracking of any
+files to be removed is beyond your control.
+
+Defaults to empty.
