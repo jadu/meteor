@@ -46,11 +46,11 @@ class BackupFilesHandler
 
         $this->filesystem->ensureDirectoryExists($task->backupDir);
 
-        $swapFolders = $config['patch']['swap_folders'];
+        $replaceDirectories = $config['patch']['replace_directories'];
 
         $excludeFilters = [];
-        foreach ($swapFolders as $swapFolder) {
-            $excludeFilters[] = '!' . $swapFolder;
+        foreach ($replaceDirectories as $directory) {
+            $excludeFilters[] = '!' . $directory;
         }
 
         // Copy the files from the install that exist in the patch to the backup
@@ -58,10 +58,10 @@ class BackupFilesHandler
         $files = $this->filesystem->findFiles($task->patchDir . '/' . PackageConstants::PATCH_DIR, $excludeFilters);
         $this->filesystem->copyFiles($files, $task->installDir, $task->backupDir . '/' . PackageConstants::PATCH_DIR);
 
-        // Backup everything that is marked as a swap_folder
-        foreach ($swapFolders as $swapFolder) {
-            $this->io->debug(sprintf("Backing up %s to %s", $task->installDir . $swapFolder, $task->backupDir . '/' . PackageConstants::PATCH_DIR . $swapFolder));
-            $this->filesystem->copyDirectory($task->installDir . $swapFolder, $task->backupDir . '/' . PackageConstants::PATCH_DIR . $swapFolder);
+        // Backup everything that is marked as a replace directory
+        foreach ($replaceDirectories as $directory) {
+            $this->io->debug(sprintf("Backing up %s to %s", $task->installDir . $directory, $task->backupDir . '/' . PackageConstants::PATCH_DIR . $directory));
+            $this->filesystem->copyDirectory($task->installDir . $directory, $task->backupDir . '/' . PackageConstants::PATCH_DIR . $directory);
         }
 
         // Copy the meteor.json into the backup

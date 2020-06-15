@@ -208,24 +208,24 @@ class Filesystem extends BaseFilesystem
     }
 
     /**
-     * Copy $swapDirectory from $sourceDir to a temporary location, then remove $swapDirectory from $targetDir and
+     * Copy $replaceDirectory from $sourceDir to a temporary location, then remove $replaceDirectory from $targetDir and
      * replace it with the temporary copy. Used to quickly move a directory of items into place, completely removing
      * anything in the existing target location.
      *
-     * Example usage: swapDirectory('/package', '/install/home', '/vendor')
+     * Example usage: replaceDirectory('/package', '/install/home', '/vendor')
      *
      * @param string $sourceDir
      * @param string $targetDir
-     * @param string $swapDirectory
+     * @param string $replaceDirectory
      */
-    public function swapDirectory($sourceDir, $targetDir, $swapDirectory)
+    public function replaceDirectory($sourceDir, $targetDir, $replaceDirectory)
     {
-        $tempTarget = uniqid($swapDirectory);
+        $tempTarget = uniqid($replaceDirectory);
 
-        $this->copyDirectory($sourceDir . $swapDirectory, $targetDir . $tempTarget);
+        $this->copyDirectory($sourceDir . $replaceDirectory, $targetDir . $tempTarget);
 
-        $this->removeDirectory($targetDir . $swapDirectory);
+        $this->removeDirectory($targetDir . $replaceDirectory);
 
-        rename($targetDir . $tempTarget, $targetDir . $swapDirectory);
+        rename($targetDir . $tempTarget, $targetDir . $replaceDirectory);
     }
 }
