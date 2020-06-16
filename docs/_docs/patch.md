@@ -75,7 +75,7 @@ php meteor.phar patch:verify
     "patch": {
         "strategy": "overwrite",
         "replace_directories": [
-            '/vendor'
+            "/vendor"
         ]
     }
 }
