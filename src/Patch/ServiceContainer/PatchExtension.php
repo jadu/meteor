@@ -103,6 +103,12 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
                 ->scalarNode('includeHiddenFiles')
                     // NB: Unused config parameter but added for backwards compatibility with old Meteor configs
                 ->end()
+                ->arrayNode('replace_directories')
+                    ->normalizeKeys(false)
+                    ->defaultValue([])
+                    ->prototype('scalar')->end()
+                    ->end()
+                ->end()
             ->end()
         ->end();
     }
