@@ -60,7 +60,7 @@ class BackupFilesHandler
         // Backup everything in the install that is marked as a replace directory
         foreach ($replaceDirectories as $directory) {
             $this->io->debug(sprintf("Adding replace directory %s to backup files", $task->installDir . $directory));
-            $replaceFiles = $this->filesystem->findFiles($task->installDir . $directory);
+            $replaceFiles = $this->filesystem->findFiles($task->installDir, [$directory]);
 
             $files = array_merge($files, $replaceFiles);
         }

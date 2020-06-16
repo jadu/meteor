@@ -76,7 +76,7 @@ class BackupFilesHandlerTest extends PHPUnit_Framework_TestCase
             ->once();
 
         $this->filesystem->shouldReceive('findFiles')
-            ->with('install/vendor')
+            ->with('install', ['/vendor'])
             ->andReturn(['vendor'])
             ->once();
 
