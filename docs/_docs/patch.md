@@ -68,6 +68,13 @@ If at any time you want to just verify the package the following command can be 
 php meteor.phar patch:verify
 ```
 
+## Specifing a different log dir
+
+```
+php meteor.phar patch:apply --log-dir=/var/www/jadu/logs
+```
+The meteor log will be created in the specified directory if it exists
+
 ## Configuration
 
 ```json
