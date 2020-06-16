@@ -8,7 +8,7 @@ toc: true
 A Meteor package is a ZIP archive containing all of the required code files and a `meteor.phar` binary used to apply the patch.
 
 Once a package has been uploaded and extracted on the server it can be applied using the `patch:apply` command.
-
+̄
 ```
 cd package
 php meteor.phar patch:apply
@@ -16,7 +16,7 @@ php meteor.phar patch:apply
 
 Meteor will now begin applying the patch to your installation using the default options.
 
-View a recording of a patch being applied:
+View a recording of a patch being applied:̄
 <script type="text/javascript" src="https://asciinema.org/a/7iz18307vbaaymu9tikdl9oi0.js" id="asciicast-7iz18307vbaaymu9tikdl9oi0" async></script>
 
 ## Rolling back a patch
@@ -66,6 +66,14 @@ If at any time you want to just verify the package the following command can be 
 
 ```
 php meteor.phar patch:verify
+```
+
+## Limiting number of backups
+
+If you want to limit the number of backups that are on an environment, you can pass on an optional `--limit-backups` parameter
+
+```
+php meteor.phar patch:apply --limit-backups=3
 ```
 
 ## Configuration
