@@ -1,3 +1,4 @@
+* Updated Doctrine Migrations to 1.5.0 ([#110](https://github.com/jadu/meteor/pull/110)).
 * Fixed issues with running multiple scripts in the script runner
 * Adds --log-dir option at patching stage to specify a different folder for logs ([#84](https://github.com/jadu/meteor/pull/84)).
 * Adds a --limit-backups option at patching stage ([#83](https://github.com/jadu/meteor/pull/83)).

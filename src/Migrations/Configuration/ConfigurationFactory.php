@@ -2,6 +2,7 @@
 
 namespace Meteor\Migrations\Configuration;
 
+use Doctrine\DBAL\Migrations\Finder\GlobFinder;
 use Doctrine\DBAL\Migrations\OutputWriter;
 use InvalidArgumentException;
 use Meteor\IO\IOInterface;
@@ -80,7 +81,7 @@ class ConfigurationFactory
      */
     public function createDatabaseConfiguration(array $config, $patchDir, $installDir)
     {
-        $configuration = $this->create('Meteor\Migrations\Configuration\DatabaseConfiguration', $config, $patchDir, $installDir);
+        $configuration = $this->create(DatabaseConfiguration::class, $config, $patchDir, $installDir);
 
         // NB: This will attempt to connect to the database
         $configuration->registerMigrationsFromDirectory($patchDir . '/' . $config['directory']);
@@ -98,7 +99,7 @@ class ConfigurationFactory
     public function createFileConfiguration(array $config, $patchDir, $installDir)
     {
         $config['directory'] = $config['directory'] . '/' . FileConfiguration::MIGRATION_DIRECTORY;
-        $configuration = $this->create('Meteor\Migrations\Configuration\FileConfiguration', $config, $patchDir, $installDir);
+        $configuration = $this->create(FileConfiguration::class, $config, $patchDir, $installDir);
 
         $versionStorage = $this->fileMigrationVersionStorageFactory->create($installDir, $config['table']);
         $configuration->setVersionStorage($versionStorage);
@@ -127,7 +128,7 @@ class ConfigurationFactory
     {
         $connection = $this->connectionFactory->getConnection($installDir);
 
-        $configuration = new $className($connection, $this->createOutputWriter());
+        $configuration = new $className($connection, $this->createOutputWriter(), new GlobFinder());
         $configuration->setName($config['name']);
         $configuration->setMigrationsNamespace($config['namespace']);
         $configuration->setMigrationsTableName($config['table']);
