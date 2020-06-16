@@ -42,7 +42,7 @@ class BackupFilesHandler
      */
     public function handle(BackupFiles $task, array $config)
     {
-        $this->io->text(sprintf('Creating backup in <info>%s</>', $task->backupDir));
+        $this->io->text(sprintf('Creating backup in <info>%s</info>', $task->backupDir));
 
         $this->filesystem->ensureDirectoryExists($task->backupDir);
 

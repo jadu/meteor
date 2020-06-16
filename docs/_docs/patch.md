@@ -75,6 +75,14 @@ php meteor.phar patch:apply --log-dir=/var/www/jadu/logs
 ```
 The meteor log will be created in the specified directory if it exists
 
+## Limiting number of backups
+
+If you want to limit the number of backups that are on an environment, you can pass on an optional `--limit-backups` parameter
+
+```
+php meteor.phar patch:apply --limit-backups=3
+```
+
 ## Configuration
 
 ```json
