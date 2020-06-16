@@ -26,7 +26,7 @@ class FinderFactory
             $finder->depth($depth);
         }
 
-        if (!empty($filters)) {
+        if ($filters !== null) {
             $patterns = [];
             foreach ($filters as $filter) {
                 $patterns[] = $this->generatePattern($filter);
