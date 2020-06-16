@@ -14,6 +14,7 @@ use Meteor\Patch\Task\CheckWritePermission;
 use Meteor\Patch\Task\CopyFiles;
 use Meteor\Patch\Task\DeleteBackup;
 use Meteor\Patch\Task\DisplayVersionInfo;
+use Meteor\Patch\Task\LimitBackups;
 use Meteor\Patch\Task\MigrateDown;
 use Meteor\Patch\Task\MigrateUp;
 use Meteor\Patch\Task\SetPermissions;
@@ -44,6 +45,10 @@ class OverwritePatchStrategy implements PatchStrategyInterface
             $tasks[] = new CheckDatabaseConnection($installDir);
         }
 
+        if (!empty($options['limit-backups']) && (int) $options['limit-backups'] !== 0) {
+            $tasks[] = new LimitBackups($installDir, $options['limit-backups']);
+        }
+
         $tasks[] = new CheckDiskSpace($installDir);
 
         if (!$options['skip-backup']) {
@@ -72,6 +77,7 @@ class OverwritePatchStrategy implements PatchStrategyInterface
     public function configureApplyCommand(InputDefinition $definition)
     {
         $definition->addOption(new InputOption('skip-backup', null, InputOption::VALUE_NONE, 'Do not create a backup before applying the patch.'));
+        $definition->addOption(new InputOption('limit-backups', null, InputOption::VALUE_REQUIRED, 'Limit the number of backups that are stored'));
 
         $this->configureCommand($definition);
     }
