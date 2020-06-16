@@ -21,9 +21,14 @@ abstract class AbstractPatchCommand extends AbstractCommand
     protected $installDir;
 
     /**
-     * @param string $name
-     * @param array $config
-     * @param IOInterface $io
+     * @var string
+     */
+    protected $logDir;
+
+    /**
+     * @param string            $name
+     * @param array             $config
+     * @param IOInterface       $io
      * @param PlatformInterface $platform
      */
     public function __construct($name, array $config, IOInterface $io, PlatformInterface $platform)
@@ -36,8 +41,8 @@ abstract class AbstractPatchCommand extends AbstractCommand
     protected function configure()
     {
         $this->addOption('install-dir', 'i', InputOption::VALUE_REQUIRED, 'The Jadu install directory');
+        $this->addOption('log-dir', 'ld', InputOption::VALUE_REQUIRED, 'Optional log directory');
         $this->addOption('path', null, InputOption::VALUE_REQUIRED, '<fg=yellow>[DEPRECATED] Use the --install-dir/-i option instead</>');
-
         $this->addOption('db-name', null, InputOption::VALUE_REQUIRED, 'The name of the database');
         $this->addOption('db-user', null, InputOption::VALUE_REQUIRED, 'The username used to connect to the database');
         $this->addOption('db-password', null, InputOption::VALUE_REQUIRED, 'The password used to connect to the database');
@@ -75,10 +80,23 @@ abstract class AbstractPatchCommand extends AbstractCommand
 
     /**
      * @param string $workingDir
+     *
+     * @return string
      */
     protected function getLogPath($workingDir)
     {
-        // Store logs in the current working directory
-        return $workingDir . '/logs/meteor-' . date('YmdHis') . '.log';
+        $filename = 'meteor-' . date('YmdHis') . '.log';
+        $logDir = rtrim($this->io->getOption('log-dir'), '/');
+
+        if (!$logDir) {
+            // Store logs in the current working directory
+            return $workingDir . '/logs/' . $filename;
+        }
+
+        if (!is_dir($logDir)) {
+            throw new InvalidArgumentException(sprintf('The log directory `%s` does not exist.', $logDir));
+        }
+
+        return $logDir . '/' . $filename;
     }
 }

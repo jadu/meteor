@@ -1,4 +1,6 @@
 * Fixed issues with running multiple scripts in the script runner
+* Adds --log-dir option at patching stage to specify a different folder for logs ([#84](https://github.com/jadu/meteor/pull/84)).
+* Adds a --limit-backups option at patching stage ([#83](https://github.com/jadu/meteor/pull/83)).
 * Adds correction to permission reset command in Troubleshooting documentation ([#94](https://github.com/jadu/meteor/pull/94)).
 
 ## v3.1.0
