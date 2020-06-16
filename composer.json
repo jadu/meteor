@@ -21,7 +21,8 @@
     "require-dev": {
         "phpunit/phpunit": "~5.7.23",
         "mockery/mockery": "~0.9",
-        "mikey179/vfsstream": "*"
+        "mikey179/vfsstream": "*",
+        "kherge/box": "^2.7"
     },
     "autoload": {
         "psr-4": {
