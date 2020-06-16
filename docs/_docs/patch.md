@@ -68,6 +68,14 @@ If at any time you want to just verify the package the following command can be 
 php meteor.phar patch:verify
 ```
 
+## Limiting number of backups
+
+If you want to limit the number of backups that are on an environment, you can pass on an optional `--limit-backups` parameter
+
+```
+php meteor.phar patch:apply --limit-backups=3
+```
+
 ## Configuration
 
 ```json

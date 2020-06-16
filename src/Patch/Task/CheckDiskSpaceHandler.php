@@ -5,9 +5,12 @@ namespace Meteor\Patch\Task;
 use Meteor\Filesystem\Filesystem;
 use Meteor\IO\IOInterface;
 use Meteor\Patch\Backup\BackupFinder;
+use Meteor\Patch\Backup\BackupHandlerTrait;
 
 class CheckDiskSpaceHandler
 {
+    use BackupHandlerTrait;
+
     /**
      * Assuming required space is 300MB for backup and new files. Not checking the real package
      * size to avoid performance issues when checking the size of thousands of files.
@@ -53,7 +56,9 @@ class CheckDiskSpaceHandler
 
     /**
      * @param CheckDiskSpace $task
-     * @param array $config
+     * @param array          $config
+     *
+     * @return bool
      */
     public function handle(CheckDiskSpace $task, array $config)
     {
@@ -107,26 +112,6 @@ class CheckDiskSpaceHandler
             return;
         }
 
-        // Do not remove the latest backups that can be kept
-        $backups = array_slice($backups, self::MAX_BACKUPS);
-
-        $this->io->text(sprintf('It is recommended to keep a maximum of %d backups. To free up some disk space the following %d backups should be removed: ', self::MAX_BACKUPS, count($backups)));
-
-        // Get just the backup directory names
-        $backupDirs = array_map(function ($backup) {
-            return $backup->getPath();
-        }, $backups);
-
-        $this->io->listing($backupDirs);
-
-        $confirmation = $this->io->askConfirmation('Would you like to remove these backups?', true);
-        if (!$confirmation) {
-            return;
-        }
-
-        foreach ($backups as $backup) {
-            $this->io->text(sprintf('Removing backup <info>%s</>', $backup->getDate()->format('c')));
-            $this->filesystem->remove($backup->getPath());
-        }
+        $this->removeBackups($backups, self::MAX_BACKUPS);
     }
 }

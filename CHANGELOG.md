@@ -1,3 +1,4 @@
+* Adds a --limit-backups option at patching stage ([#83](https://github.com/jadu/meteor/pull/83)).
 * Adds correction to permission reset command in Troubleshooting documentation ([#94](https://github.com/jadu/meteor/pull/94)).
 
 ## v3.1.0
