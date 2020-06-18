@@ -15,7 +15,7 @@ class FinderFactory
      *
      * @return Finder
      */
-    public function create($path, array $filters = null, $depth = null)
+    public function create($path, array $filters = [], $depth = null)
     {
         $finder = new Finder();
         $finder->in($path);
@@ -26,7 +26,7 @@ class FinderFactory
             $finder->depth($depth);
         }
 
-        if ($filters !== null) {
+        if (!empty($filters)) {
             $patterns = [];
             foreach ($filters as $filter) {
                 $patterns[] = $this->generatePattern($filter);

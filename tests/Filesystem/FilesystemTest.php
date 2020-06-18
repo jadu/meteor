@@ -167,10 +167,10 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
         $finder->in($sourceDir);
 
         $this->finderFactory->shouldReceive('create')
-            ->with($sourceDir, null, null)
+            ->with($sourceDir, [], null)
             ->andReturn($finder);
 
-        $files = $this->filesystem->findFiles($sourceDir, null, false);
+        $files = $this->filesystem->findFiles($sourceDir, [], false);
 
         $this->assertEquals([
             'vfs://root/public_html',
@@ -255,7 +255,7 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
         $finder->in($baseDir);
 
         $this->finderFactory->shouldReceive('create')
-            ->with($baseDir, null, null)
+            ->with($baseDir, [], null)
             ->andReturn($finder);
 
         $files = $this->filesystem->findNewFiles($baseDir, $targetDir);

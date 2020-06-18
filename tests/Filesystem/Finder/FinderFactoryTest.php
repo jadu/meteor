@@ -38,6 +38,17 @@ class FinderFactoryTest extends \PHPUnit_Framework_TestCase
                     'index.html' => '',
                     'XFP_VERSION' => '',
                 ],
+                [],
+                [
+                    'index.html',
+                    'XFP_VERSION',
+                ],
+            ],
+            [
+                [
+                    'index.html' => '',
+                    'XFP_VERSION' => '',
+                ],
                 [
                     '**',
                 ],
