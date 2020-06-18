@@ -212,7 +212,10 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
 
         $sourceDir = vfsStream::url('root');
 
-        $filters = ['!/var'];
+        $filters = [
+            '**',
+            '!/var'
+        ];
 
         $finder = new Finder();
         $finder->in($sourceDir);

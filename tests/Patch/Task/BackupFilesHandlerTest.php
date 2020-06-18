@@ -71,7 +71,7 @@ class BackupFilesHandlerTest extends PHPUnit_Framework_TestCase
         ];
 
         $this->filesystem->shouldReceive('findFiles')
-            ->with('patch/to_patch', ['!/vendor'])
+            ->with('patch/to_patch', ['**', '!/vendor'])
             ->andReturn(['patch'])
             ->once();
 

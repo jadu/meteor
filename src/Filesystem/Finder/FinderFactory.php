@@ -48,8 +48,6 @@ class FinderFactory
                         }
 
                         $include = true;
-                    } elseif ($negate) {
-                        $include = true;
                     }
                 }
 
