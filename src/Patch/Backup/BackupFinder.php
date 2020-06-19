@@ -42,7 +42,6 @@ class BackupFinder
         $backups = [];
         $backupsDir = $installDir . '/backups';
         $packageNames = $this->getPackageNames($config);
-
         $backupDirs = [];
         foreach (new DirectoryIterator($backupsDir) as $file) {
             if (!$file->isDot() && $file->isDir() && preg_match('/^\d{14}$/', $file->getFilename())) {

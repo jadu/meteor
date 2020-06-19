@@ -149,4 +149,25 @@ class ScriptRunnerTest extends \PHPUnit_Framework_TestCase
 
         $scriptRunner->run('test');
     }
+
+    public function testRunsCombinedReferencedScriptWithMultipleCommands()
+    {
+        $scriptRunner = new ScriptRunner($this->processRunner, new NullIO(), [
+            'jadu/cms' => [
+                'test' => ['@clear-cache', '@warm-cache'],
+                'clear-cache' => ['clear-cache.sh'],
+                'warm-cache' => ['warm-cache.sh']
+            ],
+        ]);
+
+        $this->processRunner->shouldReceive('run')
+            ->with('clear-cache.sh', null)
+            ->once();
+
+        $this->processRunner->shouldReceive('run')
+            ->with('warm-cache.sh', null)
+            ->once();
+
+        $scriptRunner->run('test');
+    }
 }

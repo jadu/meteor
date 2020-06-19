@@ -70,7 +70,7 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->filesystem->shouldReceive('copyDirectory')
-            ->with($workingDir, $tempDir . '/to_patch', null)
+            ->with($workingDir, $tempDir . '/to_patch', [])
             ->ordered()
             ->once();
 
@@ -135,7 +135,7 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->filesystem->shouldReceive('copyDirectory')
-            ->with($workingDir, $tempDir . '/to_patch', null)
+            ->with($workingDir, $tempDir . '/to_patch', [])
             ->ordered()
             ->once();
 
