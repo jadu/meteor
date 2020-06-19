@@ -7,8 +7,6 @@ use Doctrine\DBAL\Driver\PDOMySql\Driver;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Types\Type;
 use DOMDocument;
-use Jadu\Bundle\EncryptionBundle\Encryptor\AesCbcEncryptor;
-use Jadu\Bundle\EncryptionBundle\Type\EncryptedTextType;
 use Meteor\Migrations\Connection\Configuration\Loader\ConfigurationLoaderInterface;
 use Meteor\Migrations\Connection\Platform\SQLServer2008Platform;
 
@@ -52,13 +50,29 @@ class ConnectionFactory
     public function createConnection(array $configuration, $installDir)
     {
         Type::addType('unicodetext', 'Jadu\DoctrineTypes\UnicodeTextType');
-        Type::addType(EncryptedTextType::ENCRYPTED_TEXT_TYPE, EncryptedTextType::class);
+        $encryptionKey = $this->getEncryptionKey($installDir);
+        if (class_exists('Jadu\Bundle\EncryptionBundle\Type\EncryptedTextType')) {
+            Type::addType(\Jadu\Bundle\EncryptionBundle\Type\EncryptedTextType::ENCRYPTED_TEXT_TYPE, \Jadu\Bundle\EncryptionBundle\Type\EncryptedTextType::class);
+            $type = Type::getType(\Jadu\Bundle\EncryptionBundle\Type\EncryptedTextType::ENCRYPTED_TEXT_TYPE);
+            if ($type instanceof \Jadu\Bundle\EncryptionBundle\Type\EncryptedTextType) {
+                if (!empty($encryptionKey)) {
+                    $type->setEncryptor(new \Jadu\Bundle\EncryptionBundle\Encryptor\AesCbcEncryptor(
+                        $encryptionKey
+                    ));
+                }
+            }
+        }
 
-        $type = Type::getType(EncryptedTextType::ENCRYPTED_TEXT_TYPE);
-        if ($type instanceof EncryptedTextType) {
-            $type->setEncryptor(new AesCbcEncryptor(
-               $this->getEncryptionKey($installDir)
-            ));
+        if (class_exists('\Jadu\Bundle\EncryptionBundle\Type\EncryptedBlobType')) {
+            Type::addType(\Jadu\Bundle\EncryptionBundle\Type\EncryptedBlobType::ENCRYPTED_BLOB_TYPE, \Jadu\Bundle\EncryptionBundle\Type\EncryptedBlobType::class);
+            $type = Type::getType(\Jadu\Bundle\EncryptionBundle\Type\EncryptedBlobType::ENCRYPTED_BLOB_TYPE);
+            if ($type instanceof \Jadu\Bundle\EncryptionBundle\Type\EncryptedBlobType) {
+                if (!empty($encryptionKey)) {
+                    $type->setEncryptor(new \Jadu\Bundle\EncryptionBundle\Encryptor\AesCbcEncryptor(
+                        $encryptionKey
+                    ));
+                }
+            }
         }
 
             return DriverManager::getConnection($configuration);
@@ -90,6 +104,13 @@ class ConnectionFactory
         return $this->connection;
     }
 
+
+    /**
+     * Return the encryption key if exist , if not return empty string
+     *
+     * @param $installDir
+     * @return string
+     */
     private function getEncryptionKey($installDir)
     {
         $configFile = $installDir . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'constants.xml';
