@@ -49,8 +49,13 @@ class BackupFilesHandler
         $replaceDirectories = $config['patch']['replace_directories'];
 
         $excludeFilters = [];
-        foreach ($replaceDirectories as $directory) {
-            $excludeFilters[] = '!' . $directory;
+
+        if (!empty($replaceDirectories)) {
+            $excludeFilters[] = '**';
+
+            foreach ($replaceDirectories as $directory) {
+                $excludeFilters[] = '!' . $directory;
+            }
         }
 
         // Copy the files from the install that exist in the patch to the backup

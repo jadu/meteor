@@ -66,7 +66,7 @@ class CopyFilesHandlerTest extends PHPUnit_Framework_TestCase
     public function testExcludesSwapFoldersFromCopyDirectory()
     {
          $this->filesystem->shouldReceive('copyDirectory')
-            ->with('source', 'target', ['!/vendor'])
+            ->with('source', 'target', ['**', '!/vendor'])
             ->once();
 
         $this->handler->handle(new CopyFiles('source', 'target'), $this->replaceDirectoriesConfig);
@@ -75,7 +75,7 @@ class CopyFilesHandlerTest extends PHPUnit_Framework_TestCase
     public function testExcludesReplaceDirectoriesFromFindNewFiles()
     {
          $this->filesystem->shouldReceive('findNewFiles')
-            ->with('source', 'target', ['!/vendor'])
+            ->with('source', 'target', ['**', '!/vendor'])
             ->andReturn([])
             ->once();
 

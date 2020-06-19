@@ -46,8 +46,13 @@ class CopyFilesHandler
         $replaceDirectories = $config['patch']['replace_directories'];
 
         $excludeFilters = [];
-        foreach ($replaceDirectories as $directory) {
-            $excludeFilters[] = '!' . $directory;
+
+        if (!empty($replaceDirectories)) {
+            $excludeFilters[] = '**';
+
+            foreach ($replaceDirectories as $directory) {
+                $excludeFilters[] = '!' . $directory;
+            }
         }
 
         $newFiles = $this->filesystem->findNewFiles($task->sourceDir, $task->targetDir, $excludeFilters);

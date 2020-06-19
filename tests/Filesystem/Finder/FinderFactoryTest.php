@@ -38,6 +38,17 @@ class FinderFactoryTest extends \PHPUnit_Framework_TestCase
                     'index.html' => '',
                     'XFP_VERSION' => '',
                 ],
+                [],
+                [
+                    'index.html',
+                    'XFP_VERSION',
+                ],
+            ],
+            [
+                [
+                    'index.html' => '',
+                    'XFP_VERSION' => '',
+                ],
                 [
                     '**',
                 ],
@@ -119,7 +130,6 @@ class FinderFactoryTest extends \PHPUnit_Framework_TestCase
                     '!/*VERSION',
                 ],
                 [
-                    'var',
                     'var/XFP_VERSION',
                 ],
             ],
@@ -194,11 +204,39 @@ class FinderFactoryTest extends \PHPUnit_Framework_TestCase
                     ]
                 ],
                 [
+                    '**',
                     '!/vendor',
                 ],
                 [
                     'public_html',
                     'public_html/.htaccess',
+                ],
+            ],
+            [
+                [
+                    'public_html' => [
+                        '.htaccess' => '',
+                        'index.html' => '',
+                    ],
+                    'node_modules' => [
+                        'item.txt' => '',
+                        'module_1' => [
+                            'abc.txt' => '',
+                        ]
+                    ],
+                    'vendor' => [
+                        'org' => [
+                            'package' => 'file.html',
+                        ]
+                    ]
+                ],
+                [
+                    '/public_html',
+                    '!/public_html/.htaccess',
+                ],
+                [
+                    'public_html',
+                    'public_html/index.html',
                 ],
             ],
         ];

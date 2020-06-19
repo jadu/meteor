@@ -6,10 +6,9 @@ php:
   - 7.3
 
 before_script:
-  - wget http://getcomposer.org/composer.phar
-  - php composer.phar install --no-interaction
-  - php composer.phar require php-coveralls/php-coveralls
-  - php composer.phar dump-autoload --optimize
+  - composer install --no-interaction
+  - composer require php-coveralls/php-coveralls
+  - composer dump-autoload --optimize
 
 script:
   - mkdir ./tests/logs/

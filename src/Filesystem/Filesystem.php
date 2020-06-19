@@ -74,7 +74,7 @@ class Filesystem extends BaseFilesystem
      *
      * @return bool
      */
-    public function copyDirectory($sourceDir, $targetDir, array $filters = null)
+    public function copyDirectory($sourceDir, $targetDir, array $filters = [])
     {
         return $this->copyFiles($this->findFiles($sourceDir, $filters), $sourceDir, $targetDir);
     }
@@ -127,7 +127,7 @@ class Filesystem extends BaseFilesystem
      *
      * @return array
      */
-    public function findFiles($sourceDir, array $filters = null, $relative = true, $depth = null)
+    public function findFiles($sourceDir, array $filters = [], $relative = true, $depth = null)
     {
         $files = [];
 
