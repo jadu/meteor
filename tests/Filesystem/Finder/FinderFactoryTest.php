@@ -241,4 +241,48 @@ class FinderFactoryTest extends \PHPUnit_Framework_TestCase
             ],
         ];
     }
+
+    /**
+     * @dataProvider generatePatternProvider
+     * @param string $filter
+     * @param string $directorySeparator
+     * @param array $expected
+     */
+    public function testGeneratePattern($filter, $directorySeparator, $expected)
+    {
+        $pattern = $this->finderFactory->generatePattern($filter, $directorySeparator);
+
+        static::assertEquals($expected, $pattern);
+    }
+
+    public function generatePatternProvider()
+    {
+        return [
+            [
+                'filter' => '!/vendor',
+                'directorySeparator' => '/',
+                'expected' => ['/^vendor(?=$|\/)/', true]
+            ],
+            [
+                'filter' => '!/vendor',
+                'directorySeparator' => '\\',
+                'expected' => ['/^vendor(?=$|\\\)/', true]
+            ],
+            [
+                'filter' => '/vendor',
+                'directorySeparator' => '\\',
+                'expected' => ['/^vendor(?=$|\\\)/', false]
+            ],
+            [
+                'filter' => '/public_html/site/styles',
+                'directorySeparator' => '\\',
+                'expected' => ['/^public_html\\\site\\\styles(?=$|\\\)/', false]
+            ],
+            [
+                'filter' => '/public_html/site/styles',
+                'directorySeparator' => '/',
+                'expected' => ['/^public_html\/site\/styles(?=$|\/)/', false]
+            ],
+        ];
+    }
 }
