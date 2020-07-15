@@ -1,3 +1,4 @@
+* The order of script execution in combined packages has been changed so that scripts of the last package to be combined will now be run last
 * Add support for encrypted database content
 * Add support for 'replace_directories' configuration option, allowing certain folders to be marked for slightly different patch strategy whereby the existing folder is removed and replaced entirely by the folder from the package.
 * Updated Doctrine Migrations to 1.5.0 ([#110](https://github.com/jadu/meteor/pull/110)).
