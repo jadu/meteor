@@ -87,4 +87,39 @@ class BackupFilesHandlerTest extends PHPUnit_Framework_TestCase
 
         $this->handler->handle(new BackupFiles('install/backups/20160701000000', 'patch', 'install'), $config);
     }
+
+    public function testReplaceDirectoriesAreExcludedFromNormalBackupCopyWhenInCombinedConfig()
+    {
+        $config = [
+            'patch' => [
+                'replace_directories' => ['/vendor']
+            ],
+            'combined' => [
+                [
+                    'patch' => [
+                        'replace_directories' => ['/foo']
+                    ]
+                ]
+            ]
+        ];
+
+        $this->filesystem->shouldReceive('findFiles')
+            ->with('patch/to_patch', ['**', '!/vendor', '!/foo'])
+            ->andReturn(['patch'])
+            ->once();
+        $this->filesystem->shouldReceive('findFiles')
+            ->with('install', ['/vendor'])
+            ->andReturn(['vendor'])
+            ->once();
+        $this->filesystem->shouldReceive('findFiles')
+            ->with('install', ['/foo'])
+            ->andReturn(['foo'])
+            ->once();
+        $this->filesystem->shouldReceive('copyFiles')
+            ->with(['patch', 'vendor', 'foo'], 'install', 'install/backups/20160701000000/to_patch')
+            ->andReturn([])
+            ->once();
+
+        $this->handler->handle(new BackupFiles('install/backups/20160701000000', 'patch', 'install'), $config);
+    }
 }
