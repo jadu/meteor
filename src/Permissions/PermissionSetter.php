@@ -121,7 +121,7 @@ class PermissionSetter
     public function setPostScriptsPermissions($targetDir)
     {
         $permissions = $this->permissionLoader->loadFromArray($this->postScriptsPermission);
-        $this->io->text(sprintf('Setting post apply file permissions in <info>%s</>', $targetDir));
+        $this->io->text(sprintf('Setting post scripts file permissions in <info>%s</>', $targetDir));
 
         foreach ($permissions as $permission) {
             $files = $this->resolvePattern($targetDir, $targetDir, $permission->getPattern());
