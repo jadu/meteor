@@ -206,8 +206,8 @@ class PermissionSetter
         return $paths;
     }
 
-    public function getPostApplyPermissions()
+    public function getPostScriptsPermissions()
     {
-        return $this->postApplyPermissions;
+        return $this->postScriptsPermission;
     }
 }

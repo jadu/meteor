@@ -195,7 +195,7 @@ class PermissionSetterTest extends \PHPUnit_Framework_TestCase
         $permission = new Permission('var/cache/*');
 
         $this->permissionLoader->shouldReceive('loadFromArray')
-            ->with($this->permissionSetter->getPostApplyPermissions())
+            ->with($this->permissionSetter->getPostScriptsPermissions())
             ->andReturn([$permission])
             ->once();
 
@@ -203,7 +203,7 @@ class PermissionSetterTest extends \PHPUnit_Framework_TestCase
             ->andThrow(new Exception())
             ->once();
 
-        $this->permissionSetter->setPostApplyPermissions(vfsStream::url('root/target'));
+        $this->permissionSetter->setPostScriptsPermissions(vfsStream::url('root/target'));
     }
 
     public function testSetPostApplyPermissions()
@@ -221,7 +221,7 @@ class PermissionSetterTest extends \PHPUnit_Framework_TestCase
         $permission = new Permission('var/cache/*');
 
         $this->permissionLoader->shouldReceive('loadFromArray')
-            ->with($this->permissionSetter->getPostApplyPermissions())
+            ->with($this->permissionSetter->getPostScriptsPermissions())
             ->andReturn([$permission])
             ->once();
 
@@ -229,7 +229,7 @@ class PermissionSetterTest extends \PHPUnit_Framework_TestCase
             ->with(vfsStream::url('root/target/var/cache/test.php'), $permission)
             ->once();
 
-        $this->permissionSetter->setPostApplyPermissions(vfsStream::url('root/target'));
+        $this->permissionSetter->setPostScriptsPermissions(vfsStream::url('root/target'));
     }
 
 }

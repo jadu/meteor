@@ -47,7 +47,7 @@ class ApplyCommandTest extends CommandTestCase
             'setWorkingDir' => null,
         ]);
         $this->logger = Mockery::mock('Meteor\Logger\LoggerInterface');
-        $this->permissionSetter = Mockery::mock(PermissionSetter::class,['setPostApplyPermissions' => null]);
+        $this->permissionSetter = Mockery::mock(PermissionSetter::class,['setPostScriptsPermissions' => null]);
 
         $this->strategy->shouldReceive('configureApplyCommand')
             ->once();
@@ -91,7 +91,7 @@ class ApplyCommandTest extends CommandTestCase
             ->with($workingDir)
             ->once();
 
-        $this->permissionSetter->shouldReceive('setPostApplyPermissions')
+        $this->permissionSetter->shouldReceive('setPostScriptsPermissions')
             ->with($installDir)
             ->once();
 
@@ -179,7 +179,7 @@ class ApplyCommandTest extends CommandTestCase
             ->andReturn(true)
             ->once();
 
-        $this->permissionSetter->shouldReceive('setPostApplyPermissions')
+        $this->permissionSetter->shouldReceive('setPostScriptsPermissions')
             ->with($installDir)
             ->once();
 
@@ -584,7 +584,7 @@ class ApplyCommandTest extends CommandTestCase
             ->with($workingDir)
             ->once();
 
-        $this->permissionSetter->shouldReceive('setPostApplyPermissions')
+        $this->permissionSetter->shouldReceive('setPostScriptsPermissions')
             ->with($installDir)
             ->never();
 
@@ -610,7 +610,7 @@ class ApplyCommandTest extends CommandTestCase
         $this->tester->execute([
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
-            '--skip-post-apply-permissions' => null,
+            '--skip-post-scripts-permissions' => null,
         ]);
     }
 
