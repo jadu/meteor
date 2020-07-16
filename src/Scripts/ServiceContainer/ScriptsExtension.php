@@ -69,7 +69,7 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
     public function configParse(array $config)
     {
         $extensionConfig = [];
-        $extensionConfig[] = parent::configParse($config);
+
         if (isset($config['combined'])) {
             $extensionConfigKey = $this->getConfigKey();
             foreach ($config['combined'] as $combinedConfig) {
@@ -78,6 +78,10 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
                 }
             }
         }
+
+        // Put the current script as last executed batch
+        // Otherwise combined scripts take precedence
+        $extensionConfig[] = parent::configParse($config);
 
         return $extensionConfig;
     }

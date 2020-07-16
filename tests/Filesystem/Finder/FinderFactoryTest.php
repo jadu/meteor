@@ -38,6 +38,17 @@ class FinderFactoryTest extends \PHPUnit_Framework_TestCase
                     'index.html' => '',
                     'XFP_VERSION' => '',
                 ],
+                [],
+                [
+                    'index.html',
+                    'XFP_VERSION',
+                ],
+            ],
+            [
+                [
+                    'index.html' => '',
+                    'XFP_VERSION' => '',
+                ],
                 [
                     '**',
                 ],
@@ -180,6 +191,97 @@ class FinderFactoryTest extends \PHPUnit_Framework_TestCase
                 [
                     'public_html/.htaccess',
                 ],
+            ],
+            [
+                [
+                    'public_html' => [
+                        '.htaccess' => '',
+                    ],
+                    'vendor' => [
+                        'org' => [
+                            'package' => 'file.html'
+                        ]
+                    ]
+                ],
+                [
+                    '**',
+                    '!/vendor',
+                ],
+                [
+                    'public_html',
+                    'public_html/.htaccess',
+                ],
+            ],
+            [
+                [
+                    'public_html' => [
+                        '.htaccess' => '',
+                        'index.html' => '',
+                    ],
+                    'node_modules' => [
+                        'item.txt' => '',
+                        'module_1' => [
+                            'abc.txt' => '',
+                        ]
+                    ],
+                    'vendor' => [
+                        'org' => [
+                            'package' => 'file.html',
+                        ]
+                    ]
+                ],
+                [
+                    '/public_html',
+                    '!/public_html/.htaccess',
+                ],
+                [
+                    'public_html',
+                    'public_html/index.html',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider generatePatternProvider
+     * @param string $filter
+     * @param string $directorySeparator
+     * @param array $expected
+     */
+    public function testGeneratePattern($filter, $directorySeparator, $expected)
+    {
+        $pattern = $this->finderFactory->generatePattern($filter, $directorySeparator);
+
+        static::assertEquals($expected, $pattern);
+    }
+
+    public function generatePatternProvider()
+    {
+        return [
+            [
+                'filter' => '!/vendor',
+                'directorySeparator' => '/',
+                'expected' => ['/^vendor(?=$|\/)/', true]
+            ],
+            [
+                'filter' => '!/vendor',
+                'directorySeparator' => '\\',
+                'expected' => ['/^vendor(?=$|\\\)/', true]
+            ],
+            [
+                'filter' => '/vendor',
+                'directorySeparator' => '\\',
+                'expected' => ['/^vendor(?=$|\\\)/', false]
+            ],
+            [
+                'filter' => '/public_html/site/styles',
+                'directorySeparator' => '\\',
+                'expected' => ['/^public_html\\\site\\\styles(?=$|\\\)/', false]
+            ],
+            [
+                'filter' => '/public_html/site/styles',
+                'directorySeparator' => '/',
+                'expected' => ['/^public_html\/site\/styles(?=$|\/)/', false]
             ],
         ];
     }

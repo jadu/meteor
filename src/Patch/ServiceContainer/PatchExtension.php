@@ -25,6 +25,8 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
+use Meteor\Patch\Task\LimitBackupsHandler;
+use Meteor\Patch\Task\LimitBackups;
 
 class PatchExtension extends ExtensionBase implements ExtensionInterface, ScriptEventProviderInterface
 {
@@ -41,6 +43,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     const SERVICE_STRATEGY = 'patch.strategy';
     const SERVICE_TASK_BUS = 'patch.task_bus';
     const SERVICE_TASK_BACKUP_FILES_HANDLER = 'patch.task.backup_files_handler';
+    const SERVICE_TASK_LIMIT_BACKUPS_HANDLER = 'patch.task.limit_backups_handler';
     const SERVICE_TASK_CHECK_DATABASE_CONNECTION_HANDLER = 'patch.task.check_database_connection_handler';
     const SERVICE_TASK_CHECK_DISK_SPACE_HANDLER = 'patch.task.check_disk_space_handler';
     const SERVICE_TASK_CHECK_MODULE_CMS_DEPENDENCY_HANDLER = 'patch.task.check_module_cms_dependency_handler';
@@ -100,6 +103,12 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
                 ->scalarNode('includeHiddenFiles')
                     // NB: Unused config parameter but added for backwards compatibility with old Meteor configs
                 ->end()
+                ->arrayNode('replace_directories')
+                    ->normalizeKeys(false)
+                    ->defaultValue([])
+                    ->prototype('scalar')->end()
+                    ->end()
+                ->end()
             ->end()
         ->end();
     }
@@ -113,6 +122,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
 
         $this->loadBackupFinder($container);
         $this->loadBackupFilesTaskHandler($container);
+        $this->loadLimitBackupsTaskHandler($container);
         $this->loadCheckDatabaseConnectionTaskHandler($container);
         $this->loadCheckDiskSpaceHandler($container);
         $this->loadCheckModuleCmsDependencyTaskHandler($container);
@@ -135,7 +145,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function loadBackupFinder(ContainerBuilder $container)
     {
@@ -146,7 +156,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function loadTaskBus(ContainerBuilder $container)
     {
@@ -154,7 +164,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function loadBackupFilesTaskHandler(ContainerBuilder $container)
     {
@@ -171,7 +181,24 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
+     */
+    private function loadLimitBackupsTaskHandler(ContainerBuilder $container)
+    {
+        $definition = new Definition(LimitBackupsHandler::class, [
+            new Reference(self::SERVICE_BACKUP_FINDER),
+            new Reference(FilesystemExtension::SERVICE_FILESYSTEM),
+            new Reference(IOExtension::SERVICE_IO),
+        ]);
+        $definition->addTag(self::TAG_TASK_HANDLER, [
+            'task' => LimitBackups::class,
+        ]);
+
+        $container->setDefinition(self::SERVICE_TASK_LIMIT_BACKUPS_HANDLER, $definition);
+    }
+
+    /**
+     * @param ContainerBuilder $container
      */
     private function loadCheckDatabaseConnectionTaskHandler(ContainerBuilder $container)
     {
@@ -186,7 +213,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function loadCheckDiskSpaceHandler(ContainerBuilder $container)
     {
@@ -203,7 +230,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function loadCheckModuleCmsDependencyTaskHandler(ContainerBuilder $container)
     {
@@ -218,7 +245,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function loadCheckVersionTaskHandler(ContainerBuilder $container)
     {
@@ -234,7 +261,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function loadCheckWritePermissionTaskHandler(ContainerBuilder $container)
     {
@@ -249,7 +276,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function loadCopyFilesHandler(ContainerBuilder $container)
     {
@@ -266,7 +293,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function loadDeleteBackupHandler(ContainerBuilder $container)
     {
@@ -282,7 +309,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function loadDisplayVersionInfoTaskHandler(ContainerBuilder $container)
     {
@@ -298,7 +325,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function loadMigrateDownTaskHandler(ContainerBuilder $container)
     {
@@ -315,7 +342,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function loadMigrateUpTaskHandler(ContainerBuilder $container)
     {
@@ -331,7 +358,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function loadSetPermissionsHandler(ContainerBuilder $container)
     {
@@ -347,7 +374,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function loadUpdateMigrationVersionFilesTaskHandler(ContainerBuilder $container)
     {
@@ -364,7 +391,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function loadApplyCommand(ContainerBuilder $container)
     {
@@ -386,7 +413,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function loadVerifyCommand(ContainerBuilder $container)
     {
@@ -404,7 +431,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function loadManifestChecker(ContainerBuilder $container)
     {
@@ -414,7 +441,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function loadClearLockCommand(ContainerBuilder $container)
     {
@@ -432,7 +459,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function loadLocker(ContainerBuilder $container)
     {
@@ -440,7 +467,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function loadRollbackCommand(ContainerBuilder $container)
     {
@@ -463,7 +490,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function loadVersionInfoCommand(ContainerBuilder $container)
     {
@@ -479,7 +506,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     }
 
     /**
-     * @param ContailerBuilder $container
+     * @param ContainerBuilder $container
      */
     private function loadVersionComparer(ContainerBuilder $container)
     {

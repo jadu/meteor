@@ -15,7 +15,7 @@ class FinderFactory
      *
      * @return Finder
      */
-    public function create($path, array $filters = null, $depth = null)
+    public function create($path, array $filters = [], $depth = null)
     {
         $finder = new Finder();
         $finder->in($path);
@@ -26,7 +26,7 @@ class FinderFactory
             $finder->depth($depth);
         }
 
-        if ($filters !== null) {
+        if (!empty($filters)) {
             $patterns = [];
             foreach ($filters as $filter) {
                 $patterns[] = $this->generatePattern($filter);
@@ -41,7 +41,7 @@ class FinderFactory
                 foreach ($patterns as $patternData) {
                     list($pattern, $negate) = $patternData;
 
-                    $filepath = preg_replace('/^' . preg_quote($path . '/', '/') . '/', '', $file->getPathname());
+                    $filepath = preg_replace('/^' . preg_quote($path . DIRECTORY_SEPARATOR, '/') . '/', '', $file->getPathname());
                     if (preg_match($pattern, $filepath)) {
                         if ($negate) {
                             return false;
@@ -62,8 +62,10 @@ class FinderFactory
      * Generate a regex pattern from the filter rule.
      *
      * @param string $filter
+     * @param string $directorySeparator
+     * @return array
      */
-    private function generatePattern($filter)
+    public function generatePattern($filter, $directorySeparator = DIRECTORY_SEPARATOR)
     {
         $negate = false;
         $pattern = '';
@@ -81,9 +83,13 @@ class FinderFactory
         }
 
         // Remove delimiters as well as caret (^) and dollar sign ($) from the regex produced by Glob
-        $pattern .= substr(Glob::toRegex($filter, false), 2, -2) . '(?=$|/)';
+        $pattern .= substr(Glob::toRegex($filter, false), 2, -2) . '(?=$|' . $directorySeparator . ')';
 
-        $pattern = '/' . str_replace('/', '\/', $pattern) . '/';
+        // Convert any '/' in the path to the native directory separator
+        $pattern = str_replace('/', $directorySeparator, $pattern);
+
+        // Escape use of directory separator
+        $pattern = '/' . str_replace($directorySeparator, '\\' . $directorySeparator, $pattern) . '/';
 
         return [$pattern, $negate];
     }
