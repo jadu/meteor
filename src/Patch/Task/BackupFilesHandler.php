@@ -48,6 +48,19 @@ class BackupFilesHandler
 
         $replaceDirectories = $config['patch']['replace_directories'];
 
+        if (isset($config['combined'])) {
+            foreach ($config['combined'] as $package) {
+                if (!isset($package['patch'])) {
+                    continue;
+                }
+
+                $replaceDirectories = array_merge(
+                    $replaceDirectories,
+                    $package['patch']['replace_directories']
+                );
+            }
+        }
+
         $excludeFilters = [];
 
         if (!empty($replaceDirectories)) {

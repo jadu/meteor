@@ -90,4 +90,29 @@ class CopyFilesHandlerTest extends PHPUnit_Framework_TestCase
 
         $this->handler->handle(new CopyFiles('source', 'target'), $this->replaceDirectoriesConfig);
     }
+
+    public function testProcesseReplaceDirectoriesForCombinedPackages()
+    {
+        $config = [
+            'patch' => [
+                'replace_directories' => ['/vendor']
+            ],
+            'combined' => [
+                [
+                    'patch' => [
+                        'replace_directories' => ['/foo']
+                    ]
+                ]
+            ]
+        ];
+
+        $this->filesystem->shouldReceive('replaceDirectory')
+            ->with('source', 'target', '/foo')
+            ->once();
+        $this->filesystem->shouldReceive('replaceDirectory')
+            ->with('source', 'target', '/vendor')
+            ->once();
+
+        $this->handler->handle(new CopyFiles('source', 'target'), $config);
+    }
 }
