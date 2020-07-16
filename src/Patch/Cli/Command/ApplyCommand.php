@@ -84,7 +84,19 @@ class ApplyCommand extends AbstractPatchCommand
      * @param string                   $phpVersion
      */
     public function __construct(
-        $name, array $config, IOInterface $io, PlatformInterface $platform, TaskBusInterface $taskBus, PatchStrategyInterface $strategy, Locker $locker, ManifestChecker $manifestChecker, EventDispatcherInterface $eventDispatcher, ScriptRunner $scriptRunner, LoggerInterface $logger, PermissionSetter $permissionSetter, $phpVersion = PHP_VERSION
+        $name,
+        array $config,
+        IOInterface $io,
+        PlatformInterface $platform,
+        TaskBusInterface $taskBus,
+        PatchStrategyInterface $strategy,
+        Locker $locker,
+        ManifestChecker $manifestChecker,
+        EventDispatcherInterface $eventDispatcher,
+        ScriptRunner $scriptRunner,
+        LoggerInterface $logger,
+        PermissionSetter $permissionSetter,
+        $phpVersion = PHP_VERSION
     ) {
         $this->taskBus = $taskBus;
         $this->strategy = $strategy;
