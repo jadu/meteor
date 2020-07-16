@@ -112,12 +112,26 @@ class ScriptsExtensionTest extends ExtensionTestCase
         ]);
     }
 
+    public function testConfigIgnoresMultipleReferencesWhenThereIsntCircularReference()
+    {
+        $this->processConfiguration([
+            'scripts' => [
+                'patch.pre-apply' => ['@test1'],
+                'patch.post-apply' => ['@test1'],
+                'patch.pre-rollback' => ['@test1'],
+                'patch.post-rollback' => ['@test1'],
+                'test1' => ['test command' , '@test2'],
+                'test2' => ['test 2 command']
+            ],
+        ]);
+    }
+
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      */
     public function testConfigCannotContainMultiDimentionalScripts()
     {
-        $config = $this->processConfiguration([
+        $this->processConfiguration([
             'scripts' => [
                 'test' => [
                     ['test'],
