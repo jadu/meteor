@@ -34,11 +34,13 @@ class PermissionSetter
 
     /**
      * @param PlatformInterface $platform
-     * @param PermissionLoader  $permissionLoader
-     * @param IOInterface       $io
+     * @param PermissionLoader $permissionLoader
+     * @param IOInterface $io
      */
     public function __construct(
-        PlatformInterface $platform, PermissionLoader $permissionLoader, IOInterface $io
+        PlatformInterface $platform,
+        PermissionLoader $permissionLoader,
+        IOInterface $io
     ) {
         $this->platform = $platform;
         $this->permissionLoader = $permissionLoader;
