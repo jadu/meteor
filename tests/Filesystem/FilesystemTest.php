@@ -2,12 +2,15 @@
 
 namespace Meteor\Filesystem;
 
+use Meteor\Filesystem\Finder\FinderFactory;
 use Meteor\IO\NullIO;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit_Framework_TestCase;
+use RuntimeException;
 use Symfony\Component\Finder\Finder;
 
-class FilesystemTest extends \PHPUnit_Framework_TestCase
+class FilesystemTest extends PHPUnit_Framework_TestCase
 {
     private $finderFactory;
     private $output;
@@ -16,7 +19,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->finderFactory = Mockery::mock('Meteor\Filesystem\Finder\FinderFactory');
+        $this->finderFactory = Mockery::mock(FinderFactory::class);
 
         $this->finderFactory->shouldReceive('create')
             ->andReturnUsing(function ($sourceDir) {
@@ -69,7 +72,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException RuntimeException
      */
     public function testEnsureDirectoryExistsThrowsExceptionIfFileExists()
     {
@@ -164,10 +167,10 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $finder->in($sourceDir);
 
         $this->finderFactory->shouldReceive('create')
-            ->with($sourceDir, null, null)
+            ->with($sourceDir, [], null)
             ->andReturn($finder);
 
-        $files = $this->filesystem->findFiles($sourceDir, null, false);
+        $files = $this->filesystem->findFiles($sourceDir, [], false);
 
         $this->assertEquals([
             'vfs://root/public_html',
@@ -191,6 +194,40 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->filesystem->findFiles($sourceDir, ['/**']);
+    }
+
+    public function testFindFilesWithFiltersRealFinderFactory()
+    {
+        vfsStream::setup('root', null, [
+            'public_html' => [
+                'index.html' => '',
+            ],
+            'var' => [
+                'config' => [
+                    'system.xml' => '',
+                ],
+                'file.cache' => ''
+            ],
+        ]);
+
+        $sourceDir = vfsStream::url('root');
+
+        $filters = [
+            '**',
+            '!/var'
+        ];
+
+        $finder = new Finder();
+        $finder->in($sourceDir);
+
+        $filesystem = new Filesystem(new FinderFactory(), $this->io);
+
+        $files = $filesystem->findFiles($sourceDir, $filters);
+
+        $this->assertEquals([
+            'public_html',
+            'public_html/index.html',
+        ], $files);
     }
 
     public function testFindNewFiles()
@@ -221,7 +258,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $finder->in($baseDir);
 
         $this->finderFactory->shouldReceive('create')
-            ->with($baseDir, null, null)
+            ->with($baseDir, [], null)
             ->andReturn($finder);
 
         $files = $this->filesystem->findNewFiles($baseDir, $targetDir);
@@ -282,6 +319,66 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $this->filesystem->copyDirectory(vfsStream::url('root/source'), vfsStream::url('root/target'), ['/**']);
+
+        $this->assertTrue(is_file(vfsStream::url('root/target/index.html')));
+    }
+
+    public function testRemoveDirectory()
+    {
+        vfsStream::setup('root', null, [
+            'source' => [
+                'index.html' => '',
+                'vendor' => [
+                    'org' => [
+                        'package' => [
+                            'file.html' => ''
+                        ]
+                    ]
+                ]
+            ],
+            'target' => [],
+        ]);
+
+        $this->assertTrue(is_file(vfsStream::url('root/source/vendor/org/package/file.html')));
+
+        $this->filesystem->removeDirectory(vfsStream::url('root/source/vendor'));
+        $this->assertFalse(is_file(vfsStream::url('root/source/vendor/org/package/file.html')));
+    }
+
+
+    public function testReplaceDirectory()
+    {
+        vfsStream::setup('root', null, [
+            'source' => [
+                'index.html' => '',
+                'vendor' => [
+                    'org' => [
+                        'package' => [
+                            'file_a.html' => '',
+                            'file_b.html' => ''
+                        ]
+                    ]
+                ]
+            ],
+            'target' => [
+                'thing.html' => '',
+                'vendor' => [
+                    'org' => [
+                        'package' => [
+                            'file_b.html' => '',
+                            'file_c.html' => ''
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+
+        $this->assertTrue(is_file(vfsStream::url('root/target/vendor/org/package/file_c.html')));
+
+        $this->filesystem->replaceDirectory(vfsStream::url('root/source'), vfsStream::url('root/target'), '/vendor');
+
+        $this->assertTrue(is_file(vfsStream::url('root/target/vendor/org/package/file_a.html')));
+        $this->assertFalse(is_file(vfsStream::url('root/target/vendor/org/package/file_c.html')));
     }
 }
 

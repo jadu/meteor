@@ -74,7 +74,7 @@ class Filesystem extends BaseFilesystem
      *
      * @return bool
      */
-    public function copyDirectory($sourceDir, $targetDir, array $filters = null)
+    public function copyDirectory($sourceDir, $targetDir, array $filters = [])
     {
         return $this->copyFiles($this->findFiles($sourceDir, $filters), $sourceDir, $targetDir);
     }
@@ -127,7 +127,7 @@ class Filesystem extends BaseFilesystem
      *
      * @return array
      */
-    public function findFiles($sourceDir, array $filters = null, $relative = true, $depth = null)
+    public function findFiles($sourceDir, array $filters = [], $relative = true, $depth = null)
     {
         $files = [];
 
@@ -155,14 +155,15 @@ class Filesystem extends BaseFilesystem
     /**
      * Returns files that do not exist in the target directory.
      *
-     * @param array $files
+     * @param string $baseDir
      * @param string $targetDir
+     * @param array $filters
      *
      * @return array
      */
-    public function findNewFiles($baseDir, $targetDir)
+    public function findNewFiles($baseDir, $targetDir, array $filters = [])
     {
-        $files = $this->findFiles($baseDir);
+        $files = $this->findFiles($baseDir, $filters);
 
         return array_values(array_filter($files, function ($file) use ($targetDir) {
             return !file_exists($targetDir . '/' . $file);
@@ -181,5 +182,54 @@ class Filesystem extends BaseFilesystem
         $baseDir = rtrim($baseDir, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
 
         return preg_replace('/^' . preg_quote($baseDir, '/') . '/', '', $path);
+    }
+
+    /**
+     * Remove the directory and all of its contents
+     *
+     * @param string $directory
+     */
+    public function removeDirectory($directory)
+    {
+        if (file_exists($directory) && is_dir($directory)) {
+            $objects = scandir($directory);
+            foreach ($objects as $object) {
+                if ($object != '.' && $object != '..') {
+                    if (is_dir($directory . '/' . $object)) {
+                        $this->removeDirectory($directory . '/' . $object);
+                    } else {
+                        unlink($directory . '/' . $object);
+                    }
+                }
+            }
+
+            rmdir($directory);
+        }
+    }
+
+    /**
+     * Copy $replaceDirectory from $sourceDir to a temporary location, then remove $replaceDirectory from $targetDir and
+     * replace it with the temporary copy. Used to quickly move a directory of items into place, completely removing
+     * anything in the existing target location.
+     *
+     * Example usage: replaceDirectory('/package', '/install/home', '/vendor')
+     *
+     * @param string $sourceDir
+     * @param string $targetDir
+     * @param string $replaceDirectory
+     */
+    public function replaceDirectory($sourceDir, $targetDir, $replaceDirectory)
+    {
+        $this->io->text(sprintf('Replacing directory <info>%s</>', $targetDir . $replaceDirectory));
+
+        $tempTarget = uniqid($replaceDirectory);
+
+        $this->copyDirectory($sourceDir . $replaceDirectory, $targetDir . $tempTarget);
+
+        $this->io->debug(sprintf("Removing %s", $targetDir . $replaceDirectory));
+        $this->removeDirectory($targetDir . $replaceDirectory);
+
+        $this->io->debug(sprintf("Renaming %s to %s", $targetDir . $tempTarget, $targetDir . $replaceDirectory));
+        rename($targetDir . $tempTarget, $targetDir . $replaceDirectory);
     }
 }

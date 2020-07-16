@@ -9,7 +9,7 @@ All projects now require a name.
     }
 
 The name should be unique and not conflict with Jadu product names, e.g. `jadu/cms` or `jadu/xfp`. For this reason
-it is reccomended to prefix the name with a organisation namespace, e.g. `spacecraft/pigeon-council`.
+it is recommended to prefix the name with a organisation namespace, e.g. `spacecraft/pigeon-council`.
 
 ## Ant build scripts
 

@@ -107,7 +107,7 @@ class ApplyCommand extends AbstractPatchCommand
         $this->addOption('skip-verify', null, InputOption::VALUE_NONE, 'Skip the package verification');
         $this->addOption('skip-lock', null, InputOption::VALUE_NONE, 'Skip any existing lock files to force a patch');
         $this->addOption('skip-scripts', null, InputOption::VALUE_NONE, 'Skip script execution');
-        $this->addOption('skip-post-apply-permissions', null, InputOption::VALUE_NONE, 'Skip resetting permissions on post-apply');
+        $this->addOption('skip-post-scripts-permissions', null, InputOption::VALUE_NONE, 'Skip resetting permissions on post-apply');
 
         $this->addOption('ignore-unavailable-migrations', null, InputOption::VALUE_NONE, 'Ignore unavailable migrations.');
 
@@ -229,8 +229,8 @@ class ApplyCommand extends AbstractPatchCommand
             $this->eventDispatcher->dispatch(PatchEvents::POST_APPLY, new Event());
         }
 
-        if (!$this->io->getOption('skip-post-apply-permissions')) {
-            $this->permissionSetter->setPostApplyPermissions($installDir);
+        if (!$this->io->getOption('skip-post-scripts-permissions')) {
+            $this->permissionSetter->setPostScriptsPermissions($installDir);
         }
 
         if (!$this->io->getOption('skip-lock')) {

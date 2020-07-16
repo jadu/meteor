@@ -43,8 +43,38 @@ class CopyFilesHandler
     {
         $this->io->text(sprintf('Copying files into the install <info>%s</>', $task->targetDir));
 
-        $newFiles = $this->filesystem->findNewFiles($task->sourceDir, $task->targetDir);
-        $this->filesystem->copyDirectory($task->sourceDir, $task->targetDir);
+        $replaceDirectories = $config['patch']['replace_directories'];
+
+        if (isset($config['combined'])) {
+            foreach ($config['combined'] as $package) {
+               if (!isset($package['patch'])) {
+                   continue;
+               }
+
+                $replaceDirectories = array_merge(
+                    $replaceDirectories,
+                    $package['patch']['replace_directories']
+                );
+            }
+        }
+
+        $excludeFilters = [];
+
+        if (!empty($replaceDirectories)) {
+            $excludeFilters[] = '**';
+
+            foreach ($replaceDirectories as $directory) {
+                $excludeFilters[] = '!' . $directory;
+            }
+        }
+
+        $newFiles = $this->filesystem->findNewFiles($task->sourceDir, $task->targetDir, $excludeFilters);
+        $this->filesystem->copyDirectory($task->sourceDir, $task->targetDir, $excludeFilters);
+
+        foreach ($replaceDirectories as $directory) {
+            $this->filesystem->replaceDirectory($task->sourceDir, $task->targetDir, $directory);
+        }
+
         $this->permissionSetter->setDefaultPermissions($newFiles, $task->targetDir);
     }
 }

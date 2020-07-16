@@ -29,7 +29,7 @@ View a recording of a patch being applied:
 
 ## Multiple-server environments
 
-When patching a multi-server environment it is reccomended to only run the database migrations on one of the servers.
+When patching a multi-server environment it is recommended to only run the database migrations on one of the servers.
 Use the `--skip-db-migrations` option to not run the migrations when applying the patch.
 
     php meteor.phar patch:apply --skip-db-migrations

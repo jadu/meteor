@@ -27,7 +27,7 @@ class PermissionSetter
     /**
      * @var array
      */
-    private $postApplyPermissions = [
+    private $postScriptsPermission = [
         'var/cache/*' => 'rwxR',
         'logs/*' => 'rwxR'
     ];
@@ -118,9 +118,9 @@ class PermissionSetter
     /**
      * @param string $targetDir
      */
-    public function setPostApplyPermissions($targetDir)
+    public function setPostScriptsPermissions($targetDir)
     {
-        $permissions = $this->permissionLoader->loadFromArray($this->postApplyPermissions);
+        $permissions = $this->permissionLoader->loadFromArray($this->postScriptsPermission);
         $this->io->text(sprintf('Setting post apply file permissions in <info>%s</>', $targetDir));
 
         foreach ($permissions as $permission) {
@@ -174,6 +174,7 @@ class PermissionSetter
 
         $basePath = $baseDir . '/' . $pattern;
         $baseDirname = dirname($basePath);
+
         if (!is_dir($baseDirname)) {
             // Directory does not exist
             return [];
