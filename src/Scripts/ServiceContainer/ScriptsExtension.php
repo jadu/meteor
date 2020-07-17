@@ -78,10 +78,6 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
                 }
             }
         }
-        
-        // Put the current script as last executed batch
-        // Otherwise combined scripts take precedence
-        $extensionConfig[] = parent::configParse($config);
 
         // Put the current script as last executed batch
         // Otherwise combined scripts take precedence
