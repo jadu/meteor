@@ -6,6 +6,7 @@ use Meteor\Cli\Command\CommandTestCase;
 use Meteor\IO\NullIO;
 use Meteor\Patch\Backup\Backup;
 use Meteor\Patch\Event\PatchEvents;
+use Meteor\Permissions\PermissionSetter;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
 
@@ -19,6 +20,7 @@ class RollbackCommandTest extends CommandTestCase
     private $locker;
     private $eventDispatcher;
     private $scriptRunner;
+    private $permissionSetter;
     private $logger;
 
     public function createCommand()
@@ -32,6 +34,8 @@ class RollbackCommandTest extends CommandTestCase
         $this->backupFinder = Mockery::mock('Meteor\Patch\Backup\BackupFinder');
         $this->taskBus = Mockery::mock('Meteor\Patch\Task\TaskBusInterface');
         $this->strategy = Mockery::mock('Meteor\Patch\Strategy\PatchStrategyInterface');
+        $this->permissionSetter = Mockery::mock(PermissionSetter::class,['setPostScriptsPermissions' => null]);
+
         $this->platform = Mockery::mock('Meteor\Platform\PlatformInterface', [
             'setInstallDir' => null,
         ]);
@@ -59,7 +63,8 @@ class RollbackCommandTest extends CommandTestCase
             $this->locker,
             $this->eventDispatcher,
             $this->scriptRunner,
-            $this->logger
+            $this->logger,
+            $this->permissionSetter
         );
     }
 
@@ -82,6 +87,10 @@ class RollbackCommandTest extends CommandTestCase
         $this->versionComparer->shouldReceive('comparePackage')
             ->with($workingDir . '/to_patch', $installDir, $config)
             ->andReturn([])
+            ->once();
+
+        $this->permissionSetter->shouldReceive('setPostScriptsPermissions')
+            ->with($installDir)
             ->once();
 
         $backups = [

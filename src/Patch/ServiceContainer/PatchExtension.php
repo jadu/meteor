@@ -407,6 +407,8 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
             new Reference(EventDispatcherExtension::SERVICE_EVENT_DISPATCHER),
             new Reference(ScriptsExtension::SERVICE_SCRIPT_RUNNER),
             new Reference(LoggerExtension::SERVICE_LOGGER),
+            new Reference(PermissionsExtension::SERVICE_PERMISSION_SETTER),
+
         ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
         $container->setDefinition(self::SERVICE_COMMAND_APPLY, $definition);
@@ -484,6 +486,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
             new Reference(EventDispatcherExtension::SERVICE_EVENT_DISPATCHER),
             new Reference(ScriptsExtension::SERVICE_SCRIPT_RUNNER),
             new Reference(LoggerExtension::SERVICE_LOGGER),
+            new Reference(PermissionsExtension::SERVICE_PERMISSION_SETTER)
         ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
         $container->setDefinition(self::SERVICE_COMMAND_ROLLBACK, $definition);

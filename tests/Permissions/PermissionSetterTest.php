@@ -183,26 +183,19 @@ class PermissionSetterTest extends \PHPUnit_Framework_TestCase
     public function testSetPermissionsCatchesExceptions()
     {
         vfsStream::setup('root', null, [
-            'base' => [
-                'var' => [
-                    'config' => [
-                        'system.xml' => '',
-                    ],
-                ],
-            ],
             'target' => [
                 'var' => [
-                    'config' => [
-                        'system.xml' => '',
+                    'cache' => [
+                        'test.xml' => '',
                     ],
                 ],
             ],
         ]);
 
-        $permission = new Permission('var/config');
+        $permission = new Permission('var/cache/*');
 
-        $this->permissionLoader->shouldReceive('load')
-            ->with(vfsStream::url('root/target'))
+        $this->permissionLoader->shouldReceive('loadFromArray')
+            ->with($this->permissionSetter->getPostScriptsPermissions())
             ->andReturn([$permission])
             ->once();
 
@@ -210,6 +203,33 @@ class PermissionSetterTest extends \PHPUnit_Framework_TestCase
             ->andThrow(new Exception())
             ->once();
 
-        $this->permissionSetter->setPermissions(vfsStream::url('root/base'), vfsStream::url('root/target'));
+        $this->permissionSetter->setPostScriptsPermissions(vfsStream::url('root/target'));
     }
+
+    public function testSetPostApplyPermissions()
+    {
+        vfsStream::setup('root', null, [
+            'target' => [
+                'var' => [
+                    'cache' => [
+                        'test.php' => '',
+                    ],
+                ],
+            ],
+        ]);
+
+        $permission = new Permission('var/cache/*');
+
+        $this->permissionLoader->shouldReceive('loadFromArray')
+            ->with($this->permissionSetter->getPostScriptsPermissions())
+            ->andReturn([$permission])
+            ->once();
+
+        $this->platform->shouldReceive('setPermission')
+            ->with(vfsStream::url('root/target/var/cache/test.php'), $permission)
+            ->once();
+
+        $this->permissionSetter->setPostScriptsPermissions(vfsStream::url('root/target'));
+    }
+
 }

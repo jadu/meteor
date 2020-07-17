@@ -12,6 +12,7 @@ use Meteor\Patch\Lock\Locker;
 use Meteor\Patch\Strategy\PatchStrategyInterface;
 use Meteor\Patch\Task\TaskBusInterface;
 use Meteor\Patch\Version\VersionComparer;
+use Meteor\Permissions\PermissionSetter;
 use Meteor\Platform\PlatformInterface;
 use Meteor\Scripts\ScriptRunner;
 use Symfony\Component\Console\Input\InputInterface;
@@ -63,6 +64,11 @@ class RollbackCommand extends AbstractPatchCommand
     private $logger;
 
     /**
+     * @var PermissionSetter
+     */
+    private $permissionSetter;
+
+    /**
      * @param string $name
      * @param array $config
      * @param IOInterface $io
@@ -75,6 +81,7 @@ class RollbackCommand extends AbstractPatchCommand
      * @param EventDispatcherInterface $eventDispatcher
      * @param ScriptRunner $scriptRunner
      * @param LoggerInterface $logger
+     * @param PermissionSetter $permissionSetter
      */
     public function __construct(
         $name,
@@ -88,7 +95,8 @@ class RollbackCommand extends AbstractPatchCommand
         Locker $locker,
         EventDispatcherInterface $eventDispatcher,
         ScriptRunner $scriptRunner,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        PermissionSetter $permissionSetter
     ) {
         $this->versionComparer = $versionComparer;
         $this->backupFinder = $backupFinder;
@@ -98,6 +106,7 @@ class RollbackCommand extends AbstractPatchCommand
         $this->eventDispatcher = $eventDispatcher;
         $this->scriptRunner = $scriptRunner;
         $this->logger = $logger;
+        $this->permissionSetter = $permissionSetter;
 
         parent::__construct($name, $config, $io, $platform);
     }
@@ -110,6 +119,7 @@ class RollbackCommand extends AbstractPatchCommand
         $this->addOption('skip-lock', null, InputOption::VALUE_NONE, 'Skip any existing lock files to force a rollback');
         $this->addOption('skip-scripts', null, InputOption::VALUE_NONE, 'Skip script execution');
         $this->addOption('ignore-unavailable-migrations', null, InputOption::VALUE_NONE, 'Ignore unavailable migrations.');
+        $this->addOption('skip-post-scripts-permissions', null, InputOption::VALUE_NONE, 'Skip resetting permissions on post-apply');
 
         $this->strategy->configureRollbackCommand($this->getDefinition());
 
@@ -230,6 +240,10 @@ class RollbackCommand extends AbstractPatchCommand
 
         if (!$this->io->getOption('skip-scripts')) {
             $this->eventDispatcher->dispatch(PatchEvents::POST_ROLLBACK, new Event());
+        }
+
+        if (!$this->io->getOption('skip-post-scripts-permissions')) {
+            $this->permissionSetter->setPostScriptsPermissions($installDir);
         }
 
         if (!$this->io->getOption('skip-lock')) {
