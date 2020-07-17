@@ -1,3 +1,4 @@
+* A permission reset is now run following execution of scripts when applying or rolling back a patch
 * Fixed issue where meteor would falsely detect circular references within scripts
 * The order of script execution in combined packages has been changed so that scripts of the last package to be combined will now be run last
 * Add support for encrypted database content
