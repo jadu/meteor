@@ -38,7 +38,7 @@ class MemoryLimitSetter
     {
         return preg_replace(
             self::RE_PHP_SCRIPT,
-            sprintf('php --define memory_limit=%d', ini_get('memory_limit')),
+            sprintf('php --define memory_limit=%s', ini_get('memory_limit')),
             $command
         );
     }

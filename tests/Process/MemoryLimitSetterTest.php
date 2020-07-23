@@ -109,40 +109,25 @@ class MemoryLimitSetterTest extends \PHPUnit_Framework_TestCase
         return sprintf('%s %s=%d%s%s)', $prefix, $variant, $value === null ? rand(1, 5000) : $value, $unit, $suffix);
     }
 
-    /**
-     * @param string $input
-     * @param string $expected
-     * @dataProvider setMemoryLimitProvider
-     */
-    public function testSetMemoryLimitReturnsCorrectResult($input, $expected)
+    public function testSetMemoryLimitUsesIniValue()
     {
         $restore = ini_get('memory_limit');
+        $input = 'php cli.php cache:warmup --kernel=frontend';
+        $expected = 'php --define memory_limit=666G cli.php cache:warmup --kernel=frontend';
 
-        if ($restore !== false && (int)$restore === $this->memoryLimitValue) {
-            $this->memoryLimitValue++;
-        }
+        ini_set('memory_limit', '666G');
 
-        ini_set('memory_limit', $this->memoryLimitValue);
-
-        self::assertEquals(sprintf($expected, $this->memoryLimitValue), $this->memoryLimitSetter->setMemoryLimit($input));
+        self::assertEquals(
+            $expected,
+            $this->memoryLimitSetter->setMemoryLimit($input));
 
         ini_set('memory_limit', $restore);
     }
 
-    /**
-     * @returns array
-     */
-    public function setMemoryLimitProvider()
+    public function testSetMemoryLimitIsSafeForNonPHPScripts()
     {
-        return [
-            [
-                'php cli.php cache:warmup --kernel=frontend',
-                'php --define memory_limit=%d cli.php cache:warmup --kernel=frontend'
-            ],
-            [
-                '/bin/bash hello.sh',
-                '/bin/bash hello.sh',
-            ],
-        ];
+        $input = '/bin/bash foo.bar';
+
+        self::assertEquals($input, $this->memoryLimitSetter->setMemoryLimit($input));
     }
 }

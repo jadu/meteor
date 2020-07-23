@@ -47,12 +47,6 @@ class RunCommand extends AbstractCommand
         $this->scriptRunner->setWorkingDir($this->getWorkingDir());
 
         $scriptName = $this->io->getArgument('script');
-        $result = $this->scriptRunner->run($scriptName);
-
-        if (!$result) {
-            $this->io->error(sprintf('Unable to find script "%s"', $scriptName));
-
-            return 1;
-        }
+        $this->scriptRunner->run($scriptName);
     }
 }
