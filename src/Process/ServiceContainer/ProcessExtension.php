@@ -3,6 +3,7 @@
 namespace Meteor\Process\ServiceContainer;
 
 use Meteor\IO\ServiceContainer\IOExtension;
+use Meteor\Process\MemoryLimitSetter;
 use Meteor\ServiceContainer\ExtensionBase;
 use Meteor\ServiceContainer\ExtensionInterface;
 use Meteor\ServiceContainer\ExtensionManager;
@@ -14,6 +15,8 @@ use Symfony\Component\DependencyInjection\Reference;
 class ProcessExtension extends ExtensionBase implements ExtensionInterface
 {
     const SERVICE_PROCESS_RUNNER = 'process.runner';
+    const SERVICE_MEMORY_LIMIT_SETTER = 'process.memory_limit_setter';
+    const SERVICE_PROCESS_FACTORY = 'process.factory';
 
     /**
      * Returns the extension config key.
@@ -45,6 +48,8 @@ class ProcessExtension extends ExtensionBase implements ExtensionInterface
     public function load(ContainerBuilder $container, array $config)
     {
         $this->loadProcessRunner($container);
+        $this->loadMemoryLimitSetter($container);
+        $this->loadProcessFactory($container);
     }
 
     /**
@@ -54,7 +59,31 @@ class ProcessExtension extends ExtensionBase implements ExtensionInterface
     {
         $container->setDefinition(self::SERVICE_PROCESS_RUNNER, new Definition('Meteor\Process\ProcessRunner', [
             new Reference(IOExtension::SERVICE_IO),
+            new Reference(self::SERVICE_MEMORY_LIMIT_SETTER),
+            new Reference(self::SERVICE_PROCESS_FACTORY),
         ]));
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    private function loadMemoryLimitSetter(ContainerBuilder $container)
+    {
+        $container->setDefinition(
+            self::SERVICE_MEMORY_LIMIT_SETTER,
+            new Definition('Meteor\Process\MemoryLimitSetter')
+        );
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    private function loadProcessFactory(ContainerBuilder $container)
+    {
+        $container->setDefinition(
+            self::SERVICE_PROCESS_FACTORY,
+            new Definition('Meteor\Process\ProcessFactory')
+        );
     }
 
     /**
