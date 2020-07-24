@@ -55,8 +55,6 @@ class MemoryLimitSetterTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasMemoryLimitShouldReturnCorrectResult($script, $hasLimit)
     {
-        var_dump($script);
-
         self::assertEquals(
             $hasLimit, $this->memoryLimitSetter->hasMemoryLimit($script),
             sprintf('Expected "%s" to %s a memory_limit flag', $script, $hasLimit ? 'have' : 'not have')
