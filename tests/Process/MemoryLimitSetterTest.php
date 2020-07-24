@@ -7,11 +7,6 @@ namespace Meteor\Process;
 class MemoryLimitSetterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var int
-     */
-    private $memoryLimitValue = 666;
-
-    /**
      * @var MemoryLimitSetter
      */
     private $memoryLimitSetter;
@@ -111,9 +106,9 @@ class MemoryLimitSetterTest extends \PHPUnit_Framework_TestCase
     {
         $restore = ini_get('memory_limit');
         $input = 'php cli.php cache:warmup --kernel=frontend';
-        $expected = 'php --define memory_limit=666G cli.php cache:warmup --kernel=frontend';
+        $expected = 'php --define memory_limit=666M cli.php cache:warmup --kernel=frontend';
 
-        ini_set('memory_limit', '666G');
+        ini_set('memory_limit', '666M');
 
         self::assertEquals(
             $expected,
