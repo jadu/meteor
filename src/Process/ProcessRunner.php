@@ -15,27 +15,19 @@ class ProcessRunner
     private $io;
 
     /**
-     * @var MemoryLimitSetter
-     */
-    private $memoryLimitSetter;
-
-    /**
      * @var ProcessFactory
      */
     private $processFactory;
 
     /**
      * @param IOInterface $io
-     * @param MemoryLimitSetter $memoryLimitSetter
      * @param ProcessFactory $processFactory
      */
     public function __construct(
         IOInterface $io,
-        MemoryLimitSetter $memoryLimitSetter,
         ProcessFactory $processFactory
     ) {
         $this->io = $io;
-        $this->memoryLimitSetter = $memoryLimitSetter;
         $this->processFactory = $processFactory;
     }
 
@@ -51,9 +43,8 @@ class ProcessRunner
      */
     public function run($command, $cwd = null, $callback = null, $timeout = self::DEFAULT_TIMEOUT)
     {
-        if ($this->memoryLimitSetter->isPHPScript($command) &&
-            !$this->memoryLimitSetter->hasMemoryLimit($command)) {
-            $command = $this->memoryLimitSetter->setMemoryLimit($command);
+        if (PHPMemoryLimitSetter::isPHPScript($command) && !PHPMemoryLimitSetter::hasMemoryLimit($command)) {
+            $command = PHPMemoryLimitSetter::setMemoryLimit($command);
         }
 
         $process = $this->processFactory->create($command);

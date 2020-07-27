@@ -15,7 +15,7 @@ class ProcessRunnerTest extends \PHPUnit_Framework_TestCase
     private $processRunner;
 
     /**
-     * @var MemoryLimitSetter|Mock
+     * @var PHPMemoryLimitSetter|Mock
      */
     private $memoryLimitSetter;
 
@@ -36,9 +36,6 @@ class ProcessRunnerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->memoryLimitSetter = Mockery::mock(MemoryLimitSetter::class, [
-            'isPHPScript' => false
-        ]);
         $this->io = Mockery::mock(IOInterface::class, [
             'debug' => null
         ]);
@@ -56,7 +53,6 @@ class ProcessRunnerTest extends \PHPUnit_Framework_TestCase
 
         $this->processRunner = new ProcessRunner(
             $this->io,
-            $this->memoryLimitSetter,
             $this->processFactory
         );
     }
@@ -85,35 +81,22 @@ class ProcessRunnerTest extends \PHPUnit_Framework_TestCase
     public function testSetMemoryLimitOnPHPScript()
     {
         $command = 'php cli.php cache:warmup --kernel=frontend';
-        $commandWithLimit = 'php -dmemory_limit=-1 cli.php cache:warmup --kernel=frontend';
+        $commandWithLimit = 'php --define memory_limit=600M cli.php cache:warmup --kernel=frontend';
 
-        $this->memoryLimitSetter->shouldReceive('isPHPScript')
-            ->with($command)
-            ->andReturn(true);
-        $this->memoryLimitSetter->shouldReceive('hasMemoryLimit')
-            ->with($command)
-            ->andReturn(false);
-        $this->memoryLimitSetter->shouldReceive('setMemoryLimit')
-            ->with($command)
-            ->andReturn($commandWithLimit);
+        ini_set('memory_limit', '600M');
 
         $this->processFactory->shouldReceive('create')
             ->with($commandWithLimit)
             ->andReturn($this->process);
 
         $this->processRunner->run($command);
+
+        ini_restore('memory_limit');
     }
 
     public function testDoesSetMemoryLimitOnPHPScriptWhenAlreadyDefined()
     {
         $command = 'php -dmemory_limit=-1 cli.php cache:warmup --kernel=frontend';
-
-        $this->memoryLimitSetter->shouldReceive('isPHPScript')
-            ->with($command)
-            ->andReturn(true);
-        $this->memoryLimitSetter->shouldReceive('hasMemoryLimit')
-            ->with($command)
-            ->andReturn(true);
 
         $this->processFactory->shouldReceive('create')
             ->with($command)
@@ -125,10 +108,6 @@ class ProcessRunnerTest extends \PHPUnit_Framework_TestCase
     public function testDoesNotSetLimitIfNotPHPScript()
     {
         $command = '/bin/bash foo.bar';
-
-        $this->memoryLimitSetter->shouldReceive('isPHPScript')
-            ->with($command)
-            ->andReturn(false);
 
         $this->processFactory->shouldReceive('create')
             ->with($command)

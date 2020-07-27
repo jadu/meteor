@@ -1,30 +1,19 @@
 <?php
 
-
 namespace Meteor\Process;
-
 
 class MemoryLimitSetterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var MemoryLimitSetter
-     */
-    private $memoryLimitSetter;
-
-    public function setUp()
-    {
-        $this->memoryLimitSetter = new MemoryLimitSetter();
-    }
-
-    /**
      * @dataProvider phpScriptDataProvider
+     *
      * @param string $script
-     * @param boolean $isPHP
+     * @param bool $isPHP
      */
     public function testIsPHPScriptReturnsCorrectResult($script, $isPHP)
     {
         self::assertEquals(
-            $isPHP, $this->memoryLimitSetter->isPHPScript($script),
+            $isPHP, PHPMemoryLimitSetter::isPHPScript($script),
             sprintf('Expected "%s" to %s a PHP script', $script, $isPHP ? 'be' : 'not be')
         );
     }
@@ -45,13 +34,13 @@ class MemoryLimitSetterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $script
-     * @param boolean $hasLimit
+     * @param bool $hasLimit
      * @dataProvider memoryLimitDataProvider
      */
     public function testHasMemoryLimitShouldReturnCorrectResult($script, $hasLimit)
     {
         self::assertEquals(
-            $hasLimit, $this->memoryLimitSetter->hasMemoryLimit($script),
+            $hasLimit, PHPMemoryLimitSetter::hasMemoryLimit($script),
             sprintf('Expected "%s" to %s a memory_limit flag', $script, $hasLimit ? 'have' : 'not have')
         );
     }
@@ -66,7 +55,7 @@ class MemoryLimitSetterTest extends \PHPUnit_Framework_TestCase
             -d memory_limit',
             '-dmemory_limit',
             '--define memory_limit',
-            '--definememory_limit'
+            '--definememory_limit',
         ];
         $arguments = [];
 
@@ -94,12 +83,13 @@ class MemoryLimitSetterTest extends \PHPUnit_Framework_TestCase
      * @param string $unit
      * @param string $variant
      * @param string $suffix
-     * @param null|number $value
+     * @param number|null $value
+     *
      * @return string
      */
     private function getMemoryLimitCommands($prefix, $unit, $variant, $suffix = '', $value = null)
     {
-        return sprintf('%s %s=%d%s%s)', $prefix, $variant, $value === null ? rand(1, 5000) : $value, $unit, $suffix);
+        return sprintf('%s %s=%d%s%s)', $prefix, $variant, null === $value ? rand(1, 5000) : $value, $unit, $suffix);
     }
 
     public function testSetMemoryLimitUsesIniValue()
@@ -112,7 +102,7 @@ class MemoryLimitSetterTest extends \PHPUnit_Framework_TestCase
 
         self::assertEquals(
             $expected,
-            $this->memoryLimitSetter->setMemoryLimit($input));
+            PHPMemoryLimitSetter::setMemoryLimit($input));
 
         ini_set('memory_limit', $restore);
     }
@@ -121,6 +111,6 @@ class MemoryLimitSetterTest extends \PHPUnit_Framework_TestCase
     {
         $input = '/bin/bash foo.bar';
 
-        self::assertEquals($input, $this->memoryLimitSetter->setMemoryLimit($input));
+        self::assertEquals($input, PHPMemoryLimitSetter::setMemoryLimit($input));
     }
 }
