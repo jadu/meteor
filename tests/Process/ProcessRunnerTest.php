@@ -15,11 +15,6 @@ class ProcessRunnerTest extends \PHPUnit_Framework_TestCase
     private $processRunner;
 
     /**
-     * @var PHPMemoryLimitSetter|Mock
-     */
-    private $memoryLimitSetter;
-
-    /**
      * @var IOInterface|Mock
      */
     private $io;
