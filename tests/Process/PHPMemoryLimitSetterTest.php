@@ -2,7 +2,7 @@
 
 namespace Meteor\Process;
 
-class MemoryLimitSetterTest extends \PHPUnit_Framework_TestCase
+class PHPMemoryLimitSetterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider phpScriptDataProvider
