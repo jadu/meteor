@@ -4,11 +4,6 @@ namespace Meteor\Process;
 
 use Symfony\Component\Process\Process;
 
-/**
- * Class ProcessFactory
- *
- * @author Jadu Ltd.
- */
 class ProcessFactory
 {
     /**
