@@ -4,7 +4,6 @@ namespace Meteor\Process;
 
 use Meteor\IO\IOInterface;
 use RuntimeException;
-use Symfony\Component\Process\Process;
 
 class ProcessRunner
 {
@@ -16,11 +15,20 @@ class ProcessRunner
     private $io;
 
     /**
-     * @param IOInterface $io
+     * @var ProcessFactory
      */
-    public function __construct(IOInterface $io)
-    {
+    private $processFactory;
+
+    /**
+     * @param IOInterface $io
+     * @param ProcessFactory $processFactory
+     */
+    public function __construct(
+        IOInterface $io,
+        ProcessFactory $processFactory
+    ) {
         $this->io = $io;
+        $this->processFactory = $processFactory;
     }
 
     /**
@@ -35,7 +43,11 @@ class ProcessRunner
      */
     public function run($command, $cwd = null, $callback = null, $timeout = self::DEFAULT_TIMEOUT)
     {
-        $process = new Process($command);
+        if (PHPMemoryLimitSetter::isPHPScript($command) && !PHPMemoryLimitSetter::hasMemoryLimit($command)) {
+            $command = PHPMemoryLimitSetter::setMemoryLimit($command);
+        }
+
+        $process = $this->processFactory->create($command);
         $process->setWorkingDirectory($cwd);
         $process->setTimeout($timeout);
 
