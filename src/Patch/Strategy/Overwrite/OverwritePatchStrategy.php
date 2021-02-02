@@ -49,14 +49,18 @@ class OverwritePatchStrategy implements PatchStrategyInterface
             $tasks[] = new LimitBackups($installDir, $options['limit-backups']);
         }
 
-        $tasks[] = new CheckDiskSpace($installDir);
+        if (!$options['skip-backup'] || !$options['skip-copy-files']) {
+            $tasks[] = new CheckDiskSpace($installDir);
+        }
 
         if (!$options['skip-backup']) {
             $tasks[] = new BackupFiles($backupDir, $patchDir, $installDir);
             $tasks[] = new UpdateMigrationVersionFiles($backupDir, $patchDir, $installDir);
         }
 
-        $tasks[] = new CopyFiles($patchFilesDir, $installDir);
+        if (!$options['skip-copy-files']) {
+            $tasks[] = new CopyFiles($patchFilesDir, $installDir);
+        }
 
         if (!$options['skip-db-migrations']) {
             $tasks[] = new MigrateUp($patchDir, $installDir, MigrationsConstants::TYPE_DATABASE, (bool) $options['ignore-unavailable-migrations']);
@@ -101,7 +105,9 @@ class OverwritePatchStrategy implements PatchStrategyInterface
             $tasks[] = new CheckDatabaseConnection($installDir);
         }
 
-        $tasks[] = new CopyFiles($backupFilesDir, $installDir);
+        if (!$options['skip-copy-files']) {
+            $tasks[] = new CopyFiles($backupFilesDir, $installDir);
+        }
 
         if (!$options['skip-db-migrations']) {
             $tasks[] = new MigrateDown($backupDir, $patchDir, $installDir, MigrationsConstants::TYPE_DATABASE, (bool) $options['ignore-unavailable-migrations']);
@@ -135,6 +141,7 @@ class OverwritePatchStrategy implements PatchStrategyInterface
      */
     private function configureCommand(InputDefinition $definition)
     {
+        $definition->addOption(new InputOption('skip-copy-files', null, InputOption::VALUE_NONE, 'Skip copying files.'));
         $definition->addOption(new InputOption('skip-db-migrations', null, InputOption::VALUE_NONE, 'Skip database migrations.'));
         $definition->addOption(new InputOption('skip-file-migrations', null, InputOption::VALUE_NONE, 'Skip file migrations.'));
         $definition->addOption(new InputOption('skip-version-check', null, InputOption::VALUE_NONE, 'Skip the version check.'));
