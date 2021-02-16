@@ -58,13 +58,15 @@ class CopyFilesHandler
             }
         }
 
+        array_walk($replaceDirectories, function(&$directory) { $directory = ltrim($directory, '/\\'); });
+
         $excludeFilters = [];
 
         if (!empty($replaceDirectories)) {
             $excludeFilters[] = '**';
 
             foreach ($replaceDirectories as $directory) {
-                $excludeFilters[] = '!' . $directory;
+                $excludeFilters[] = '!' . DIRECTORY_SEPARATOR . $directory;
             }
         }
 

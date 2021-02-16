@@ -61,13 +61,15 @@ class BackupFilesHandler
             }
         }
 
+        array_walk($replaceDirectories, function(&$directory) { $directory = ltrim($directory, '/\\'); });
+
         $excludeFilters = [];
 
         if (!empty($replaceDirectories)) {
             $excludeFilters[] = '**';
 
             foreach ($replaceDirectories as $directory) {
-                $excludeFilters[] = '!' . $directory;
+                $excludeFilters[] = '!' . DIRECTORY_SEPARATOR . $directory;
             }
         }
 
@@ -77,13 +79,16 @@ class BackupFilesHandler
 
         // Backup everything in the install that is marked as a replace directory
         foreach ($replaceDirectories as $directory) {
-            $this->io->debug(sprintf("Adding replace directory %s to backup files", $task->installDir . $directory));
-            $replaceFiles = $this->filesystem->findFiles($task->installDir, [$directory]);
+            $path = $task->installDir . DIRECTORY_SEPARATOR . $directory;
 
-            $files = array_merge($files, $replaceFiles);
+            $this->io->debug(sprintf("Adding replace directory %s to backup files", $path));
+            $replaceFiles = $this->filesystem->findFiles($path);
+            array_walk($replaceFiles, function(&$path) use ($directory) { $path = $directory . DIRECTORY_SEPARATOR . $path; });
+
+            $files = array_merge($files, [$directory], $replaceFiles);
         }
 
-        $this->filesystem->copyFiles($files, $task->installDir, $task->backupDir . '/' . PackageConstants::PATCH_DIR);
+        $this->filesystem->copyFiles($files, $task->installDir, $task->backupDir . DIRECTORY_SEPARATOR . PackageConstants::PATCH_DIR);
 
         // Copy the meteor.json into the backup
         $configPath = $this->configurationLoader->resolve($task->patchDir);

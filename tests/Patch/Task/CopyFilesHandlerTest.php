@@ -21,7 +21,9 @@ class CopyFilesHandlerTest extends PHPUnit_Framework_TestCase
     {
         $this->defaultConfig['patch']['replace_directories'] = [];
         $this->replaceDirectoriesConfig['patch']['replace_directories'] = [
-            '/vendor',
+            '/forward',
+            '\\backward',
+            'noward',
         ];
         $this->io = new NullIO();
         $this->filesystem = Mockery::mock(Filesystem::class, [
@@ -66,7 +68,7 @@ class CopyFilesHandlerTest extends PHPUnit_Framework_TestCase
     public function testExcludesSwapFoldersFromCopyDirectory()
     {
          $this->filesystem->shouldReceive('copyDirectory')
-            ->with('source', 'target', ['**', '!/vendor'])
+            ->with('source', 'target', ['**', '!/forward', '!/backward', '!/noward'])
             ->once();
 
         $this->handler->handle(new CopyFiles('source', 'target'), $this->replaceDirectoriesConfig);
@@ -75,7 +77,7 @@ class CopyFilesHandlerTest extends PHPUnit_Framework_TestCase
     public function testExcludesReplaceDirectoriesFromFindNewFiles()
     {
          $this->filesystem->shouldReceive('findNewFiles')
-            ->with('source', 'target', ['**', '!/vendor'])
+            ->with('source', 'target', ['**', '!/forward', '!/backward', '!/noward'])
             ->andReturn([])
             ->once();
 
@@ -85,7 +87,13 @@ class CopyFilesHandlerTest extends PHPUnit_Framework_TestCase
     public function testProcessesReplaceDirectories()
     {
         $this->filesystem->shouldReceive('replaceDirectory')
-            ->with('source', 'target', '/vendor')
+            ->with('source', 'target', 'forward')
+            ->once();
+        $this->filesystem->shouldReceive('replaceDirectory')
+            ->with('source', 'target', 'backward')
+            ->once();
+        $this->filesystem->shouldReceive('replaceDirectory')
+            ->with('source', 'target', 'noward')
             ->once();
 
         $this->handler->handle(new CopyFiles('source', 'target'), $this->replaceDirectoriesConfig);
@@ -107,10 +115,10 @@ class CopyFilesHandlerTest extends PHPUnit_Framework_TestCase
         ];
 
         $this->filesystem->shouldReceive('replaceDirectory')
-            ->with('source', 'target', '/foo')
+            ->with('source', 'target', 'foo')
             ->once();
         $this->filesystem->shouldReceive('replaceDirectory')
-            ->with('source', 'target', '/vendor')
+            ->with('source', 'target', 'vendor')
             ->once();
 
         $this->handler->handle(new CopyFiles('source', 'target'), $config);
