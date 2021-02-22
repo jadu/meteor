@@ -31,7 +31,8 @@ class OverwritePatchStrategy implements PatchStrategyInterface
     {
         $tasks = [];
         $patchFilesDir = $patchDir . '/' . PackageConstants::PATCH_DIR;
-        $backupDir = $installDir . '/backups/' . date('YmdHis');
+        $backupsDir = $installDir . '/backups';
+        $backupDir = $backupsDir . '/' . date('YmdHis');
 
         $tasks[] = new CheckWritePermission($installDir);
         $tasks[] = new DisplayVersionInfo($patchFilesDir, $installDir);
@@ -46,7 +47,7 @@ class OverwritePatchStrategy implements PatchStrategyInterface
         }
 
         if (!empty($options['limit-backups']) && (int) $options['limit-backups'] !== 0) {
-            $tasks[] = new LimitBackups($installDir, $options['limit-backups']);
+            $tasks[] = new LimitBackups($backupsDir, $installDir, $options['limit-backups']);
         }
 
         $tasks[] = new CheckDiskSpace($installDir);

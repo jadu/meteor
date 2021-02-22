@@ -32,15 +32,15 @@ class BackupFinder
     }
 
     /**
+     * @param string $backupsDir
      * @param string $installDir
      * @param array $config
      *
      * @return Backup[]
      */
-    public function find($installDir, array $config)
+    public function find($backupsDir, $installDir, array $config)
     {
         $backups = [];
-        $backupsDir = $installDir . '/backups';
         $packageNames = $this->getPackageNames($config);
         $backupDirs = [];
         foreach (new DirectoryIterator($backupsDir) as $file) {
