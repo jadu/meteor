@@ -134,6 +134,7 @@ class RollbackCommand extends AbstractPatchCommand
     {
         $workingDir = $this->getWorkingDir();
         $installDir = $this->getInstallDir();
+        $backupsDir = $installDir . '/backups';
 
         if ($workingDir === $installDir) {
             throw new InvalidArgumentException('The working directory cannot be the same as the install directory');
@@ -160,7 +161,7 @@ class RollbackCommand extends AbstractPatchCommand
             return 1;
         }
 
-        $backups = $this->backupFinder->find($installDir, $config);
+        $backups = $this->backupFinder->find($backupsDir, $installDir, $config);
         if (empty($backups)) {
             $this->io->error('Unable to find a valid backup for this package.');
 

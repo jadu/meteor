@@ -106,7 +106,7 @@ class CheckDiskSpaceHandler
      */
     private function removeOldBackups($installDir, array $config)
     {
-        $backups = $this->backupFinder->find($installDir, $config);
+        $backups = $this->backupFinder->find($installDir . '/backups', $installDir, $config);
         if (count($backups) <= self::MAX_BACKUPS) {
             // No backups to remove
             return;
