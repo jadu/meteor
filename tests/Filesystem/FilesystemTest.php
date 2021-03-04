@@ -375,7 +375,7 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(is_file(vfsStream::url('root/target/vendor/org/package/file_c.html')));
 
-        $this->filesystem->replaceDirectory(vfsStream::url('root/source'), vfsStream::url('root/target'), '/vendor');
+        $this->filesystem->replaceDirectory(vfsStream::url('root/source'), vfsStream::url('root/target'), 'vendor');
 
         $this->assertTrue(is_file(vfsStream::url('root/target/vendor/org/package/file_a.html')));
         $this->assertFalse(is_file(vfsStream::url('root/target/vendor/org/package/file_c.html')));

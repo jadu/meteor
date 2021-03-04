@@ -66,22 +66,27 @@ class BackupFilesHandlerTest extends PHPUnit_Framework_TestCase
     public function testReplaceDirectoriesAreExcludedFromNormalBackupCopy()
     {
         $config = [];
-        $config['patch']['replace_directories'] = [
-            '/vendor',
-        ];
+        $config['patch']['replace_directories'] = ['/forward', '\\backward', 'noward'];
 
         $this->filesystem->shouldReceive('findFiles')
-            ->with('patch/to_patch', ['**', '!/vendor'])
+            ->with('patch/to_patch', ['**', '!/forward', '!/backward', '!/noward'])
             ->andReturn(['patch'])
             ->once();
-
         $this->filesystem->shouldReceive('findFiles')
-            ->with('install', ['/vendor'])
-            ->andReturn(['vendor'])
+            ->with('install/forward')
+            ->andReturn(['bar'])
+            ->once();
+        $this->filesystem->shouldReceive('findFiles')
+            ->with('install/backward')
+            ->andReturn(['bar'])
+            ->once();
+        $this->filesystem->shouldReceive('findFiles')
+            ->with('install/noward')
+            ->andReturn(['bar'])
             ->once();
 
         $this->filesystem->shouldReceive('copyFiles')
-            ->with(['patch', 'vendor'], 'install', 'install/backups/20160701000000/to_patch')
+            ->with(['patch', 'forward', 'forward/bar', 'backward', 'backward/bar', 'noward', 'noward/bar'], 'install', 'install/backups/20160701000000/to_patch')
             ->andReturn([])
             ->once();
 
@@ -108,15 +113,15 @@ class BackupFilesHandlerTest extends PHPUnit_Framework_TestCase
             ->andReturn(['patch'])
             ->once();
         $this->filesystem->shouldReceive('findFiles')
-            ->with('install', ['/vendor'])
-            ->andReturn(['vendor'])
+            ->with('install/vendor')
+            ->andReturn(['bar'])
             ->once();
         $this->filesystem->shouldReceive('findFiles')
-            ->with('install', ['/foo'])
-            ->andReturn(['foo'])
+            ->with('install/foo')
+            ->andReturn(['bar'])
             ->once();
         $this->filesystem->shouldReceive('copyFiles')
-            ->with(['patch', 'vendor', 'foo'], 'install', 'install/backups/20160701000000/to_patch')
+            ->with(['patch', 'vendor', 'vendor/bar', 'foo', 'foo/bar'], 'install', 'install/backups/20160701000000/to_patch')
             ->andReturn([])
             ->once();
 

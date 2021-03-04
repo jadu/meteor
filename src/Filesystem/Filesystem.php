@@ -212,7 +212,7 @@ class Filesystem extends BaseFilesystem
      * replace it with the temporary copy. Used to quickly move a directory of items into place, completely removing
      * anything in the existing target location.
      *
-     * Example usage: replaceDirectory('/package', '/install/home', '/vendor')
+     * Example usage: replaceDirectory('/package', '/install/home', 'vendor')
      *
      * @param string $sourceDir
      * @param string $targetDir
@@ -220,16 +220,18 @@ class Filesystem extends BaseFilesystem
      */
     public function replaceDirectory($sourceDir, $targetDir, $replaceDirectory)
     {
-        $this->io->text(sprintf('Replacing directory <info>%s</>', $targetDir . $replaceDirectory));
+        $source = $sourceDir . DIRECTORY_SEPARATOR . $replaceDirectory;
+        $target = $targetDir . DIRECTORY_SEPARATOR . $replaceDirectory;
+        $temp = $targetDir . DIRECTORY_SEPARATOR . uniqid($replaceDirectory);
 
-        $tempTarget = uniqid($replaceDirectory);
+        $this->io->text(sprintf('Replacing directory <info>%s</>', $target));
 
-        $this->copyDirectory($sourceDir . $replaceDirectory, $targetDir . $tempTarget);
+        $this->copyDirectory($source, $temp);
 
-        $this->io->debug(sprintf("Removing %s", $targetDir . $replaceDirectory));
-        $this->removeDirectory($targetDir . $replaceDirectory);
+        $this->io->debug(sprintf("Removing %s", $target));
+        $this->removeDirectory($target);
 
-        $this->io->debug(sprintf("Renaming %s to %s", $targetDir . $tempTarget, $targetDir . $replaceDirectory));
-        rename($targetDir . $tempTarget, $targetDir . $replaceDirectory);
+        $this->io->debug(sprintf("Renaming %s to %s", $temp, $target));
+        rename($temp, $target);
     }
 }
