@@ -44,7 +44,9 @@ class LimitBackupsHandler
      */
     public function handle(LimitBackups $task, array $config)
     {
-        $backups = $this->backupFinder->find($task->installDir, $config);
+        $this->filesystem->ensureDirectoryExists($task->backupsDir);
+
+        $backups = $this->backupFinder->find($task->backupsDir, $task->installDir, $config);
 
         if ((int) $task->backups === 0 || count($backups) <= $task->backups) {
             // No backups to remove

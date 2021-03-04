@@ -41,12 +41,16 @@ class LimitBackupsHandlerTest extends PHPUnit_Framework_TestCase
             new Backup('backups/1', []),
         ];
 
+        $this->filesystem->shouldReceive('ensureDirectoryExists')
+            ->with('backups')
+            ->andReturn(true);
+
         $this->backupFinder->shouldReceive('find')
-            ->with('install', $config)
+            ->with('backups', 'install', $config)
             ->andReturn($backups)
             ->once();
 
-        $this->assertTrue($this->handler->handle(new LimitBackups('install', 10), $config));
+        $this->assertTrue($this->handler->handle(new LimitBackups('backups', 'install', 10), $config));
     }
 
     public function testOverLimit()
@@ -61,8 +65,12 @@ class LimitBackupsHandlerTest extends PHPUnit_Framework_TestCase
             new Backup('backups/1', []),
         ];
 
+        $this->filesystem->shouldReceive('ensureDirectoryExists')
+            ->with('backups')
+            ->andReturn(true);
+
         $this->backupFinder->shouldReceive('find')
-            ->with('install', $config)
+            ->with('backups', 'install', $config)
             ->andReturn($backups)
             ->once();
 
@@ -75,7 +83,7 @@ class LimitBackupsHandlerTest extends PHPUnit_Framework_TestCase
             ->with('backups/1')
             ->once();
 
-        $this->assertTrue($this->handler->handle(new LimitBackups('install', 3), $config));
+        $this->assertTrue($this->handler->handle(new LimitBackups('backups', 'install', 3), $config));
     }
 
 
@@ -91,11 +99,15 @@ class LimitBackupsHandlerTest extends PHPUnit_Framework_TestCase
             new Backup('backups/1', []),
         ];
 
+        $this->filesystem->shouldReceive('ensureDirectoryExists')
+            ->with('backups')
+            ->andReturn(true);
+
         $this->backupFinder->shouldReceive('find')
-            ->with('install', $config)
+            ->with('backups', 'install', $config)
             ->andReturn($backups)
             ->once();
 
-        $this->assertTrue($this->handler->handle(new LimitBackups('install', 0), $config));
+        $this->assertTrue($this->handler->handle(new LimitBackups('backups', 'install', 0), $config));
     }
 }

@@ -7,6 +7,11 @@ class LimitBackups
     /**
      * @var string
      */
+    public $backupsDir;
+
+    /**
+     * @var string
+     */
     public $installDir;
 
     /**
@@ -15,11 +20,13 @@ class LimitBackups
     public $backups;
 
     /**
-     * @param        $installDir
-     * @param        $backups
+     * @param string $backupsDir
+     * @param string $installDir
+     * @param string $backups
      */
-    public function __construct($installDir, $backups)
+    public function __construct($backupsDir, $installDir, $backups)
     {
+        $this->backupsDir = $backupsDir;
         $this->installDir = $installDir;
         $this->backups = $backups;
     }
