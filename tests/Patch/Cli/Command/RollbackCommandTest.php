@@ -100,7 +100,7 @@ class RollbackCommandTest extends CommandTestCase
         ];
 
         $this->backupFinder->shouldReceive('find')
-            ->with($installDir, $config)
+            ->with($installDir . '/backups', $installDir, $config)
             ->andReturn($backups)
             ->once();
 
@@ -175,7 +175,7 @@ class RollbackCommandTest extends CommandTestCase
         ];
 
         $this->backupFinder->shouldReceive('find')
-            ->with($installDir, $config)
+            ->with($installDir . '/backups', $installDir, $config)
             ->andReturn($backups);
 
         $backupDir = $backups[0]->getPath();
@@ -253,7 +253,7 @@ class RollbackCommandTest extends CommandTestCase
         ];
 
         $this->backupFinder->shouldReceive('find')
-            ->with($installDir, $config)
+            ->with($installDir . '/backups', $installDir, $config)
             ->andReturn($backups)
             ->once();
 
@@ -306,7 +306,7 @@ class RollbackCommandTest extends CommandTestCase
         ];
 
         $this->backupFinder->shouldReceive('find')
-            ->with($installDir, $config)
+            ->with($installDir . '/backups', $installDir, $config)
             ->andReturn($backups)
             ->once();
 

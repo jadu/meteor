@@ -70,7 +70,7 @@ class CheckDiskSpaceHandler
         $this->io->warning('Patching will reduce free disk space to less than ' . self::REQUIRED_FREE_SPACE_PERCENT . '%');
 
         // Try removing old backups
-        $this->removeOldBackups($task->installDir, $config);
+        $this->removeOldBackups($task->backupsDir, $task->installDir, $config);
 
         // Check disk space again
         if ($this->hasFreeSpace($task->installDir)) {
@@ -101,12 +101,13 @@ class CheckDiskSpaceHandler
     }
 
     /**
+     * @param string $backupsDir
      * @param string $installDir
      * @param array $config
      */
-    private function removeOldBackups($installDir, array $config)
+    private function removeOldBackups($backupsDir, $installDir, array $config)
     {
-        $backups = $this->backupFinder->find($installDir, $config);
+        $backups = $this->backupFinder->find($backupsDir, $installDir, $config);
         if (count($backups) <= self::MAX_BACKUPS) {
             // No backups to remove
             return;

@@ -10,10 +10,17 @@ class CheckDiskSpace
     public $installDir;
 
     /**
-     * @param string $installDir
+     * @var string
      */
-    public function __construct($installDir)
+    public $backupsDir;
+
+    /**
+     * @param string $installDir
+     * @param string $backupsDir
+     */
+    public function __construct($installDir, $backupsDir)
     {
         $this->installDir = $installDir;
+        $this->backupsDir = $backupsDir;
     }
 }

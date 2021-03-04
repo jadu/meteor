@@ -50,7 +50,7 @@ class BackupFinderTest extends \PHPUnit_Framework_TestCase
             ])
             ->once();
 
-        $backups = $this->backupFinder->find(vfsStream::url('root'), $config);
+        $backups = $this->backupFinder->find(vfsStream::url('root/backups'), vfsStream::url('root'), $config);
 
         $this->assertCount(1, $backups);
         $backup = $backups[0];
@@ -91,7 +91,7 @@ class BackupFinderTest extends \PHPUnit_Framework_TestCase
             ->andThrow(new ConfigurationLoadingException())
             ->once();
 
-        $backups = $this->backupFinder->find(vfsStream::url('root'), $config);
+        $backups = $this->backupFinder->find(vfsStream::url('root/backups'), vfsStream::url('root'), $config);
 
         $this->assertCount(0, $backups);
     }
@@ -121,7 +121,7 @@ class BackupFinderTest extends \PHPUnit_Framework_TestCase
             ->andThrow(new InvalidConfigurationException())
             ->once();
 
-        $backups = $this->backupFinder->find(vfsStream::url('root'), $config);
+        $backups = $this->backupFinder->find(vfsStream::url('root/backups'), vfsStream::url('root'), $config);
 
         $this->assertCount(0, $backups);
     }
@@ -179,7 +179,7 @@ class BackupFinderTest extends \PHPUnit_Framework_TestCase
             ])
             ->once();
 
-        $backups = $this->backupFinder->find(vfsStream::url('root'), $config);
+        $backups = $this->backupFinder->find(vfsStream::url('root/backups'), vfsStream::url('root'), $config);
 
         $this->assertCount(1, $backups);
         $backup = $backups[0];
@@ -259,7 +259,7 @@ class BackupFinderTest extends \PHPUnit_Framework_TestCase
             ])
             ->once();
 
-        $backups = $this->backupFinder->find(vfsStream::url('root'), $config);
+        $backups = $this->backupFinder->find(vfsStream::url('root/backups'), vfsStream::url('root'), $config);
 
         $this->assertCount(0, $backups);
     }
@@ -291,7 +291,7 @@ class BackupFinderTest extends \PHPUnit_Framework_TestCase
             ])
             ->once();
 
-        $backups = $this->backupFinder->find(vfsStream::url('root'), $config);
+        $backups = $this->backupFinder->find(vfsStream::url('root/backups'), vfsStream::url('root'), $config);
 
         $this->assertCount(0, $backups);
     }
@@ -323,7 +323,7 @@ class BackupFinderTest extends \PHPUnit_Framework_TestCase
             ])
             ->once();
 
-        $backups = $this->backupFinder->find(vfsStream::url('root'), $config);
+        $backups = $this->backupFinder->find(vfsStream::url('root/backups'), vfsStream::url('root'), $config);
 
         $this->assertCount(0, $backups);
     }

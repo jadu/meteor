@@ -28,7 +28,7 @@ class CheckDiskSpaceHandlerTest extends \PHPUnit_Framework_TestCase
         $GLOBALS['disk_free_space'] = 1048576000;
 
         $config = ['name' => 'test'];
-        $this->assertTrue($this->handler->handle(new CheckDiskSpace('install'), $config));
+        $this->assertTrue($this->handler->handle(new CheckDiskSpace('install', 'install/backups'), $config));
     }
 
     public function testWhenRunningLowOnSpace()
@@ -39,10 +39,10 @@ class CheckDiskSpaceHandlerTest extends \PHPUnit_Framework_TestCase
         $config = ['name' => 'test'];
 
         $this->backupFinder->shouldReceive('find')
-            ->with('install', $config)
+            ->with('install/backups', 'install', $config)
             ->andReturn([]);
 
-        $this->assertFalse($this->handler->handle(new CheckDiskSpace('install'), $config));
+        $this->assertFalse($this->handler->handle(new CheckDiskSpace('install', 'install/backups'), $config));
     }
 
     public function testRemovesOldBackupsWhenRunningLowOnSpace()
@@ -61,7 +61,7 @@ class CheckDiskSpaceHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->backupFinder->shouldReceive('find')
-            ->with('install', $config)
+            ->with('install/backups', 'install', $config)
             ->andReturn($backups)
             ->once();
 
@@ -89,7 +89,7 @@ class CheckDiskSpaceHandlerTest extends \PHPUnit_Framework_TestCase
             })
             ->once();
 
-        $this->assertTrue($this->handler->handle(new CheckDiskSpace('install'), $config));
+        $this->assertTrue($this->handler->handle(new CheckDiskSpace('install', 'install/backups'), $config));
     }
 
     public function testDoesNotRemoveMostRecentBackups()
@@ -105,14 +105,14 @@ class CheckDiskSpaceHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->backupFinder->shouldReceive('find')
-            ->with('install', $config)
+            ->with('install/backups', 'install', $config)
             ->andReturn($backups)
             ->once();
 
         $this->filesystem->shouldReceive('remove')
             ->never();
 
-        $this->assertFalse($this->handler->handle(new CheckDiskSpace('install'), $config));
+        $this->assertFalse($this->handler->handle(new CheckDiskSpace('install', 'install/backups'), $config));
     }
 
     public function testRemovesOldBackupsWhenRunningLowOnSpaceButNotEnoughIsFreedUp()
@@ -131,7 +131,7 @@ class CheckDiskSpaceHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->backupFinder->shouldReceive('find')
-            ->with('install', $config)
+            ->with('install/backups', 'install', $config)
             ->andReturn($backups)
             ->once();
 
@@ -159,7 +159,7 @@ class CheckDiskSpaceHandlerTest extends \PHPUnit_Framework_TestCase
             })
             ->once();
 
-        $this->assertFalse($this->handler->handle(new CheckDiskSpace('install'), $config));
+        $this->assertFalse($this->handler->handle(new CheckDiskSpace('install', 'install/backups'), $config));
     }
 }
 
