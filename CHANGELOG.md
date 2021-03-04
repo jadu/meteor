@@ -1,3 +1,10 @@
+## v3.4.1
+
+* Fixed fatal error when permissions prevent access to a directory within the patch target ([#123](https://github.com/jadu/meteor/pull/123))
+* Fixed behaviour when backups directory is not present on patch target ([#124](https://github.com/jadu/meteor/pull/124))
+
+## v3.4.0
+
 * A permission reset is now run following execution of scripts when applying or rolling back a patch
 * Fixed issue where meteor would falsely detect circular references within scripts
 * The order of script execution in combined packages has been changed so that scripts of the last package to be combined will now be run last
