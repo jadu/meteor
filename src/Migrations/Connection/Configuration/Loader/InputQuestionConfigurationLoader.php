@@ -40,6 +40,10 @@ class InputQuestionConfigurationLoader implements ConfigurationLoaderInterface
             $configuration['host'] = $this->io->ask('Enter the database host for migrations', 'localhost');
         }
 
+        if (!isset($configuration['port']) || empty($configuration['port'])) {
+            $configuration['port'] = $this->io->ask('Enter the database port for migrations', '3306');
+        }
+
         if (!isset($configuration['driver']) || empty($configuration['driver'])) {
             $configuration['driver'] = $this->io->ask('Enter the database driver for migrations', 'pdo_mysql');
         }

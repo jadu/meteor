@@ -38,6 +38,10 @@ class SystemConfigurationLoader implements ConfigurationLoaderInterface
             $configuration['host'] = trim($xml->db_host);
         }
 
+        if (isset($xml->db_port) && !empty($xml->db_port)) {
+            $configuration['port'] = trim($xml->db_port);
+        }
+
         if (isset($xml->db_dbms) && !empty($xml->db_dbms)) {
             if (stripos(trim($xml->db_dbms), 'mysql') !== false) {
                 $configuration['driver'] = 'pdo_mysql';
