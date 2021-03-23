@@ -2,6 +2,7 @@
 
 * Fixed fatal error when permissions prevent access to a directory within the patch target ([#123](https://github.com/jadu/meteor/pull/123))
 * Fixed behaviour when backups directory is not present on patch target ([#124](https://github.com/jadu/meteor/pull/124))
+* Prevent encoding issues by forcing UTF-8 charset ([#127](https://github.com/jadu/meteor/pull/127))
 
 ## v3.4.0
 
