@@ -75,7 +75,7 @@ class ConnectionFactory
             }
         }
 
-            return DriverManager::getConnection($configuration);
+        return DriverManager::getConnection($configuration);
     }
 
     /**
@@ -87,9 +87,11 @@ class ConnectionFactory
     {
         if ($this->connection === null) {
             $configuration = $this->configurationLoader->load($installDir);
+            $configuration['charset'] = 'utf8';
             if ($configuration['driver'] === 'pdo_sqlsrv' || $configuration['driver'] === 'sqlsrv') {
                 // Use an extended Platform class for SQL Server to fix a few issues
                 $configuration['platform'] = new SQLServer2008Platform();
+                $configuration['charset'] = 'UTF-8';
             }
 
             $this->connection = $this->createConnection($configuration, $installDir);
