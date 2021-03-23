@@ -4,6 +4,7 @@ namespace Meteor\Migrations\Configuration;
 
 use Doctrine\DBAL\Migrations\MigrationException;
 use Doctrine\DBAL\Migrations\Version;
+use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class AbstractConfiguration extends DoctrineConfiguration
 {
@@ -13,6 +14,27 @@ abstract class AbstractConfiguration extends DoctrineConfiguration
      * @var string
      */
     private $jaduPath;
+
+    /**
+     * @var OutputInterface
+     */
+    private $debugLogger;
+
+    /**
+     * @return OutputInterface
+     */
+    public function getDebugLogger()
+    {
+        return $this->debugLogger;
+    }
+
+    /**
+     * @param OutputInterface $debugLogger
+     */
+    public function setDebugLogger($debugLogger)
+    {
+        $this->debugLogger = $debugLogger;
+    }
 
     /**
      * @return string
