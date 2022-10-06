@@ -3,6 +3,7 @@
 namespace Meteor\Platform\Unix;
 
 use InvalidArgumentException;
+use Throwable;
 
 class InstallConfigLoader
 {
@@ -20,7 +21,13 @@ class InstallConfigLoader
             throw new InvalidArgumentException(sprintf('Unable to open install.conf file "%s"', $configPath));
         }
 
-        $values = @parse_ini_file($configPath);
+        try {
+            $values = parse_ini_file($configPath);
+        }
+        catch (Throwable $e) {
+            $values = false;
+        }
+
         if ($values === false) {
             throw new InvalidArgumentException(sprintf('Unable to parse install.conf file "%s"', $configPath));
         }
