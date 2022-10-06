@@ -61,9 +61,7 @@ class PackageCommand extends AbstractCommand
             $this->io->getOption('phar')
         );
 
-        if (!$created) {
-            return 1;
-        }
+        return $created ? 0 : 1;
     }
 
     /**
