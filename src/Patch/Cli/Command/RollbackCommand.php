@@ -18,8 +18,8 @@ use Meteor\Scripts\ScriptRunner;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class RollbackCommand extends AbstractPatchCommand
 {
@@ -181,7 +181,7 @@ class RollbackCommand extends AbstractPatchCommand
             $backupRows[] = [
                 $index,
                 $backup->getDate()->format('c'),
-                implode($backupVersions, ', '),
+                implode(', ', $backupVersions),
             ];
         }
 
@@ -210,7 +210,7 @@ class RollbackCommand extends AbstractPatchCommand
         }
 
         if (!$this->io->getOption('skip-scripts')) {
-            $this->eventDispatcher->dispatch(PatchEvents::PRE_ROLLBACK, new Event());
+            $this->eventDispatcher->dispatch(new Event(), PatchEvents::PRE_ROLLBACK);
         }
 
         if ($backupChoice > 0 && !empty($backups)) {
@@ -240,7 +240,7 @@ class RollbackCommand extends AbstractPatchCommand
         }
 
         if (!$this->io->getOption('skip-scripts')) {
-            $this->eventDispatcher->dispatch(PatchEvents::POST_ROLLBACK, new Event());
+            $this->eventDispatcher->dispatch(new Event(), PatchEvents::POST_ROLLBACK);
         }
 
         if (!$this->io->getOption('skip-post-scripts-permissions')) {
@@ -252,5 +252,7 @@ class RollbackCommand extends AbstractPatchCommand
         }
 
         $this->io->success('Rollback complete');
+
+        return 0;
     }
 }

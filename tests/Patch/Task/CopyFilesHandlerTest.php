@@ -6,9 +6,9 @@ use Meteor\Filesystem\Filesystem;
 use Meteor\IO\NullIO;
 use Meteor\Permissions\PermissionSetter;
 use Mockery;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class CopyFilesHandlerTest extends PHPUnit_Framework_TestCase
+class CopyFilesHandlerTest extends TestCase
 {
     private $io;
     private $filesystem;
@@ -17,7 +17,7 @@ class CopyFilesHandlerTest extends PHPUnit_Framework_TestCase
     private $defaultConfig = [];
     private $replaceDirectoriesConfig = [];
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->defaultConfig['patch']['replace_directories'] = [];
         $this->replaceDirectoriesConfig['patch']['replace_directories'] = [

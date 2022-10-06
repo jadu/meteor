@@ -2,11 +2,13 @@
 
 namespace Meteor\Permissions;
 
-class PermissionLoaderTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class PermissionLoaderTest extends TestCase
 {
     private $loader;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->loader = new PermissionLoader();
     }

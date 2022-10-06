@@ -3,12 +3,13 @@
 namespace Meteor\Migrations\Connection\Configuration\Loader;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class SystemConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
+class SystemConfigurationLoaderTest extends TestCase
 {
     private $loader;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->loader = new SystemConfigurationLoader();
     }

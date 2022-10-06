@@ -112,7 +112,7 @@ EOT;
                 return 1;
             }
 
-            return;
+            return 0;
         }
 
         if (!isset($config[$packageName])) {
@@ -132,8 +132,6 @@ EOT;
             (bool) $this->io->getOption('ignore-unavailable-migrations')
         );
 
-        if (!$result) {
-            return 1;
-        }
+        return $result ? 0 : 1;
     }
 }

@@ -2,7 +2,9 @@
 
 namespace Meteor\Patch\Version;
 
-class VersionDiffTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class VersionDiffTest extends TestCase
 {
     /**
      * @dataProvider lessThanProvider

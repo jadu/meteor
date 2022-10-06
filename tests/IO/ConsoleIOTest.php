@@ -3,14 +3,15 @@
 namespace Meteor\IO;
 
 use Meteor\Logger\NullLogger;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\StreamOutput;
 
-class ConsoleIOTest extends \PHPUnit_Framework_TestCase
+class ConsoleIOTest extends TestCase
 {
     private $io;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->input = new ArrayInput([]);
         $this->input->setInteractive(true);

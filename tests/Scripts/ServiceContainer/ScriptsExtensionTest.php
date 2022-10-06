@@ -3,6 +3,7 @@
 namespace Meteor\Scripts\ServiceContainer;
 
 use Meteor\ServiceContainer\ExtensionTestCase;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 class ScriptsExtensionTest extends ExtensionTestCase
 {
@@ -11,7 +12,7 @@ class ScriptsExtensionTest extends ExtensionTestCase
         $container = $this->loadContainer([]);
 
         foreach ($this->getServiceIds() as $serviceId) {
-            $container->get($serviceId);
+            static::assertTrue($container->has($serviceId), sprintf('Container has "%s" service', $serviceId));
         }
     }
 
@@ -31,11 +32,8 @@ class ScriptsExtensionTest extends ExtensionTestCase
             ],
         ]);
 
-        $this->assertArraySubset([
-            'scripts' => [
-                'test' => ['script'],
-            ],
-        ], $config);
+        static::assertArrayHasKey('scripts', $config);
+        static::assertEquals(['test' => ['script']], $config['scripts']);
     }
 
     public function testConfigAllowsGroupedCommands()
@@ -46,11 +44,8 @@ class ScriptsExtensionTest extends ExtensionTestCase
             ],
         ]);
 
-        $this->assertArraySubset([
-            'scripts' => [
-                'test' => ['script1', 'script2'],
-            ],
-        ], $config);
+        static::assertArrayHasKey('scripts', $config);
+        static::assertEquals(['test' => ['script1', 'script2']], $config['scripts']);
     }
 
     public function testConfigDoesNotNormalizeKeys()
@@ -61,19 +56,15 @@ class ScriptsExtensionTest extends ExtensionTestCase
             ],
         ]);
 
-        $this->assertArraySubset([
-            'scripts' => [
-                'pre.patch.apply' => ['script'],
-            ],
-        ], $config);
+        static::assertArrayHasKey('scripts', $config);
+        static::assertEquals(['pre.patch.apply' => ['script']], $config['scripts']);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Circular reference detected in "test" to "test"
-     */
     public function testConfigPreventsInfiniteRecursion()
     {
+        static::expectException(InvalidConfigurationException::class);
+        static::expectExceptionMessage('Circular reference detected in "test" to "test"');
+
         $this->processConfiguration([
             'scripts' => [
                 'test' => ['@test'],
@@ -81,12 +72,11 @@ class ScriptsExtensionTest extends ExtensionTestCase
         ]);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Circular reference detected in "test2" to "test1"
-     */
     public function testConfigPreventsInfiniteRecursionWithScriptReferences()
     {
+        static::expectException(InvalidConfigurationException::class);
+        static::expectExceptionMessage('Circular reference detected in "test2" to "test1"');
+
         $this->processConfiguration([
             'scripts' => [
                 'test1' => ['@test2'],
@@ -95,12 +85,11 @@ class ScriptsExtensionTest extends ExtensionTestCase
         ]);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Circular reference detected in "test5" to "test1"
-     */
     public function testConfigPreventsInfiniteRecursionWithDeepScriptReferences()
     {
+        static::expectException(InvalidConfigurationException::class);
+        static::expectExceptionMessage('Circular reference detected in "test5" to "test1"');
+
         $this->processConfiguration([
             'scripts' => [
                 'test1' => ['@test2'],
@@ -126,11 +115,10 @@ class ScriptsExtensionTest extends ExtensionTestCase
         ]);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
     public function testConfigCannotContainMultiDimentionalScripts()
     {
+        static::expectException(InvalidConfigurationException::class);
+
         $this->processConfiguration([
             'scripts' => [
                 'test' => [

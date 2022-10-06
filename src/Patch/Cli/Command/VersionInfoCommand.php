@@ -51,5 +51,7 @@ class VersionInfoCommand extends AbstractPatchCommand
         );
 
         $this->taskBus->run($task, $this->getConfiguration());
+
+        return 0;
     }
 }

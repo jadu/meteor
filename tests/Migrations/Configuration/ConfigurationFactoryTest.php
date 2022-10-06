@@ -11,9 +11,9 @@ use Meteor\Migrations\Version\FileMigrationVersionStorage;
 use Meteor\Migrations\Version\FileMigrationVersionStorageFactory;
 use Meteor\Migrations\Version\VersionFileManager;
 use Mockery;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ConfigurationFactoryTest extends PHPUnit_Framework_TestCase
+class ConfigurationFactoryTest extends TestCase
 {
     private $connectionFactory;
     private $fileMigrationVersionStorageFactory;
@@ -21,7 +21,7 @@ class ConfigurationFactoryTest extends PHPUnit_Framework_TestCase
     private $io;
     private $configurationFactory;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->connectionFactory = Mockery::mock(ConnectionFactory::class);
         $this->fileMigrationVersionStorageFactory = Mockery::mock(FileMigrationVersionStorageFactory::class);
@@ -38,7 +38,10 @@ class ConfigurationFactoryTest extends PHPUnit_Framework_TestCase
 
     public function testCreateDatabaseConfiguration()
     {
-        $connection = Mockery::mock(Connection::class);
+        $connection = Mockery::mock(Connection::class, [
+            'getDatabasePlatform' => Mockery::mock(MySqlPlatform::class),
+            'getSchemaManager' => Mockery::mock(AbstractSchemaManager::class),
+        ]);
         $this->connectionFactory->shouldReceive('getConnection')
             ->with(__DIR__ . '/Fixtures/empty/install')
             ->andReturn($connection)
@@ -56,12 +59,12 @@ class ConfigurationFactoryTest extends PHPUnit_Framework_TestCase
             true
         );
 
-        $this->assertSame($connection, $configuration->getConnection());
-        $this->assertSame('jadu/xfp', $configuration->getName());
-        $this->assertSame('Migrations', $configuration->getMigrationsNamespace());
-        $this->assertSame('JaduMigrationsXFP', $configuration->getMigrationsTableName());
-        $this->assertSame(__DIR__ . '/Fixtures/empty/patch/upgrades', $configuration->getMigrationsDirectory());
-        $this->assertSame(__DIR__ . '/Fixtures/empty/install', $configuration->getJaduPath());
+        static::assertSame($connection, $configuration->getConnection());
+        static::assertSame('jadu/xfp', $configuration->getName());
+        static::assertSame('Migrations', $configuration->getMigrationsNamespace());
+        static::assertSame('JaduMigrationsXFP', $configuration->getMigrationsTableName());
+        static::assertSame(__DIR__ . '/Fixtures/empty/patch/upgrades', $configuration->getMigrationsDirectory());
+        static::assertSame(__DIR__ . '/Fixtures/empty/install', $configuration->getJaduPath());
     }
 
     public function testCreateDatabaseConfigurationWithMigrationsOnlyFindsDatabaseMigrations()
@@ -98,7 +101,10 @@ class ConfigurationFactoryTest extends PHPUnit_Framework_TestCase
 
     public function testCreateFileConfiguration()
     {
-        $connection = Mockery::mock(Connection::class);
+        $connection = Mockery::mock(Connection::class, [
+            'getDatabasePlatform' => Mockery::mock(MySqlPlatform::class),
+            'getSchemaManager' => Mockery::mock(AbstractSchemaManager::class),
+        ]);
         $this->connectionFactory->shouldReceive('getConnection')
             ->with(__DIR__ . '/Fixtures/empty/install')
             ->andReturn($connection)
@@ -124,13 +130,13 @@ class ConfigurationFactoryTest extends PHPUnit_Framework_TestCase
             true
         );
 
-        $this->assertSame($connection, $configuration->getConnection());
-        $this->assertSame('jadu/xfp', $configuration->getName());
-        $this->assertSame('Migrations', $configuration->getMigrationsNamespace());
-        $this->assertSame('JaduMigrationsXFP', $configuration->getMigrationsTableName());
-        $this->assertSame(__DIR__ . '/Fixtures/empty/patch/upgrades/filesystem', $configuration->getMigrationsDirectory());
-        $this->assertSame(__DIR__ . '/Fixtures/empty/install', $configuration->getJaduPath());
-        $this->assertSame($fileMigrationVersionStorage, $configuration->getVersionStorage());
+        static::assertSame($connection, $configuration->getConnection());
+        static::assertSame('jadu/xfp', $configuration->getName());
+        static::assertSame('Migrations', $configuration->getMigrationsNamespace());
+        static::assertSame('JaduMigrationsXFP', $configuration->getMigrationsTableName());
+        static::assertSame(__DIR__ . '/Fixtures/empty/patch/upgrades/filesystem', $configuration->getMigrationsDirectory());
+        static::assertSame(__DIR__ . '/Fixtures/empty/install', $configuration->getJaduPath());
+        static::assertSame($fileMigrationVersionStorage, $configuration->getVersionStorage());
     }
 
     public function testCreateFileConfigurationWithMigrationsOnlyIncludesFileMigrations()
@@ -175,7 +181,11 @@ class ConfigurationFactoryTest extends PHPUnit_Framework_TestCase
 
     public function testInitialisesFileMigrationVersionStorage()
     {
-        $connection = Mockery::mock(Connection::class);
+        $connection = Mockery::mock(Connection::class, [
+            'getDatabasePlatform' => Mockery::mock(MySqlPlatform::class),
+            'getSchemaManager' => Mockery::mock(AbstractSchemaManager::class),
+        ]);
+
         $this->connectionFactory->shouldReceive('getConnection')
             ->with(__DIR__ . '/Fixtures/empty/install')
             ->andReturn($connection)

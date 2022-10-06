@@ -4,6 +4,7 @@ namespace Meteor\Migrations\Cli\Command;
 
 use Meteor\Cli\Command\CommandTestCase;
 use Meteor\IO\NullIO;
+use Meteor\Migrations\Generator\MigrationGenerator;
 use Meteor\Migrations\MigrationsConstants;
 use Mockery;
 
@@ -13,7 +14,7 @@ class GenerateMigrationCommandTest extends CommandTestCase
 
     public function createCommand()
     {
-        $this->migrationGenerator = Mockery::mock('Meteor\Migrations\Generator\MigrationGenerator');
+        $this->migrationGenerator = Mockery::mock(MigrationGenerator::class);
 
         return new GenerateMigrationCommand('migrations:generate', [], new NullIO(), $this->migrationGenerator, MigrationsConstants::TYPE_DATABASE);
     }
@@ -39,6 +40,9 @@ class GenerateMigrationCommandTest extends CommandTestCase
             '--working-dir' => $workingDir,
         ]);
 
-        $this->assertRegExp('/Version\d{14}\.php/', $this->tester->getDisplay());
+        static::assertMatchesRegularExpression(
+            '/Version\d{14}\.php/',
+            preg_replace('/\s/', '', $this->tester->getDisplay())
+        );
     }
 }

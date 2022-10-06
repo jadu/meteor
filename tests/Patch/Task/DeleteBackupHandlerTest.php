@@ -4,14 +4,15 @@ namespace Meteor\Patch\Task;
 
 use Meteor\IO\NullIO;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class DeleteBackupHandlerTest extends \PHPUnit_Framework_TestCase
+class DeleteBackupHandlerTest extends TestCase
 {
     private $io;
     private $filesystem;
     private $handler;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->io = new NullIO();
         $this->filesystem = Mockery::mock('Meteor\Filesystem\Filesystem', [

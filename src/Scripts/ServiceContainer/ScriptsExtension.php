@@ -7,9 +7,12 @@ use Meteor\Cli\ServiceContainer\CliExtension;
 use Meteor\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Meteor\IO\ServiceContainer\IOExtension;
 use Meteor\Process\ServiceContainer\ProcessExtension;
+use Meteor\Scripts\Cli\Command\RunCommand;
+use Meteor\Scripts\EventListener\ScriptEventListener;
 use Meteor\Scripts\Exception\CircularScriptReferenceException;
 use Meteor\Scripts\Exception\ScriptReferenceException;
 use Meteor\Scripts\ScriptEventProviderInterface;
+use Meteor\Scripts\ScriptRunner;
 use Meteor\ServiceContainer\ExtensionBase;
 use Meteor\ServiceContainer\ExtensionInterface;
 use Meteor\ServiceContainer\ExtensionManager;
@@ -180,9 +183,10 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadEventListener(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_EVENT_LISTENER, new Definition('Meteor\Scripts\EventListener\ScriptEventListener', [
+        $container->setDefinition(self::SERVICE_EVENT_LISTENER, new Definition(ScriptEventListener::class, [
             new Reference(self::SERVICE_SCRIPT_RUNNER),
-        ]));
+        ]))
+        ->setPublic(true);
     }
 
     /**
@@ -190,21 +194,25 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadScriptRunner(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_SCRIPT_RUNNER, new Definition('Meteor\Scripts\ScriptRunner', [
-            new Reference(ProcessExtension::SERVICE_PROCESS_RUNNER),
-            new Reference(IOExtension::SERVICE_IO),
-            '%' . self::PARAMETER_SCRIPTS . '%',
-        ]));
+        $container->setDefinition(self::SERVICE_SCRIPT_RUNNER, new Definition(ScriptRunner::class, [
+                new Reference(ProcessExtension::SERVICE_PROCESS_RUNNER),
+                new Reference(IOExtension::SERVICE_IO),
+                '%' . self::PARAMETER_SCRIPTS . '%',
+            ])
+        )
+        ->setPublic(true);
     }
 
     private function loadRunCommand(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Scripts\Cli\Command\RunCommand', [
+        $definition = new Definition(RunCommand::class, [
             null,
             '%' . Application::PARAMETER_CONFIG . '%',
             new Reference(IOExtension::SERVICE_IO),
             new Reference(self::SERVICE_SCRIPT_RUNNER),
         ]);
+
+        $definition->setPublic(true);
 
         $definition->addTag(CliExtension::TAG_COMMAND);
         $container->setDefinition(self::SERVICE_COMMAND_RUN, $definition);

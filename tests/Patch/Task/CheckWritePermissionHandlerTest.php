@@ -4,12 +4,13 @@ namespace Meteor\Patch\Task;
 
 use Meteor\IO\NullIO;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class CheckWritePermissionHandlerTest extends \PHPUnit_Framework_TestCase
+class CheckWritePermissionHandlerTest extends TestCase
 {
     private $handler;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->handler = new CheckWritePermissionHandler(new NullIO());
     }

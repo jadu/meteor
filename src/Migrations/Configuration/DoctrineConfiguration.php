@@ -2,15 +2,17 @@
 
 namespace Meteor\Migrations\Configuration;
 
-use Doctrine\DBAL\Migrations\Configuration\Configuration;
-use Doctrine\DBAL\Migrations\MigrationException;
-use Doctrine\DBAL\Migrations\Version;
+use Doctrine\Migrations\Configuration\Configuration;
+use Doctrine\Migrations\Exception\MigrationException;
+use Doctrine\Migrations\Version\Version;
 
 /**
  * The base Configuration class stored migrations in a private $migrations property that cannot be accesed.
  * To overcome this limitation the methods that utilise this property have been overridden and made to use
  * the $migrationVersions property instead. All of the methods here were taken from the Configuration class
  * so if Doctrine Migrations is updated these methods should also be.
+ *
+ * TODO: parent class differs from this version a lot, likely needs refactoring
  *
  * @codeCoverageIgnore Tested by Doctrine and copy and pasted by TG
  */
@@ -24,19 +26,9 @@ abstract class DoctrineConfiguration extends Configuration
     protected $migrationVersions = [];
 
     /**
-     * Get the array of registered migration versions.
-     *
-     * @return Version[] $migrations
-     */
-    public function getMigrations()
-    {
-        return $this->migrationVersions;
-    }
-
-    /**
      * {@inheritdoc}
      */
-    public function getVersion($version)
+    public function getVersion($version): Version
     {
         if (!isset($this->migrationVersions[$version])) {
             throw MigrationException::unknownMigrationVersion($version);
@@ -48,7 +40,7 @@ abstract class DoctrineConfiguration extends Configuration
     /**
      * {@inheritdoc}
      */
-    public function hasVersion($version)
+    public function hasVersion($version): bool
     {
         return isset($this->migrationVersions[$version]);
     }
@@ -56,7 +48,7 @@ abstract class DoctrineConfiguration extends Configuration
     /**
      * {@inheritdoc}
      */
-    public function getAvailableVersions()
+    public function getAvailableVersions(): array
     {
         $availableVersions = [];
         foreach ($this->migrationVersions as $migration) {
@@ -69,7 +61,7 @@ abstract class DoctrineConfiguration extends Configuration
     /**
      * {@inheritdoc}
      */
-    public function getCurrentVersion()
+    public function getCurrentVersion(): string
     {
         $this->createMigrationTable();
 
@@ -95,14 +87,14 @@ abstract class DoctrineConfiguration extends Configuration
     /**
      * {@inheritdoc}
      */
-    public function getRelativeVersion($version, $delta)
+    public function getRelativeVersion(string $version, int $delta): ?string
     {
         $versions = array_keys($this->migrationVersions);
         array_unshift($versions, 0);
         $offset = array_search($version, $versions, true);
         if ($offset === false || !isset($versions[$offset + $delta])) {
             // Unknown version or delta out of bounds.
-            return;
+            return null;
         }
 
         return (string) $versions[$offset + $delta];
@@ -111,7 +103,7 @@ abstract class DoctrineConfiguration extends Configuration
     /**
      * {@inheritdoc}
      */
-    public function getNumberOfAvailableMigrations()
+    public function getNumberOfAvailableMigrations(): int
     {
         return count($this->migrationVersions);
     }
@@ -119,7 +111,7 @@ abstract class DoctrineConfiguration extends Configuration
     /**
      * {@inheritdoc}
      */
-    public function getLatestVersion()
+    public function getLatestVersion(): string
     {
         $versions = array_keys($this->migrationVersions);
         $latest = end($versions);
@@ -130,7 +122,7 @@ abstract class DoctrineConfiguration extends Configuration
     /**
      * {@inheritdoc}
      */
-    public function getMigrationsToExecute($direction, $to)
+    public function getMigrationsToExecute(string $direction, string $to): array
     {
         if ($direction === 'down') {
             if (count($this->migrationVersions)) {

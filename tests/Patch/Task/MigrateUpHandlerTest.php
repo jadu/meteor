@@ -5,14 +5,15 @@ namespace Meteor\Patch\Task;
 use Meteor\IO\NullIO;
 use Meteor\Migrations\MigrationsConstants;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class MigrateUpHandlerTest extends \PHPUnit_Framework_TestCase
+class MigrateUpHandlerTest extends TestCase
 {
     private $migrator;
     private $io;
     private $handler;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->migrator = Mockery::mock('Meteor\Migrations\Migrator');
         $this->io = new NullIO();

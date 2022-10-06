@@ -4,12 +4,13 @@ namespace Meteor\Patch\Manifest;
 
 use Meteor\IO\NullIO;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class ManifestCheckerTest extends \PHPUnit_Framework_TestCase
+class ManifestCheckerTest extends TestCase
 {
     private $manifestChecker;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->manifestChecker = new ManifestChecker(new NullIO());
 

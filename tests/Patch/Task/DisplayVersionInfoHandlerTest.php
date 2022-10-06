@@ -4,14 +4,15 @@ namespace Meteor\Patch\Task;
 
 use Meteor\Patch\Version\VersionDiff;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class DisplayVersionInfoHandlerTest extends \PHPUnit_Framework_TestCase
+class DisplayVersionInfoHandlerTest extends TestCase
 {
     private $io;
     private $versionComparer;
     private $handler;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->io = Mockery::mock('Meteor\IO\IOInterface', [
             'text' => null,

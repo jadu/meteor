@@ -9,7 +9,7 @@ abstract class MigrationTestCase extends CommandTestCase
 {
     protected $extension;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->extension = new MigrationsExtension();

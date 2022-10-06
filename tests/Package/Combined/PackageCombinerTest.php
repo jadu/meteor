@@ -5,8 +5,9 @@ namespace Meteor\Package\Combined;
 use Meteor\IO\NullIO;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class PackageCombinerTest extends \PHPUnit_Framework_TestCase
+class PackageCombinerTest extends TestCase
 {
     private $configurationLoader;
     private $filesystem;
@@ -15,7 +16,7 @@ class PackageCombinerTest extends \PHPUnit_Framework_TestCase
     private $io;
     private $packageCombiner;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->configurationLoader = Mockery::mock('Meteor\Configuration\ConfigurationLoader');
         $this->filesystem = Mockery::mock('Meteor\Filesystem\Filesystem');

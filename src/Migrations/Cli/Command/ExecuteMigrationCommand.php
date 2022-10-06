@@ -125,8 +125,6 @@ EOT;
             $direction
         );
 
-        if (!$result) {
-            return 1;
-        }
+        return $result ? 0 : 1;
     }
 }

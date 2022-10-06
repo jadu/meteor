@@ -6,14 +6,15 @@ use Meteor\Configuration\Exception\ConfigurationLoadingException;
 use Meteor\Patch\Version\VersionComparer;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-class BackupFinderTest extends \PHPUnit_Framework_TestCase
+class BackupFinderTest extends TestCase
 {
     private $configurationLoader;
     private $backupFinder;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->configurationLoader = Mockery::mock('Meteor\Configuration\ConfigurationLoader');
         $this->backupFinder = new BackupFinder(new VersionComparer(), $this->configurationLoader);

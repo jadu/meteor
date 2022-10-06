@@ -48,5 +48,7 @@ class RunCommand extends AbstractCommand
 
         $scriptName = $this->io->getArgument('script');
         $this->scriptRunner->run($scriptName);
+
+        return 0;
     }
 }

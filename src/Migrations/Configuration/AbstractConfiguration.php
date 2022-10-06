@@ -2,8 +2,8 @@
 
 namespace Meteor\Migrations\Configuration;
 
-use Doctrine\DBAL\Migrations\MigrationException;
-use Doctrine\DBAL\Migrations\Version;
+use Doctrine\Migrations\Exception\MigrationException;
+use Doctrine\Migrations\Version\Version;
 
 abstract class AbstractConfiguration extends DoctrineConfiguration
 {
@@ -41,10 +41,8 @@ abstract class AbstractConfiguration extends DoctrineConfiguration
      *
      * @throws MigrationException
      */
-    public function registerMigration($version, $class)
+    public function registerMigration(string $version, string $class): Version
     {
-        $version = (string) $version;
-        $class = (string) $class;
         if (isset($this->migrationVersions[$version])) {
             throw MigrationException::duplicateMigrationVersion($version, get_class($this->migrationVersions[$version]));
         }

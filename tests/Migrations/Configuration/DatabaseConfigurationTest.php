@@ -3,8 +3,9 @@
 namespace Meteor\Migrations\Configuration;
 
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class DatabaseConfigurationTest extends \PHPUnit_Framework_TestCase
+class DatabaseConfigurationTest extends TestCase
 {
     /**
      * Ensure the method exists as it is used by old migrations.

@@ -3,12 +3,13 @@
 namespace Meteor\Configuration;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class ConfigurationWriterTest extends \PHPUnit_Framework_TestCase
+class ConfigurationWriterTest extends TestCase
 {
     private $configurationWriter;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->configurationWriter = new ConfigurationWriter();
 

@@ -18,8 +18,8 @@ use Meteor\Scripts\ScriptRunner;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class ApplyCommand extends AbstractPatchCommand
 {
@@ -226,7 +226,7 @@ class ApplyCommand extends AbstractPatchCommand
         }
 
         if (!$this->io->getOption('skip-scripts')) {
-            $this->eventDispatcher->dispatch(PatchEvents::PRE_APPLY, new Event());
+            $this->eventDispatcher->dispatch(new Event(), PatchEvents::PRE_APPLY);
         }
 
         $tasks = $this->strategy->apply($workingDir, $installDir, $this->io->getOptions());
@@ -238,7 +238,7 @@ class ApplyCommand extends AbstractPatchCommand
         }
 
         if (!$this->io->getOption('skip-scripts')) {
-            $this->eventDispatcher->dispatch(PatchEvents::POST_APPLY, new Event());
+            $this->eventDispatcher->dispatch(new Event(), PatchEvents::POST_APPLY);
         }
 
         if (!$this->io->getOption('skip-post-scripts-permissions')) {
@@ -250,5 +250,7 @@ class ApplyCommand extends AbstractPatchCommand
         }
 
         $this->io->success('Patch complete');
+
+        return 0;
     }
 }

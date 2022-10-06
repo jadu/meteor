@@ -6,9 +6,9 @@ use Meteor\Configuration\ConfigurationLoader;
 use Meteor\Filesystem\Filesystem;
 use Meteor\IO\NullIO;
 use Mockery;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class BackupFilesHandlerTest extends PHPUnit_Framework_TestCase
+class BackupFilesHandlerTest extends TestCase
 {
     private $filesystem;
     private $configurationLoader;
@@ -16,7 +16,7 @@ class BackupFilesHandlerTest extends PHPUnit_Framework_TestCase
     private $handler;
     private $config = [];
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->config['patch']['replace_directories'] = [];
         $this->filesystem = Mockery::mock(Filesystem::class, [
@@ -27,7 +27,7 @@ class BackupFilesHandlerTest extends PHPUnit_Framework_TestCase
             'copyDirectory' => null,
         ]);
         $this->configurationLoader = Mockery::mock(ConfigurationLoader::class, [
-            'resolve' => null,
+            'resolve' => 'composer.json',
         ]);
         $this->io = new NullIO();
 

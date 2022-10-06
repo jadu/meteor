@@ -2,7 +2,9 @@
 
 namespace Meteor\Patch\Backup;
 
-class BackupTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class BackupTest extends TestCase
 {
     public function testGetDate()
     {

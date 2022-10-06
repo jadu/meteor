@@ -3,12 +3,14 @@
 namespace Meteor\Patch\Lock;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
-class LockerTest extends \PHPUnit_Framework_TestCase
+class LockerTest extends TestCase
 {
     private $locker;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->locker = new Locker();
 
@@ -19,14 +21,13 @@ class LockerTest extends \PHPUnit_Framework_TestCase
     {
         $this->locker->lock(vfsStream::url('root'));
 
-        $this->assertTrue(is_file(vfsStream::url('root/' . Locker::FILENAME)));
+        static::assertTrue(is_file(vfsStream::url('root/' . Locker::FILENAME)));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testLockThrowsExceptionIfUnableToCreateLockFile()
     {
+        static::expectException(RuntimeException::class);
+
         $this->locker->lock(vfsStream::url('root'));
         $this->locker->lock(vfsStream::url('root'));
     }
@@ -34,13 +35,13 @@ class LockerTest extends \PHPUnit_Framework_TestCase
     public function testUnlock()
     {
         $this->locker->lock(vfsStream::url('root'));
-        $this->assertTrue($this->locker->unlock(vfsStream::url('root')));
+        static::assertTrue($this->locker->unlock(vfsStream::url('root')));
 
-        $this->assertFalse(is_file(vfsStream::url('root/' . Locker::FILENAME)));
+        static::assertFalse(is_file(vfsStream::url('root/' . Locker::FILENAME)));
     }
 
     public function testUnlockReturnsFalseIfNotLocked()
     {
-        $this->assertFalse($this->locker->unlock(vfsStream::url('root')));
+        static::assertFalse($this->locker->unlock(vfsStream::url('root')));
     }
 }

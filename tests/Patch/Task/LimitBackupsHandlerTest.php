@@ -8,8 +8,9 @@ use Mockery;
 use PHPUnit_Framework_TestCase;
 use Meteor\Patch\Backup\BackupFinder;
 use Meteor\Filesystem\Filesystem;
+use PHPUnit\Framework\TestCase;
 
-class LimitBackupsHandlerTest extends PHPUnit_Framework_TestCase
+class LimitBackupsHandlerTest extends TestCase
 {
 
     protected $backupFinder;
@@ -20,7 +21,7 @@ class LimitBackupsHandlerTest extends PHPUnit_Framework_TestCase
 
     protected $handler;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->backupFinder = Mockery::mock(BackupFinder::class);
         $this->filesystem = Mockery::mock(Filesystem::class);

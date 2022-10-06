@@ -2,8 +2,8 @@
 
 namespace Meteor\Migrations\Configuration;
 
-use Doctrine\DBAL\Migrations\Finder\GlobFinder;
-use Doctrine\DBAL\Migrations\OutputWriter;
+use Doctrine\Migrations\Finder\GlobFinder;
+use Doctrine\Migrations\OutputWriter;
 use InvalidArgumentException;
 use Meteor\IO\IOInterface;
 use Meteor\Migrations\Connection\ConnectionFactory;
@@ -53,7 +53,7 @@ class ConfigurationFactory
 
     /**
      * @param string $type
-     * @param Config $config
+     * @param array $config
      * @param string $patchDir
      * @param string $installDir
      *
@@ -73,7 +73,7 @@ class ConfigurationFactory
     }
 
     /**
-     * @param Config $config
+     * @param array $config
      * @param string $patchDir
      * @param string $installDir
      *
@@ -90,7 +90,7 @@ class ConfigurationFactory
     }
 
     /**
-     * @param Config $config
+     * @param array $config
      * @param string $patchDir
      * @param string $installDir
      *
@@ -118,7 +118,7 @@ class ConfigurationFactory
 
     /**
      * @param string $className
-     * @param Config $config
+     * @param array $config
      * @param string $patchDir
      * @param string $installDir
      *

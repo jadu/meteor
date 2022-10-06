@@ -12,7 +12,7 @@ class PackageCommandTest extends CommandTestCase
 
     public function createCommand()
     {
-        $this->packageCreator = Mockery::mock('Meteor\Package\PackageCreator');
+        $this->packageCreator = Mockery::mock(\Meteor\Package\PackageCreator::class);
 
         return new PackageCommand(null, ['name' => 'test'], new NullIO(), $this->packageCreator);
     }

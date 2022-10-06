@@ -3,12 +3,13 @@
 namespace Meteor\Filesystem\Finder;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class FinderFactoryTest extends \PHPUnit_Framework_TestCase
+class FinderFactoryTest extends TestCase
 {
     private $finderFactory;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->finderFactory = new FinderFactory();
     }

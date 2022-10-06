@@ -2,14 +2,16 @@
 
 namespace Meteor\ServiceContainer;
 
+use Meteor\ServiceContainer\Exception\ExtensionInitializationException;
 use Meteor\ServiceContainer\Test\TestExtension;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class ExtensionManagerTest extends \PHPUnit_Framework_TestCase
+class ExtensionManagerTest extends TestCase
 {
     private $extensionManager;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->extensionManager = new ExtensionManager([]);
     }
@@ -44,19 +46,17 @@ class ExtensionManagerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @expectedException \Meteor\ServiceContainer\Exception\ExtensionInitializationException
-     */
     public function testActivateExtensionThrowsExceptionWhenClassNotFound()
     {
+        static::expectException(ExtensionInitializationException::class);
+
         $this->extensionManager->activateExtension('ThisClassDoesNotExist', null);
     }
 
-    /**
-     * @expectedException \Meteor\ServiceContainer\Exception\ExtensionInitializationException
-     */
     public function testActivateExtensionThrowsExceptionWhenNotImplementingExceptionInterface()
     {
+        static::expectException(ExtensionInitializationException::class);
+
         $this->extensionManager->activateExtension('DateTime', null);
     }
 

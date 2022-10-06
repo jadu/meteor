@@ -4,15 +4,16 @@ namespace Meteor\Package\Combined;
 
 use Meteor\IO\NullIO;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class CombinedPackageResolverTest extends \PHPUnit_Framework_TestCase
+class CombinedPackageResolverTest extends TestCase
 {
     private $packageCombiner;
     private $combinedPackageDependencyChecker;
     private $filesystem;
     private $packageProvider;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->packageCombiner = Mockery::mock('Meteor\Package\Combined\PackageCombiner');
         $this->combinedPackageDependencyChecker = Mockery::mock('Meteor\Package\Combined\CombinedPackageDependencyChecker', [

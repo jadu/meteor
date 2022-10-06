@@ -5,13 +5,14 @@ namespace Meteor\Patch\Task;
 use Meteor\IO\NullIO;
 use Meteor\Patch\Version\VersionDiff;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class CheckVersionHandlerTest extends \PHPUnit_Framework_TestCase
+class CheckVersionHandlerTest extends TestCase
 {
     private $versionComparer;
     private $handler;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->versionComparer = Mockery::mock('Meteor\Patch\Version\VersionComparer');
         $this->handler = new CheckVersionHandler(new NullIO(), $this->versionComparer);

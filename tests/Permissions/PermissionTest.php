@@ -2,7 +2,9 @@
 
 namespace Meteor\Permissions;
 
-class PermissionTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class PermissionTest extends TestCase
 {
     public function testCreateWithAllPermissions()
     {

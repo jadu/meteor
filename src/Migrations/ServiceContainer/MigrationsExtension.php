@@ -140,11 +140,13 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
     {
         $container->setDefinition(self::SERVICE_CONNECTION_CONFIGURATION_LOADER_INPUT_OPTION, new Definition('Meteor\Migrations\Connection\Configuration\Loader\InputOptionConfigurationLoader', [
             new Reference(IOExtension::SERVICE_IO),
-        ]));
-        $container->setDefinition(self::SERVICE_CONNECTION_CONFIGURATION_LOADER_SYSTEM, new Definition('Meteor\Migrations\Connection\Configuration\Loader\SystemConfigurationLoader'));
+        ]))
+        ->setPublic(true);
+        $container->setDefinition(self::SERVICE_CONNECTION_CONFIGURATION_LOADER_SYSTEM, new Definition('Meteor\Migrations\Connection\Configuration\Loader\SystemConfigurationLoader'))->setPublic(true);
         $container->setDefinition(self::SERVICE_CONNECTION_CONFIGURATION_LOADER_INPUT_QUESTION, new Definition('Meteor\Migrations\Connection\Configuration\Loader\InputQuestionConfigurationLoader', [
             new Reference(IOExtension::SERVICE_IO),
-        ]));
+        ]))
+        ->setPublic(true);
 
         $container->setDefinition(self::SERVICE_CONNECTION_CONFIGURATION_LOADER, new Definition('Meteor\Migrations\Connection\Configuration\Loader\ChainedConfigurationLoader', [
             [
@@ -152,7 +154,8 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
                 new Reference(self::SERVICE_CONNECTION_CONFIGURATION_LOADER_SYSTEM),
                 new Reference(self::SERVICE_CONNECTION_CONFIGURATION_LOADER_INPUT_QUESTION),
             ],
-        ]));
+        ]))
+        ->setPublic(true);
     }
 
     /**
@@ -162,7 +165,8 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
     {
         $container->setDefinition(self::SERVICE_CONNECTION_FACTORY, new Definition('Meteor\Migrations\Connection\ConnectionFactory', [
             new Reference(self::SERVICE_CONNECTION_CONFIGURATION_LOADER),
-        ]));
+        ]))
+        ->setPublic(true);
     }
 
     /**
@@ -175,7 +179,8 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
             new Reference(self::SERVICE_VERSION_FILE_MIGRATION_VERSION_STORAGE_FACTORY),
             new Reference(self::SERVICE_VERSION_FILE_MANAGER),
             new Reference(IOExtension::SERVICE_IO),
-        ]));
+        ]))
+        ->setPublic(true);
     }
 
     /**
@@ -193,6 +198,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
             MigrationsConstants::TYPE_DATABASE,
         ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
+        $definition->setPublic(true);
         $container->setDefinition(self::SERVICE_COMMAND_EXECUTE_DATABASE_MIGRATION, $definition);
     }
 
@@ -211,6 +217,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
             MigrationsConstants::TYPE_FILE,
         ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
+        $definition->setPublic(true);
         $container->setDefinition(self::SERVICE_COMMAND_EXECUTE_FILE_MIGRATION, $definition);
     }
 
@@ -227,6 +234,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
             MigrationsConstants::TYPE_DATABASE,
         ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
+        $definition->setPublic(true);
         $container->setDefinition(self::SERVICE_COMMAND_GENERATE_DATABASE_MIGRATION, $definition);
     }
 
@@ -243,6 +251,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
             MigrationsConstants::TYPE_FILE,
         ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
+        $definition->setPublic(true);
         $container->setDefinition(self::SERVICE_COMMAND_GENERATE_FILE_MIGRATION, $definition);
     }
 
@@ -251,7 +260,8 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadMigrationGenerator(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_MIGRATION_GENERATOR, new Definition('Meteor\Migrations\Generator\MigrationGenerator'));
+        $container->setDefinition(self::SERVICE_MIGRATION_GENERATOR, new Definition('Meteor\Migrations\Generator\MigrationGenerator'))
+        ->setPublic(true);
     }
 
     /**
@@ -262,7 +272,8 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
         $container->setDefinition(self::SERVICE_MIGRATOR, new Definition('Meteor\Migrations\Migrator', [
             new Reference(self::SERVICE_CONFIGURATION_FACTORY),
             new Reference(IOExtension::SERVICE_IO),
-        ]));
+        ]))
+        ->setPublic(true);
     }
 
     /**
@@ -280,6 +291,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
             MigrationsConstants::TYPE_DATABASE,
         ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
+        $definition->setPublic(true);
         $container->setDefinition(self::SERVICE_COMMAND_MIGRATE_DATABASE, $definition);
     }
 
@@ -298,6 +310,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
             MigrationsConstants::TYPE_FILE,
         ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
+        $definition->setPublic(true);
         $container->setDefinition(self::SERVICE_COMMAND_MIGRATE_FILES, $definition);
     }
 
@@ -315,6 +328,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
             MigrationsConstants::TYPE_DATABASE,
         ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
+        $definition->setPublic(true);
         $container->setDefinition(self::SERVICE_COMMAND_DATABASE_MIGRATION_STATUS, $definition);
     }
 
@@ -332,6 +346,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
             MigrationsConstants::TYPE_FILE,
         ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
+        $definition->setPublic(true);
         $container->setDefinition(self::SERVICE_COMMAND_FILE_MIGRATION_STATUS, $definition);
     }
 
@@ -343,7 +358,8 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
         $container->setDefinition(self::SERVICE_STATUS_OUTPUTTER, new Definition('Meteor\Migrations\Outputter\StatusOutputter', [
             new Reference(self::SERVICE_CONFIGURATION_FACTORY),
             new Reference(IOExtension::SERVICE_IO),
-        ]));
+        ]))
+        ->setPublic(true);
     }
 
     /**
@@ -360,6 +376,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
             MigrationsConstants::TYPE_DATABASE,
         ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
+        $definition->setPublic(true);
         $container->setDefinition(self::SERVICE_COMMAND_DATABASE_MIGRATION_VERSION, $definition);
     }
 
@@ -377,6 +394,7 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
             MigrationsConstants::TYPE_FILE,
         ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
+        $definition->setPublic(true);
         $container->setDefinition(self::SERVICE_COMMAND_FILE_MIGRATION_VERSION, $definition);
     }
 
@@ -388,7 +406,8 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
         $container->setDefinition(
             self::SERVICE_VERSION_FILE_MANAGER,
             new Definition('Meteor\Migrations\Version\VersionFileManager')
-        );
+        )
+        ->setPublic(true);
     }
 
     /**
@@ -401,7 +420,8 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
             new Definition('Meteor\Migrations\Version\FileMigrationVersionStorageFactory', [
                 new Reference(FilesystemExtension::SERVICE_FILESYSTEM),
             ])
-        );
+        )
+        ->setPublic(true);
     }
 
     /**
@@ -415,7 +435,8 @@ class MigrationsExtension extends ExtensionBase implements ExtensionInterface
                 new Reference(self::SERVICE_CONFIGURATION_FACTORY),
                 new Reference(IOExtension::SERVICE_IO),
             ])
-        );
+        )
+        ->setPublic(true);
     }
 
     /**

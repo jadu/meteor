@@ -4,14 +4,15 @@ namespace Meteor\Package\Migrations;
 
 use Meteor\IO\NullIO;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class MigrationsCopierTest extends \PHPUnit_Framework_TestCase
+class MigrationsCopierTest extends TestCase
 {
     private $filesystem;
     private $io;
     private $migrationsCopier;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->filesystem = Mockery::mock('Meteor\Filesystem\Filesystem');
         $this->io = new NullIO();

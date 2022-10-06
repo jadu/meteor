@@ -3,12 +3,13 @@
 namespace Meteor\Migrations\Version;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class FileMigrationVersionStorageTest extends \PHPUnit_Framework_TestCase
+class FileMigrationVersionStorageTest extends TestCase
 {
     private $versionStorage;
 
-    public function setUp()
+    protected function setUp(): void
     {
         vfsStream::setup('root');
 

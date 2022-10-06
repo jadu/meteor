@@ -63,5 +63,7 @@ class GenerateMigrationCommand extends AbstractCommand
         $this->migrationGenerator->generate($timestamp, $config['migrations']['namespace'], $path);
 
         $this->io->success(sprintf('Generated migration in %s/Version%s.php', $path, $timestamp));
+
+        return 0;
     }
 }

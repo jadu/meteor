@@ -4,12 +4,14 @@ namespace Meteor\Patch\Task;
 
 use Meteor\IO\NullIO;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
+use UnexpectedValueException;
 
-class CheckModuleCmsDependencyHandlerTest extends \PHPUnit_Framework_TestCase
+class CheckModuleCmsDependencyHandlerTest extends TestCase
 {
     private $handler;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->handler = new CheckModuleCmsDependencyHandler(new NullIO());
     }
@@ -75,11 +77,10 @@ class CheckModuleCmsDependencyHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->handler->handle($task));
     }
 
-    /**
-     * @expectedException \UnexpectedValueException
-     */
     public function testThrowsExceptionWhenVersionConstraintIsInvalid()
     {
+        static::expectException(UnexpectedValueException::class);
+
         vfsStream::setup('root', null, [
             'working' => [
                 'MODULE_CMS_DEPENDENCY' => '!! this is not a valid constraint',

@@ -3,17 +3,20 @@
 namespace Meteor\Package\Provider\GoogleDrive;
 
 use Meteor\IO\NullIO;
+use Meteor\Package\Provider\Exception\PackageNotFoundException;
+use Meteor\Process\ProcessRunner;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class GoogleDrivePackageProviderTest extends \PHPUnit_Framework_TestCase
+class GoogleDrivePackageProviderTest extends TestCase
 {
     private $processRunner;
     private $packageProvider;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->processRunner = Mockery::mock('Meteor\Process\ProcessRunner');
+        $this->processRunner = Mockery::mock(ProcessRunner::class);
         $this->packageProvider = new GoogleDrivePackageProvider($this->processRunner, new NullIO(), 'gdrive', [
             'jadu/cms' => '12345',
         ]);
@@ -35,19 +38,17 @@ class GoogleDrivePackageProviderTest extends \PHPUnit_Framework_TestCase
         $this->packageProvider->download('jadu/cms', '3.2.1', vfsStream::url('root'));
     }
 
-    /**
-     * @expectedException \Meteor\Package\Provider\Exception\PackageNotFoundException
-     */
     public function testDownloadThrowsExceptionWhenPackageFolderNotConfigured()
     {
+        static::expectException(PackageNotFoundException::class);
+
         $this->packageProvider->download('jadu/xfp', '3.2.1', vfsStream::url('root'));
     }
 
-    /**
-     * @expectedException \Meteor\Package\Provider\Exception\PackageNotFoundException
-     */
     public function testDownloadThrowsExceptionWhenPackageNotDownloaded()
     {
+        static::expectException(PackageNotFoundException::class);
+
         $this->processRunner->shouldReceive('run')
             ->once();
 

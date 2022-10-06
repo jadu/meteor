@@ -77,7 +77,7 @@ class StatusCommand extends AbstractPatchCommand
                 );
             }
 
-            return;
+            return 0;
         }
 
         if (!isset($config[$packageName])) {
@@ -95,5 +95,7 @@ class StatusCommand extends AbstractPatchCommand
             $this->type,
             $showVersions
         );
+
+        return 0;
     }
 }

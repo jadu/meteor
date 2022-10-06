@@ -2,7 +2,9 @@
 
 namespace Jadu\Meteor\Config;
 
-class InstallConfigTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class InstallConfigTest extends TestCase
 {
     public function testGetWebUserFallsBackToApacheUserWhenNotSuexec()
     {

@@ -4,12 +4,13 @@ namespace Meteor\Patch\Strategy\Overwrite;
 
 use Meteor\Migrations\MigrationsConstants;
 use Meteor\Patch\Task\CheckVersion;
+use PHPUnit\Framework\TestCase;
 
-class OverwritePatchStrategyTest extends \PHPUnit_Framework_TestCase
+class OverwritePatchStrategyTest extends TestCase
 {
     private $strategy;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->strategy = new OverwritePatchStrategy();
     }

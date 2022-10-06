@@ -65,5 +65,7 @@ class ResetPermissionsCommand extends AbstractPatchCommand
 
         // NB: Find files and set permission in the same directory, which in this case should be the install directory
         $this->permissionSetter->setPermissions($installDir, $installDir);
+
+        return 0;
     }
 }

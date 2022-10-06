@@ -5,15 +5,16 @@ namespace Meteor\Patch\Task;
 use Meteor\IO\NullIO;
 use Meteor\Patch\Backup\Backup;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class CheckDiskSpaceHandlerTest extends \PHPUnit_Framework_TestCase
+class CheckDiskSpaceHandlerTest extends TestCase
 {
     private $backupFinder;
     private $filesystem;
     private $io;
     private $handler;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->backupFinder = Mockery::mock('Meteor\Patch\Backup\BackupFinder');
         $this->filesystem = Mockery::mock('Meteor\Filesystem\Filesystem');

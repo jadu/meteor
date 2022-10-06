@@ -3,6 +3,7 @@
 namespace Meteor\Patch\Strategy\Overwrite\ServiceContainer;
 
 use Meteor\Patch\ServiceContainer\PatchExtension;
+use Meteor\Patch\Strategy\Overwrite\OverwritePatchStrategy;
 use Meteor\ServiceContainer\ExtensionBase;
 use Meteor\ServiceContainer\ExtensionInterface;
 use Meteor\ServiceContainer\ExtensionManager;
@@ -55,8 +56,9 @@ class OverwritePatchStrategyExtension extends ExtensionBase implements Extension
      */
     private function loadStrategy(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Strategy\Overwrite\OverwritePatchStrategy');
-        $container->setDefinition(PatchExtension::SERVICE_STRATEGY_PREFIX . '.' . self::STRATEGY_NAME, $definition);
+        $definition = new Definition(OverwritePatchStrategy::class);
+        $container->setDefinition(PatchExtension::SERVICE_STRATEGY_PREFIX . '.' . self::STRATEGY_NAME, $definition)
+            ->setPublic(true);
     }
 
     /**

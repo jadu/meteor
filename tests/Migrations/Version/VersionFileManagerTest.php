@@ -3,12 +3,13 @@
 namespace Meteor\Migrations\Version;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class VersionFileManagerTest extends \PHPUnit_Framework_TestCase
+class VersionFileManagerTest extends TestCase
 {
     private $versionFileManager;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->versionFileManager = new VersionFileManager();
     }

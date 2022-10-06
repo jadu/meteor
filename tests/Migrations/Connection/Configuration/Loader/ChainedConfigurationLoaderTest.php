@@ -3,8 +3,9 @@
 namespace Meteor\Migrations\Connection\Configuration\Loader;
 
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class ChainedConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
+class ChainedConfigurationLoaderTest extends TestCase
 {
     public function testFirstLoaderTakesPrecedence()
     {
