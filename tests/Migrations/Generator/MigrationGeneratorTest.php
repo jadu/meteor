@@ -24,7 +24,6 @@ class MigrationGeneratorTest extends TestCase
 
 namespace Migrations;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 class Version201600701102030 extends AbstractMigration
