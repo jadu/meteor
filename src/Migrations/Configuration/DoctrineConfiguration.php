@@ -37,6 +37,11 @@ abstract class DoctrineConfiguration extends Configuration
         return $this->migrationVersions[$version];
     }
 
+    public function setVersions($versions): void
+    {
+        $this->migrationVersions = $versions;
+    }
+
     /**
      * {@inheritdoc}
      */

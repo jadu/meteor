@@ -84,8 +84,8 @@ class ConfigurationFactory
         $configuration = $this->create(DatabaseConfiguration::class, $config, $patchDir, $installDir);
 
         // NB: This will attempt to connect to the database
-        $configuration->registerMigrationsFromDirectory($patchDir . '/' . $config['directory']);
-
+        $versions = $configuration->registerMigrationsFromDirectory($patchDir . '/' . $config['directory']);
+        $configuration->setVersions($versions);
         return $configuration;
     }
 
@@ -105,8 +105,8 @@ class ConfigurationFactory
         $configuration->setVersionStorage($versionStorage);
 
         // NB: This will attempt to connect to the database
-        $configuration->registerMigrationsFromDirectory($patchDir . '/' . $config['directory']);
-
+        $versions = $configuration->registerMigrationsFromDirectory($patchDir . '/' . $config['directory']);
+        $configuration->setVersions($versions);
         if (!$versionStorage->isInitialised()) {
             // The version storage file does not exist yet, create using the migration status file if available
             $currentVersion = $this->versionFileManager->getCurrentVersion($installDir, $config['table'], VersionFileManager::FILE_MIGRATION);
