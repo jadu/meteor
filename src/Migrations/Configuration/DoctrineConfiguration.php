@@ -37,9 +37,14 @@ abstract class DoctrineConfiguration extends Configuration
         return $this->migrationVersions[$version];
     }
 
+    /**
+     * @param Version[] $versions
+     */
     public function setVersions($versions): void
     {
-        $this->migrationVersions = $versions;
+        foreach ($versions as $version){
+            $this->migrationVersions[$version->getVersion()] = $version;
+        }
     }
 
     /**
