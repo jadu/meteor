@@ -15,6 +15,7 @@ class ChainedConfigurationLoaderTest extends TestCase
                 'user' => 'user1',
                 'password' => 'password1',
                 'host' => 'host1',
+                'port' => 'port1',
                 'driver' => 'driver1',
             ],
         ]);
@@ -24,6 +25,7 @@ class ChainedConfigurationLoaderTest extends TestCase
                 'user' => 'user2',
                 'password' => 'password2',
                 'host' => 'host2',
+                'port' => 'port2',
                 'driver' => 'driver2',
             ],
         ]);
@@ -33,6 +35,7 @@ class ChainedConfigurationLoaderTest extends TestCase
                 'user' => 'user3',
                 'password' => 'password3',
                 'host' => 'host3',
+                'port' => 'port3',
                 'driver' => 'driver3',
             ],
         ]);
@@ -44,6 +47,7 @@ class ChainedConfigurationLoaderTest extends TestCase
                 'user' => 'user1',
                 'password' => 'password1',
                 'host' => 'host1',
+                'port' => 'port1',
                 'driver' => 'driver1',
         ], $chainedLoader->load('/path', []));
     }
@@ -56,6 +60,7 @@ class ChainedConfigurationLoaderTest extends TestCase
                 'user' => 'user1',
                 'password' => '',
                 'host' => 'host1',
+                'port' => '',
                 'driver' => '',
             ],
         ]);
@@ -65,6 +70,7 @@ class ChainedConfigurationLoaderTest extends TestCase
                 'user' => 'user2',
                 'password' => '',
                 'host' => 'host2',
+                'port' => '',
                 'driver' => 'driver2',
             ],
         ]);
@@ -74,6 +80,7 @@ class ChainedConfigurationLoaderTest extends TestCase
                 'user' => 'user3',
                 'password' => 'password3',
                 'host' => 'host3',
+                'port' => 'port3',
                 'driver' => 'driver3',
             ],
         ]);
@@ -85,6 +92,7 @@ class ChainedConfigurationLoaderTest extends TestCase
                 'user' => 'user1',
                 'password' => 'password3',
                 'host' => 'host1',
+                'port' => 'port3',
                 'driver' => 'driver2',
         ], $chainedLoader->load('/path', []));
     }
