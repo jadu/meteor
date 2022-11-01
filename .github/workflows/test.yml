@@ -2,9 +2,12 @@ name: Symfony
 
 on:
   push:
-    branches: [ "master" ]
+    branches:
+      - "master"
   pull_request:
-    branches: [ "master" ]
+    branches:
+      - "master"
+      - "release/4.0.0"
 
 permissions:
   contents: read
