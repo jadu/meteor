@@ -86,6 +86,7 @@ class ConfigurationFactory
         // NB: This will attempt to connect to the database
         $versions = $configuration->registerMigrationsFromDirectory($patchDir . '/' . $config['directory']);
         $configuration->setVersions($versions);
+
         return $configuration;
     }
 

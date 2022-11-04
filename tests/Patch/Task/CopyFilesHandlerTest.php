@@ -67,7 +67,7 @@ class CopyFilesHandlerTest extends TestCase
 
     public function testExcludesSwapFoldersFromCopyDirectory()
     {
-         $this->filesystem->shouldReceive('copyDirectory')
+        $this->filesystem->shouldReceive('copyDirectory')
             ->with('source', 'target', ['**', '!/forward', '!/backward', '!/noward'])
             ->once();
 
@@ -76,7 +76,7 @@ class CopyFilesHandlerTest extends TestCase
 
     public function testExcludesReplaceDirectoriesFromFindNewFiles()
     {
-         $this->filesystem->shouldReceive('findNewFiles')
+        $this->filesystem->shouldReceive('findNewFiles')
             ->with('source', 'target', ['**', '!/forward', '!/backward', '!/noward'])
             ->andReturn([])
             ->once();
@@ -103,15 +103,15 @@ class CopyFilesHandlerTest extends TestCase
     {
         $config = [
             'patch' => [
-                'replace_directories' => ['/vendor']
+                'replace_directories' => ['/vendor'],
             ],
             'combined' => [
                 [
                     'patch' => [
-                        'replace_directories' => ['/foo']
-                    ]
-                ]
-            ]
+                        'replace_directories' => ['/foo'],
+                    ],
+                ],
+            ],
         ];
 
         $this->filesystem->shouldReceive('replaceDirectory')

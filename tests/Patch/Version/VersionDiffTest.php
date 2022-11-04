@@ -13,7 +13,7 @@ class VersionDiffTest extends TestCase
     {
         $version = new VersionDiff('test', 'VERSION', $newVersion, $currentVersion);
 
-        $this->assertSame($expectedResult, $version->isLessThan());
+        static::assertSame($expectedResult, $version->isLessThan());
     }
 
     public function lessThanProvider()
@@ -36,7 +36,7 @@ class VersionDiffTest extends TestCase
     {
         $version = new VersionDiff('test', 'VERSION', $newVersion, $currentVersion);
 
-        $this->assertSame($expectedResult, $version->isGreaterThan());
+        static::assertSame($expectedResult, $version->isGreaterThan());
     }
 
     public function greaterThanProvider()

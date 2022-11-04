@@ -69,19 +69,19 @@ class ApplyCommand extends AbstractPatchCommand
     private $phpVersion;
 
     /**
-     * @param string                   $name
-     * @param array                    $config
-     * @param IOInterface              $io
-     * @param PlatformInterface        $platform
-     * @param TaskBusInterface         $taskBus
-     * @param PatchStrategyInterface   $strategy
-     * @param Locker                   $locker
-     * @param ManifestChecker          $manifestChecker
+     * @param string $name
+     * @param array $config
+     * @param IOInterface $io
+     * @param PlatformInterface $platform
+     * @param TaskBusInterface $taskBus
+     * @param PatchStrategyInterface $strategy
+     * @param Locker $locker
+     * @param ManifestChecker $manifestChecker
      * @param EventDispatcherInterface $eventDispatcher
-     * @param ScriptRunner             $scriptRunner
-     * @param LoggerInterface          $logger
-     * @param PermissionSetter         $permissionSetter
-     * @param string                   $phpVersion
+     * @param ScriptRunner $scriptRunner
+     * @param LoggerInterface $logger
+     * @param PermissionSetter $permissionSetter
+     * @param string $phpVersion
      */
     public function __construct(
         $name,
@@ -189,7 +189,7 @@ class ApplyCommand extends AbstractPatchCommand
     }
 
     /**
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @return int|null

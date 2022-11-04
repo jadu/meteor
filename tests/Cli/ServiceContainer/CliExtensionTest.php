@@ -10,6 +10,6 @@ class CliExtensionTest extends ExtensionTestCase
     {
         $container = $this->loadContainer([]);
 
-        $this->assertTrue($container->hasParameter(CliExtension::PARAMETER_COMMAND_SERVICE_IDS));
+        static::assertTrue($container->hasParameter(CliExtension::PARAMETER_COMMAND_SERVICE_IDS));
     }
 }

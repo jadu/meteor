@@ -97,15 +97,15 @@ class BackupFilesHandlerTest extends TestCase
     {
         $config = [
             'patch' => [
-                'replace_directories' => ['/vendor']
+                'replace_directories' => ['/vendor'],
             ],
             'combined' => [
                 [
                     'patch' => [
-                        'replace_directories' => ['/foo']
-                    ]
-                ]
-            ]
+                        'replace_directories' => ['/foo'],
+                    ],
+                ],
+            ],
         ];
 
         $this->filesystem->shouldReceive('findFiles')

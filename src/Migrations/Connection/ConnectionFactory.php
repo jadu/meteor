@@ -44,7 +44,9 @@ class ConnectionFactory
     /**
      * @param array $configuration
      * @param $installDir
+     *
      * @return Connection
+     *
      * @throws \Doctrine\DBAL\DBALException
      */
     public function createConnection(array $configuration, $installDir)
@@ -106,11 +108,11 @@ class ConnectionFactory
         return $this->connection;
     }
 
-
     /**
-     * Return the encryption key if exist , if not return empty string
+     * Return the encryption key if exist , if not return empty string.
      *
      * @param $installDir
+     *
      * @return string
      */
     private function getEncryptionKey($installDir)
@@ -127,6 +129,7 @@ class ConnectionFactory
                 return trim($nodes->item(0)->textContent);
             }
         }
+
         return '';
     }
 }

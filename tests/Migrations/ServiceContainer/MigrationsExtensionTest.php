@@ -46,6 +46,6 @@ class MigrationsExtensionTest extends ExtensionTestCase
     {
         $config = $this->processConfiguration([]);
 
-        $this->assertArrayNotHasKey('migrations', $config);
+        static::assertArrayNotHasKey('migrations', $config);
     }
 }

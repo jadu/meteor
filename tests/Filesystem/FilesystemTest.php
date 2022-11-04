@@ -224,7 +224,7 @@ class FilesystemTest extends TestCase
                 'config' => [
                     'system.xml' => '',
                 ],
-                'file.cache' => ''
+                'file.cache' => '',
             ],
         ]);
 
@@ -232,7 +232,7 @@ class FilesystemTest extends TestCase
 
         $filters = [
             '**',
-            '!/var'
+            '!/var',
         ];
 
         $finder = new Finder();
@@ -349,10 +349,10 @@ class FilesystemTest extends TestCase
                 'vendor' => [
                     'org' => [
                         'package' => [
-                            'file.html' => ''
-                        ]
-                    ]
-                ]
+                            'file.html' => '',
+                        ],
+                    ],
+                ],
             ],
             'target' => [],
         ]);
@@ -363,7 +363,6 @@ class FilesystemTest extends TestCase
         static::assertFalse(is_file(vfsStream::url('root/source/vendor/org/package/file.html')));
     }
 
-
     public function testReplaceDirectory()
     {
         vfsStream::setup('root', null, [
@@ -373,10 +372,10 @@ class FilesystemTest extends TestCase
                     'org' => [
                         'package' => [
                             'file_a.html' => '',
-                            'file_b.html' => ''
-                        ]
-                    ]
-                ]
+                            'file_b.html' => '',
+                        ],
+                    ],
+                ],
             ],
             'target' => [
                 'thing.html' => '',
@@ -384,11 +383,11 @@ class FilesystemTest extends TestCase
                     'org' => [
                         'package' => [
                             'file_b.html' => '',
-                            'file_c.html' => ''
-                        ]
-                    ]
-                ]
-            ]
+                            'file_c.html' => '',
+                        ],
+                    ],
+                ],
+            ],
         ]);
 
         static::assertTrue(is_file(vfsStream::url('root/target/vendor/org/package/file_c.html')));

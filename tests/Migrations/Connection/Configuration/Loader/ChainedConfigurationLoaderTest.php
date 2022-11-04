@@ -39,7 +39,7 @@ class ChainedConfigurationLoaderTest extends TestCase
 
         $chainedLoader = new ChainedConfigurationLoader([$loader1, $loader2, $loader3]);
 
-        $this->assertSame([
+        static::assertSame([
                 'dbname' => 'db1',
                 'user' => 'user1',
                 'password' => 'password1',
@@ -80,7 +80,7 @@ class ChainedConfigurationLoaderTest extends TestCase
 
         $chainedLoader = new ChainedConfigurationLoader([$loader1, $loader2, $loader3]);
 
-        $this->assertSame([
+        static::assertSame([
                 'dbname' => 'db2',
                 'user' => 'user1',
                 'password' => 'password3',

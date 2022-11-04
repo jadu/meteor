@@ -38,10 +38,7 @@ class ExtensionManager
         $extension = $this->instaniateExtension($locator, $workingDir);
 
         if (!$extension instanceof ExtensionInterface) {
-            throw new ExtensionInitializationException(sprintf(
-                'Extension class `%s` does not implement ExtensionInterface.',
-                get_class($extension)
-            ));
+            throw new ExtensionInitializationException(sprintf('Extension class `%s` does not implement ExtensionInterface.', get_class($extension)));
         }
 
         $this->addExtension($extension);
@@ -70,10 +67,7 @@ class ExtensionManager
             return new $className();
         }
 
-        throw new ExtensionInitializationException(sprintf(
-            'Extension file or class `%s` could not be found.',
-            $locator
-        ));
+        throw new ExtensionInitializationException(sprintf('Extension file or class `%s` could not be found.', $locator));
     }
 
     /**
@@ -83,7 +77,7 @@ class ExtensionManager
      */
     public function getExtension($key)
     {
-        return isset($this->extensions[$key]) ? $this->extensions[$key] : null;
+        return $this->extensions[$key] ?? null;
     }
 
     /**

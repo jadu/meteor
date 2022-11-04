@@ -109,7 +109,7 @@ class PackageCreator
 
         try {
             $this->io->text('Copying files into the working directory:');
-            $filesFilter = isset($config['package']['files']) ? $config['package']['files'] : [];
+            $filesFilter = $config['package']['files'] ?? [];
             $this->filesystem->copyDirectory($workingDir, $tempDir . '/' . PackageConstants::PATCH_DIR, $filesFilter);
 
             // Copy migrations into place and update configuration

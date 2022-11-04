@@ -3,7 +3,6 @@
 namespace Meteor\Process\ServiceContainer;
 
 use Meteor\IO\ServiceContainer\IOExtension;
-use Meteor\Process\PHPMemoryLimitSetter;
 use Meteor\ServiceContainer\ExtensionBase;
 use Meteor\ServiceContainer\ExtensionInterface;
 use Meteor\ServiceContainer\ExtensionManager;

@@ -96,7 +96,7 @@ class PackageExtension extends ExtensionBase implements ExtensionInterface
      */
     public function load(ContainerBuilder $container, array $config)
     {
-        $container->setParameter(self::PARAMETER_PROVIDER, isset($config['provider']) ? $config['provider'] : null);
+        $container->setParameter(self::PARAMETER_PROVIDER, $config['provider'] ?? null);
 
         $this->loadCombinedPackageDependencyChecker($container);
         $this->loadCombinedPackageCombiner($container);
@@ -120,7 +120,7 @@ class PackageExtension extends ExtensionBase implements ExtensionInterface
             new Definition(CombinedPackageDependencyChecker::class)
         )
         ->setPublic(true);
-}
+    }
 
     /**
      * @param ContainerBuilder $container

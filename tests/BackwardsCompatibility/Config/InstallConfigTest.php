@@ -13,7 +13,7 @@ class InstallConfigTest extends TestCase
             'APACHE_USER' => 'apache',
         ]);
 
-        $this->assertSame('apache', $config->getWebUser());
+        static::assertSame('apache', $config->getWebUser());
     }
 
     public function testGetWebGroupFallsBackToApacheGroupWhenNotSuexec()
@@ -23,7 +23,7 @@ class InstallConfigTest extends TestCase
             'APACHE_GROUP' => 'apache',
         ]);
 
-        $this->assertSame('apache', $config->getWebGroup());
+        static::assertSame('apache', $config->getWebGroup());
     }
 
     /**
@@ -35,7 +35,7 @@ class InstallConfigTest extends TestCase
             'SUEXEC' => $value,
         ]);
 
-        $this->assertSame($expectedResult, $config->isSuexec());
+        static::assertSame($expectedResult, $config->isSuexec());
     }
 
     public function suexecValueProvider()

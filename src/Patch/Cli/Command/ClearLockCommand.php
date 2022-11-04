@@ -49,9 +49,11 @@ class ClearLockCommand extends AbstractPatchCommand
 
         if ($result) {
             $this->io->success('Cleared lock file.');
+
             return 0;
         } else {
             $this->io->note('The install was not locked.');
+
             return 1;
         }
     }

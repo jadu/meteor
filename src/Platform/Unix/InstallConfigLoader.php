@@ -23,8 +23,7 @@ class InstallConfigLoader
 
         try {
             $values = parse_ini_file($configPath);
-        }
-        catch (Throwable $e) {
+        } catch (Throwable $e) {
             $values = false;
         }
 

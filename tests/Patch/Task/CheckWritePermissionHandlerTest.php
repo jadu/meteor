@@ -19,18 +19,18 @@ class CheckWritePermissionHandlerTest extends TestCase
     {
         vfsStream::setup('root');
 
-        $this->assertTrue($this->handler->handle(new CheckWritePermission(vfsStream::url('root'))));
+        static::assertTrue($this->handler->handle(new CheckWritePermission(vfsStream::url('root'))));
     }
 
     public function testReturnsFalseWhenDoesNotHavePermission()
     {
         vfsStream::setup('root', 0000);
 
-        $this->assertFalse($this->handler->handle(new CheckWritePermission(vfsStream::url('root'))));
+        static::assertFalse($this->handler->handle(new CheckWritePermission(vfsStream::url('root'))));
     }
 
     public function testReturnsFalseWhenDirectoryDoesNotExist()
     {
-        $this->assertFalse($this->handler->handle(new CheckWritePermission(vfsStream::url('root'))));
+        static::assertFalse($this->handler->handle(new CheckWritePermission(vfsStream::url('root'))));
     }
 }

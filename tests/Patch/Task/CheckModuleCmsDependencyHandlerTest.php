@@ -31,7 +31,7 @@ class CheckModuleCmsDependencyHandlerTest extends TestCase
         ]);
 
         $task = new CheckModuleCmsDependency(vfsStream::url('root/working'), vfsStream::url('root/install'));
-        $this->assertSame($expectedResult, $this->handler->handle($task));
+        static::assertSame($expectedResult, $this->handler->handle($task));
     }
 
     /**
@@ -50,7 +50,7 @@ class CheckModuleCmsDependencyHandlerTest extends TestCase
         ]);
 
         $task = new CheckModuleCmsDependency(vfsStream::url('root/working'), vfsStream::url('root/install'));
-        $this->assertSame($expectedResult, $this->handler->handle($task));
+        static::assertSame($expectedResult, $this->handler->handle($task));
     }
 
     public function testReturnsTrueIfModuleCmsDependencyFileNotFoundInWorkingDir()
@@ -61,7 +61,7 @@ class CheckModuleCmsDependencyHandlerTest extends TestCase
         ]);
 
         $task = new CheckModuleCmsDependency(vfsStream::url('root/working'), vfsStream::url('root/install'));
-        $this->assertTrue($this->handler->handle($task));
+        static::assertTrue($this->handler->handle($task));
     }
 
     public function testReturnsTrueIfCmsVersionFileNotFoundInInstallDir()
@@ -74,7 +74,7 @@ class CheckModuleCmsDependencyHandlerTest extends TestCase
         ]);
 
         $task = new CheckModuleCmsDependency(vfsStream::url('root/working'), vfsStream::url('root/install'));
-        $this->assertTrue($this->handler->handle($task));
+        static::assertTrue($this->handler->handle($task));
     }
 
     public function testThrowsExceptionWhenVersionConstraintIsInvalid()
@@ -109,7 +109,7 @@ class CheckModuleCmsDependencyHandlerTest extends TestCase
         ]);
 
         $task = new CheckModuleCmsDependency(vfsStream::url('root/working'), vfsStream::url('root/install'));
-        $this->assertSame($expectedResult, $this->handler->handle($task));
+        static::assertSame($expectedResult, $this->handler->handle($task));
     }
 
     public function versionProvider()

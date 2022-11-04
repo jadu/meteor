@@ -47,9 +47,11 @@ class VerifyCommand extends AbstractPatchCommand
 
         if ($result) {
             $this->io->success('The package was verified against the manifest.');
+
             return 0;
         } else {
             $this->io->error('The package could not be verified.');
+
             return 1;
         }
     }

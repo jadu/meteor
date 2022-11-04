@@ -34,7 +34,7 @@ class ConsoleIOTest extends TestCase
 
     private function assertOutputEquals($fixture)
     {
-        $this->assertSame(file_get_contents(__DIR__ . '/Fixtures/' . $fixture . '.txt'), $this->getOutput());
+        static::assertSame(file_get_contents(__DIR__ . '/Fixtures/' . $fixture . '.txt'), $this->getOutput());
     }
 
     public function testTitle()
@@ -84,7 +84,7 @@ class ConsoleIOTest extends TestCase
 
         $this->io->debug('This is some text');
 
-        $this->assertEmpty($this->getOutput());
+        static::assertEmpty($this->getOutput());
     }
 
     public function testSuccess()
@@ -137,20 +137,20 @@ class ConsoleIOTest extends TestCase
     {
         $this->io->writeln('Smelly');
 
-        $this->assertSame("Smelly\n", $this->getOutput());
+        static::assertSame("Smelly\n", $this->getOutput());
     }
 
     public function testWrite()
     {
         $this->io->write('Smelly');
 
-        $this->assertSame('Smelly', $this->getOutput());
+        static::assertSame('Smelly', $this->getOutput());
     }
 
     public function testNewLine()
     {
         $this->io->newLine();
 
-        $this->assertSame("\n", $this->getOutput());
+        static::assertSame("\n", $this->getOutput());
     }
 }

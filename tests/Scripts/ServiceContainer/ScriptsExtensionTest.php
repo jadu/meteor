@@ -109,8 +109,8 @@ class ScriptsExtensionTest extends ExtensionTestCase
                 'patch.post-apply' => ['@test1'],
                 'patch.pre-rollback' => ['@test1'],
                 'patch.post-rollback' => ['@test1'],
-                'test1' => ['test command' , '@test2'],
-                'test2' => ['test 2 command']
+                'test1' => ['test command', '@test2'],
+                'test2' => ['test 2 command'],
             ],
         ]);
     }

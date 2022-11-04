@@ -34,7 +34,7 @@ class ProcessRunnerTest extends TestCase
     protected function setUp(): void
     {
         $this->io = Mockery::mock(IOInterface::class, [
-            'debug' => null
+            'debug' => null,
         ]);
         $this->process = Mockery::mock(Process::class, [
             'setWorkingDirectory' => null,
@@ -42,10 +42,10 @@ class ProcessRunnerTest extends TestCase
             'setTimeout' => null,
             'run' => 0,
             'getOutput' => '',
-            'isSuccessful' => true
+            'isSuccessful' => true,
         ]);
         $this->processFactory = Mockery::mock(ProcessFactory::class, [
-            'create' => $this->process
+            'create' => $this->process,
         ]);
 
         $this->processRunner = new ProcessRunner(
@@ -59,7 +59,7 @@ class ProcessRunnerTest extends TestCase
         $this->process->shouldReceive('getOutput')
             ->andReturn('done');
 
-        self::assertSame('done', $this->processRunner->run('whoami'));
+        static::assertSame('done', $this->processRunner->run('whoami'));
     }
 
     public function testRunThrowsExceptionWithErrorOutputWhenNotSuccessful()

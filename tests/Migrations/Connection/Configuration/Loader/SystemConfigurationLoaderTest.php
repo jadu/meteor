@@ -35,7 +35,7 @@ XML;
             ],
         ]);
 
-        $this->assertSame([
+        static::assertSame([
             'dbname' => 'jadudb',
             'user' => 'jadu',
             'password' => 'password',
@@ -65,7 +65,7 @@ XML;
             ],
         ]);
 
-        $this->assertSame([
+        static::assertSame([
             'dbname' => 'jadudb',
             'user' => 'jadu',
             'password' => 'password',
@@ -95,7 +95,7 @@ XML;
             ],
         ]);
 
-        $this->assertSame([
+        static::assertSame([
             'dbname' => 'jadudb',
             'user' => 'jadu',
             'password' => 'password',
@@ -125,6 +125,6 @@ XML;
             ],
         ]);
 
-        $this->assertSame([], $this->loader->load(vfsStream::url('root')));
+        static::assertSame([], $this->loader->load(vfsStream::url('root')));
     }
 }

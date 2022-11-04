@@ -25,9 +25,8 @@ class LimitBackupsHandler
 
     /**
      * @param BackupFinder $backupFinder
-     * @param Filesystem   $filesystem
-     * @param IOInterface  $io
-     *
+     * @param Filesystem $filesystem
+     * @param IOInterface $io
      */
     public function __construct(BackupFinder $backupFinder, Filesystem $filesystem, IOInterface $io)
     {
@@ -38,7 +37,7 @@ class LimitBackupsHandler
 
     /**
      * @param LimitBackups $task
-     * @param array        $config
+     * @param array $config
      *
      * @return bool
      */
@@ -54,6 +53,7 @@ class LimitBackupsHandler
         }
 
         $this->removeBackups($backups, $task->backups);
+
         return true;
     }
 }

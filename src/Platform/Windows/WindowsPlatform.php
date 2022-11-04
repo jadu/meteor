@@ -63,7 +63,6 @@ class WindowsPlatform implements PlatformInterface
 
         $command[] = '/Q';
 
-
         $this->processRunner->run($command);
     }
 
