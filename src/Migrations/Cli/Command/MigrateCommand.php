@@ -7,6 +7,7 @@ use Meteor\Logger\LoggerInterface;
 use Meteor\Migrations\Migrator;
 use Meteor\Patch\Cli\Command\AbstractPatchCommand;
 use Meteor\Platform\PlatformInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -90,7 +91,7 @@ EOT;
             if (empty($config)) {
                 $this->io->error('There are no migrations configured');
 
-                return 1;
+                return Command::FAILURE;
             }
 
             $result = null;
@@ -109,16 +110,16 @@ EOT;
             }
 
             if (!$result) {
-                return 1;
+                return Command::FAILURE;
             }
 
-            return 0;
+            return Command::SUCCESS;
         }
 
         if (!isset($config[$packageName])) {
             $this->io->error(sprintf('Unable to find migrations for the package "%s"', $packageName));
 
-            return 1;
+            return Command::FAILURE;
         }
 
         $this->io->text(sprintf('Running <info>%s</> %s migrations', $packageName, $this->type));
@@ -132,6 +133,6 @@ EOT;
             (bool) $this->io->getOption('ignore-unavailable-migrations')
         );
 
-        return $result ? 0 : 1;
+        return $result ? Command::SUCCESS : Command::FAILURE;
     }
 }

@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use Meteor\Cli\Command\AbstractCommand;
 use Meteor\IO\IOInterface;
 use Meteor\Package\PackageCreator;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -61,7 +62,7 @@ class PackageCommand extends AbstractCommand
             $this->io->getOption('phar')
         );
 
-        return $created ? 0 : 1;
+        return $created ? Command::SUCCESS : Command::FAILURE;
     }
 
     /**
