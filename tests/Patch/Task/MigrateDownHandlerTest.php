@@ -5,15 +5,16 @@ namespace Meteor\Patch\Task;
 use Meteor\IO\NullIO;
 use Meteor\Migrations\MigrationsConstants;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class MigrateDownHandlerTest extends \PHPUnit_Framework_TestCase
+class MigrateDownHandlerTest extends TestCase
 {
     private $migrator;
     private $versionFileManager;
     private $io;
     private $handler;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->migrator = Mockery::mock('Meteor\Migrations\Migrator');
         $this->versionFileManager = Mockery::mock('Meteor\Migrations\Version\VersionFileManager');

@@ -82,7 +82,7 @@ class BasicHttpPackageProviderExtension extends ExtensionBase implements Extensi
         $definition = new Definition('Meteor\Package\Provider\BasicHttp\BasicHttpPackageProvider', [
             new Reference(IOExtension::SERVICE_IO),
             '%' . self::PARAMETER_BASE_URLS . '%',
-            new Client(['verify' => false])
+            new Client(['verify' => false]),
         ]);
         $container->setDefinition(PackageExtension::SERVICE_PROVIDER_PREFIX . '.' . self::PROVIDER_NAME, $definition);
     }

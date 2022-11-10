@@ -4,6 +4,7 @@ namespace Meteor\Autoload\ServiceContainer;
 
 use Meteor\ServiceContainer\ExtensionTestCase;
 use org\bovigo\vfs\vfsStream;
+use RuntimeException;
 
 class AutoloadExtensionTest extends ExtensionTestCase
 {
@@ -40,9 +41,8 @@ JSON;
 
         $prefixes = $container->get(AutoloadExtension::SERVICE_CLASS_LOADER)->getPrefixes();
 
-        $this->assertArraySubset([
-            'Test_' => [vfsStream::url('root/to_patch/vendor/test/test/src/')],
-        ], $prefixes);
+        static::assertArrayHasKey('Test_', $prefixes);
+        static::assertEquals([vfsStream::url('root/to_patch/vendor/test/test/src/')], $prefixes['Test_']);
     }
 
     public function testAddsComposerPackagesWithPsr4()
@@ -78,9 +78,8 @@ JSON;
 
         $prefixes = $container->get(AutoloadExtension::SERVICE_CLASS_LOADER)->getPrefixesPsr4();
 
-        $this->assertArraySubset([
-            'Test\\' => [vfsStream::url('root/to_patch/vendor/test/test/src/')],
-        ], $prefixes);
+        static::assertArrayHasKey('Test\\', $prefixes);
+        static::assertEquals([vfsStream::url('root/to_patch/vendor/test/test/src/')], $prefixes['Test\\']);
     }
 
     public function testAddsComposerPackagesWithClassMap()
@@ -114,7 +113,7 @@ JSON;
 
         $classMap = $container->get(AutoloadExtension::SERVICE_CLASS_LOADER)->getClassMap();
 
-        $this->assertArraySubset([vfsStream::url('root/to_patch/vendor/test/test/file.php')], $classMap);
+        static::assertTrue(in_array(vfsStream::url('root/to_patch/vendor/test/test/file.php'), $classMap));
     }
 
     public function testAddsComposerPackagesFromRootVendor()
@@ -148,16 +147,13 @@ JSON;
 
         $prefixes = $container->get(AutoloadExtension::SERVICE_CLASS_LOADER)->getPrefixes();
 
-        $this->assertArraySubset([
-            'Test_' => [vfsStream::url('root/vendor/test/test/src/')],
-        ], $prefixes);
+        static::assertArrayHasKey('Test_', $prefixes);
+        static::assertEquals([vfsStream::url('root/vendor/test/test/src/')], $prefixes['Test_']);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testThrowsExceptionWhenComposerPackageNotFound()
     {
+        $this->expectException(RuntimeException::class);
         vfsStream::setup('root');
 
         $container = $this->loadContainer([
@@ -179,9 +175,8 @@ JSON;
 
         $prefixes = $container->get(AutoloadExtension::SERVICE_CLASS_LOADER)->getPrefixesPsr4();
 
-        $this->assertArraySubset([
-            'Jadu\\' => ['/path/to/working/src/'],
-        ], $prefixes);
+        static::assertArrayHasKey('Jadu\\', $prefixes);
+        static::assertEquals(['/path/to/working/src/'], $prefixes['Jadu\\']);
     }
 
     public function testAddsPsr4Paths()
@@ -196,9 +191,8 @@ JSON;
 
         $prefixes = $container->get(AutoloadExtension::SERVICE_CLASS_LOADER)->getPrefixesPsr4();
 
-        $this->assertArraySubset([
-            'Jadu\\' => ['/path/to/working/src/', '/path/to/working/tests/'],
-        ], $prefixes);
+        static::assertArrayHasKey('Jadu\\', $prefixes);
+        static::assertEquals(['/path/to/working/src/', '/path/to/working/tests/'], $prefixes['Jadu\\']);
     }
 
     public function testAutoloadComposerPackages()
@@ -211,7 +205,7 @@ JSON;
             ],
         ]);
 
-        $this->assertSame([
+        static::assertSame([
             'spacecraft/migrations',
         ], $config['autoload']['composer']);
     }
@@ -226,7 +220,7 @@ JSON;
             ],
         ]);
 
-        $this->assertSame([
+        static::assertSame([
             'Jadu\\' => ['src/'],
         ], $config['autoload']['psr-4']);
     }

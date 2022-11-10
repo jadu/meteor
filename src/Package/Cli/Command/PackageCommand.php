@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use Meteor\Cli\Command\AbstractCommand;
 use Meteor\IO\IOInterface;
 use Meteor\Package\PackageCreator;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -49,19 +50,19 @@ class PackageCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $combine = $this->io->getOption('combine') ?: [];
+
         $created = $this->packageCreator->create(
             $this->getWorkingDir(),
             $this->getOutputDir(),
             $this->io->getOption('filename'),
             $this->getConfiguration(),
-            $this->io->getOption('combine'),
+            $combine,
             $this->io->getOption('skip-combine'),
             $this->io->getOption('phar')
         );
 
-        if (!$created) {
-            return 1;
-        }
+        return $created ? Command::SUCCESS : Command::FAILURE;
     }
 
     /**

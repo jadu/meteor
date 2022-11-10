@@ -42,7 +42,7 @@ class ConfigurationLoader
     public function __construct(ExtensionManager $extensionManager, TreeBuilder $treeBuilder = null, Processor $processor = null)
     {
         $this->extensionManager = $extensionManager;
-        $this->treeBuilder = $treeBuilder ?: new TreeBuilder();
+        $this->treeBuilder = $treeBuilder ?: new TreeBuilder('meteor');
         $this->processor = $processor ?: new Processor();
     }
 
@@ -51,7 +51,7 @@ class ConfigurationLoader
      */
     public function buildTree(array $extensions)
     {
-        $rootNode = $this->treeBuilder->root('meteor');
+        $rootNode = $this->treeBuilder->getRootNode();
         $childrenNode = $rootNode->children();
 
         $childrenNode->scalarNode('name')->defaultValue(uniqid('package'))->end();

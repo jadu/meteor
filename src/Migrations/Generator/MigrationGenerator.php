@@ -18,7 +18,6 @@ class MigrationGenerator
 
 namespace <namespace>;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 class Version<version> extends AbstractMigration

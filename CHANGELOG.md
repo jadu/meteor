@@ -1,3 +1,10 @@
+## v4.0.0
+
+* Added PHP 8 support
+* Updated Symfony to 5.4
+* Update Doctrine to 2.3.5
+* Content passed to addSql is no longer output to the terminal during migrations.
+
 ## v3.4.1
 
 * Fixed fatal error when permissions prevent access to a directory within the patch target ([#123](https://github.com/jadu/meteor/pull/123))

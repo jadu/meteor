@@ -3,12 +3,14 @@
 namespace Meteor\Package;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
-class PackageNameResolverTest extends \PHPUnit_Framework_TestCase
+class PackageNameResolverTest extends TestCase
 {
     private $resolver;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->resolver = new PackageNameResolver();
 
@@ -21,7 +23,7 @@ class PackageNameResolverTest extends \PHPUnit_Framework_TestCase
             'name' => 'jadu/test',
         ];
 
-        $this->assertSame('package', $this->resolver->resolve('package', vfsStream::url('root'), $config));
+        static::assertSame('package', $this->resolver->resolve('package', vfsStream::url('root'), $config));
     }
 
     /**
@@ -33,7 +35,7 @@ class PackageNameResolverTest extends \PHPUnit_Framework_TestCase
             'name' => $packageName,
         ];
 
-        $this->assertSame($expectedFileName, $this->resolver->resolve(null, vfsStream::url('root'), $config));
+        static::assertSame($expectedFileName, $this->resolver->resolve('', vfsStream::url('root'), $config));
     }
 
     public function packageNameProvider()
@@ -60,7 +62,7 @@ class PackageNameResolverTest extends \PHPUnit_Framework_TestCase
             'VERSION' => $version,
         ]);
 
-        $this->assertSame($expectedFileName, $this->resolver->resolve(null, vfsStream::url('root'), $config));
+        static::assertSame($expectedFileName, $this->resolver->resolve('', vfsStream::url('root'), $config));
     }
 
     public function versionProvider()
@@ -72,11 +74,10 @@ class PackageNameResolverTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testResolveThrowsExceptionWhenVersionFileCannotBeFound()
     {
+        static::expectException(RuntimeException::class);
+
         $config = [
             'name' => 'jadu/test',
             'package' => [
@@ -84,7 +85,7 @@ class PackageNameResolverTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->resolver->resolve(null, vfsStream::url('root'), $config);
+        $this->resolver->resolve('', vfsStream::url('root'), $config);
     }
 
     /**
@@ -96,13 +97,12 @@ class PackageNameResolverTest extends \PHPUnit_Framework_TestCase
             'name' => 'jadu/test',
         ];
 
-        $this->assertSame('jadu_test', $this->resolver->resolve($fileName, vfsStream::url('root'), $config));
+        static::assertSame('jadu_test', $this->resolver->resolve($fileName, vfsStream::url('root'), $config));
     }
 
     public function invalidFileNameProvider()
     {
         return [
-            [null],
             [''],
             ['     '],
             ['___'],

@@ -6,18 +6,18 @@ use Meteor\Filesystem\Finder\FinderFactory;
 use Meteor\IO\NullIO;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Symfony\Component\Finder\Finder;
 
-class FilesystemTest extends PHPUnit_Framework_TestCase
+class FilesystemTest extends TestCase
 {
     private $finderFactory;
     private $output;
     private $io;
     private $filesystem;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->finderFactory = Mockery::mock(FinderFactory::class);
 
@@ -41,15 +41,15 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
     {
         $path = $this->filesystem->createTempDirectory();
 
-        $this->assertTrue(is_dir($path));
+        static::assertTrue(is_dir($path));
     }
 
     public function testCreateTempDirectoryInDirectory()
     {
         $path = $this->filesystem->createTempDirectory(vfsStream::url('root'));
 
-        $this->assertContains(vfsStream::url('root'), $path);
-        $this->assertTrue(is_dir($path));
+        static::assertStringContainsString(vfsStream::url('root'), $path);
+        static::assertTrue(is_dir($path));
     }
 
     public function testCreateTempDirectoryReturnsRandomDirectoryNames()
@@ -61,21 +61,20 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
 
         $paths = array_unique($paths);
 
-        $this->assertCount(100, $paths);
+        static::assertCount(100, $paths);
     }
 
     public function testEnsureDirectoryExistsCreatesDirectoryIfItDoesNotExist()
     {
         $this->filesystem->ensureDirectoryExists(vfsStream::url('root/test'));
 
-        $this->assertTrue(is_dir(vfsStream::url('root/test')));
+        static::assertTrue(is_dir(vfsStream::url('root/test')));
     }
 
-    /**
-     * @expectedException RuntimeException
-     */
     public function testEnsureDirectoryExistsThrowsExceptionIfFileExists()
     {
+        $this->expectException(RuntimeException::class);
+
         file_put_contents(vfsStream::url('root/test'), 'Some text');
 
         $this->filesystem->ensureDirectoryExists(vfsStream::url('root/test'));
@@ -105,7 +104,7 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
 
         $files = $this->filesystem->findFiles($sourceDir);
 
-        $this->assertEquals([
+        static::assertEquals([
             'public_html',
             'public_html/index.html',
             'var',
@@ -139,7 +138,7 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
 
         $files = $this->filesystem->findFiles(strtoupper($sourceDir));
 
-        $this->assertEquals([
+        static::assertEquals([
             'public_html',
             'public_html/index.html',
             'var',
@@ -172,7 +171,7 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
 
         $files = $this->filesystem->findFiles($sourceDir, [], false);
 
-        $this->assertEquals([
+        static::assertEquals([
             'vfs://root/public_html',
             'vfs://root/public_html/index.html',
             'vfs://root/var',
@@ -183,6 +182,17 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
 
     public function testFindFilesWithFilters()
     {
+        vfsStream::setup('root', null, [
+            'public_html' => [
+                'index.html' => '',
+            ],
+            'var' => [
+                'config' => [
+                    'system.xml' => '',
+                ],
+            ],
+        ]);
+
         $sourceDir = vfsStream::url('root');
 
         $finder = new Finder();
@@ -193,7 +203,15 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
             ->andReturn($finder)
             ->once();
 
-        $this->filesystem->findFiles($sourceDir, ['/**']);
+        $files = $this->filesystem->findFiles($sourceDir, ['/**']);
+
+        static::assertEquals([
+            'public_html',
+            'public_html/index.html',
+            'var',
+            'var/config',
+            'var/config/system.xml',
+        ], $files);
     }
 
     public function testFindFilesWithFiltersRealFinderFactory()
@@ -206,7 +224,7 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
                 'config' => [
                     'system.xml' => '',
                 ],
-                'file.cache' => ''
+                'file.cache' => '',
             ],
         ]);
 
@@ -214,7 +232,7 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
 
         $filters = [
             '**',
-            '!/var'
+            '!/var',
         ];
 
         $finder = new Finder();
@@ -224,7 +242,7 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
 
         $files = $filesystem->findFiles($sourceDir, $filters);
 
-        $this->assertEquals([
+        static::assertEquals([
             'public_html',
             'public_html/index.html',
         ], $files);
@@ -263,7 +281,7 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
 
         $files = $this->filesystem->findNewFiles($baseDir, $targetDir);
 
-        $this->assertEquals([
+        static::assertEquals([
             'var/config',
             'var/config/system.xml',
         ], $files);
@@ -284,11 +302,11 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
             'target' => [],
         ]);
 
-        $this->assertTrue($this->filesystem->copyDirectory(vfsStream::url('root/source'), vfsStream::url('root/target')));
+        static::assertTrue($this->filesystem->copyDirectory(vfsStream::url('root/source'), vfsStream::url('root/target')));
 
-        $this->assertTrue(is_file(vfsStream::url('root/target/index.html')));
-        $this->assertTrue(is_file(vfsStream::url('root/target/var/config/system.xml')));
-        $this->assertTrue(is_dir(vfsStream::url('root/target/var/cache')));
+        static::assertTrue(is_file(vfsStream::url('root/target/index.html')));
+        static::assertTrue(is_file(vfsStream::url('root/target/var/config/system.xml')));
+        static::assertTrue(is_dir(vfsStream::url('root/target/var/cache')));
     }
 
     public function testCopyDirectoryReturnsFalseWhenEmpty()
@@ -298,7 +316,7 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
             'target' => [],
         ]);
 
-        $this->assertFalse($this->filesystem->copyDirectory(vfsStream::url('root/source'), vfsStream::url('root/target')));
+        static::assertFalse($this->filesystem->copyDirectory(vfsStream::url('root/source'), vfsStream::url('root/target')));
     }
 
     public function testCopyDirectoryWithFiltersOnlyCopiesFilteredFiles()
@@ -320,7 +338,7 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
 
         $this->filesystem->copyDirectory(vfsStream::url('root/source'), vfsStream::url('root/target'), ['/**']);
 
-        $this->assertTrue(is_file(vfsStream::url('root/target/index.html')));
+        static::assertTrue(is_file(vfsStream::url('root/target/index.html')));
     }
 
     public function testRemoveDirectory()
@@ -331,20 +349,19 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
                 'vendor' => [
                     'org' => [
                         'package' => [
-                            'file.html' => ''
-                        ]
-                    ]
-                ]
+                            'file.html' => '',
+                        ],
+                    ],
+                ],
             ],
             'target' => [],
         ]);
 
-        $this->assertTrue(is_file(vfsStream::url('root/source/vendor/org/package/file.html')));
+        static::assertTrue(is_file(vfsStream::url('root/source/vendor/org/package/file.html')));
 
         $this->filesystem->removeDirectory(vfsStream::url('root/source/vendor'));
-        $this->assertFalse(is_file(vfsStream::url('root/source/vendor/org/package/file.html')));
+        static::assertFalse(is_file(vfsStream::url('root/source/vendor/org/package/file.html')));
     }
-
 
     public function testReplaceDirectory()
     {
@@ -355,10 +372,10 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
                     'org' => [
                         'package' => [
                             'file_a.html' => '',
-                            'file_b.html' => ''
-                        ]
-                    ]
-                ]
+                            'file_b.html' => '',
+                        ],
+                    ],
+                ],
             ],
             'target' => [
                 'thing.html' => '',
@@ -366,19 +383,19 @@ class FilesystemTest extends PHPUnit_Framework_TestCase
                     'org' => [
                         'package' => [
                             'file_b.html' => '',
-                            'file_c.html' => ''
-                        ]
-                    ]
-                ]
-            ]
+                            'file_c.html' => '',
+                        ],
+                    ],
+                ],
+            ],
         ]);
 
-        $this->assertTrue(is_file(vfsStream::url('root/target/vendor/org/package/file_c.html')));
+        static::assertTrue(is_file(vfsStream::url('root/target/vendor/org/package/file_c.html')));
 
         $this->filesystem->replaceDirectory(vfsStream::url('root/source'), vfsStream::url('root/target'), 'vendor');
 
-        $this->assertTrue(is_file(vfsStream::url('root/target/vendor/org/package/file_a.html')));
-        $this->assertFalse(is_file(vfsStream::url('root/target/vendor/org/package/file_c.html')));
+        static::assertTrue(is_file(vfsStream::url('root/target/vendor/org/package/file_a.html')));
+        static::assertFalse(is_file(vfsStream::url('root/target/vendor/org/package/file_c.html')));
     }
 }
 

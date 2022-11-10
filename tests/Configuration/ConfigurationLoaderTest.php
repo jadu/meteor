@@ -2,31 +2,35 @@
 
 namespace Meteor\Configuration;
 
+use Meteor\Configuration\Exception\ConfigurationLoadingException;
+use Meteor\ServiceContainer\ExtensionInterface;
+use Meteor\ServiceContainer\ExtensionManager;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Processor;
 
-class ConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
+class ConfigurationLoaderTest extends TestCase
 {
     private $extensionManager;
     private $treeBuilder;
     private $processor;
     private $configurationLoader;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->extensionManager = Mockery::mock('Meteor\ServiceContainer\ExtensionManager', [
+        $this->extensionManager = Mockery::mock(ExtensionManager::class, [
             'getExtensions' => [],
         ]);
-        $this->treeBuilder = new TreeBuilder();
+        $this->treeBuilder = new TreeBuilder('meteor');
         $this->processor = new Processor();
         $this->configurationLoader = new ConfigurationLoader($this->extensionManager, $this->treeBuilder, $this->processor);
     }
 
     public function testBuildTreeConfiguresExtensions()
     {
-        $extension = Mockery::mock('Meteor\ServiceContainer\ExtensionInterface', [
+        $extension = Mockery::mock(ExtensionInterface::class, [
             'getConfigKey' => 'test',
         ]);
 
@@ -35,6 +39,12 @@ class ConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
             ->twice();
 
         $this->configurationLoader->buildTree([$extension]);
+
+        $config = $this->configurationLoader->process([
+            'name' => 'jadu/xfp',
+        ]);
+
+        static::assertArrayHasKey('extensions', $config);
     }
 
     public function testAllowsNameSection()
@@ -45,9 +55,8 @@ class ConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
             'name' => 'jadu/xfp',
         ]);
 
-        $this->assertArraySubset([
-            'name' => 'jadu/xfp',
-        ], $config);
+        static::assertArrayHasKey('name', $config);
+        static::assertEquals('jadu/xfp', $config['name']);
     }
 
     public function testGeneratesAUniqueNameIfNotProvided()
@@ -56,8 +65,8 @@ class ConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
 
         $config = $this->configurationLoader->process([]);
 
-        $this->assertArrayHasKey('name', $config);
-        $this->assertNotEmpty($config['name']);
+        static::assertArrayHasKey('name', $config);
+        static::assertNotEmpty($config['name']);
     }
 
     public function testAllowsExtensionsSection()
@@ -70,11 +79,8 @@ class ConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->assertArraySubset([
-            'extensions' => [
-                'Meteor\Test\ServiceContainer\TestExtension',
-            ],
-        ], $config);
+        static::assertArrayHasKey('extensions', $config);
+        static::assertEquals(['Meteor\Test\ServiceContainer\TestExtension'], $config['extensions']);
     }
 
     public function testParseReturnsConfigAsArray()
@@ -94,7 +100,7 @@ JSON;
 
         $config = $this->configurationLoader->parse(vfsStream::url('root/meteor.json'));
 
-        $this->assertSame([
+        static::assertSame([
             'name' => 'jadu/xfp',
             'migrations' => [
                 'table' => 'JaduMigrationsXFP',
@@ -102,21 +108,19 @@ JSON;
         ], $config);
     }
 
-    /**
-     * @expectedException \Meteor\Configuration\Exception\ConfigurationLoadingException
-     */
     public function testParseThrowsExceptionWhenFileCannotBeRead()
     {
+        $this->expectException(ConfigurationLoadingException::class);
+
         vfsStream::setup('root');
 
         $this->configurationLoader->parse(vfsStream::url('root/meteor.json'));
     }
 
-    /**
-     * @expectedException \Meteor\Configuration\Exception\ConfigurationLoadingException
-     */
     public function testParseThrowsExceptionWhenJsonCannotBeParsed()
     {
+        $this->expectException(ConfigurationLoadingException::class);
+
         vfsStream::setup('root', null, [
             'meteor.json' => '!!!',
         ]);
@@ -139,7 +143,7 @@ JSON;
         $this->configurationLoader->buildTree([]);
         $config = $this->configurationLoader->load(vfsStream::url('root'));
 
-        $this->assertSame([
+        static::assertSame([
             'name' => 'jadu/xfp',
             'extensions' => [],
             'combined' => [],
@@ -166,7 +170,7 @@ JSON;
         $this->configurationLoader->buildTree([]);
         $config = $this->configurationLoader->load(vfsStream::url('root'));
 
-        $this->assertSame([
+        static::assertSame([
             'name' => 'jadu/xfp',
             'combined' => [
                 [
@@ -194,18 +198,17 @@ JSON;
         $this->configurationLoader->buildTree([]);
         $config = $this->configurationLoader->load(vfsStream::url('root'), false);
 
-        $this->assertSame([
+        static::assertSame([
             'name' => 'jadu/xfp',
             'extensions' => [],
             'combined' => [],
         ], $config);
     }
 
-    /**
-     * @expectedException \Meteor\Configuration\Exception\ConfigurationLoadingException
-     */
     public function testCannotProcessBeforeTreeIsBuild()
     {
+        $this->expectException(ConfigurationLoadingException::class);
+
         $this->configurationLoader->process([]);
     }
 }

@@ -3,12 +3,13 @@
 namespace Meteor\Logger;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class LoggerTest extends \PHPUnit_Framework_TestCase
+class LoggerTest extends TestCase
 {
     private $logger;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->logger = new Logger();
 
@@ -19,7 +20,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     {
         $this->logger->enable(vfsStream::url('root/logs/meteor.log'));
 
-        $this->assertTrue(is_dir(vfsStream::url('root/logs')));
+        static::assertTrue(is_dir(vfsStream::url('root/logs')));
     }
 
     public function testLogWritesToFileWhenEnabled()
@@ -28,7 +29,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
         $this->logger->log('test');
 
-        $this->assertContains('test', file_get_contents(vfsStream::url('root/logs/meteor.log')));
+        static::assertStringContainsString('test', file_get_contents(vfsStream::url('root/logs/meteor.log')));
     }
 
     public function testLogWritesToFileWithMultipleMessages()
@@ -44,7 +45,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 [2016-07-01T08:00:00+00:00/32.76MB]
 LOG;
 
-        $this->assertContains($expected, file_get_contents(vfsStream::url('root/logs/meteor.log')));
+        static::assertStringContainsString($expected, file_get_contents(vfsStream::url('root/logs/meteor.log')));
     }
 
     public function testLogWritesMultipleSeparateMessagesCorrectly()
@@ -63,7 +64,7 @@ LOG;
 [2016-07-01T08:00:00+00:00/32.76MB]
 LOG;
 
-        $this->assertContains($expected, file_get_contents(vfsStream::url('root/logs/meteor.log')));
+        static::assertStringContainsString($expected, file_get_contents(vfsStream::url('root/logs/meteor.log')));
     }
 
     public function testLogAddsTimestampToEveryLineInMultilineMessage()
@@ -79,7 +80,7 @@ LOG;
 [2016-07-01T08:00:00+00:00/32.76MB] test
 LOG;
 
-        $this->assertContains($expected, file_get_contents(vfsStream::url('root/logs/meteor.log')));
+        static::assertStringContainsString($expected, file_get_contents(vfsStream::url('root/logs/meteor.log')));
     }
 
     public function testLogStripsColourFormatting()
@@ -92,7 +93,7 @@ LOG;
 [2016-07-01T08:00:00+00:00/32.76MB] Error
 LOG;
 
-        $this->assertContains($expected, file_get_contents(vfsStream::url('root/logs/meteor.log')));
+        static::assertStringContainsString($expected, file_get_contents(vfsStream::url('root/logs/meteor.log')));
     }
 
     public function testLogStripsTrailingWhitespace()
@@ -105,7 +106,7 @@ LOG;
 [2016-07-01T08:00:00+00:00/32.76MB] test
 LOG;
 
-        $this->assertContains($expected, file_get_contents(vfsStream::url('root/logs/meteor.log')));
+        static::assertStringContainsString($expected, file_get_contents(vfsStream::url('root/logs/meteor.log')));
     }
 
     public function testLogDoesNotWriteToFileWhenDisabled()
@@ -115,7 +116,7 @@ LOG;
 
         $this->logger->log('test');
 
-        $this->assertFalse(file_exists(vfsStream::url('root/logs/meteor.log')));
+        static::assertFalse(file_exists(vfsStream::url('root/logs/meteor.log')));
     }
 }
 

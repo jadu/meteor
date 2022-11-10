@@ -3,12 +3,13 @@
 namespace Meteor\Migrations\Version;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class FileMigrationVersionStorageTest extends \PHPUnit_Framework_TestCase
+class FileMigrationVersionStorageTest extends TestCase
 {
     private $versionStorage;
 
-    public function setUp()
+    protected function setUp(): void
     {
         vfsStream::setup('root');
 
@@ -17,7 +18,7 @@ class FileMigrationVersionStorageTest extends \PHPUnit_Framework_TestCase
 
     public function testIsInitialisedReturnsFalseWhenFileDoesNotExist()
     {
-        $this->assertFalse($this->versionStorage->isInitialised());
+        static::assertFalse($this->versionStorage->isInitialised());
     }
 
     public function testIsInitialisedReturnsTrueWhenFileExists()
@@ -26,7 +27,7 @@ class FileMigrationVersionStorageTest extends \PHPUnit_Framework_TestCase
             'jadumigrations' => "1\n2\n3",
         ]);
 
-        $this->assertTrue($this->versionStorage->isInitialised());
+        static::assertTrue($this->versionStorage->isInitialised());
     }
 
     public function testHasVersionMigratedReturnsTrueWhenMigrated()
@@ -35,7 +36,7 @@ class FileMigrationVersionStorageTest extends \PHPUnit_Framework_TestCase
             'jadumigrations' => "1\n2\n3",
         ]);
 
-        $this->assertTrue($this->versionStorage->hasVersionMigrated(2));
+        static::assertTrue($this->versionStorage->hasVersionMigrated(2));
     }
 
     public function testHasVersionMigratedReturnsFalseWhenNotMigrated()
@@ -44,7 +45,7 @@ class FileMigrationVersionStorageTest extends \PHPUnit_Framework_TestCase
             'jadumigrations' => "1\n2\n3",
         ]);
 
-        $this->assertFalse($this->versionStorage->hasVersionMigrated(5));
+        static::assertFalse($this->versionStorage->hasVersionMigrated(5));
     }
 
     public function testGetMigratedVersions()
@@ -53,7 +54,7 @@ class FileMigrationVersionStorageTest extends \PHPUnit_Framework_TestCase
             'jadumigrations' => "1\n2\n3",
         ]);
 
-        $this->assertSame(['1', '2', '3'], $this->versionStorage->getMigratedVersions());
+        static::assertSame(['1', '2', '3'], $this->versionStorage->getMigratedVersions());
     }
 
     public function testGetMigratedVersionsSortsVersions()
@@ -62,7 +63,7 @@ class FileMigrationVersionStorageTest extends \PHPUnit_Framework_TestCase
             'jadumigrations' => "2\n3\n1",
         ]);
 
-        $this->assertSame(['1', '2', '3'], $this->versionStorage->getMigratedVersions());
+        static::assertSame(['1', '2', '3'], $this->versionStorage->getMigratedVersions());
     }
 
     public function testGetMigratedVersionsRemovesDuplicates()
@@ -71,7 +72,7 @@ class FileMigrationVersionStorageTest extends \PHPUnit_Framework_TestCase
             'jadumigrations' => "1\n2\n3\n2\n3\n1",
         ]);
 
-        $this->assertSame(['1', '2', '3'], $this->versionStorage->getMigratedVersions());
+        static::assertSame(['1', '2', '3'], $this->versionStorage->getMigratedVersions());
     }
 
     public function testGetMigratedVersionsNormalisesVersionsFromFile()
@@ -80,7 +81,7 @@ class FileMigrationVersionStorageTest extends \PHPUnit_Framework_TestCase
             'jadumigrations' => "1   \n   2\n3",
         ]);
 
-        $this->assertSame(['1', '2', '3'], $this->versionStorage->getMigratedVersions());
+        static::assertSame(['1', '2', '3'], $this->versionStorage->getMigratedVersions());
     }
 
     public function testGetNumberOfExecutedMigrations()
@@ -89,7 +90,7 @@ class FileMigrationVersionStorageTest extends \PHPUnit_Framework_TestCase
             'jadumigrations' => "1\n2\n3",
         ]);
 
-        $this->assertSame(3, $this->versionStorage->getNumberOfExecutedMigrations());
+        static::assertSame(3, $this->versionStorage->getNumberOfExecutedMigrations());
     }
 
     public function testGetCurrentVersionReturnsLatestVersion()
@@ -98,7 +99,7 @@ class FileMigrationVersionStorageTest extends \PHPUnit_Framework_TestCase
             'jadumigrations' => "1\n2\n3",
         ]);
 
-        $this->assertSame('3', $this->versionStorage->getCurrentVersion());
+        static::assertSame('3', $this->versionStorage->getCurrentVersion());
     }
 
     public function testGetCurrentVersionSortsVersions()
@@ -107,7 +108,7 @@ class FileMigrationVersionStorageTest extends \PHPUnit_Framework_TestCase
             'jadumigrations' => "2\n3\n1",
         ]);
 
-        $this->assertSame('3', $this->versionStorage->getCurrentVersion());
+        static::assertSame('3', $this->versionStorage->getCurrentVersion());
     }
 
     public function testGetCurrentVersionReturnsZeroWhenFileIsEmpty()
@@ -116,7 +117,7 @@ class FileMigrationVersionStorageTest extends \PHPUnit_Framework_TestCase
             'jadumigrations' => '',
         ]);
 
-        $this->assertSame('0', $this->versionStorage->getCurrentVersion());
+        static::assertSame('0', $this->versionStorage->getCurrentVersion());
     }
 
     public function testMarkMigrated()
@@ -127,7 +128,7 @@ class FileMigrationVersionStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->versionStorage->markMigrated(4);
 
-        $this->assertSame("1\n2\n3\n4", file_get_contents(vfsStream::url('root/jadumigrations')));
+        static::assertSame("1\n2\n3\n4", file_get_contents(vfsStream::url('root/jadumigrations')));
     }
 
     public function testMarkMigratedOnlyAddsOnce()
@@ -140,7 +141,7 @@ class FileMigrationVersionStorageTest extends \PHPUnit_Framework_TestCase
         $this->versionStorage->markMigrated(4);
         $this->versionStorage->markMigrated(4);
 
-        $this->assertSame("1\n2\n3\n4", file_get_contents(vfsStream::url('root/jadumigrations')));
+        static::assertSame("1\n2\n3\n4", file_get_contents(vfsStream::url('root/jadumigrations')));
     }
 
     public function testMarkMigratedAddsInOrder()
@@ -151,7 +152,7 @@ class FileMigrationVersionStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->versionStorage->markMigrated(2);
 
-        $this->assertSame("1\n2\n3", file_get_contents(vfsStream::url('root/jadumigrations')));
+        static::assertSame("1\n2\n3", file_get_contents(vfsStream::url('root/jadumigrations')));
     }
 
     public function testMarkMigratedAddsToNewFile()
@@ -160,7 +161,7 @@ class FileMigrationVersionStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->versionStorage->markMigrated(2);
 
-        $this->assertSame('2', file_get_contents(vfsStream::url('root/jadumigrations')));
+        static::assertSame('2', file_get_contents(vfsStream::url('root/jadumigrations')));
     }
 
     public function testMarkNotMigrated()
@@ -171,7 +172,7 @@ class FileMigrationVersionStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->versionStorage->markNotMigrated(2);
 
-        $this->assertSame("1\n3", file_get_contents(vfsStream::url('root/jadumigrations')));
+        static::assertSame("1\n3", file_get_contents(vfsStream::url('root/jadumigrations')));
     }
 
     public function testMarkNotMigratedDoesNothingWhenVersionNotPresentInFile()
@@ -182,6 +183,6 @@ class FileMigrationVersionStorageTest extends \PHPUnit_Framework_TestCase
 
         $this->versionStorage->markNotMigrated(4);
 
-        $this->assertSame("1\n2\n3", file_get_contents(vfsStream::url('root/jadumigrations')));
+        static::assertSame("1\n2\n3", file_get_contents(vfsStream::url('root/jadumigrations')));
     }
 }

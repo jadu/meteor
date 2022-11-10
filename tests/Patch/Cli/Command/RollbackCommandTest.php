@@ -2,6 +2,7 @@
 
 namespace Meteor\Patch\Cli\Command;
 
+use InvalidArgumentException;
 use Meteor\Cli\Command\CommandTestCase;
 use Meteor\IO\NullIO;
 use Meteor\Patch\Backup\Backup;
@@ -9,6 +10,7 @@ use Meteor\Patch\Event\PatchEvents;
 use Meteor\Permissions\PermissionSetter;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class RollbackCommandTest extends CommandTestCase
 {
@@ -34,14 +36,14 @@ class RollbackCommandTest extends CommandTestCase
         $this->backupFinder = Mockery::mock('Meteor\Patch\Backup\BackupFinder');
         $this->taskBus = Mockery::mock('Meteor\Patch\Task\TaskBusInterface');
         $this->strategy = Mockery::mock('Meteor\Patch\Strategy\PatchStrategyInterface');
-        $this->permissionSetter = Mockery::mock(PermissionSetter::class,['setPostScriptsPermissions' => null]);
+        $this->permissionSetter = Mockery::mock(PermissionSetter::class, ['setPostScriptsPermissions' => null]);
 
         $this->platform = Mockery::mock('Meteor\Platform\PlatformInterface', [
             'setInstallDir' => null,
         ]);
         $this->locker = Mockery::mock('Meteor\Patch\Lock\Locker');
         $this->eventDispatcher = Mockery::mock('Symfony\Component\EventDispatcher\EventDispatcherInterface', [
-            'dispatch' => null,
+            'dispatch' => Mockery::mock(Event::class),
         ]);
         $this->scriptRunner = Mockery::mock('Meteor\Scripts\ScriptRunner', [
             'setWorkingDir' => null,
@@ -114,7 +116,8 @@ class RollbackCommandTest extends CommandTestCase
             ->once();
 
         $this->eventDispatcher->shouldReceive('dispatch')
-            ->with(PatchEvents::PRE_ROLLBACK, Mockery::any())
+            ->with(Mockery::any(), PatchEvents::PRE_ROLLBACK)
+            ->andReturn(Mockery::mock(Event::class))
             ->once();
 
         $tasks = [
@@ -137,7 +140,8 @@ class RollbackCommandTest extends CommandTestCase
             ->once();
 
         $this->eventDispatcher->shouldReceive('dispatch')
-            ->with(PatchEvents::POST_ROLLBACK, Mockery::any())
+            ->with(Mockery::any(), PatchEvents::POST_ROLLBACK)
+            ->andReturn(Mockery::mock(Event::class))
             ->once();
 
         $this->locker->shouldReceive('unlock')
@@ -186,7 +190,8 @@ class RollbackCommandTest extends CommandTestCase
             ->with($installDir);
 
         $this->eventDispatcher->shouldReceive('dispatch')
-            ->with(PatchEvents::PRE_ROLLBACK, Mockery::any())
+            ->with(Mockery::any(), PatchEvents::PRE_ROLLBACK)
+            ->andReturn(Mockery::mock(Event::class))
             ->never();
 
         $tasks = [
@@ -206,7 +211,8 @@ class RollbackCommandTest extends CommandTestCase
             ->andReturn(true);
 
         $this->eventDispatcher->shouldReceive('dispatch')
-            ->with(PatchEvents::POST_ROLLBACK, Mockery::any())
+            ->with(Mockery::any(), PatchEvents::POST_ROLLBACK)
+            ->andReturn(Mockery::mock(Event::class))
             ->never();
 
         $this->locker->shouldReceive('unlock')
@@ -219,11 +225,10 @@ class RollbackCommandTest extends CommandTestCase
         ]);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testThrowsExceptionWhenWorkingDirIsTheSameAsTheInstallDir()
     {
+        static::expectException(InvalidArgumentException::class);
+
         $workingDir = vfsStream::url('root/install');
         $installDir = vfsStream::url('root/install');
 

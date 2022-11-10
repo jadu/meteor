@@ -56,7 +56,7 @@ class CheckDiskSpaceHandler
 
     /**
      * @param CheckDiskSpace $task
-     * @param array          $config
+     * @param array $config
      *
      * @return bool
      */

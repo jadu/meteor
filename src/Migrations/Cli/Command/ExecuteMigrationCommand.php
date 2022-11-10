@@ -7,6 +7,7 @@ use Meteor\Logger\LoggerInterface;
 use Meteor\Migrations\Migrator;
 use Meteor\Patch\Cli\Command\AbstractPatchCommand;
 use Meteor\Platform\PlatformInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -89,7 +90,7 @@ EOT;
         if (empty($packageName)) {
             $this->io->error('You must specify a package name as the first argument.');
 
-            return 1;
+            return Command::FAILURE;
         }
 
         $config = $this->getConfiguration();
@@ -97,7 +98,7 @@ EOT;
         if (!isset($config[$packageName])) {
             $this->io->error(sprintf('Unable to find migrations for the package "%s"', $packageName));
 
-            return 1;
+            return Command::FAILURE;
         }
 
         $this->logger->enable($this->getLogPath($workingDir));
@@ -112,7 +113,7 @@ EOT;
             if (!$confirmation) {
                 $this->io->error('Migration cancelled.');
 
-                return 1;
+                return Command::FAILURE;
             }
         }
 
@@ -125,8 +126,6 @@ EOT;
             $direction
         );
 
-        if (!$result) {
-            return 1;
-        }
+        return $result ? Command::SUCCESS : Command::FAILURE;
     }
 }

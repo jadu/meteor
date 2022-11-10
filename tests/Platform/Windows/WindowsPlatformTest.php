@@ -5,13 +5,14 @@ namespace Meteor\Platform\Windows;
 use Meteor\Permissions\Permission;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class WindowsPlatformTest extends \PHPUnit_Framework_TestCase
+class WindowsPlatformTest extends TestCase
 {
     private $processRunner;
     private $platform;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->processRunner = Mockery::mock('Meteor\Process\ProcessRunner');
         $this->platform = new WindowsPlatform($this->processRunner);
@@ -34,9 +35,10 @@ class WindowsPlatformTest extends \PHPUnit_Framework_TestCase
         $permission = Permission::create('', ['r', 'w', 'x']);
 
         $this->processRunner->shouldReceive('run')
-            ->with("icacls 'vfs://root/jadu/JaduConstants.php' /remove:g 'IIS_IUSRS' /grant 'IIS_IUSRS:RXWM' /Q")
+            ->andReturnUsing(function ($command) {
+                static::assertEquals(['icacls', 'vfs://root/jadu/JaduConstants.php', '/remove:g', 'IIS_IUSRS', '/grant', 'IIS_IUSRS:RXWM', '/Q'], $command);
+            })
             ->once();
-
         $this->platform->setPermission(vfsStream::url('root/jadu/JaduConstants.php'), $permission);
     }
 
@@ -45,7 +47,9 @@ class WindowsPlatformTest extends \PHPUnit_Framework_TestCase
         $permission = Permission::create('', ['r', 'w', 'x']);
 
         $this->processRunner->shouldReceive('run')
-            ->with("icacls 'vfs://root/jadu/custom' /remove:g 'IIS_IUSRS' /grant 'IIS_IUSRS:(OI)(CI)RXWM' /Q")
+            ->andReturnUsing(function ($command) {
+                static::assertEquals(['icacls', 'vfs://root/jadu/custom', '/remove:g', 'IIS_IUSRS', '/grant', 'IIS_IUSRS:(OI)(CI)RXWM', '/Q'], $command);
+            })
             ->once();
 
         $this->platform->setPermission(vfsStream::url('root/jadu/custom'), $permission);
@@ -56,7 +60,9 @@ class WindowsPlatformTest extends \PHPUnit_Framework_TestCase
         $permission = Permission::create('', ['r', 'w', 'x', 'R']);
 
         $this->processRunner->shouldReceive('run')
-            ->with("icacls 'vfs://root/jadu/custom' /remove:g 'IIS_IUSRS' /grant 'IIS_IUSRS:(OI)(CI)RXWM' /t /Q")
+            ->andReturnUsing(function ($command) {
+                static::assertEquals(['icacls', 'vfs://root/jadu/custom', '/remove:g', 'IIS_IUSRS', '/grant', 'IIS_IUSRS:(OI)(CI)RXWM', '/t', '/Q'], $command);
+            })
             ->once();
 
         $this->platform->setPermission(vfsStream::url('root/jadu/custom'), $permission);
@@ -67,7 +73,9 @@ class WindowsPlatformTest extends \PHPUnit_Framework_TestCase
         $permission = Permission::create('', ['r', 'w', 'x', 'R']);
 
         $this->processRunner->shouldReceive('run')
-            ->with("icacls 'vfs://root/jadu/JaduConstants.php' /remove:g 'IIS_IUSRS' /grant 'IIS_IUSRS:RXWM' /Q")
+            ->andReturnUsing(function ($command) {
+                static::assertEquals(['icacls', 'vfs://root/jadu/JaduConstants.php', '/remove:g', 'IIS_IUSRS', '/grant', 'IIS_IUSRS:RXWM', '/Q'], $command);
+            })
             ->once();
 
         $this->platform->setPermission(vfsStream::url('root/jadu/JaduConstants.php'), $permission);
@@ -78,7 +86,9 @@ class WindowsPlatformTest extends \PHPUnit_Framework_TestCase
         $permission = Permission::create('', ['x']);
 
         $this->processRunner->shouldReceive('run')
-            ->with("icacls 'vfs://root/jadu/JaduConstants.php' /remove:g 'IIS_IUSRS' /grant 'IIS_IUSRS:RX' /Q")
+            ->andReturnUsing(function ($command) {
+                static::assertEquals(['icacls', 'vfs://root/jadu/JaduConstants.php', '/remove:g', 'IIS_IUSRS', '/grant', 'IIS_IUSRS:RX', '/Q'], $command);
+            })
             ->once();
 
         $this->platform->setPermission(vfsStream::url('root/jadu/JaduConstants.php'), $permission);

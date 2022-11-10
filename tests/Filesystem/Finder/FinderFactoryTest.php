@@ -3,12 +3,13 @@
 namespace Meteor\Filesystem\Finder;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class FinderFactoryTest extends \PHPUnit_Framework_TestCase
+class FinderFactoryTest extends TestCase
 {
     private $finderFactory;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->finderFactory = new FinderFactory();
     }
@@ -27,7 +28,7 @@ class FinderFactoryTest extends \PHPUnit_Framework_TestCase
             $foundFiles[] = preg_replace('/^' . preg_quote(vfsStream::url('root') . '/', '/') . '/', '', $file->getPathname());
         }
 
-        $this->assertEquals($expectedFiles, $foundFiles);
+        static::assertEquals($expectedFiles, $foundFiles);
     }
 
     public function filterProvider()
@@ -199,9 +200,9 @@ class FinderFactoryTest extends \PHPUnit_Framework_TestCase
                     ],
                     'vendor' => [
                         'org' => [
-                            'package' => 'file.html'
-                        ]
-                    ]
+                            'package' => 'file.html',
+                        ],
+                    ],
                 ],
                 [
                     '**',
@@ -222,13 +223,13 @@ class FinderFactoryTest extends \PHPUnit_Framework_TestCase
                         'item.txt' => '',
                         'module_1' => [
                             'abc.txt' => '',
-                        ]
+                        ],
                     ],
                     'vendor' => [
                         'org' => [
                             'package' => 'file.html',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 [
                     '/public_html',
@@ -244,6 +245,7 @@ class FinderFactoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider generatePatternProvider
+     *
      * @param string $filter
      * @param string $directorySeparator
      * @param array $expected
@@ -261,27 +263,27 @@ class FinderFactoryTest extends \PHPUnit_Framework_TestCase
             [
                 'filter' => '!/vendor',
                 'directorySeparator' => '/',
-                'expected' => ['/^vendor(?=$|\/)/', true]
+                'expected' => ['/^vendor(?=$|\/)/', true],
             ],
             [
                 'filter' => '!/vendor',
                 'directorySeparator' => '\\',
-                'expected' => ['/^vendor(?=$|\\\)/', true]
+                'expected' => ['/^vendor(?=$|\\\)/', true],
             ],
             [
                 'filter' => '/vendor',
                 'directorySeparator' => '\\',
-                'expected' => ['/^vendor(?=$|\\\)/', false]
+                'expected' => ['/^vendor(?=$|\\\)/', false],
             ],
             [
                 'filter' => '/public_html/site/styles',
                 'directorySeparator' => '\\',
-                'expected' => ['/^public_html\\\site\\\styles(?=$|\\\)/', false]
+                'expected' => ['/^public_html\\\site\\\styles(?=$|\\\)/', false],
             ],
             [
                 'filter' => '/public_html/site/styles',
                 'directorySeparator' => '/',
-                'expected' => ['/^public_html\/site\/styles(?=$|\/)/', false]
+                'expected' => ['/^public_html\/site\/styles(?=$|\/)/', false],
             ],
         ];
     }

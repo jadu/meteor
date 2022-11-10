@@ -61,7 +61,7 @@ class BackupFilesHandler
             }
         }
 
-        array_walk($replaceDirectories, function(&$directory) { $directory = ltrim($directory, '/\\'); });
+        array_walk($replaceDirectories, function (&$directory) { $directory = ltrim($directory, '/\\'); });
 
         $excludeFilters = [];
 
@@ -81,9 +81,9 @@ class BackupFilesHandler
         foreach ($replaceDirectories as $directory) {
             $path = $task->installDir . DIRECTORY_SEPARATOR . $directory;
 
-            $this->io->debug(sprintf("Adding replace directory %s to backup files", $path));
+            $this->io->debug(sprintf('Adding replace directory %s to backup files', $path));
             $replaceFiles = $this->filesystem->findFiles($path);
-            array_walk($replaceFiles, function(&$path) use ($directory) { $path = $directory . DIRECTORY_SEPARATOR . $path; });
+            array_walk($replaceFiles, function (&$path) use ($directory) { $path = $directory . DIRECTORY_SEPARATOR . $path; });
 
             $files = array_merge($files, [$directory], $replaceFiles);
         }

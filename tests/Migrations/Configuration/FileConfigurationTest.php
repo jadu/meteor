@@ -2,22 +2,29 @@
 
 namespace Meteor\Migrations\Configuration;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Doctrine\Migrations\Version\Version;
+use Meteor\Migrations\Version\FileMigrationVersion;
+use Meteor\Migrations\Version\FileMigrationVersionStorage;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class FileConfigurationTest extends \PHPUnit_Framework_TestCase
+class FileConfigurationTest extends TestCase
 {
     private $configuration;
     private $versionStorage;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->configuration = new FileConfiguration(Mockery::mock('Doctrine\DBAL\Connection', [
+        $this->configuration = new FileConfiguration(Mockery::mock(Connection::class, [
             // Stub methods to satisfy `new Version`
-            'getSchemaManager' => Mockery::mock('Doctrine\DBAL\Schema\AbstractSchemaManager'),
-            'getDatabasePlatform' => Mockery::mock('Doctrine\DBAL\Platforms\AbstractPlatform'),
+            'getSchemaManager' => Mockery::mock(AbstractSchemaManager::class),
+            'getDatabasePlatform' => Mockery::mock(AbstractPlatform::class),
         ]));
 
-        $this->versionStorage = Mockery::mock('Meteor\Migrations\Version\FileMigrationVersionStorage');
+        $this->versionStorage = Mockery::mock(FileMigrationVersionStorage::class);
         $this->configuration->setVersionStorage($this->versionStorage);
     }
 
@@ -28,19 +35,19 @@ class FileConfigurationTest extends \PHPUnit_Framework_TestCase
     {
         $this->configuration->setJaduPath('/var/www/jadu');
 
-        $this->assertSame('/var/www/jadu', $this->configuration->getJaduPath());
+        static::assertSame('/var/www/jadu', $this->configuration->getJaduPath());
     }
 
     public function testCanSetVersionStorage()
     {
         $this->configuration->setVersionStorage($this->versionStorage);
 
-        $this->assertSame($this->versionStorage, $this->configuration->getVersionStorage());
+        static::assertSame($this->versionStorage, $this->configuration->getVersionStorage());
     }
 
     public function testHasVersionMigrated()
     {
-        $version = Mockery::mock('Doctrine\DBAL\Migrations\Version', [
+        $version = Mockery::mock(Version::class, [
             'getVersion' => '1',
         ]);
 
@@ -49,7 +56,7 @@ class FileConfigurationTest extends \PHPUnit_Framework_TestCase
             ->andReturn(true)
             ->once();
 
-        $this->assertTrue($this->configuration->hasVersionMigrated($version));
+        static::assertTrue($this->configuration->hasVersionMigrated($version));
     }
 
     public function testGetMigratedVersions()
@@ -59,7 +66,7 @@ class FileConfigurationTest extends \PHPUnit_Framework_TestCase
             ->andReturn($versionStrings)
             ->once();
 
-        $this->assertSame($versionStrings, $this->configuration->getMigratedVersions());
+        static::assertSame($versionStrings, $this->configuration->getMigratedVersions());
     }
 
     public function testGetCurrentVersion()
@@ -68,7 +75,7 @@ class FileConfigurationTest extends \PHPUnit_Framework_TestCase
             ->andReturn('1')
             ->once();
 
-        $this->assertSame('1', $this->configuration->getCurrentVersion());
+        static::assertSame('1', $this->configuration->getCurrentVersion());
     }
 
     public function testGetNumberOfExecutedMigrations()
@@ -77,19 +84,19 @@ class FileConfigurationTest extends \PHPUnit_Framework_TestCase
             ->andReturn(5)
             ->once();
 
-        $this->assertSame(5, $this->configuration->getNumberOfExecutedMigrations());
+        static::assertSame(5, $this->configuration->getNumberOfExecutedMigrations());
     }
 
     public function testCreateMigrationTableStubbed()
     {
         // It should not try to execute any database queries on the connection
-        $this->assertTrue($this->configuration->createMigrationTable());
+        static::assertTrue($this->configuration->createMigrationTable());
     }
 
     public function testRegisterMigrationReturnsInstanceOfFileMigrationVersion()
     {
         $version = $this->configuration->registerMigration('1', 'stdClass');
 
-        $this->assertInstanceOf('Meteor\Migrations\Version\FileMigrationVersion', $version);
+        static::assertInstanceOf(FileMigrationVersion::class, $version);
     }
 }

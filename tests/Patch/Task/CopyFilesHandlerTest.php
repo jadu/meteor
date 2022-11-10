@@ -6,9 +6,9 @@ use Meteor\Filesystem\Filesystem;
 use Meteor\IO\NullIO;
 use Meteor\Permissions\PermissionSetter;
 use Mockery;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class CopyFilesHandlerTest extends PHPUnit_Framework_TestCase
+class CopyFilesHandlerTest extends TestCase
 {
     private $io;
     private $filesystem;
@@ -17,7 +17,7 @@ class CopyFilesHandlerTest extends PHPUnit_Framework_TestCase
     private $defaultConfig = [];
     private $replaceDirectoriesConfig = [];
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->defaultConfig['patch']['replace_directories'] = [];
         $this->replaceDirectoriesConfig['patch']['replace_directories'] = [
@@ -67,7 +67,7 @@ class CopyFilesHandlerTest extends PHPUnit_Framework_TestCase
 
     public function testExcludesSwapFoldersFromCopyDirectory()
     {
-         $this->filesystem->shouldReceive('copyDirectory')
+        $this->filesystem->shouldReceive('copyDirectory')
             ->with('source', 'target', ['**', '!/forward', '!/backward', '!/noward'])
             ->once();
 
@@ -76,7 +76,7 @@ class CopyFilesHandlerTest extends PHPUnit_Framework_TestCase
 
     public function testExcludesReplaceDirectoriesFromFindNewFiles()
     {
-         $this->filesystem->shouldReceive('findNewFiles')
+        $this->filesystem->shouldReceive('findNewFiles')
             ->with('source', 'target', ['**', '!/forward', '!/backward', '!/noward'])
             ->andReturn([])
             ->once();
@@ -103,15 +103,15 @@ class CopyFilesHandlerTest extends PHPUnit_Framework_TestCase
     {
         $config = [
             'patch' => [
-                'replace_directories' => ['/vendor']
+                'replace_directories' => ['/vendor'],
             ],
             'combined' => [
                 [
                     'patch' => [
-                        'replace_directories' => ['/foo']
-                    ]
-                ]
-            ]
+                        'replace_directories' => ['/foo'],
+                    ],
+                ],
+            ],
         ];
 
         $this->filesystem->shouldReceive('replaceDirectory')

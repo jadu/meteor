@@ -4,9 +4,9 @@ namespace Meteor\IO;
 
 use Meteor\Logger\LoggerInterface;
 use RuntimeException;
-use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Helper\Helper;
+use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Helper\Table;
@@ -17,6 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Console\Terminal;
 
 class ConsoleIO implements IOInterface
 {
@@ -97,7 +98,7 @@ class ConsoleIO implements IOInterface
      */
     public function getOption($name)
     {
-        return $this->input->getOption($name);
+        return $this->input->getOption($name) ?: '';
     }
 
     /**
@@ -157,7 +158,7 @@ class ConsoleIO implements IOInterface
      */
     public function askChoice($question, $choices, $default = null)
     {
-        $question = sprintf(" <info>%s</info> [<comment>%s</comment>]:\n > ", $question, isset($choices[$default]) ? $choices[$default] : null);
+        $question = sprintf(" <info>%s</info> [<comment>%s</comment>]:\n > ", $question, $choices[$default] ?? null);
         $question = new ChoiceQuestion($question, $choices, $default);
 
         return $this->askQuestion($question);
@@ -241,10 +242,10 @@ class ConsoleIO implements IOInterface
      * Formats a message as a block of text.
      *
      * @param string|array $message The message to write in the block
-     * @param string|null  $type     The block type (added in [] on first line)
-     * @param string|null  $style    The style to apply to the whole block
-     * @param string       $prefix   The prefix for the block
-     * @param bool         $padding  Whether to add vertical padding
+     * @param string|null $type The block type (added in [] on first line)
+     * @param string|null $style The style to apply to the whole block
+     * @param string $prefix The prefix for the block
+     * @param bool $padding Whether to add vertical padding
      */
     private function block($message, $type = null, $style = null, $prefix = ' ', $padding = false)
     {
@@ -374,9 +375,9 @@ class ConsoleIO implements IOInterface
 
         $style = new TableStyle();
         $style->setCellHeaderFormat('<info>%s</info>');
-        $style->setHorizontalBorderChar('-');
-        $style->setVerticalBorderChar(' ');
-        $style->setCrossingChar(' ');
+        $style->setHorizontalBorderChars('-');
+        $style->setVerticalBorderChars(' ');
+        $style->setCrossingChars(' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
         $table->setStyle($style);
 
         $table->render();
@@ -445,10 +446,7 @@ class ConsoleIO implements IOInterface
 
     private function getTerminalWidth()
     {
-        $application = new Application();
-        $dimensions = $application->getTerminalDimensions();
-
-        return $dimensions[0] ?: self::MAX_LINE_LENGTH;
+        return (new Terminal())->getWidth();
     }
 
     private function autoPrependBlock()

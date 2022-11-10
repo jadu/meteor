@@ -14,7 +14,7 @@ class GoogleDrivePackageProviderExtensionTest extends ExtensionTestCase
             ],
         ]);
 
-        $this->assertTrue($container->has('package.provider.gdrive'));
+        static::assertTrue($container->has('package.provider.gdrive'));
 
         $container->get('package.provider.gdrive');
     }
@@ -27,18 +27,20 @@ class GoogleDrivePackageProviderExtensionTest extends ExtensionTestCase
             ],
         ]);
 
-        $this->assertFalse($container->has('package.provider.gdrive'));
+        static::assertFalse($container->has('package.provider.gdrive'));
     }
 
     public function testAddsDefaultFolders()
     {
         $config = $this->processConfiguration([]);
 
-        $this->assertArraySubset([
-            'folders' => [
+        static::assertArrayHasKey('folders', $config['gdrive_package_provider']);
+
+        static::assertEquals([
                 'jadu/cms' => '0B3tlQeNsllCKY2tzbFpUUkI2OGM',
                 'jadu/xfp' => '0B2h2-RgE2WidOHRhZVNUbUc1Z0E',
             ],
-        ], $config['gdrive_package_provider']);
+            $config['gdrive_package_provider']['folders']
+        );
     }
 }

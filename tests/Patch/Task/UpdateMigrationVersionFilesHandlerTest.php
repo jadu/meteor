@@ -6,14 +6,15 @@ use Meteor\IO\NullIO;
 use Meteor\Migrations\MigrationsConstants;
 use Meteor\Migrations\Version\VersionFileManager;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class UpdateMigrationVersionFilesHandlerTest extends \PHPUnit_Framework_TestCase
+class UpdateMigrationVersionFilesHandlerTest extends TestCase
 {
     private $configurationFactory;
     private $versionFileManager;
     private $handler;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->configurationFactory = Mockery::mock('Meteor\Migrations\Configuration\ConfigurationFactory');
         $this->versionFileManager = Mockery::mock('Meteor\Migrations\Version\VersionFileManager');

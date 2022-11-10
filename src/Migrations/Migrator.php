@@ -2,8 +2,7 @@
 
 namespace Meteor\Migrations;
 
-use Doctrine\DBAL\Migrations\Migration;
-use Doctrine\DBAL\Migrations\MigrationException;
+use Doctrine\Migrations\Exception\MigrationException;
 use Meteor\IO\IOInterface;
 use Meteor\Migrations\Configuration\ConfigurationFactory;
 
@@ -89,7 +88,7 @@ class Migrator
         if ($executedUnavailableMigrations) {
             $this->io->note(sprintf('You have %s previously executed migrations that are not registered migrations.', count($executedUnavailableMigrations)));
             foreach ($executedUnavailableMigrations as $executedUnavailableMigration) {
-                $this->io->text(' * ' . $configuration->formatVersion($executedUnavailableMigration) . ' (<comment>' . $executedUnavailableMigration . '</>)');
+                $this->io->text(' * ' . $configuration->getDateTime($executedUnavailableMigration) . ' (<comment>' . $executedUnavailableMigration . '</>)');
             }
 
             if (!$ignoreUnavailableMigrations) {
@@ -106,8 +105,8 @@ class Migrator
 
         $time = 0;
         foreach ($migrationsToExecute as $version) {
-            $version->execute($direction, false, false);
-            $time += $version->getTime();
+            $result = $version->execute($direction);
+            $time += $result->getTime();
         }
 
         $this->io->success([
@@ -136,7 +135,7 @@ class Migrator
 
         $configuration = $this->configurationFactory->createConfiguration($type, $config, $patchDir, $installDir);
         $version = $configuration->getVersion($version);
-        $version->execute($direction, false, false);
+        $version->execute($direction);
 
         return true;
     }

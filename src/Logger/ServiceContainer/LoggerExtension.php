@@ -2,6 +2,7 @@
 
 namespace Meteor\Logger\ServiceContainer;
 
+use Meteor\Logger\Logger;
 use Meteor\ServiceContainer\ExtensionBase;
 use Meteor\ServiceContainer\ExtensionInterface;
 use Meteor\ServiceContainer\ExtensionManager;
@@ -42,7 +43,7 @@ class LoggerExtension extends ExtensionBase implements ExtensionInterface
      */
     public function load(ContainerBuilder $container, array $config)
     {
-        $container->setDefinition(self::SERVICE_LOGGER, new Definition('Meteor\Logger\Logger'));
+        $container->setDefinition(self::SERVICE_LOGGER, new Definition(Logger::class))->setPublic(true);
     }
 
     /**

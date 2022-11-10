@@ -4,12 +4,14 @@ namespace Meteor\Patch\Task;
 
 use Meteor\IO\NullIO;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
+use UnexpectedValueException;
 
-class CheckModuleCmsDependencyHandlerTest extends \PHPUnit_Framework_TestCase
+class CheckModuleCmsDependencyHandlerTest extends TestCase
 {
     private $handler;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->handler = new CheckModuleCmsDependencyHandler(new NullIO());
     }
@@ -29,7 +31,7 @@ class CheckModuleCmsDependencyHandlerTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $task = new CheckModuleCmsDependency(vfsStream::url('root/working'), vfsStream::url('root/install'));
-        $this->assertSame($expectedResult, $this->handler->handle($task));
+        static::assertSame($expectedResult, $this->handler->handle($task));
     }
 
     /**
@@ -48,7 +50,7 @@ class CheckModuleCmsDependencyHandlerTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $task = new CheckModuleCmsDependency(vfsStream::url('root/working'), vfsStream::url('root/install'));
-        $this->assertSame($expectedResult, $this->handler->handle($task));
+        static::assertSame($expectedResult, $this->handler->handle($task));
     }
 
     public function testReturnsTrueIfModuleCmsDependencyFileNotFoundInWorkingDir()
@@ -59,7 +61,7 @@ class CheckModuleCmsDependencyHandlerTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $task = new CheckModuleCmsDependency(vfsStream::url('root/working'), vfsStream::url('root/install'));
-        $this->assertTrue($this->handler->handle($task));
+        static::assertTrue($this->handler->handle($task));
     }
 
     public function testReturnsTrueIfCmsVersionFileNotFoundInInstallDir()
@@ -72,14 +74,13 @@ class CheckModuleCmsDependencyHandlerTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $task = new CheckModuleCmsDependency(vfsStream::url('root/working'), vfsStream::url('root/install'));
-        $this->assertTrue($this->handler->handle($task));
+        static::assertTrue($this->handler->handle($task));
     }
 
-    /**
-     * @expectedException \UnexpectedValueException
-     */
     public function testThrowsExceptionWhenVersionConstraintIsInvalid()
     {
+        static::expectException(UnexpectedValueException::class);
+
         vfsStream::setup('root', null, [
             'working' => [
                 'MODULE_CMS_DEPENDENCY' => '!! this is not a valid constraint',
@@ -108,7 +109,7 @@ class CheckModuleCmsDependencyHandlerTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $task = new CheckModuleCmsDependency(vfsStream::url('root/working'), vfsStream::url('root/install'));
-        $this->assertSame($expectedResult, $this->handler->handle($task));
+        static::assertSame($expectedResult, $this->handler->handle($task));
     }
 
     public function versionProvider()

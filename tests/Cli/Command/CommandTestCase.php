@@ -6,14 +6,15 @@ use Composer\Autoload\ClassLoader;
 use Meteor\Cli\Application;
 use Meteor\Configuration\ConfigurationLoader;
 use Meteor\ServiceContainer\ExtensionManager;
+use PHPUnit\Framework\TestCase;
 
-abstract class CommandTestCase extends \PHPUnit_Framework_TestCase
+abstract class CommandTestCase extends TestCase
 {
     protected $command;
     protected $application;
     protected $tester;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $extensionManager = new ExtensionManager([]);
         $configurationLoader = new ConfigurationLoader($extensionManager);

@@ -3,12 +3,13 @@
 namespace Meteor\Configuration;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class ConfigurationWriterTest extends \PHPUnit_Framework_TestCase
+class ConfigurationWriterTest extends TestCase
 {
     private $configurationWriter;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->configurationWriter = new ConfigurationWriter();
 
@@ -40,8 +41,8 @@ JSON;
 
         $this->configurationWriter->write($path, $config);
 
-        $this->assertTrue(file_exists($path));
-        $this->assertEquals($expectedJson, file_get_contents($path));
+        static::assertTrue(file_exists($path));
+        static::assertEquals($expectedJson, file_get_contents($path));
     }
 
     public function testRemovesEmptyValues()
@@ -61,7 +62,7 @@ JSON;
 
         $this->configurationWriter->write($path, $config);
 
-        $this->assertTrue(file_exists($path));
-        $this->assertEquals($expectedJson, file_get_contents($path));
+        static::assertTrue(file_exists($path));
+        static::assertEquals($expectedJson, file_get_contents($path));
     }
 }

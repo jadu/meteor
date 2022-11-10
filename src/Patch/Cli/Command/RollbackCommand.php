@@ -15,11 +15,12 @@ use Meteor\Patch\Version\VersionComparer;
 use Meteor\Permissions\PermissionSetter;
 use Meteor\Platform\PlatformInterface;
 use Meteor\Scripts\ScriptRunner;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class RollbackCommand extends AbstractPatchCommand
 {
@@ -158,14 +159,14 @@ class RollbackCommand extends AbstractPatchCommand
         if (!$packageValid) {
             $this->io->error('The package versions must be greater than or equal to the currently installed versions.');
 
-            return 1;
+            return Command::FAILURE;
         }
 
         $backups = $this->backupFinder->find($backupsDir, $installDir, $config);
         if (empty($backups)) {
             $this->io->error('Unable to find a valid backup for this package.');
 
-            return 1;
+            return Command::FAILURE;
         }
 
         $backupChoices = [];
@@ -181,7 +182,7 @@ class RollbackCommand extends AbstractPatchCommand
             $backupRows[] = [
                 $index,
                 $backup->getDate()->format('c'),
-                implode($backupVersions, ', '),
+                implode(', ', $backupVersions),
             ];
         }
 
@@ -196,7 +197,7 @@ class RollbackCommand extends AbstractPatchCommand
         if (!isset($backups[$backupChoice])) {
             $this->io->error('Please select an available backup.');
 
-            return 1;
+            return Command::FAILURE;
         }
 
         $backup = $backups[$backupChoice];
@@ -210,7 +211,7 @@ class RollbackCommand extends AbstractPatchCommand
         }
 
         if (!$this->io->getOption('skip-scripts')) {
-            $this->eventDispatcher->dispatch(PatchEvents::PRE_ROLLBACK, new Event());
+            $this->eventDispatcher->dispatch(new Event(), PatchEvents::PRE_ROLLBACK);
         }
 
         if ($backupChoice > 0 && !empty($backups)) {
@@ -235,12 +236,12 @@ class RollbackCommand extends AbstractPatchCommand
         foreach ($tasks as $task) {
             $result = $this->taskBus->run($task, $config);
             if ($result === false) {
-                return 1;
+                return Command::FAILURE;
             }
         }
 
         if (!$this->io->getOption('skip-scripts')) {
-            $this->eventDispatcher->dispatch(PatchEvents::POST_ROLLBACK, new Event());
+            $this->eventDispatcher->dispatch(new Event(), PatchEvents::POST_ROLLBACK);
         }
 
         if (!$this->io->getOption('skip-post-scripts-permissions')) {
@@ -252,5 +253,7 @@ class RollbackCommand extends AbstractPatchCommand
         }
 
         $this->io->success('Rollback complete');
+
+        return Command::SUCCESS;
     }
 }

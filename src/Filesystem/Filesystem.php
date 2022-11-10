@@ -185,7 +185,7 @@ class Filesystem extends BaseFilesystem
     }
 
     /**
-     * Remove the directory and all of its contents
+     * Remove the directory and all of its contents.
      *
      * @param string $directory
      */
@@ -228,10 +228,10 @@ class Filesystem extends BaseFilesystem
 
         $this->copyDirectory($source, $temp);
 
-        $this->io->debug(sprintf("Removing %s", $target));
+        $this->io->debug(sprintf('Removing %s', $target));
         $this->removeDirectory($target);
 
-        $this->io->debug(sprintf("Renaming %s to %s", $temp, $target));
+        $this->io->debug(sprintf('Renaming %s to %s', $temp, $target));
         rename($temp, $target);
     }
 }

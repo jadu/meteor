@@ -2,13 +2,15 @@
 
 namespace Meteor\Migrations\Generator;
 
+use InvalidArgumentException;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class MigrationGeneratorTest extends \PHPUnit_Framework_TestCase
+class MigrationGeneratorTest extends TestCase
 {
     private $migrationGenerator;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->migrationGenerator = new MigrationGenerator();
     }
@@ -22,7 +24,6 @@ class MigrationGeneratorTest extends \PHPUnit_Framework_TestCase
 
 namespace Migrations;
 
-use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 class Version201600701102030 extends AbstractMigration
@@ -45,14 +46,13 @@ PHP;
 
         $this->migrationGenerator->generate('201600701102030', 'Migrations', vfsStream::url('root'));
 
-        $this->assertSame($generatedCode, file_get_contents(vfsStream::url('root/Version201600701102030.php')));
+        static::assertSame($generatedCode, file_get_contents(vfsStream::url('root/Version201600701102030.php')));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testGenerateThrowsExceptionWhenMigrationsDirectoryDoesNotExist()
     {
+        static::expectException(InvalidArgumentException::class);
+
         vfsStream::setup('root');
 
         $this->migrationGenerator->generate('201600701102030', 'Migrations', vfsStream::url('root/migrations'));

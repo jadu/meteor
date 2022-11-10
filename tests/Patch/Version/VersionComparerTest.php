@@ -3,12 +3,14 @@
 namespace Meteor\Patch\Version;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
-class VersionComparerTest extends \PHPUnit_Framework_TestCase
+class VersionComparerTest extends TestCase
 {
     private $versionComparer;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->versionComparer = new VersionComparer();
     }
@@ -26,11 +28,11 @@ class VersionComparerTest extends \PHPUnit_Framework_TestCase
 
         $version = $this->versionComparer->compare(vfsStream::url('root/working'), vfsStream::url('root/install'), 'jadu/cms', 'VERSION');
 
-        $this->assertInstanceOf('Meteor\Patch\Version\VersionDiff', $version);
-        $this->assertSame('jadu/cms', $version->getPackageName());
-        $this->assertSame('VERSION', $version->getFileName());
-        $this->assertSame('1.1.0', $version->getNewVersion());
-        $this->assertSame('0.1.2', $version->getCurrentVersion());
+        static::assertInstanceOf('Meteor\Patch\Version\VersionDiff', $version);
+        static::assertSame('jadu/cms', $version->getPackageName());
+        static::assertSame('VERSION', $version->getFileName());
+        static::assertSame('1.1.0', $version->getNewVersion());
+        static::assertSame('0.1.2', $version->getCurrentVersion());
     }
 
     public function testComparePackage()
@@ -71,25 +73,25 @@ class VersionComparerTest extends \PHPUnit_Framework_TestCase
 
         $versions = $this->versionComparer->comparePackage(vfsStream::url('root/working'), vfsStream::url('root/install'), $config);
 
-        $this->assertCount(3, $versions);
+        static::assertCount(3, $versions);
 
-        $this->assertInstanceOf('Meteor\Patch\Version\VersionDiff', $versions[0]);
-        $this->assertSame('jadu/cms', $versions[0]->getPackageName());
-        $this->assertSame('VERSION', $versions[0]->getFileName());
-        $this->assertSame('1.1.0', $versions[0]->getNewVersion());
-        $this->assertSame('1.1.2', $versions[0]->getCurrentVersion());
+        static::assertInstanceOf('Meteor\Patch\Version\VersionDiff', $versions[0]);
+        static::assertSame('jadu/cms', $versions[0]->getPackageName());
+        static::assertSame('VERSION', $versions[0]->getFileName());
+        static::assertSame('1.1.0', $versions[0]->getNewVersion());
+        static::assertSame('1.1.2', $versions[0]->getCurrentVersion());
 
-        $this->assertInstanceOf('Meteor\Patch\Version\VersionDiff', $versions[1]);
-        $this->assertSame('jadu/xfp', $versions[1]->getPackageName());
-        $this->assertSame('XFP_VERSION', $versions[1]->getFileName());
-        $this->assertSame('2.0.0', $versions[1]->getNewVersion());
-        $this->assertSame('3.0.0', $versions[1]->getCurrentVersion());
+        static::assertInstanceOf('Meteor\Patch\Version\VersionDiff', $versions[1]);
+        static::assertSame('jadu/xfp', $versions[1]->getPackageName());
+        static::assertSame('XFP_VERSION', $versions[1]->getFileName());
+        static::assertSame('2.0.0', $versions[1]->getNewVersion());
+        static::assertSame('3.0.0', $versions[1]->getCurrentVersion());
 
-        $this->assertInstanceOf('Meteor\Patch\Version\VersionDiff', $versions[2]);
-        $this->assertSame('jadu/cp', $versions[2]->getPackageName());
-        $this->assertSame('CP_VERSION', $versions[2]->getFileName());
-        $this->assertSame('0.0.1', $versions[2]->getNewVersion());
-        $this->assertSame('0.1.0', $versions[2]->getCurrentVersion());
+        static::assertInstanceOf('Meteor\Patch\Version\VersionDiff', $versions[2]);
+        static::assertSame('jadu/cp', $versions[2]->getPackageName());
+        static::assertSame('CP_VERSION', $versions[2]->getFileName());
+        static::assertSame('0.0.1', $versions[2]->getNewVersion());
+        static::assertSame('0.1.0', $versions[2]->getCurrentVersion());
     }
 
     public function testComparePackageIgnoresVersionFilesThatDoNotExistInThePatchDir()
@@ -128,20 +130,19 @@ class VersionComparerTest extends \PHPUnit_Framework_TestCase
 
         $versions = $this->versionComparer->comparePackage(vfsStream::url('root/working'), vfsStream::url('root/install'), $config);
 
-        $this->assertCount(1, $versions);
+        static::assertCount(1, $versions);
 
-        $this->assertInstanceOf('Meteor\Patch\Version\VersionDiff', $versions[0]);
-        $this->assertSame('jadu/cms', $versions[0]->getPackageName());
-        $this->assertSame('VERSION', $versions[0]->getFileName());
-        $this->assertSame('1.1.0', $versions[0]->getNewVersion());
-        $this->assertSame('1.1.2', $versions[0]->getCurrentVersion());
+        static::assertInstanceOf('Meteor\Patch\Version\VersionDiff', $versions[0]);
+        static::assertSame('jadu/cms', $versions[0]->getPackageName());
+        static::assertSame('VERSION', $versions[0]->getFileName());
+        static::assertSame('1.1.0', $versions[0]->getNewVersion());
+        static::assertSame('1.1.2', $versions[0]->getCurrentVersion());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testCompareThrowsExceptionWhenUnableToFindVersionFileInWorkingDir()
     {
+        static::expectException(RuntimeException::class);
+
         vfsStream::setup('root', null, [
             'working' => [],
             'install' => [],

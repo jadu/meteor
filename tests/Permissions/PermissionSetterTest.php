@@ -6,15 +6,16 @@ use Exception;
 use Meteor\IO\NullIO;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class PermissionSetterTest extends \PHPUnit_Framework_TestCase
+class PermissionSetterTest extends TestCase
 {
     private $platform;
     private $permissionLoader;
     private $io;
     private $permissionSetter;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->platform = Mockery::mock('Meteor\Platform\PlatformInterface');
         $this->permissionLoader = Mockery::mock('Meteor\Permissions\PermissionLoader');
@@ -231,5 +232,4 @@ class PermissionSetterTest extends \PHPUnit_Framework_TestCase
 
         $this->permissionSetter->setPostScriptsPermissions(vfsStream::url('root/target'));
     }
-
 }

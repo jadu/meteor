@@ -3,12 +3,13 @@
 namespace Meteor\Migrations\Connection\Configuration\Loader;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class SystemConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
+class SystemConfigurationLoaderTest extends TestCase
 {
     private $loader;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->loader = new SystemConfigurationLoader();
     }
@@ -34,7 +35,7 @@ XML;
             ],
         ]);
 
-        $this->assertSame([
+        static::assertSame([
             'dbname' => 'jadudb',
             'user' => 'jadu',
             'password' => 'password',
@@ -64,7 +65,7 @@ XML;
             ],
         ]);
 
-        $this->assertSame([
+        static::assertSame([
             'dbname' => 'jadudb',
             'user' => 'jadu',
             'password' => 'password',
@@ -94,7 +95,7 @@ XML;
             ],
         ]);
 
-        $this->assertSame([
+        static::assertSame([
             'dbname' => 'jadudb',
             'user' => 'jadu',
             'password' => 'password',
@@ -124,6 +125,6 @@ XML;
             ],
         ]);
 
-        $this->assertSame([], $this->loader->load(vfsStream::url('root')));
+        static::assertSame([], $this->loader->load(vfsStream::url('root')));
     }
 }

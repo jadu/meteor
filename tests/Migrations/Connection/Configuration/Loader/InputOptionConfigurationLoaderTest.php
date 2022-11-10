@@ -2,16 +2,18 @@
 
 namespace Meteor\Migrations\Connection\Configuration\Loader;
 
+use Meteor\IO\IOInterface;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class InputOptionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
+class InputOptionConfigurationLoaderTest extends TestCase
 {
     private $io;
     private $loader;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->io = Mockery::mock('Meteor\IO\IOInterface');
+        $this->io = Mockery::mock(IOInterface::class);
         $this->loader = new InputOptionConfigurationLoader($this->io);
     }
 
@@ -28,7 +30,10 @@ class InputOptionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
         $this->io->shouldReceive('hasOption')
             ->andReturn(false);
 
-        $this->assertArraySubset(['dbname' => 'test'], $this->loader->load('/path'));
+        $result = $this->loader->load('/path');
+
+        static::assertArrayHasKey('dbname', $result);
+        static::assertEquals($result['dbname'], 'test');
     }
 
     public function testLoadsUser()
@@ -44,7 +49,10 @@ class InputOptionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
         $this->io->shouldReceive('hasOption')
             ->andReturn(false);
 
-        $this->assertArraySubset(['user' => 'test'], $this->loader->load('/path'));
+        $result = $this->loader->load('/path');
+
+        static::assertArrayHasKey('user', $result);
+        static::assertEquals($result['user'], 'test');
     }
 
     public function testLoadsDbPassword()
@@ -60,7 +68,10 @@ class InputOptionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
         $this->io->shouldReceive('hasOption')
             ->andReturn(false);
 
-        $this->assertArraySubset(['password' => 'test'], $this->loader->load('/path'));
+        $result = $this->loader->load('/path');
+
+        static::assertArrayHasKey('password', $result);
+        static::assertEquals($result['password'], 'test');
     }
 
     public function testLoadsDbHost()
@@ -76,7 +87,10 @@ class InputOptionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
         $this->io->shouldReceive('hasOption')
             ->andReturn(false);
 
-        $this->assertArraySubset(['host' => 'test'], $this->loader->load('/path'));
+        $result = $this->loader->load('/path');
+
+        static::assertArrayHasKey('host', $result);
+        static::assertEquals($result['host'], 'test');
     }
 
     public function testLoadDbDriver()
@@ -92,6 +106,9 @@ class InputOptionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
         $this->io->shouldReceive('hasOption')
             ->andReturn(false);
 
-        $this->assertArraySubset(['driver' => 'test'], $this->loader->load('/path'));
+        $result = $this->loader->load('/path');
+
+        static::assertArrayHasKey('driver', $result);
+        static::assertEquals($result['driver'], 'test');
     }
 }

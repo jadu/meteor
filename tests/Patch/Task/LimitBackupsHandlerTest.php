@@ -2,16 +2,15 @@
 
 namespace Meteor\Patch\Task;
 
+use Meteor\Filesystem\Filesystem;
 use Meteor\IO\NullIO;
 use Meteor\Patch\Backup\Backup;
-use Mockery;
-use PHPUnit_Framework_TestCase;
 use Meteor\Patch\Backup\BackupFinder;
-use Meteor\Filesystem\Filesystem;
+use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class LimitBackupsHandlerTest extends PHPUnit_Framework_TestCase
+class LimitBackupsHandlerTest extends TestCase
 {
-
     protected $backupFinder;
 
     protected $filesystem;
@@ -20,7 +19,7 @@ class LimitBackupsHandlerTest extends PHPUnit_Framework_TestCase
 
     protected $handler;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->backupFinder = Mockery::mock(BackupFinder::class);
         $this->filesystem = Mockery::mock(Filesystem::class);
@@ -50,7 +49,7 @@ class LimitBackupsHandlerTest extends PHPUnit_Framework_TestCase
             ->andReturn($backups)
             ->once();
 
-        $this->assertTrue($this->handler->handle(new LimitBackups('backups', 'install', 10), $config));
+        static::assertTrue($this->handler->handle(new LimitBackups('backups', 'install', 10), $config));
     }
 
     public function testOverLimit()
@@ -78,14 +77,12 @@ class LimitBackupsHandlerTest extends PHPUnit_Framework_TestCase
             ->with('backups/2')
             ->once();
 
-
         $this->filesystem->shouldReceive('remove')
             ->with('backups/1')
             ->once();
 
-        $this->assertTrue($this->handler->handle(new LimitBackups('backups', 'install', 3), $config));
+        static::assertTrue($this->handler->handle(new LimitBackups('backups', 'install', 3), $config));
     }
-
 
     public function testInvalidBackups()
     {
@@ -108,6 +105,6 @@ class LimitBackupsHandlerTest extends PHPUnit_Framework_TestCase
             ->andReturn($backups)
             ->once();
 
-        $this->assertTrue($this->handler->handle(new LimitBackups('backups', 'install', 0), $config));
+        static::assertTrue($this->handler->handle(new LimitBackups('backups', 'install', 0), $config));
     }
 }

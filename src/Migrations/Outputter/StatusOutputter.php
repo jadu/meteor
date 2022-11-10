@@ -55,7 +55,7 @@ class StatusOutputter
             } elseif ($version === '0') {
                 $formattedVersions[$alias] = '<comment>0</comment>';
             } else {
-                $formattedVersions[$alias] = $configuration->formatVersion($version) . ' (<comment>' . $version . '</comment>)';
+                $formattedVersions[$alias] = $configuration->getDateTime($version) . ' (<comment>' . $version . '</comment>)';
             }
         }
 
@@ -90,7 +90,7 @@ class StatusOutputter
 
                     $this->io->text(sprintf(
                         ' * %s (<comment>%s</comment>) %s',
-                        $configuration->formatVersion($migration->getVersion()),
+                        $configuration->getDateTime($migration->getVersion()),
                         $migration->getVersion(),
                         $status
                     ));
@@ -104,7 +104,7 @@ class StatusOutputter
                 foreach ($executedUnavailableMigrations as $version) {
                     $this->io->text(sprintf(
                         ' * %s (<comment>%s</comment>)',
-                        $configuration->formatVersion($version),
+                        $configuration->getDateTime($version),
                         $version
                     ));
                 }

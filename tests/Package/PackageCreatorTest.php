@@ -5,8 +5,9 @@ namespace Meteor\Package;
 use Meteor\IO\NullIO;
 use Meteor\Package\Composer\ComposerRequirement;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class PackageCreatorTest extends \PHPUnit_Framework_TestCase
+class PackageCreatorTest extends TestCase
 {
     private $filesystem;
     private $packageArchiver;
@@ -18,7 +19,7 @@ class PackageCreatorTest extends \PHPUnit_Framework_TestCase
     private $io;
     private $packageCreator;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->filesystem = Mockery::mock('Meteor\Filesystem\Filesystem');
         $this->packageArchiver = Mockery::mock('Meteor\Package\PackageArchiver');

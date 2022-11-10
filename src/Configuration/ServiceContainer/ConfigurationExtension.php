@@ -2,6 +2,7 @@
 
 namespace Meteor\Configuration\ServiceContainer;
 
+use Meteor\Configuration\ConfigurationWriter;
 use Meteor\ServiceContainer\ExtensionBase;
 use Meteor\ServiceContainer\ExtensionInterface;
 use Meteor\ServiceContainer\ExtensionManager;
@@ -49,7 +50,7 @@ class ConfigurationExtension extends ExtensionBase implements ExtensionInterface
 
     private function loadConfigurationWriter(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_WRITER, new Definition('Meteor\Configuration\ConfigurationWriter'));
+        $container->setDefinition(self::SERVICE_WRITER, new Definition(ConfigurationWriter::class))->setPublic(true);
     }
 
     /**

@@ -2,13 +2,15 @@
 
 namespace Meteor\Package\Composer;
 
+use Meteor\Package\Composer\Exception\ComposerDependenciesException;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
+class ComposerDependencyCheckerTest extends TestCase
 {
     private $checker;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->checker = new ComposerDependencyChecker();
 
@@ -23,18 +25,18 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
 
         $requirements = $this->checker->getRequirements(vfsStream::url('root'));
 
-        $this->assertCount(3, $requirements);
+        static::assertCount(3, $requirements);
 
-        $this->assertInstanceOf('Meteor\Package\Composer\ComposerPhpVersion', $requirements[0]);
-        $this->assertEquals('>=5.3.2', $requirements[0]->getVersionConstraint());
+        static::assertInstanceOf('Meteor\Package\Composer\ComposerPhpVersion', $requirements[0]);
+        static::assertEquals('>=5.3.2', $requirements[0]->getVersionConstraint());
 
-        $this->assertInstanceOf('Meteor\Package\Composer\ComposerRequirement', $requirements[1]);
-        $this->assertEquals('jadu/cms-dependencies', $requirements[1]->getPackageName());
-        $this->assertEquals('~13.6.0', $requirements[1]->getVersionConstraint());
+        static::assertInstanceOf('Meteor\Package\Composer\ComposerRequirement', $requirements[1]);
+        static::assertEquals('jadu/cms-dependencies', $requirements[1]->getPackageName());
+        static::assertEquals('~13.6.0', $requirements[1]->getVersionConstraint());
 
-        $this->assertInstanceOf('Meteor\Package\Composer\ComposerRequirement', $requirements[2]);
-        $this->assertEquals('symfony/symfony', $requirements[2]->getPackageName());
-        $this->assertEquals('~2.6.11', $requirements[2]->getVersionConstraint());
+        static::assertInstanceOf('Meteor\Package\Composer\ComposerRequirement', $requirements[2]);
+        static::assertEquals('symfony/symfony', $requirements[2]->getPackageName());
+        static::assertEquals('~2.6.11', $requirements[2]->getVersionConstraint());
     }
 
     public function testGetRequirementsIgnoresPhpExtensionRequirements()
@@ -45,26 +47,25 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
 
         $requirements = $this->checker->getRequirements(vfsStream::url('root'));
 
-        $this->assertCount(3, $requirements);
-        $this->assertEquals('>=5.3.2', $requirements[0]->getVersionConstraint());
-        $this->assertEquals('jadu/cms-dependencies', $requirements[1]->getPackageName());
-        $this->assertEquals('~13.6.0', $requirements[1]->getVersionConstraint());
-        $this->assertEquals('symfony/symfony', $requirements[2]->getPackageName());
-        $this->assertEquals('~2.6.11', $requirements[2]->getVersionConstraint());
+        static::assertCount(3, $requirements);
+        static::assertEquals('>=5.3.2', $requirements[0]->getVersionConstraint());
+        static::assertEquals('jadu/cms-dependencies', $requirements[1]->getPackageName());
+        static::assertEquals('~13.6.0', $requirements[1]->getVersionConstraint());
+        static::assertEquals('symfony/symfony', $requirements[2]->getPackageName());
+        static::assertEquals('~2.6.11', $requirements[2]->getVersionConstraint());
     }
 
     public function testGetRequirementsReturnsEmptyArrayWhenComposerJsonNotFound()
     {
         vfsStream::setup('root');
 
-        $this->assertSame([], $this->checker->getRequirements(vfsStream::url('root')));
+        static::assertSame([], $this->checker->getRequirements(vfsStream::url('root')));
     }
 
-    /**
-     * @expectedException \Meteor\Package\Composer\Exception\ComposerDependenciesException
-     */
     public function testGetRequirementsThrowsExceptionWhenComposerJsonCannotBeParsed()
     {
+        static::expectException(ComposerDependenciesException::class);
+
         vfsStream::setup('root', null, [
             'composer.json' => '!!!',
         ]);
@@ -79,7 +80,7 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
             new ComposerRequirement('symfony/symfony', '~2.6.11'),
         ];
 
-        $this->assertSame([
+        static::assertSame([
             'package' => [
                 'composer' => [
                     'jadu/cms-dependencies' => '~13.6.0',
@@ -104,7 +105,7 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->assertSame([
+        static::assertSame([
             'package' => [
                 'composer' => [
                     'jadu/cms-dependencies' => '~13.6.0',
@@ -159,11 +160,10 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
-    /**
-     * @expectedException \Meteor\Package\Composer\Exception\ComposerDependenciesException
-     */
     public function testCheckThrowsExceptionWhenComposerLockCannotBeParsed()
     {
+        static::expectException(ComposerDependenciesException::class);
+
         vfsStream::setup('root', null, [
             'composer.lock' => '!!!',
         ]);
@@ -182,11 +182,10 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
-    /**
-     * @expectedException \Meteor\Package\Composer\Exception\ComposerDependenciesException
-     */
     public function testCheckThrowsExceptionWhenHasRequiredPackagesAndLockFileMissing()
     {
+        static::expectException(ComposerDependenciesException::class);
+
         $this->checker->check(vfsStream::url('root'), [
             'combined' => [
                 [
@@ -201,11 +200,10 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
-    /**
-     * @expectedException \Meteor\Package\Composer\Exception\ComposerDependenciesException
-     */
     public function testCheckThrowsExceptionWhenRequiredPackageMissingFromLockFile()
     {
+        static::expectException(ComposerDependenciesException::class);
+
         vfsStream::setup('root', null, [
             'composer.lock' => file_get_contents(__DIR__ . '/Fixtures/composer.lock'),
         ]);
@@ -224,11 +222,10 @@ class ComposerDependencyCheckerTest extends \PHPUnit_Framework_TestCase
         ]);
     }
 
-    /**
-     * @expectedException \Meteor\Package\Composer\Exception\ComposerDependenciesException
-     */
     public function testCheckThrowsExceptionWhenVersionInLockFileDoesNotSatisfyRequiredPackageConstraint()
     {
+        static::expectException(ComposerDependenciesException::class);
+
         vfsStream::setup('root', null, [
             'composer.lock' => file_get_contents(__DIR__ . '/Fixtures/composer.lock'),
         ]);

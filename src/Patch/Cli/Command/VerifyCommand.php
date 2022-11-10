@@ -5,6 +5,7 @@ namespace Meteor\Patch\Cli\Command;
 use Meteor\IO\IOInterface;
 use Meteor\Patch\Manifest\ManifestChecker;
 use Meteor\Platform\PlatformInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -47,8 +48,12 @@ class VerifyCommand extends AbstractPatchCommand
 
         if ($result) {
             $this->io->success('The package was verified against the manifest.');
+
+            return Command::SUCCESS;
         } else {
             $this->io->error('The package could not be verified.');
+
+            return Command::FAILURE;
         }
     }
 }

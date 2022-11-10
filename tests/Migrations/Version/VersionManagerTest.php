@@ -2,27 +2,30 @@
 
 namespace Meteor\Migrations\Version;
 
+use Doctrine\Migrations\Version\Version;
 use Meteor\IO\NullIO;
+use Meteor\Migrations\Configuration\ConfigurationFactory;
+use Meteor\Migrations\Configuration\DatabaseConfiguration;
 use Meteor\Migrations\MigrationsConstants;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class VersionManagerTest extends \PHPUnit_Framework_TestCase
+class VersionManagerTest extends TestCase
 {
     private $configurationFactory;
     private $versionManager;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->configurationFactory = Mockery::mock('Meteor\Migrations\Configuration\ConfigurationFactory');
+        $this->configurationFactory = Mockery::mock(ConfigurationFactory::class);
         $this->versionManager = new VersionManager($this->configurationFactory, new NullIO());
     }
 
     private function createVersion($versionString)
     {
-        return Mockery::mock('Doctrine\DBAL\Migrations\Version', [
+        return Mockery::mock(Version::class, [
             'getVersion' => $versionString,
             '__toString' => $versionString,
-            'getTime' => 5,
         ]);
     }
 
@@ -32,7 +35,7 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
 
         $version = $this->createVersion('20160701000000');
 
-        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration');
+        $configuration = Mockery::mock(DatabaseConfiguration::class);
 
         $this->configurationFactory->shouldReceive('createConfiguration')
             ->with(MigrationsConstants::TYPE_DATABASE, $config, 'patch', 'install')
@@ -57,7 +60,7 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
         $version->shouldReceive('markMigrated')
             ->once();
 
-        $this->assertTrue($this->versionManager->markMigrated('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, '20160701000000'));
+        static::assertTrue($this->versionManager->markMigrated('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, '20160701000000'));
     }
 
     public function testMarkMigratedReturnsFalseWhenVersionHasBeenMigrated()
@@ -66,7 +69,7 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
 
         $version = $this->createVersion('20160701000000');
 
-        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration');
+        $configuration = Mockery::mock(DatabaseConfiguration::class);
 
         $this->configurationFactory->shouldReceive('createConfiguration')
             ->with(MigrationsConstants::TYPE_DATABASE, $config, 'patch', 'install')
@@ -88,7 +91,7 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
             ->andReturn(true)
             ->once();
 
-        $this->assertFalse($this->versionManager->markMigrated('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, '20160701000000'));
+        static::assertFalse($this->versionManager->markMigrated('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, '20160701000000'));
     }
 
     public function testMarkMigratedReturnsFalseWhenVersionNotFound()
@@ -97,7 +100,7 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
 
         $version = $this->createVersion('20160701000000');
 
-        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration');
+        $configuration = Mockery::mock(DatabaseConfiguration::class);
 
         $this->configurationFactory->shouldReceive('createConfiguration')
             ->with(MigrationsConstants::TYPE_DATABASE, $config, 'patch', 'install')
@@ -109,7 +112,7 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
             ->andReturn(false)
             ->once();
 
-        $this->assertFalse($this->versionManager->markMigrated('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, '20160701000000'));
+        static::assertFalse($this->versionManager->markMigrated('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, '20160701000000'));
     }
 
     public function testMarkNotMigrated()
@@ -118,7 +121,7 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
 
         $version = $this->createVersion('20160701000000');
 
-        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration');
+        $configuration = Mockery::mock(DatabaseConfiguration::class);
 
         $this->configurationFactory->shouldReceive('createConfiguration')
             ->with(MigrationsConstants::TYPE_DATABASE, $config, 'patch', 'install')
@@ -143,7 +146,7 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
         $version->shouldReceive('markNotMigrated')
             ->once();
 
-        $this->assertTrue($this->versionManager->markNotMigrated('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, '20160701000000'));
+        static::assertTrue($this->versionManager->markNotMigrated('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, '20160701000000'));
     }
 
     public function testMarkNotMigratedReturnsFalseWhenVersionHasNotBeenMigrated()
@@ -152,7 +155,7 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
 
         $version = $this->createVersion('20160701000000');
 
-        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration');
+        $configuration = Mockery::mock(DatabaseConfiguration::class);
 
         $this->configurationFactory->shouldReceive('createConfiguration')
             ->with(MigrationsConstants::TYPE_DATABASE, $config, 'patch', 'install')
@@ -174,7 +177,7 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
             ->andReturn(false)
             ->once();
 
-        $this->assertFalse($this->versionManager->markNotMigrated('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, '20160701000000'));
+        static::assertFalse($this->versionManager->markNotMigrated('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, '20160701000000'));
     }
 
     public function testMarkNotMigratedReturnsFalseWhenVersionNotFound()
@@ -183,7 +186,7 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
 
         $version = $this->createVersion('20160701000000');
 
-        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration');
+        $configuration = Mockery::mock(DatabaseConfiguration::class);
 
         $this->configurationFactory->shouldReceive('createConfiguration')
             ->with(MigrationsConstants::TYPE_DATABASE, $config, 'patch', 'install')
@@ -195,7 +198,7 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
             ->andReturn(false)
             ->once();
 
-        $this->assertFalse($this->versionManager->markNotMigrated('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, '20160701000000'));
+        static::assertFalse($this->versionManager->markNotMigrated('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, '20160701000000'));
     }
 
     public function testMarkAllMigrated()
@@ -206,7 +209,7 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
         $version2 = $this->createVersion('20160702000000');
         $version3 = $this->createVersion('20160703000000');
 
-        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', [
+        $configuration = Mockery::mock(DatabaseConfiguration::class, [
             'getAvailableVersions' => [
                 $version1->getVersion(),
                 $version2->getVersion(),
@@ -258,7 +261,7 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
         $version3->shouldReceive('markMigrated')
             ->once();
 
-        $this->assertTrue($this->versionManager->markAllMigrated('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE));
+        static::assertTrue($this->versionManager->markAllMigrated('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE));
     }
 
     public function testMarkAllNotMigrated()
@@ -269,7 +272,7 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
         $version2 = $this->createVersion('20160702000000');
         $version3 = $this->createVersion('20160703000000');
 
-        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', [
+        $configuration = Mockery::mock(DatabaseConfiguration::class, [
             'getAvailableVersions' => [
                 $version1->getVersion(),
                 $version2->getVersion(),
@@ -321,6 +324,6 @@ class VersionManagerTest extends \PHPUnit_Framework_TestCase
         $version3->shouldReceive('markNotMigrated')
             ->once();
 
-        $this->assertTrue($this->versionManager->markAllNotMigrated('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE));
+        static::assertTrue($this->versionManager->markAllNotMigrated('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE));
     }
 }

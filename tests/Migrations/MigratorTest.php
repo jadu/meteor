@@ -2,18 +2,23 @@
 
 namespace Meteor\Migrations;
 
+use Doctrine\Migrations\Version\ExecutionResult;
+use Doctrine\Migrations\Version\Version;
 use Meteor\IO\NullIO;
+use Meteor\Migrations\Configuration\ConfigurationFactory;
+use Meteor\Migrations\Configuration\DatabaseConfiguration;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class MigratorTest extends \PHPUnit_Framework_TestCase
+class MigratorTest extends TestCase
 {
     private $configurationFactory;
     private $io;
     private $migrator;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->configurationFactory = Mockery::mock('Meteor\Migrations\Configuration\ConfigurationFactory');
+        $this->configurationFactory = Mockery::mock(ConfigurationFactory::class);
         $this->io = new NullIO();
 
         $this->migrator = new Migrator($this->configurationFactory, $this->io);
@@ -21,10 +26,9 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
 
     private function createVersion($versionString)
     {
-        return Mockery::mock('Doctrine\DBAL\Migrations\Version', [
+        return Mockery::mock(Version::class, [
             'getVersion' => $versionString,
             '__toString' => $versionString,
-            'getTime' => 5,
         ]);
     }
 
@@ -36,7 +40,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
         $version2 = $this->createVersion('20160702000000');
         $version3 = $this->createVersion('20160703000000');
 
-        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', [
+        $configuration = Mockery::mock(DatabaseConfiguration::class, [
             'getMigrations' => [
                 $version1->getVersion() => $version1,
                 $version2->getVersion() => $version2,
@@ -59,7 +63,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
             'resolveVersionAlias' => $version3->getVersion(),
         ]);
 
-        $configuration->shouldReceive('formatVersion')
+        $configuration->shouldReceive('getDateTime')
             ->andReturnUsing(function ($version) {
                 return (string) $version;
             });
@@ -73,14 +77,20 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
             ->never();
 
         $version2->shouldReceive('execute')
-            ->with('up', false, false)
+            ->with('up')
+            ->andReturn(Mockery::mock(ExecutionResult::class, [
+                'getTime' => 5,
+            ]))
             ->once();
 
         $version3->shouldReceive('execute')
-            ->with('up', false, false)
+            ->with('up')
+            ->andReturn(Mockery::mock(ExecutionResult::class, [
+                'getTime' => 5,
+            ]))
             ->once();
 
-        $this->assertTrue($this->migrator->migrate('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest', false));
+        static::assertTrue($this->migrator->migrate('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest', false));
     }
 
     public function testMigrateHaltsWhenUnavailableMigrationsFound()
@@ -91,7 +101,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
         $version2 = $this->createVersion('20160702000000');
         $version3 = $this->createVersion('20160703000000');
 
-        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', [
+        $configuration = Mockery::mock(DatabaseConfiguration::class, [
             'getMigrations' => [
                 $version1->getVersion() => $version1,
                 $version2->getVersion() => $version2,
@@ -113,7 +123,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
             'resolveVersionAlias' => $version3->getVersion(),
         ]);
 
-        $configuration->shouldReceive('formatVersion')
+        $configuration->shouldReceive('getDateTime')
             ->andReturnUsing(function ($version) {
                 return (string) $version;
             });
@@ -126,7 +136,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
         $version1->shouldReceive('execute')
             ->never();
 
-        $this->assertFalse($this->migrator->migrate('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest', false));
+        static::assertFalse($this->migrator->migrate('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest', false));
     }
 
     public function testMigrateReturnsTrueWhenNoMigrationsToExecute()
@@ -137,7 +147,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
         $version2 = $this->createVersion('20160702000000');
         $version3 = $this->createVersion('20160703000000');
 
-        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', [
+        $configuration = Mockery::mock(DatabaseConfiguration::class, [
             'getMigrations' => [
                 $version1->getVersion() => $version1,
                 $version2->getVersion() => $version2,
@@ -158,7 +168,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
             'resolveVersionAlias' => $version3->getVersion(),
         ]);
 
-        $configuration->shouldReceive('formatVersion')
+        $configuration->shouldReceive('getDateTime')
             ->andReturnUsing(function ($version) {
                 return (string) $version;
             });
@@ -177,7 +187,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
         $version3->shouldReceive('execute')
             ->never();
 
-        $this->assertTrue($this->migrator->migrate('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest', false));
+        static::assertTrue($this->migrator->migrate('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest', false));
     }
 
     public function testMigrateIgnoresUnavailableMigrations()
@@ -188,7 +198,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
         $version2 = $this->createVersion('20160702000000');
         $version3 = $this->createVersion('20160703000000');
 
-        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration', [
+        $configuration = Mockery::mock(DatabaseConfiguration::class, [
             'getMigrations' => [
                 $version1->getVersion() => $version1,
                 $version2->getVersion() => $version2,
@@ -209,7 +219,7 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
             'resolveVersionAlias' => $version3->getVersion(),
         ]);
 
-        $configuration->shouldReceive('formatVersion')
+        $configuration->shouldReceive('getDateTime')
             ->andReturnUsing(function ($version) {
                 return (string) $version;
             });
@@ -223,17 +233,20 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
             ->never();
 
         $version3->shouldReceive('execute')
-            ->with('up', false, false)
+            ->with('up')
+            ->andReturn(Mockery::mock(ExecutionResult::class, [
+                'getTime' => 5,
+            ]))
             ->once();
 
-        $this->assertTrue($this->migrator->migrate('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest', true));
+        static::assertTrue($this->migrator->migrate('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest', true));
     }
 
     public function testExecuteUp()
     {
         $config = [];
 
-        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration');
+        $configuration = Mockery::mock(DatabaseConfiguration::class);
         $this->configurationFactory->shouldReceive('createConfiguration')
             ->with(MigrationsConstants::TYPE_DATABASE, $config, 'patch', 'install')
             ->andReturn($configuration)
@@ -246,17 +259,20 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $version->shouldReceive('execute')
-            ->with('up', false, false)
+            ->with('up')
+            ->andReturn(Mockery::mock(ExecutionResult::class, [
+                'getTime' => 5,
+            ]))
             ->once();
 
-        $this->assertTrue($this->migrator->execute('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, '20160701000000', 'up'));
+        static::assertTrue($this->migrator->execute('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, '20160701000000', 'up'));
     }
 
     public function testExecuteDown()
     {
         $config = [];
 
-        $configuration = Mockery::mock('Meteor\Migrations\Configuration\DatabaseConfiguration');
+        $configuration = Mockery::mock(DatabaseConfiguration::class);
         $this->configurationFactory->shouldReceive('createConfiguration')
             ->with(MigrationsConstants::TYPE_DATABASE, $config, 'patch', 'install')
             ->andReturn($configuration)
@@ -269,9 +285,9 @@ class MigratorTest extends \PHPUnit_Framework_TestCase
             ->once();
 
         $version->shouldReceive('execute')
-            ->with('down', false, false)
+            ->with('down')
             ->once();
 
-        $this->assertTrue($this->migrator->execute('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, '20160701000000', 'down'));
+        static::assertTrue($this->migrator->execute('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, '20160701000000', 'down'));
     }
 }

@@ -5,13 +5,14 @@ namespace Meteor\Patch\Task;
 use Meteor\IO\NullIO;
 use Meteor\Patch\Version\VersionDiff;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class CheckVersionHandlerTest extends \PHPUnit_Framework_TestCase
+class CheckVersionHandlerTest extends TestCase
 {
     private $versionComparer;
     private $handler;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->versionComparer = Mockery::mock('Meteor\Patch\Version\VersionComparer');
         $this->handler = new CheckVersionHandler(new NullIO(), $this->versionComparer);
@@ -34,7 +35,7 @@ class CheckVersionHandlerTest extends \PHPUnit_Framework_TestCase
             ->andReturn($versions)
             ->once();
 
-        $this->assertTrue($this->handler->handle(new CheckVersion('working', 'install', CheckVersion::GREATER_THAN_OR_EQUAL), $config));
+        static::assertTrue($this->handler->handle(new CheckVersion('working', 'install', CheckVersion::GREATER_THAN_OR_EQUAL), $config));
     }
 
     public function testPreventsOlderVersionFromBeingPatched()
@@ -54,7 +55,7 @@ class CheckVersionHandlerTest extends \PHPUnit_Framework_TestCase
             ->andReturn($versions)
             ->once();
 
-        $this->assertFalse($this->handler->handle(new CheckVersion('working', 'install', CheckVersion::GREATER_THAN_OR_EQUAL), $config));
+        static::assertFalse($this->handler->handle(new CheckVersion('working', 'install', CheckVersion::GREATER_THAN_OR_EQUAL), $config));
     }
 
     public function testAllowsOlderVersionsForRollback()
@@ -74,7 +75,7 @@ class CheckVersionHandlerTest extends \PHPUnit_Framework_TestCase
             ->andReturn($versions)
             ->once();
 
-        $this->assertTrue($this->handler->handle(new CheckVersion('working', 'install', CheckVersion::LESS_THAN_OR_EQUAL), $config));
+        static::assertTrue($this->handler->handle(new CheckVersion('working', 'install', CheckVersion::LESS_THAN_OR_EQUAL), $config));
     }
 
     public function testPreventsNewerVersionFromBeingPatchedForRollback()
@@ -94,6 +95,6 @@ class CheckVersionHandlerTest extends \PHPUnit_Framework_TestCase
             ->andReturn($versions)
             ->once();
 
-        $this->assertFalse($this->handler->handle(new CheckVersion('working', 'install', CheckVersion::LESS_THAN_OR_EQUAL), $config));
+        static::assertFalse($this->handler->handle(new CheckVersion('working', 'install', CheckVersion::LESS_THAN_OR_EQUAL), $config));
     }
 }

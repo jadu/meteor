@@ -12,8 +12,33 @@ use Meteor\Filesystem\ServiceContainer\FilesystemExtension;
 use Meteor\IO\ServiceContainer\IOExtension;
 use Meteor\Logger\ServiceContainer\LoggerExtension;
 use Meteor\Migrations\ServiceContainer\MigrationsExtension;
+use Meteor\Patch\Backup\BackupFinder;
+use Meteor\Patch\Cli\Command\ApplyCommand;
+use Meteor\Patch\Cli\Command\ClearLockCommand;
+use Meteor\Patch\Cli\Command\RollbackCommand;
+use Meteor\Patch\Cli\Command\VerifyCommand;
+use Meteor\Patch\Cli\Command\VersionInfoCommand;
 use Meteor\Patch\Event\PatchEvents;
+use Meteor\Patch\Lock\Locker;
+use Meteor\Patch\Manifest\ManifestChecker;
 use Meteor\Patch\Strategy\Overwrite\ServiceContainer\OverwritePatchStrategyExtension;
+use Meteor\Patch\Task\BackupFilesHandler;
+use Meteor\Patch\Task\CheckDatabaseConnectionHandler;
+use Meteor\Patch\Task\CheckDiskSpaceHandler;
+use Meteor\Patch\Task\CheckModuleCmsDependencyHandler;
+use Meteor\Patch\Task\CheckVersionHandler;
+use Meteor\Patch\Task\CheckWritePermissionHandler;
+use Meteor\Patch\Task\CopyFilesHandler;
+use Meteor\Patch\Task\DeleteBackupHandler;
+use Meteor\Patch\Task\DisplayVersionInfoHandler;
+use Meteor\Patch\Task\LimitBackups;
+use Meteor\Patch\Task\LimitBackupsHandler;
+use Meteor\Patch\Task\MigrateDownHandler;
+use Meteor\Patch\Task\MigrateUpHandler;
+use Meteor\Patch\Task\SetPermissionsHandler;
+use Meteor\Patch\Task\TaskBus;
+use Meteor\Patch\Task\UpdateMigrationVersionFilesHandler;
+use Meteor\Patch\Version\VersionComparer;
 use Meteor\Permissions\ServiceContainer\PermissionsExtension;
 use Meteor\Platform\ServiceContainer\PlatformExtension;
 use Meteor\Scripts\ScriptEventProviderInterface;
@@ -25,8 +50,6 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
-use Meteor\Patch\Task\LimitBackupsHandler;
-use Meteor\Patch\Task\LimitBackups;
 
 class PatchExtension extends ExtensionBase implements ExtensionInterface, ScriptEventProviderInterface
 {
@@ -149,7 +172,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadBackupFinder(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_BACKUP_FINDER, new Definition('Meteor\Patch\Backup\BackupFinder', [
+        $container->setDefinition(self::SERVICE_BACKUP_FINDER, new Definition(BackupFinder::class, [
             new Reference(self::SERVICE_VERSION_COMPARER),
             new Reference(ConfigurationExtension::SERVICE_LOADER),
         ]));
@@ -160,7 +183,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadTaskBus(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_TASK_BUS, new Definition('Meteor\Patch\Task\TaskBus'));
+        $container->setDefinition(self::SERVICE_TASK_BUS, new Definition(TaskBus::class));
     }
 
     /**
@@ -168,7 +191,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadBackupFilesTaskHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\BackupFilesHandler', [
+        $definition = new Definition(BackupFilesHandler::class, [
             new Reference(FilesystemExtension::SERVICE_FILESYSTEM),
             new Reference(ConfigurationExtension::SERVICE_LOADER),
             new Reference(IOExtension::SERVICE_IO),
@@ -177,7 +200,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
             'task' => 'Meteor\Patch\Task\BackupFiles',
         ]);
 
-        $container->setDefinition(self::SERVICE_TASK_BACKUP_FILES_HANDLER, $definition);
+        $container->setDefinition(self::SERVICE_TASK_BACKUP_FILES_HANDLER, $definition)->setPublic(true);
     }
 
     /**
@@ -194,7 +217,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
             'task' => LimitBackups::class,
         ]);
 
-        $container->setDefinition(self::SERVICE_TASK_LIMIT_BACKUPS_HANDLER, $definition);
+        $container->setDefinition(self::SERVICE_TASK_LIMIT_BACKUPS_HANDLER, $definition)->setPublic(true);
     }
 
     /**
@@ -202,14 +225,14 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadCheckDatabaseConnectionTaskHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\CheckDatabaseConnectionHandler', [
+        $definition = new Definition(CheckDatabaseConnectionHandler::class, [
             new Reference(MigrationsExtension::SERVICE_CONNECTION_FACTORY),
         ]);
         $definition->addTag(self::TAG_TASK_HANDLER, [
             'task' => 'Meteor\Patch\Task\CheckDatabaseConnection',
         ]);
 
-        $container->setDefinition(self::SERVICE_TASK_CHECK_DATABASE_CONNECTION_HANDLER, $definition);
+        $container->setDefinition(self::SERVICE_TASK_CHECK_DATABASE_CONNECTION_HANDLER, $definition)->setPublic(true);
     }
 
     /**
@@ -217,7 +240,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadCheckDiskSpaceHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\CheckDiskSpaceHandler', [
+        $definition = new Definition(CheckDiskSpaceHandler::class, [
             new Reference(self::SERVICE_BACKUP_FINDER),
             new Reference(FilesystemExtension::SERVICE_FILESYSTEM),
             new Reference(IOExtension::SERVICE_IO),
@@ -226,7 +249,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
             'task' => 'Meteor\Patch\Task\CheckDiskSpace',
         ]);
 
-        $container->setDefinition(self::SERVICE_TASK_CHECK_DISK_SPACE_HANDLER, $definition);
+        $container->setDefinition(self::SERVICE_TASK_CHECK_DISK_SPACE_HANDLER, $definition)->setPublic(true);
     }
 
     /**
@@ -234,14 +257,14 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadCheckModuleCmsDependencyTaskHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\CheckModuleCmsDependencyHandler', [
+        $definition = new Definition(CheckModuleCmsDependencyHandler::class, [
             new Reference(IOExtension::SERVICE_IO),
         ]);
         $definition->addTag(self::TAG_TASK_HANDLER, [
             'task' => 'Meteor\Patch\Task\CheckModuleCmsDependency',
         ]);
 
-        $container->setDefinition(self::SERVICE_TASK_CHECK_MODULE_CMS_DEPENDENCY_HANDLER, $definition);
+        $container->setDefinition(self::SERVICE_TASK_CHECK_MODULE_CMS_DEPENDENCY_HANDLER, $definition)->setPublic(true);
     }
 
     /**
@@ -249,7 +272,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadCheckVersionTaskHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\CheckVersionHandler', [
+        $definition = new Definition(CheckVersionHandler::class, [
             new Reference(IOExtension::SERVICE_IO),
             new Reference(self::SERVICE_VERSION_COMPARER),
         ]);
@@ -257,7 +280,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
             'task' => 'Meteor\Patch\Task\CheckVersion',
         ]);
 
-        $container->setDefinition(self::SERVICE_TASK_CHECK_VERSION_HANDLER, $definition);
+        $container->setDefinition(self::SERVICE_TASK_CHECK_VERSION_HANDLER, $definition)->setPublic(true);
     }
 
     /**
@@ -265,14 +288,14 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadCheckWritePermissionTaskHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\CheckWritePermissionHandler', [
+        $definition = new Definition(CheckWritePermissionHandler::class, [
             new Reference(IOExtension::SERVICE_IO),
         ]);
         $definition->addTag(self::TAG_TASK_HANDLER, [
             'task' => 'Meteor\Patch\Task\CheckWritePermission',
         ]);
 
-        $container->setDefinition(self::SERVICE_TASK_CHECK_WRITE_PERMISSION_HANDLER, $definition);
+        $container->setDefinition(self::SERVICE_TASK_CHECK_WRITE_PERMISSION_HANDLER, $definition)->setPublic(true);
     }
 
     /**
@@ -280,7 +303,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadCopyFilesHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\CopyFilesHandler', [
+        $definition = new Definition(CopyFilesHandler::class, [
             new Reference(IOExtension::SERVICE_IO),
             new Reference(FilesystemExtension::SERVICE_FILESYSTEM),
             new Reference(PermissionsExtension::SERVICE_PERMISSION_SETTER),
@@ -289,7 +312,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
             'task' => 'Meteor\Patch\Task\CopyFiles',
         ]);
 
-        $container->setDefinition(self::SERVICE_TASK_COPY_FILES_HANDLER, $definition);
+        $container->setDefinition(self::SERVICE_TASK_COPY_FILES_HANDLER, $definition)->setPublic(true);
     }
 
     /**
@@ -297,7 +320,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadDeleteBackupHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\DeleteBackupHandler', [
+        $definition = new Definition(DeleteBackupHandler::class, [
             new Reference(IOExtension::SERVICE_IO),
             new Reference(FilesystemExtension::SERVICE_FILESYSTEM),
         ]);
@@ -305,7 +328,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
             'task' => 'Meteor\Patch\Task\DeleteBackup',
         ]);
 
-        $container->setDefinition(self::SERVICE_TASK_DELETE_BACKUP_HANDLER, $definition);
+        $container->setDefinition(self::SERVICE_TASK_DELETE_BACKUP_HANDLER, $definition)->setPublic(true);
     }
 
     /**
@@ -313,7 +336,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadDisplayVersionInfoTaskHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\DisplayVersionInfoHandler', [
+        $definition = new Definition(DisplayVersionInfoHandler::class, [
             new Reference(IOExtension::SERVICE_IO),
             new Reference(self::SERVICE_VERSION_COMPARER),
         ]);
@@ -321,7 +344,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
             'task' => 'Meteor\Patch\Task\DisplayVersionInfo',
         ]);
 
-        $container->setDefinition(self::SERVICE_TASK_DISPLAY_VERSION_INFO_HANDLER, $definition);
+        $container->setDefinition(self::SERVICE_TASK_DISPLAY_VERSION_INFO_HANDLER, $definition)->setPublic(true);
     }
 
     /**
@@ -329,7 +352,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadMigrateDownTaskHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\MigrateDownHandler', [
+        $definition = new Definition(MigrateDownHandler::class, [
             new Reference(MigrationsExtension::SERVICE_MIGRATOR),
             new Reference(MigrationsExtension::SERVICE_VERSION_FILE_MANAGER),
             new Reference(IOExtension::SERVICE_IO),
@@ -338,7 +361,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
             'task' => 'Meteor\Patch\Task\MigrateDown',
         ]);
 
-        $container->setDefinition(self::SERVICE_TASK_MIGRATE_DOWN_HANDLER, $definition);
+        $container->setDefinition(self::SERVICE_TASK_MIGRATE_DOWN_HANDLER, $definition)->setPublic(true);
     }
 
     /**
@@ -346,7 +369,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadMigrateUpTaskHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\MigrateUpHandler', [
+        $definition = new Definition(MigrateUpHandler::class, [
             new Reference(MigrationsExtension::SERVICE_MIGRATOR),
             new Reference(IOExtension::SERVICE_IO),
         ]);
@@ -354,7 +377,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
             'task' => 'Meteor\Patch\Task\MigrateUp',
         ]);
 
-        $container->setDefinition(self::SERVICE_TASK_MIGRATE_UP_HANDLER, $definition);
+        $container->setDefinition(self::SERVICE_TASK_MIGRATE_UP_HANDLER, $definition)->setPublic(true);
     }
 
     /**
@@ -362,7 +385,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadSetPermissionsHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\SetPermissionsHandler', [
+        $definition = new Definition(SetPermissionsHandler::class, [
             new Reference(IOExtension::SERVICE_IO),
             new Reference(PermissionsExtension::SERVICE_PERMISSION_SETTER),
         ]);
@@ -370,7 +393,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
             'task' => 'Meteor\Patch\Task\SetPermissions',
         ]);
 
-        $container->setDefinition(self::SERVICE_TASK_SET_PERMISSIONS_HANDLER, $definition);
+        $container->setDefinition(self::SERVICE_TASK_SET_PERMISSIONS_HANDLER, $definition)->setPublic(true);
     }
 
     /**
@@ -378,7 +401,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadUpdateMigrationVersionFilesTaskHandler(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Task\UpdateMigrationVersionFilesHandler', [
+        $definition = new Definition(UpdateMigrationVersionFilesHandler::class, [
             new Reference(MigrationsExtension::SERVICE_CONFIGURATION_FACTORY),
             new Reference(MigrationsExtension::SERVICE_VERSION_FILE_MANAGER),
             new Reference(IOExtension::SERVICE_IO),
@@ -387,7 +410,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
             'task' => 'Meteor\Patch\Task\UpdateMigrationVersionFiles',
         ]);
 
-        $container->setDefinition(self::SERVICE_TASK_UPDATE_MIGRATION_VERSION_FILES_HANDLER, $definition);
+        $container->setDefinition(self::SERVICE_TASK_UPDATE_MIGRATION_VERSION_FILES_HANDLER, $definition)->setPublic(true);
     }
 
     /**
@@ -395,7 +418,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadApplyCommand(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Cli\Command\ApplyCommand', [
+        $definition = new Definition(ApplyCommand::class, [
             null,
             '%' . Application::PARAMETER_CONFIG . '%',
             new Reference(IOExtension::SERVICE_IO),
@@ -408,10 +431,9 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
             new Reference(ScriptsExtension::SERVICE_SCRIPT_RUNNER),
             new Reference(LoggerExtension::SERVICE_LOGGER),
             new Reference(PermissionsExtension::SERVICE_PERMISSION_SETTER),
-
         ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
-        $container->setDefinition(self::SERVICE_COMMAND_APPLY, $definition);
+        $container->setDefinition(self::SERVICE_COMMAND_APPLY, $definition)->setPublic(true);
     }
 
     /**
@@ -421,7 +443,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     {
         $this->loadManifestChecker($container);
 
-        $definition = new Definition('Meteor\Patch\Cli\Command\VerifyCommand', [
+        $definition = new Definition(VerifyCommand::class, [
             null,
             '%' . Application::PARAMETER_CONFIG . '%',
             new Reference(IOExtension::SERVICE_IO),
@@ -429,7 +451,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
             new Reference(self::SERVICE_MANIFEST_CHECKER),
         ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
-        $container->setDefinition(self::SERVICE_COMMAND_VERIFY, $definition);
+        $container->setDefinition(self::SERVICE_COMMAND_VERIFY, $definition)->setPublic(true);
     }
 
     /**
@@ -437,9 +459,10 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadManifestChecker(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_MANIFEST_CHECKER, new Definition('Meteor\Patch\Manifest\ManifestChecker', [
+        $container->setDefinition(self::SERVICE_MANIFEST_CHECKER, new Definition(ManifestChecker::class, [
             new Reference(IOExtension::SERVICE_IO),
-        ]));
+        ]))
+        ->setPublic(true);
     }
 
     /**
@@ -449,7 +472,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
     {
         $this->loadLocker($container);
 
-        $definition = new Definition('Meteor\Patch\Cli\Command\ClearLockCommand', [
+        $definition = new Definition(ClearLockCommand::class, [
             null,
             '%' . Application::PARAMETER_CONFIG . '%',
             new Reference(IOExtension::SERVICE_IO),
@@ -457,7 +480,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
             new Reference(self::SERVICE_LOCKER),
         ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
-        $container->setDefinition(self::SERVICE_COMMAND_CLEAR_LOCK, $definition);
+        $container->setDefinition(self::SERVICE_COMMAND_CLEAR_LOCK, $definition)->setPublic(true);
     }
 
     /**
@@ -465,7 +488,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadLocker(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_LOCKER, new Definition('Meteor\Patch\Lock\Locker'));
+        $container->setDefinition(self::SERVICE_LOCKER, new Definition(Locker::class))->setPublic(true);
     }
 
     /**
@@ -473,7 +496,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadRollbackCommand(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Cli\Command\RollbackCommand', [
+        $definition = new Definition(RollbackCommand::class, [
             null,
             '%' . Application::PARAMETER_CONFIG . '%',
             new Reference(IOExtension::SERVICE_IO),
@@ -486,10 +509,10 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
             new Reference(EventDispatcherExtension::SERVICE_EVENT_DISPATCHER),
             new Reference(ScriptsExtension::SERVICE_SCRIPT_RUNNER),
             new Reference(LoggerExtension::SERVICE_LOGGER),
-            new Reference(PermissionsExtension::SERVICE_PERMISSION_SETTER)
+            new Reference(PermissionsExtension::SERVICE_PERMISSION_SETTER),
         ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
-        $container->setDefinition(self::SERVICE_COMMAND_ROLLBACK, $definition);
+        $container->setDefinition(self::SERVICE_COMMAND_ROLLBACK, $definition)->setPublic(true);
     }
 
     /**
@@ -497,7 +520,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadVersionInfoCommand(ContainerBuilder $container)
     {
-        $definition = new Definition('Meteor\Patch\Cli\Command\VersionInfoCommand', [
+        $definition = new Definition(VersionInfoCommand::class, [
             null,
             '%' . Application::PARAMETER_CONFIG . '%',
             new Reference(IOExtension::SERVICE_IO),
@@ -505,7 +528,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
             new Reference(self::SERVICE_TASK_BUS),
         ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
-        $container->setDefinition(self::SERVICE_COMMAND_VERSION_INFO, $definition);
+        $container->setDefinition(self::SERVICE_COMMAND_VERSION_INFO, $definition)->setPublic(true);
     }
 
     /**
@@ -513,7 +536,8 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
      */
     private function loadVersionComparer(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_VERSION_COMPARER, new Definition('Meteor\Patch\Version\VersionComparer'));
+        $container->setDefinition(self::SERVICE_VERSION_COMPARER, new Definition(VersionComparer::class))
+            ->setPublic(true);
     }
 
     /**
@@ -529,6 +553,7 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
         }
 
         $container->setAlias(self::SERVICE_STRATEGY, $strategyServiceId);
+        $container->getAlias(self::SERVICE_STRATEGY)->setPublic(true);
 
         foreach ($container->findTaggedServiceIds(self::TAG_TASK_HANDLER) as $id => $tags) {
             foreach ($tags as $attributes) {
@@ -537,9 +562,11 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
                 }
 
                 $container->getDefinition(self::SERVICE_TASK_BUS)->addMethodCall('registerHandler', [
-                    $attributes['task'],
-                    new Reference($id),
-                ]);
+                        $attributes['task'],
+                        new Reference($id),
+                    ]
+                )
+                ->setPublic(true);
             }
         }
     }

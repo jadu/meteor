@@ -6,15 +6,15 @@ use InvalidArgumentException;
 use Meteor\Cli\Command\CommandTestCase;
 use Meteor\IO\NullIO;
 use Meteor\Patch\Event\PatchEvents;
+use Meteor\Patch\Exception\PhpVersionException;
 use Meteor\Patch\Manifest\ManifestChecker;
 use Meteor\Permissions\PermissionSetter;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
+use stdClass;
 
 class ApplyCommandTest extends CommandTestCase
 {
-
-
     private $taskBus;
     private $strategy;
     private $platform;
@@ -30,7 +30,7 @@ class ApplyCommandTest extends CommandTestCase
         vfsStream::setup('root', null, [
             'patch' => [],
             'install' => [],
-            'logs' => []
+            'logs' => [],
         ]);
 
         $this->taskBus = Mockery::mock('Meteor\Patch\Task\TaskBusInterface');
@@ -41,13 +41,13 @@ class ApplyCommandTest extends CommandTestCase
         $this->locker = Mockery::mock('Meteor\Patch\Lock\Locker');
         $this->manifestChecker = Mockery::mock(ManifestChecker::class);
         $this->eventDispatcher = Mockery::mock('Symfony\Component\EventDispatcher\EventDispatcherInterface', [
-            'dispatch' => null,
+            'dispatch' => new stdClass(),
         ]);
         $this->scriptRunner = Mockery::mock('Meteor\Scripts\ScriptRunner', [
             'setWorkingDir' => null,
         ]);
         $this->logger = Mockery::mock('Meteor\Logger\LoggerInterface');
-        $this->permissionSetter = Mockery::mock(PermissionSetter::class,['setPostScriptsPermissions' => null]);
+        $this->permissionSetter = Mockery::mock(PermissionSetter::class, ['setPostScriptsPermissions' => null]);
 
         $this->strategy->shouldReceive('configureApplyCommand')
             ->once();
@@ -104,8 +104,8 @@ class ApplyCommandTest extends CommandTestCase
             ->once();
 
         $tasks = [
-            new \stdClass(),
-            new \stdClass(),
+            new stdClass(),
+            new stdClass(),
         ];
         $this->strategy->shouldReceive('apply')
             ->with($workingDir, $installDir, Mockery::any())
@@ -123,7 +123,8 @@ class ApplyCommandTest extends CommandTestCase
             ->once();
 
         $this->eventDispatcher->shouldReceive('dispatch')
-            ->with(PatchEvents::POST_APPLY, Mockery::any())
+            ->with(Mockery::any(), PatchEvents::POST_APPLY)
+            ->andReturn(new stdClass())
             ->once();
 
         $this->locker->shouldReceive('unlock')
@@ -136,11 +137,10 @@ class ApplyCommandTest extends CommandTestCase
         ]);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testThrowsExceptionWhenWorkingDirIsTheSameAsTheInstallDir()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $workingDir = vfsStream::url('root/install');
         $installDir = vfsStream::url('root/install');
 
@@ -168,7 +168,7 @@ class ApplyCommandTest extends CommandTestCase
             ->with($installDir)
             ->once();
 
-        $tasks = [new \stdClass()];
+        $tasks = [new stdClass()];
         $this->strategy->shouldReceive('apply')
             ->with($workingDir, $installDir, Mockery::any())
             ->andReturn($tasks)
@@ -218,7 +218,7 @@ class ApplyCommandTest extends CommandTestCase
             '--install-dir' => $installDir,
         ]);
 
-        $this->assertSame(1, $this->tester->getStatusCode());
+        static::assertSame(1, $this->tester->getStatusCode());
     }
 
     public function testDoesNotLockWhenSkipLockOptionSpecified()
@@ -239,7 +239,7 @@ class ApplyCommandTest extends CommandTestCase
         $this->locker->shouldReceive('lock')
             ->never();
 
-        $tasks = [new \stdClass()];
+        $tasks = [new stdClass()];
         $this->strategy->shouldReceive('apply')
             ->with($workingDir, $installDir, Mockery::any())
             ->andReturn($tasks)
@@ -279,7 +279,7 @@ class ApplyCommandTest extends CommandTestCase
             ->with($installDir)
             ->once();
 
-        $tasks = [new \stdClass()];
+        $tasks = [new stdClass()];
         $this->strategy->shouldReceive('apply')
             ->with($workingDir, $installDir, Mockery::any())
             ->andReturn($tasks)
@@ -299,12 +299,11 @@ class ApplyCommandTest extends CommandTestCase
         ]);
     }
 
-    /**
-     * @expectedException \Meteor\Patch\Exception\PhpVersionException
-     * @expectedExceptionMessage Your PHP version (5.6.0) is not sufficient enough for the package "test", which requires >=7
-     */
     public function testPhpVersionConstraint()
     {
+        $this->expectException(PhpVersionException::class);
+        $this->expectExceptionMessage('Your PHP version (5.6.0) is not sufficient enough for the package "test", which requires >=7');
+
         $workingDir = vfsStream::url('root/patch');
         $installDir = vfsStream::url('root/install');
 
@@ -362,8 +361,8 @@ class ApplyCommandTest extends CommandTestCase
             ->once();
 
         $tasks = [
-            new \stdClass(),
-            new \stdClass(),
+            new stdClass(),
+            new stdClass(),
         ];
         $this->strategy->shouldReceive('apply')
             ->with($workingDir, $installDir, Mockery::any())
@@ -406,15 +405,14 @@ class ApplyCommandTest extends CommandTestCase
         $this->command->setConfiguration($config);
         $this->command->setPhpVersion('5.6.0-1ubuntu3.25');
 
-        $this->assertEquals('5.6.0', $this->command->getPhpVersion());
+        static::assertEquals('5.6.0', $this->command->getPhpVersion());
     }
 
-    /**
-     * @expectedException \Meteor\Patch\Exception\PhpVersionException
-     * @expectedExceptionMessage Your PHP version (5.4.0) is not sufficient enough for the package "package/second", which requires >=5.6
-     */
     public function testCombinedPhpVersionConstraint()
     {
+        $this->expectException(PhpVersionException::class);
+        $this->expectExceptionMessage('Your PHP version (5.4.0) is not sufficient enough for the package "package/second", which requires >=5.6');
+
         $workingDir = vfsStream::url('root/patch');
         $installDir = vfsStream::url('root/install');
 
@@ -475,8 +473,8 @@ class ApplyCommandTest extends CommandTestCase
             ->never();
 
         $tasks = [
-            new \stdClass(),
-            new \stdClass(),
+            new stdClass(),
+            new stdClass(),
         ];
         $this->strategy->shouldReceive('apply')
             ->with($workingDir, $installDir, Mockery::any())
@@ -515,7 +513,7 @@ class ApplyCommandTest extends CommandTestCase
         $this->command->setConfiguration($config);
 
         $this->logger->shouldReceive('enable')
-            ->with($logDir.'/'.$filename)
+            ->with($logDir . '/' . $filename)
             ->once();
 
         $this->manifestChecker->shouldReceive('check')
@@ -525,7 +523,7 @@ class ApplyCommandTest extends CommandTestCase
         $this->locker->shouldReceive('lock')
             ->never();
 
-        $tasks = [new \stdClass()];
+        $tasks = [new stdClass()];
         $this->strategy->shouldReceive('apply')
             ->with($workingDir, $installDir, Mockery::any())
             ->andReturn($tasks)
@@ -543,10 +541,9 @@ class ApplyCommandTest extends CommandTestCase
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
             '--skip-lock' => null,
-            '--log-dir' => $logDir
+            '--log-dir' => $logDir,
         ]);
     }
-
 
     public function testChangesLogDirectoryThrowsErrorIfDoesntExist()
     {
@@ -558,16 +555,14 @@ class ApplyCommandTest extends CommandTestCase
 
         $config = ['name' => 'test'];
         $this->command->setConfiguration($config);
-        
 
         $this->tester->execute([
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
             '--skip-lock' => null,
-            '--log-dir' => '/testlog'
+            '--log-dir' => '/testlog',
         ]);
     }
-
 
     public function testDoesNotSetPostApplyPermissionIfSkipVerifyOptionSpecified()
     {
@@ -592,7 +587,7 @@ class ApplyCommandTest extends CommandTestCase
             ->with($installDir)
             ->once();
 
-        $tasks = [new \stdClass()];
+        $tasks = [new stdClass()];
         $this->strategy->shouldReceive('apply')
             ->with($workingDir, $installDir, Mockery::any())
             ->andReturn($tasks)
@@ -613,5 +608,4 @@ class ApplyCommandTest extends CommandTestCase
             '--skip-post-scripts-permissions' => null,
         ]);
     }
-
 }

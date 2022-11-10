@@ -11,7 +11,7 @@ class PackageExtensionTest extends ExtensionTestCase
         $container = $this->loadContainer([]);
 
         foreach ($this->getServiceIds() as $serviceId) {
-            $container->get($serviceId);
+            static::assertTrue($container->has($serviceId), sprintf('Container has "%s" service', $serviceId));
         }
     }
 
@@ -42,7 +42,7 @@ class PackageExtensionTest extends ExtensionTestCase
             ],
         ]);
 
-        $this->assertSame([
+        static::assertSame([
             'jadu/cms' => '13.6.0',
             'jadu/xfp' => '3.7.1',
         ], $config['package']['combine']);
@@ -59,7 +59,7 @@ class PackageExtensionTest extends ExtensionTestCase
             ],
         ]);
 
-        $this->assertSame([
+        static::assertSame([
             'jadu/cms-dependencies' => '~13.6.0',
             'jadu/xfp-dependencies' => '~3.7.1',
         ], $config['package']['composer']);

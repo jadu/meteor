@@ -3,8 +3,9 @@
 namespace Meteor\Migrations\Configuration;
 
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class DatabaseConfigurationTest extends \PHPUnit_Framework_TestCase
+class DatabaseConfigurationTest extends TestCase
 {
     /**
      * Ensure the method exists as it is used by old migrations.
@@ -14,6 +15,6 @@ class DatabaseConfigurationTest extends \PHPUnit_Framework_TestCase
         $configuration = new DatabaseConfiguration(Mockery::mock('Doctrine\DBAL\Connection'));
         $configuration->setJaduPath('/var/www/jadu');
 
-        $this->assertSame('/var/www/jadu', $configuration->getJaduPath());
+        static::assertSame('/var/www/jadu', $configuration->getJaduPath());
     }
 }

@@ -23,11 +23,12 @@ use Meteor\Permissions\ServiceContainer\PermissionsExtension;
 use Meteor\Platform\ServiceContainer\PlatformExtension;
 use Meteor\Process\ServiceContainer\ProcessExtension;
 use Meteor\Scripts\ServiceContainer\ScriptsExtension;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-abstract class ExtensionTestCase extends \PHPUnit_Framework_TestCase
+abstract class ExtensionTestCase extends TestCase
 {
     protected $configurationLoader;
     protected $extensionManager;
@@ -36,7 +37,7 @@ abstract class ExtensionTestCase extends \PHPUnit_Framework_TestCase
     protected $input;
     protected $output;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->extensionManager = new ExtensionManager($this->createExtensions());
         $this->configurationLoader = new ConfigurationLoader($this->extensionManager);
