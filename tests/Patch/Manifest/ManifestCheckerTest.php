@@ -23,14 +23,14 @@ class ManifestCheckerTest extends TestCase
 
     public function testReturnsTrueIfManifestFileDoesNotExist()
     {
-        $this->assertTrue($this->manifestChecker->check(vfsStream::url('root')));
+        static::assertTrue($this->manifestChecker->check(vfsStream::url('root')));
     }
 
     public function testReturnsFalseIfManifestFileCouldNotBeParsed()
     {
         file_put_contents(vfsStream::url('root/' . ManifestChecker::MANIFEST_FILENAME), '!!');
 
-        $this->assertFalse($this->manifestChecker->check(vfsStream::url('root')));
+        static::assertFalse($this->manifestChecker->check(vfsStream::url('root')));
     }
 
     public function testReturnsFalseIfThePatchCannotBeVerifiedDueToMissingFile()
@@ -41,7 +41,7 @@ class ManifestCheckerTest extends TestCase
 
         file_put_contents(vfsStream::url('root/' . ManifestChecker::MANIFEST_FILENAME), json_encode($manifest));
 
-        $this->assertFalse($this->manifestChecker->check(vfsStream::url('root')));
+        static::assertFalse($this->manifestChecker->check(vfsStream::url('root')));
     }
 
     public function testReturnsFalseIfThePatchCannotBeVerifiedDueToInvalidFileHash()
@@ -52,7 +52,7 @@ class ManifestCheckerTest extends TestCase
 
         file_put_contents(vfsStream::url('root/' . ManifestChecker::MANIFEST_FILENAME), json_encode($manifest));
 
-        $this->assertFalse($this->manifestChecker->check(vfsStream::url('root')));
+        static::assertFalse($this->manifestChecker->check(vfsStream::url('root')));
     }
 
     public function testReturnsTrueIfThePatchIsVerified()
@@ -65,6 +65,6 @@ class ManifestCheckerTest extends TestCase
 
         file_put_contents(vfsStream::url('root/' . ManifestChecker::MANIFEST_FILENAME), json_encode($manifest));
 
-        $this->assertTrue($this->manifestChecker->check(vfsStream::url('root')));
+        static::assertTrue($this->manifestChecker->check(vfsStream::url('root')));
     }
 }

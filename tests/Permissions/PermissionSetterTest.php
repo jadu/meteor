@@ -232,5 +232,4 @@ class PermissionSetterTest extends TestCase
 
         $this->permissionSetter->setPostScriptsPermissions(vfsStream::url('root/target'));
     }
-
 }

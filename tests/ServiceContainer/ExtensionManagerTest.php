@@ -20,7 +20,7 @@ class ExtensionManagerTest extends TestCase
     {
         $this->extensionManager->activateExtension('Meteor\ServiceContainer\Test\TestExtension', null);
 
-        $this->assertSame(
+        static::assertSame(
             ['Meteor\ServiceContainer\Test\TestExtension'],
             $this->extensionManager->getExtensionClasses()
         );
@@ -30,7 +30,7 @@ class ExtensionManagerTest extends TestCase
     {
         $this->extensionManager->activateExtension(__DIR__ . '/Fixtures/absolute_extension.php', null);
 
-        $this->assertSame(
+        static::assertSame(
             ['Meteor\ServiceContainer\Test\TestAbsoluteFileExtension'],
             $this->extensionManager->getExtensionClasses()
         );
@@ -40,7 +40,7 @@ class ExtensionManagerTest extends TestCase
     {
         $this->extensionManager->activateExtension('relative_extension.php', __DIR__ . '/Fixtures');
 
-        $this->assertSame(
+        static::assertSame(
             ['Meteor\ServiceContainer\Test\TestRelativeFileExtension'],
             $this->extensionManager->getExtensionClasses()
         );
@@ -65,12 +65,12 @@ class ExtensionManagerTest extends TestCase
         $extension = new TestExtension();
         $extensionManager = new ExtensionManager([$extension]);
 
-        $this->assertSame($extension, $extensionManager->getExtension('test'));
+        static::assertSame($extension, $extensionManager->getExtension('test'));
     }
 
     public function testGetExtensionReturnsNullWhenNotFound()
     {
-        $this->assertNull($this->extensionManager->getExtension('invalid'));
+        static::assertNull($this->extensionManager->getExtension('invalid'));
     }
 
     public function testGetExtensions()
@@ -78,7 +78,7 @@ class ExtensionManagerTest extends TestCase
         $extension = new TestExtension();
         $extensionManager = new ExtensionManager([$extension]);
 
-        $this->assertSame(['test' => $extension], $extensionManager->getExtensions());
+        static::assertSame(['test' => $extension], $extensionManager->getExtensions());
     }
 
     public function testGetExtensionClasses()
@@ -86,7 +86,7 @@ class ExtensionManagerTest extends TestCase
         $extension = new TestExtension();
         $extensionManager = new ExtensionManager([$extension]);
 
-        $this->assertSame(
+        static::assertSame(
             ['Meteor\ServiceContainer\Test\TestExtension'],
             $extensionManager->getExtensionClasses()
         );

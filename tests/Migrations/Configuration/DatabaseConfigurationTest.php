@@ -15,6 +15,6 @@ class DatabaseConfigurationTest extends TestCase
         $configuration = new DatabaseConfiguration(Mockery::mock('Doctrine\DBAL\Connection'));
         $configuration->setJaduPath('/var/www/jadu');
 
-        $this->assertSame('/var/www/jadu', $configuration->getJaduPath());
+        static::assertSame('/var/www/jadu', $configuration->getJaduPath());
     }
 }

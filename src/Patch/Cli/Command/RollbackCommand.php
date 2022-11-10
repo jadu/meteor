@@ -15,6 +15,7 @@ use Meteor\Patch\Version\VersionComparer;
 use Meteor\Permissions\PermissionSetter;
 use Meteor\Platform\PlatformInterface;
 use Meteor\Scripts\ScriptRunner;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -158,14 +159,14 @@ class RollbackCommand extends AbstractPatchCommand
         if (!$packageValid) {
             $this->io->error('The package versions must be greater than or equal to the currently installed versions.');
 
-            return 1;
+            return Command::FAILURE;
         }
 
         $backups = $this->backupFinder->find($backupsDir, $installDir, $config);
         if (empty($backups)) {
             $this->io->error('Unable to find a valid backup for this package.');
 
-            return 1;
+            return Command::FAILURE;
         }
 
         $backupChoices = [];
@@ -196,7 +197,7 @@ class RollbackCommand extends AbstractPatchCommand
         if (!isset($backups[$backupChoice])) {
             $this->io->error('Please select an available backup.');
 
-            return 1;
+            return Command::FAILURE;
         }
 
         $backup = $backups[$backupChoice];
@@ -235,7 +236,7 @@ class RollbackCommand extends AbstractPatchCommand
         foreach ($tasks as $task) {
             $result = $this->taskBus->run($task, $config);
             if ($result === false) {
-                return 1;
+                return Command::FAILURE;
             }
         }
 
@@ -253,6 +254,6 @@ class RollbackCommand extends AbstractPatchCommand
 
         $this->io->success('Rollback complete');
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

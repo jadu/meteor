@@ -30,7 +30,7 @@ class ApplyCommandTest extends CommandTestCase
         vfsStream::setup('root', null, [
             'patch' => [],
             'install' => [],
-            'logs' => []
+            'logs' => [],
         ]);
 
         $this->taskBus = Mockery::mock('Meteor\Patch\Task\TaskBusInterface');
@@ -47,7 +47,7 @@ class ApplyCommandTest extends CommandTestCase
             'setWorkingDir' => null,
         ]);
         $this->logger = Mockery::mock('Meteor\Logger\LoggerInterface');
-        $this->permissionSetter = Mockery::mock(PermissionSetter::class,['setPostScriptsPermissions' => null]);
+        $this->permissionSetter = Mockery::mock(PermissionSetter::class, ['setPostScriptsPermissions' => null]);
 
         $this->strategy->shouldReceive('configureApplyCommand')
             ->once();
@@ -123,7 +123,7 @@ class ApplyCommandTest extends CommandTestCase
             ->once();
 
         $this->eventDispatcher->shouldReceive('dispatch')
-            ->with(Mockery::any(),PatchEvents::POST_APPLY)
+            ->with(Mockery::any(), PatchEvents::POST_APPLY)
             ->andReturn(new stdClass())
             ->once();
 
@@ -218,7 +218,7 @@ class ApplyCommandTest extends CommandTestCase
             '--install-dir' => $installDir,
         ]);
 
-        $this->assertSame(1, $this->tester->getStatusCode());
+        static::assertSame(1, $this->tester->getStatusCode());
     }
 
     public function testDoesNotLockWhenSkipLockOptionSpecified()
@@ -298,7 +298,6 @@ class ApplyCommandTest extends CommandTestCase
             '--install-dir' => $installDir,
         ]);
     }
-
 
     public function testPhpVersionConstraint()
     {
@@ -406,9 +405,8 @@ class ApplyCommandTest extends CommandTestCase
         $this->command->setConfiguration($config);
         $this->command->setPhpVersion('5.6.0-1ubuntu3.25');
 
-        $this->assertEquals('5.6.0', $this->command->getPhpVersion());
+        static::assertEquals('5.6.0', $this->command->getPhpVersion());
     }
-
 
     public function testCombinedPhpVersionConstraint()
     {
@@ -515,7 +513,7 @@ class ApplyCommandTest extends CommandTestCase
         $this->command->setConfiguration($config);
 
         $this->logger->shouldReceive('enable')
-            ->with($logDir.'/'.$filename)
+            ->with($logDir . '/' . $filename)
             ->once();
 
         $this->manifestChecker->shouldReceive('check')
@@ -543,10 +541,9 @@ class ApplyCommandTest extends CommandTestCase
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
             '--skip-lock' => null,
-            '--log-dir' => $logDir
+            '--log-dir' => $logDir,
         ]);
     }
-
 
     public function testChangesLogDirectoryThrowsErrorIfDoesntExist()
     {
@@ -559,15 +556,13 @@ class ApplyCommandTest extends CommandTestCase
         $config = ['name' => 'test'];
         $this->command->setConfiguration($config);
 
-
         $this->tester->execute([
             '--working-dir' => $workingDir,
             '--install-dir' => $installDir,
             '--skip-lock' => null,
-            '--log-dir' => '/testlog'
+            '--log-dir' => '/testlog',
         ]);
     }
-
 
     public function testDoesNotSetPostApplyPermissionIfSkipVerifyOptionSpecified()
     {
@@ -613,5 +608,4 @@ class ApplyCommandTest extends CommandTestCase
             '--skip-post-scripts-permissions' => null,
         ]);
     }
-
 }

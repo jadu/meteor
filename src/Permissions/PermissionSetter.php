@@ -29,7 +29,7 @@ class PermissionSetter
      */
     private $postScriptsPermission = [
         'var/cache/*' => 'rwxR',
-        'logs/*' => 'rwxR'
+        'logs/*' => 'rwxR',
     ];
 
     /**
@@ -48,7 +48,7 @@ class PermissionSetter
     }
 
     /**
-     * @param array  $files
+     * @param array $files
      * @param string $targetDir
      */
     public function setDefaultPermissions(array $files, $targetDir)
@@ -115,7 +115,6 @@ class PermissionSetter
 
         $this->io->newLine();
     }
-
 
     /**
      * @param string $targetDir

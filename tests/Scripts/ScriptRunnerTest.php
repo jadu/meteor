@@ -157,7 +157,7 @@ class ScriptRunnerTest extends TestCase
             'jadu/cms' => [
                 'test' => ['@clear-cache', '@warm-cache'],
                 'clear-cache' => ['clear-cache.sh'],
-                'warm-cache' => ['warm-cache.sh']
+                'warm-cache' => ['warm-cache.sh'],
             ],
         ]);
 

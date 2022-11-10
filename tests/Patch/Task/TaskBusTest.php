@@ -28,7 +28,7 @@ class TaskBusTest extends TestCase
             ->andReturn(true)
             ->once();
 
-        $this->assertTrue($this->taskBus->run($task, $config));
+        static::assertTrue($this->taskBus->run($task, $config));
     }
 
     public function testThrowsExceptionWhenMissingHandler()

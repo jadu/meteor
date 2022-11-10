@@ -158,7 +158,7 @@ class ConsoleIO implements IOInterface
      */
     public function askChoice($question, $choices, $default = null)
     {
-        $question = sprintf(" <info>%s</info> [<comment>%s</comment>]:\n > ", $question, isset($choices[$default]) ? $choices[$default] : null);
+        $question = sprintf(" <info>%s</info> [<comment>%s</comment>]:\n > ", $question, $choices[$default] ?? null);
         $question = new ChoiceQuestion($question, $choices, $default);
 
         return $this->askQuestion($question);
@@ -242,10 +242,10 @@ class ConsoleIO implements IOInterface
      * Formats a message as a block of text.
      *
      * @param string|array $message The message to write in the block
-     * @param string|null  $type     The block type (added in [] on first line)
-     * @param string|null  $style    The style to apply to the whole block
-     * @param string       $prefix   The prefix for the block
-     * @param bool         $padding  Whether to add vertical padding
+     * @param string|null $type The block type (added in [] on first line)
+     * @param string|null $style The style to apply to the whole block
+     * @param string $prefix The prefix for the block
+     * @param bool $padding Whether to add vertical padding
      */
     private function block($message, $type = null, $style = null, $prefix = ' ', $padding = false)
     {
@@ -446,7 +446,7 @@ class ConsoleIO implements IOInterface
 
     private function getTerminalWidth()
     {
-        return (new Terminal())->getWidth();;
+        return (new Terminal())->getWidth();
     }
 
     private function autoPrependBlock()

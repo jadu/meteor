@@ -10,6 +10,6 @@ class BackupTest extends TestCase
     {
         $backup = new Backup('/path/to/20160203145217', []);
 
-        $this->assertSame('2016-02-03T14:52:17+00:00', $backup->getDate()->format('c'));
+        static::assertSame('2016-02-03T14:52:17+00:00', $backup->getDate()->format('c'));
     }
 }

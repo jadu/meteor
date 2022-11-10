@@ -141,7 +141,6 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
      * Check for circular references.
      *
      * @param string $name
-     *
      * @param array $seen
      *
      * @throws CircularScriptReferenceException

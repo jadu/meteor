@@ -5,6 +5,7 @@ namespace Meteor\Scripts\Cli\Command;
 use Meteor\Cli\Command\AbstractCommand;
 use Meteor\IO\IOInterface;
 use Meteor\Scripts\ScriptRunner;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -49,6 +50,6 @@ class RunCommand extends AbstractCommand
         $scriptName = $this->io->getArgument('script');
         $this->scriptRunner->run($scriptName);
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

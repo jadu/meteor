@@ -53,18 +53,18 @@ class BackupFinderTest extends TestCase
 
         $backups = $this->backupFinder->find(vfsStream::url('root/backups'), vfsStream::url('root'), $config);
 
-        $this->assertCount(1, $backups);
+        static::assertCount(1, $backups);
         $backup = $backups[0];
 
-        $this->assertInstanceOf('Meteor\Patch\Backup\Backup', $backup);
-        $this->assertSame(vfsStream::url('root/backups/20160701102030'), $backup->getPath());
+        static::assertInstanceOf('Meteor\Patch\Backup\Backup', $backup);
+        static::assertSame(vfsStream::url('root/backups/20160701102030'), $backup->getPath());
 
         $backupVersions = $backup->getVersions();
-        $this->assertCount(1, $backupVersions);
-        $this->assertSame('jadu/cms', $backupVersions[0]->getPackageName());
-        $this->assertSame('VERSION', $backupVersions[0]->getFileName());
-        $this->assertSame('1.0.0', $backupVersions[0]->getNewVersion());
-        $this->assertSame('1.1.0', $backupVersions[0]->getCurrentVersion());
+        static::assertCount(1, $backupVersions);
+        static::assertSame('jadu/cms', $backupVersions[0]->getPackageName());
+        static::assertSame('VERSION', $backupVersions[0]->getFileName());
+        static::assertSame('1.0.0', $backupVersions[0]->getNewVersion());
+        static::assertSame('1.1.0', $backupVersions[0]->getCurrentVersion());
     }
 
     public function testFindIgnoresBackupsWithoutMeteorConfig()
@@ -94,7 +94,7 @@ class BackupFinderTest extends TestCase
 
         $backups = $this->backupFinder->find(vfsStream::url('root/backups'), vfsStream::url('root'), $config);
 
-        $this->assertCount(0, $backups);
+        static::assertCount(0, $backups);
     }
 
     public function testFindIgnoresBackupsWithAnInvalidMeteorConfig()
@@ -124,7 +124,7 @@ class BackupFinderTest extends TestCase
 
         $backups = $this->backupFinder->find(vfsStream::url('root/backups'), vfsStream::url('root'), $config);
 
-        $this->assertCount(0, $backups);
+        static::assertCount(0, $backups);
     }
 
     public function testFindWithCombinedPackages()
@@ -182,29 +182,29 @@ class BackupFinderTest extends TestCase
 
         $backups = $this->backupFinder->find(vfsStream::url('root/backups'), vfsStream::url('root'), $config);
 
-        $this->assertCount(1, $backups);
+        static::assertCount(1, $backups);
         $backup = $backups[0];
 
-        $this->assertInstanceOf('Meteor\Patch\Backup\Backup', $backup);
-        $this->assertSame(vfsStream::url('root/backups/20160701102030'), $backup->getPath());
+        static::assertInstanceOf('Meteor\Patch\Backup\Backup', $backup);
+        static::assertSame(vfsStream::url('root/backups/20160701102030'), $backup->getPath());
 
         $backupVersions = $backup->getVersions();
-        $this->assertCount(3, $backupVersions);
+        static::assertCount(3, $backupVersions);
 
-        $this->assertSame('jadu/cms', $backupVersions[0]->getPackageName());
-        $this->assertSame('VERSION', $backupVersions[0]->getFileName());
-        $this->assertSame('1.0.0', $backupVersions[0]->getNewVersion());
-        $this->assertSame('1.1.0', $backupVersions[0]->getCurrentVersion());
+        static::assertSame('jadu/cms', $backupVersions[0]->getPackageName());
+        static::assertSame('VERSION', $backupVersions[0]->getFileName());
+        static::assertSame('1.0.0', $backupVersions[0]->getNewVersion());
+        static::assertSame('1.1.0', $backupVersions[0]->getCurrentVersion());
 
-        $this->assertSame('jadu/xfp', $backupVersions[1]->getPackageName());
-        $this->assertSame('XFP_VERSION', $backupVersions[1]->getFileName());
-        $this->assertSame('1.0.0', $backupVersions[1]->getNewVersion());
-        $this->assertSame('1.1.0', $backupVersions[1]->getCurrentVersion());
+        static::assertSame('jadu/xfp', $backupVersions[1]->getPackageName());
+        static::assertSame('XFP_VERSION', $backupVersions[1]->getFileName());
+        static::assertSame('1.0.0', $backupVersions[1]->getNewVersion());
+        static::assertSame('1.1.0', $backupVersions[1]->getCurrentVersion());
 
-        $this->assertSame('jadu/cp', $backupVersions[2]->getPackageName());
-        $this->assertSame('CP_VERSION', $backupVersions[2]->getFileName());
-        $this->assertSame('1.0.0', $backupVersions[2]->getNewVersion());
-        $this->assertSame('1.1.0', $backupVersions[2]->getCurrentVersion());
+        static::assertSame('jadu/cp', $backupVersions[2]->getPackageName());
+        static::assertSame('CP_VERSION', $backupVersions[2]->getFileName());
+        static::assertSame('1.0.0', $backupVersions[2]->getNewVersion());
+        static::assertSame('1.1.0', $backupVersions[2]->getCurrentVersion());
     }
 
     public function testFindWithDifferentCombinedPackages()
@@ -262,7 +262,7 @@ class BackupFinderTest extends TestCase
 
         $backups = $this->backupFinder->find(vfsStream::url('root/backups'), vfsStream::url('root'), $config);
 
-        $this->assertCount(0, $backups);
+        static::assertCount(0, $backups);
     }
 
     public function testFindWhenBackupHasDifferentPackages()
@@ -294,7 +294,7 @@ class BackupFinderTest extends TestCase
 
         $backups = $this->backupFinder->find(vfsStream::url('root/backups'), vfsStream::url('root'), $config);
 
-        $this->assertCount(0, $backups);
+        static::assertCount(0, $backups);
     }
 
     public function testFindWhenBackupIsNewerThanInstall()
@@ -326,6 +326,6 @@ class BackupFinderTest extends TestCase
 
         $backups = $this->backupFinder->find(vfsStream::url('root/backups'), vfsStream::url('root'), $config);
 
-        $this->assertCount(0, $backups);
+        static::assertCount(0, $backups);
     }
 }

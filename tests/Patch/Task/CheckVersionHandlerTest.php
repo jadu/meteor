@@ -35,7 +35,7 @@ class CheckVersionHandlerTest extends TestCase
             ->andReturn($versions)
             ->once();
 
-        $this->assertTrue($this->handler->handle(new CheckVersion('working', 'install', CheckVersion::GREATER_THAN_OR_EQUAL), $config));
+        static::assertTrue($this->handler->handle(new CheckVersion('working', 'install', CheckVersion::GREATER_THAN_OR_EQUAL), $config));
     }
 
     public function testPreventsOlderVersionFromBeingPatched()
@@ -55,7 +55,7 @@ class CheckVersionHandlerTest extends TestCase
             ->andReturn($versions)
             ->once();
 
-        $this->assertFalse($this->handler->handle(new CheckVersion('working', 'install', CheckVersion::GREATER_THAN_OR_EQUAL), $config));
+        static::assertFalse($this->handler->handle(new CheckVersion('working', 'install', CheckVersion::GREATER_THAN_OR_EQUAL), $config));
     }
 
     public function testAllowsOlderVersionsForRollback()
@@ -75,7 +75,7 @@ class CheckVersionHandlerTest extends TestCase
             ->andReturn($versions)
             ->once();
 
-        $this->assertTrue($this->handler->handle(new CheckVersion('working', 'install', CheckVersion::LESS_THAN_OR_EQUAL), $config));
+        static::assertTrue($this->handler->handle(new CheckVersion('working', 'install', CheckVersion::LESS_THAN_OR_EQUAL), $config));
     }
 
     public function testPreventsNewerVersionFromBeingPatchedForRollback()
@@ -95,6 +95,6 @@ class CheckVersionHandlerTest extends TestCase
             ->andReturn($versions)
             ->once();
 
-        $this->assertFalse($this->handler->handle(new CheckVersion('working', 'install', CheckVersion::LESS_THAN_OR_EQUAL), $config));
+        static::assertFalse($this->handler->handle(new CheckVersion('working', 'install', CheckVersion::LESS_THAN_OR_EQUAL), $config));
     }
 }

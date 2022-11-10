@@ -39,7 +39,7 @@ class FinderFactory
 
                 $include = false;
                 foreach ($patterns as $patternData) {
-                    list($pattern, $negate) = $patternData;
+                    [$pattern, $negate] = $patternData;
 
                     $filepath = preg_replace('/^' . preg_quote($path . DIRECTORY_SEPARATOR, '/') . '/', '', $file->getPathname());
                     if (preg_match($pattern, $filepath)) {
@@ -63,6 +63,7 @@ class FinderFactory
      *
      * @param string $filter
      * @param string $directorySeparator
+     *
      * @return array
      */
     public function generatePattern($filter, $directorySeparator = DIRECTORY_SEPARATOR)

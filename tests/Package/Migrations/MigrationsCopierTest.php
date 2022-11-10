@@ -26,7 +26,7 @@ class MigrationsCopierTest extends TestCase
             'name' => 'test',
         ];
 
-        $this->assertSame($config, $this->migrationsCopier->copy('working', 'temp', $config));
+        static::assertSame($config, $this->migrationsCopier->copy('working', 'temp', $config));
     }
 
     public function testCopiesMigrations()
@@ -56,7 +56,7 @@ class MigrationsCopierTest extends TestCase
 
         $this->filesystem->shouldReceive('copyDirectory');
 
-        $this->assertSame([
+        static::assertSame([
             'name' => 'test',
             'migrations' => [
                 'directory' => 'migrations/test',

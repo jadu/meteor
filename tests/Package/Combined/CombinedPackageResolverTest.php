@@ -56,7 +56,7 @@ class CombinedPackageResolverTest extends TestCase
             ->with($tempDir, $updatedConfig)
             ->once();
 
-        $this->assertSame($updatedConfig, $this->combinedPackageResolver->resolve(['cms.zip'], $outputDir, $tempDir, $config, true));
+        static::assertSame($updatedConfig, $this->combinedPackageResolver->resolve(['cms.zip'], $outputDir, $tempDir, $config, true));
     }
 
     public function testResolveDoesNotDownloadPackageIfAlreadyCombined()
@@ -92,7 +92,7 @@ class CombinedPackageResolverTest extends TestCase
             ->with($tempDir, $updatedConfig)
             ->once();
 
-        $this->assertSame($updatedConfig, $this->combinedPackageResolver->resolve(['cms.zip'], $outputDir, $tempDir, $config, true));
+        static::assertSame($updatedConfig, $this->combinedPackageResolver->resolve(['cms.zip'], $outputDir, $tempDir, $config, true));
     }
 
     public function testResolveDoesNotDownloadPackageIfAlreadyCombinedViaAnotherCombinedPackage()
@@ -131,7 +131,7 @@ class CombinedPackageResolverTest extends TestCase
             ->with($tempDir, $updatedConfig)
             ->once();
 
-        $this->assertSame($updatedConfig, $this->combinedPackageResolver->resolve(['xfp.zip'], $outputDir, $tempDir, $config, true));
+        static::assertSame($updatedConfig, $this->combinedPackageResolver->resolve(['xfp.zip'], $outputDir, $tempDir, $config, true));
     }
 
     public function testResolveDownloadsPackages()
@@ -177,7 +177,7 @@ class CombinedPackageResolverTest extends TestCase
             ->with($tempDir, $updatedConfig)
             ->once();
 
-        $this->assertSame($updatedConfig, $this->combinedPackageResolver->resolve([], $outputDir, $tempDir, $config, true));
+        static::assertSame($updatedConfig, $this->combinedPackageResolver->resolve([], $outputDir, $tempDir, $config, true));
     }
 
     public function testChecksPackageDependencies()

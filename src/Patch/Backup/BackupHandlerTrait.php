@@ -4,7 +4,6 @@ namespace Meteor\Patch\Backup;
 
 trait BackupHandlerTrait
 {
-
     public function removeBackups($backups, $count)
     {
         // Do not remove the latest backups that can be kept

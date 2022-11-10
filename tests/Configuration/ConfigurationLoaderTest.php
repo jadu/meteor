@@ -65,8 +65,8 @@ class ConfigurationLoaderTest extends TestCase
 
         $config = $this->configurationLoader->process([]);
 
-        $this->assertArrayHasKey('name', $config);
-        $this->assertNotEmpty($config['name']);
+        static::assertArrayHasKey('name', $config);
+        static::assertNotEmpty($config['name']);
     }
 
     public function testAllowsExtensionsSection()
@@ -100,7 +100,7 @@ JSON;
 
         $config = $this->configurationLoader->parse(vfsStream::url('root/meteor.json'));
 
-        $this->assertSame([
+        static::assertSame([
             'name' => 'jadu/xfp',
             'migrations' => [
                 'table' => 'JaduMigrationsXFP',
@@ -143,7 +143,7 @@ JSON;
         $this->configurationLoader->buildTree([]);
         $config = $this->configurationLoader->load(vfsStream::url('root'));
 
-        $this->assertSame([
+        static::assertSame([
             'name' => 'jadu/xfp',
             'extensions' => [],
             'combined' => [],
@@ -170,7 +170,7 @@ JSON;
         $this->configurationLoader->buildTree([]);
         $config = $this->configurationLoader->load(vfsStream::url('root'));
 
-        $this->assertSame([
+        static::assertSame([
             'name' => 'jadu/xfp',
             'combined' => [
                 [
@@ -198,7 +198,7 @@ JSON;
         $this->configurationLoader->buildTree([]);
         $config = $this->configurationLoader->load(vfsStream::url('root'), false);
 
-        $this->assertSame([
+        static::assertSame([
             'name' => 'jadu/xfp',
             'extensions' => [],
             'combined' => [],

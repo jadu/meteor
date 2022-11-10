@@ -83,7 +83,7 @@ class PackageCombinerTest extends TestCase
 
         $updatedConfig = $this->packageCombiner->combine($packagePath, $outputDir, $tempDir, $config, false);
 
-        $this->assertEquals([
+        static::assertEquals([
             'name' => 'client',
             'combined' => [
                 [
@@ -143,7 +143,7 @@ class PackageCombinerTest extends TestCase
 
         $updatedConfig = $this->packageCombiner->combine($packagePath, $outputDir, $tempDir, $config, true);
 
-        $this->assertEquals([
+        static::assertEquals([
             'name' => 'client',
             'combined' => [
                 [
@@ -213,7 +213,7 @@ class PackageCombinerTest extends TestCase
 
         $updatedConfig = $this->packageCombiner->combine($packagePath, $outputDir, $tempDir, $config, false);
 
-        $this->assertEquals([
+        static::assertEquals([
             'name' => 'client',
             'combined' => [
                 [
@@ -290,7 +290,7 @@ class PackageCombinerTest extends TestCase
 
         $updatedConfig = $this->packageCombiner->combine($packagePath, $outputDir, $tempDir, $config, false);
 
-        $this->assertEquals([
+        static::assertEquals([
             'name' => 'client',
             'combined' => [
                 [
@@ -347,7 +347,7 @@ class PackageCombinerTest extends TestCase
 
         $updatedConfig = $this->packageCombiner->combine($packagePath, $outputDir, $tempDir, $config, false);
 
-        $this->assertEquals([
+        static::assertEquals([
             'name' => 'client',
             'combined' => [
                 [

@@ -47,9 +47,9 @@ class CopyFilesHandler
 
         if (isset($config['combined'])) {
             foreach ($config['combined'] as $package) {
-               if (!isset($package['patch'])) {
-                   continue;
-               }
+                if (!isset($package['patch'])) {
+                    continue;
+                }
 
                 $replaceDirectories = array_merge(
                     $replaceDirectories,
@@ -58,7 +58,7 @@ class CopyFilesHandler
             }
         }
 
-        array_walk($replaceDirectories, function(&$directory) { $directory = ltrim($directory, '/\\'); });
+        array_walk($replaceDirectories, function (&$directory) { $directory = ltrim($directory, '/\\'); });
 
         $excludeFilters = [];
 

@@ -24,7 +24,7 @@ class InstallConfig
      */
     private function get($name)
     {
-        return isset($this->values[$name]) ? $this->values[$name] : null;
+        return $this->values[$name] ?? null;
     }
 
     /**

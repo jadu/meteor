@@ -29,7 +29,7 @@ class CheckDiskSpaceHandlerTest extends TestCase
         $GLOBALS['disk_free_space'] = 1048576000;
 
         $config = ['name' => 'test'];
-        $this->assertTrue($this->handler->handle(new CheckDiskSpace('install', 'install/backups'), $config));
+        static::assertTrue($this->handler->handle(new CheckDiskSpace('install', 'install/backups'), $config));
     }
 
     public function testWhenRunningLowOnSpace()
@@ -43,7 +43,7 @@ class CheckDiskSpaceHandlerTest extends TestCase
             ->with('install/backups', 'install', $config)
             ->andReturn([]);
 
-        $this->assertFalse($this->handler->handle(new CheckDiskSpace('install', 'install/backups'), $config));
+        static::assertFalse($this->handler->handle(new CheckDiskSpace('install', 'install/backups'), $config));
     }
 
     public function testRemovesOldBackupsWhenRunningLowOnSpace()
@@ -90,7 +90,7 @@ class CheckDiskSpaceHandlerTest extends TestCase
             })
             ->once();
 
-        $this->assertTrue($this->handler->handle(new CheckDiskSpace('install', 'install/backups'), $config));
+        static::assertTrue($this->handler->handle(new CheckDiskSpace('install', 'install/backups'), $config));
     }
 
     public function testDoesNotRemoveMostRecentBackups()
@@ -113,7 +113,7 @@ class CheckDiskSpaceHandlerTest extends TestCase
         $this->filesystem->shouldReceive('remove')
             ->never();
 
-        $this->assertFalse($this->handler->handle(new CheckDiskSpace('install', 'install/backups'), $config));
+        static::assertFalse($this->handler->handle(new CheckDiskSpace('install', 'install/backups'), $config));
     }
 
     public function testRemovesOldBackupsWhenRunningLowOnSpaceButNotEnoughIsFreedUp()
@@ -160,16 +160,16 @@ class CheckDiskSpaceHandlerTest extends TestCase
             })
             ->once();
 
-        $this->assertFalse($this->handler->handle(new CheckDiskSpace('install', 'install/backups'), $config));
+        static::assertFalse($this->handler->handle(new CheckDiskSpace('install', 'install/backups'), $config));
     }
 }
 
 function disk_total_space($directory)
 {
-    return isset($GLOBALS['disk_total_space']) ? $GLOBALS['disk_total_space'] : 1048576000;
+    return $GLOBALS['disk_total_space'] ?? 1048576000;
 }
 
 function disk_free_space($directory)
 {
-    return isset($GLOBALS['disk_free_space']) ? $GLOBALS['disk_free_space'] : 1048576000;
+    return $GLOBALS['disk_free_space'] ?? 1048576000;
 }

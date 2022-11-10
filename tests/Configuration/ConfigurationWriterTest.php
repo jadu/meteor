@@ -41,8 +41,8 @@ JSON;
 
         $this->configurationWriter->write($path, $config);
 
-        $this->assertTrue(file_exists($path));
-        $this->assertEquals($expectedJson, file_get_contents($path));
+        static::assertTrue(file_exists($path));
+        static::assertEquals($expectedJson, file_get_contents($path));
     }
 
     public function testRemovesEmptyValues()
@@ -62,7 +62,7 @@ JSON;
 
         $this->configurationWriter->write($path, $config);
 
-        $this->assertTrue(file_exists($path));
-        $this->assertEquals($expectedJson, file_get_contents($path));
+        static::assertTrue(file_exists($path));
+        static::assertEquals($expectedJson, file_get_contents($path));
     }
 }

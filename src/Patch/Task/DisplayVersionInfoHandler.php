@@ -18,7 +18,7 @@ class DisplayVersionInfoHandler
     private $versionComparer;
 
     /**
-     * @param IOInterface     $io
+     * @param IOInterface $io
      * @param VersionComparer $versionComparer
      */
     public function __construct(IOInterface $io, VersionComparer $versionComparer)
@@ -29,7 +29,7 @@ class DisplayVersionInfoHandler
 
     /**
      * @param DisplayVersionInfo $task
-     * @param array              $config
+     * @param array $config
      */
     public function handle(DisplayVersionInfo $task, array $config)
     {

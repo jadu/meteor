@@ -6,6 +6,7 @@ use Meteor\IO\IOInterface;
 use Meteor\Migrations\Version\VersionManager;
 use Meteor\Patch\Cli\Command\AbstractPatchCommand;
 use Meteor\Platform\PlatformInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -80,20 +81,20 @@ EOT;
         if (!$this->io->getOption('add') && !$this->io->getOption('delete')) {
             $this->io->error('You must specify whether you want to --add or --delete the specified version.');
 
-            return 1;
+            return Command::FAILURE;
         }
 
         $packageName = $this->io->getArgument('package');
         if (empty($packageName)) {
             $this->io->error('You must specify a package name as the first argument.');
 
-            return 1;
+            return Command::FAILURE;
         }
 
         if (!isset($config[$packageName])) {
             $this->io->error(sprintf('Unable to find migrations for the package "%s"', $packageName));
 
-            return 1;
+            return Command::FAILURE;
         }
 
         $this->io->note('Synchronizing versions manually is recommended for development use only');
@@ -103,7 +104,7 @@ EOT;
             if (!$confirmation) {
                 $this->io->error('Synchronization cancelled.');
 
-                return 1;
+                return Command::FAILURE;
             }
         }
 
@@ -145,6 +146,6 @@ EOT;
             }
         }
 
-        return $result ? 0 : 1;
+        return $result ? Command::SUCCESS : Command::FAILURE;
     }
 }

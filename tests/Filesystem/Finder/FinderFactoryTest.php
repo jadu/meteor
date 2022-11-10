@@ -28,7 +28,7 @@ class FinderFactoryTest extends TestCase
             $foundFiles[] = preg_replace('/^' . preg_quote(vfsStream::url('root') . '/', '/') . '/', '', $file->getPathname());
         }
 
-        $this->assertEquals($expectedFiles, $foundFiles);
+        static::assertEquals($expectedFiles, $foundFiles);
     }
 
     public function filterProvider()
@@ -200,9 +200,9 @@ class FinderFactoryTest extends TestCase
                     ],
                     'vendor' => [
                         'org' => [
-                            'package' => 'file.html'
-                        ]
-                    ]
+                            'package' => 'file.html',
+                        ],
+                    ],
                 ],
                 [
                     '**',
@@ -223,13 +223,13 @@ class FinderFactoryTest extends TestCase
                         'item.txt' => '',
                         'module_1' => [
                             'abc.txt' => '',
-                        ]
+                        ],
                     ],
                     'vendor' => [
                         'org' => [
                             'package' => 'file.html',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 [
                     '/public_html',
@@ -245,6 +245,7 @@ class FinderFactoryTest extends TestCase
 
     /**
      * @dataProvider generatePatternProvider
+     *
      * @param string $filter
      * @param string $directorySeparator
      * @param array $expected
@@ -262,27 +263,27 @@ class FinderFactoryTest extends TestCase
             [
                 'filter' => '!/vendor',
                 'directorySeparator' => '/',
-                'expected' => ['/^vendor(?=$|\/)/', true]
+                'expected' => ['/^vendor(?=$|\/)/', true],
             ],
             [
                 'filter' => '!/vendor',
                 'directorySeparator' => '\\',
-                'expected' => ['/^vendor(?=$|\\\)/', true]
+                'expected' => ['/^vendor(?=$|\\\)/', true],
             ],
             [
                 'filter' => '/vendor',
                 'directorySeparator' => '\\',
-                'expected' => ['/^vendor(?=$|\\\)/', false]
+                'expected' => ['/^vendor(?=$|\\\)/', false],
             ],
             [
                 'filter' => '/public_html/site/styles',
                 'directorySeparator' => '\\',
-                'expected' => ['/^public_html\\\site\\\styles(?=$|\\\)/', false]
+                'expected' => ['/^public_html\\\site\\\styles(?=$|\\\)/', false],
             ],
             [
                 'filter' => '/public_html/site/styles',
                 'directorySeparator' => '/',
-                'expected' => ['/^public_html\/site\/styles(?=$|\/)/', false]
+                'expected' => ['/^public_html\/site\/styles(?=$|\/)/', false],
             ],
         ];
     }

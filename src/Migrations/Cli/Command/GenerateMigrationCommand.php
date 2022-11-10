@@ -7,6 +7,7 @@ use Meteor\IO\IOInterface;
 use Meteor\Migrations\Configuration\FileConfiguration;
 use Meteor\Migrations\Generator\MigrationGenerator;
 use Meteor\Migrations\MigrationsConstants;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -64,6 +65,6 @@ class GenerateMigrationCommand extends AbstractCommand
 
         $this->io->success(sprintf('Generated migration in %s/Version%s.php', $path, $timestamp));
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

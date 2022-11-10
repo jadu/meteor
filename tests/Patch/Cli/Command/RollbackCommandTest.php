@@ -36,7 +36,7 @@ class RollbackCommandTest extends CommandTestCase
         $this->backupFinder = Mockery::mock('Meteor\Patch\Backup\BackupFinder');
         $this->taskBus = Mockery::mock('Meteor\Patch\Task\TaskBusInterface');
         $this->strategy = Mockery::mock('Meteor\Patch\Strategy\PatchStrategyInterface');
-        $this->permissionSetter = Mockery::mock(PermissionSetter::class,['setPostScriptsPermissions' => null]);
+        $this->permissionSetter = Mockery::mock(PermissionSetter::class, ['setPostScriptsPermissions' => null]);
 
         $this->platform = Mockery::mock('Meteor\Platform\PlatformInterface', [
             'setInstallDir' => null,
