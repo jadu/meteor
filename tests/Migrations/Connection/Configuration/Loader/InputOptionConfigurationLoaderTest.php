@@ -93,6 +93,25 @@ class InputOptionConfigurationLoaderTest extends TestCase
         static::assertEquals($result['host'], 'test');
     }
 
+    public function testLoadsDbPort()
+    {
+        $this->io->shouldReceive('hasOption')
+            ->with('db-port')
+            ->andReturn(true);
+
+        $this->io->shouldReceive('getOption')
+            ->with('db-port')
+            ->andReturn('test');
+
+        $this->io->shouldReceive('hasOption')
+            ->andReturn(false);
+
+        $result = $this->loader->load('/path');
+
+        static::assertArrayHasKey('port', $result);
+        static::assertEquals($result['port'], 'test');
+    }
+
     public function testLoadDbDriver()
     {
         $this->io->shouldReceive('hasOption')

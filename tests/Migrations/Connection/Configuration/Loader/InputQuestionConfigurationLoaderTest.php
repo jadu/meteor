@@ -27,6 +27,7 @@ class InputQuestionConfigurationLoaderTest extends TestCase
             'user' => 'user',
             'password' => 'password',
             'host' => 'host',
+            'port' => 'port',
             'driver' => 'driver',
         ];
 
@@ -47,6 +48,7 @@ class InputQuestionConfigurationLoaderTest extends TestCase
             'user' => '',
             'password' => 'password',
             'host' => 'host',
+            'port' => 'port',
             'driver' => 'driver',
         ];
 
@@ -67,6 +69,7 @@ class InputQuestionConfigurationLoaderTest extends TestCase
             'user' => 'user',
             'password' => '',
             'host' => 'host',
+            'port' => 'port',
             'driver' => 'driver',
         ];
 
@@ -87,6 +90,7 @@ class InputQuestionConfigurationLoaderTest extends TestCase
             'user' => 'user',
             'password' => 'password',
             'host' => '',
+            'port' => 'port',
             'driver' => 'driver',
         ];
 
@@ -94,6 +98,27 @@ class InputQuestionConfigurationLoaderTest extends TestCase
 
         static::assertArrayHasKey('host', $result);
         static::assertEquals($result['host'], 'host');
+    }
+
+    public function testAsksForPortWhenNotSet()
+    {
+        $this->io->shouldReceive('ask')
+            ->andReturn('port')
+            ->once();
+
+        $configuration = [
+            'dbname' => 'dbname',
+            'user' => 'user',
+            'password' => 'password',
+            'host' => 'host',
+            'port' => '',
+            'driver' => 'driver',
+        ];
+
+        $result = $this->loader->load('install', $configuration);
+
+        static::assertArrayHasKey('port', $result);
+        static::assertEquals($result['port'], 'port');
     }
 
     public function testAsksForDriverWhenNotSet()
@@ -107,6 +132,7 @@ class InputQuestionConfigurationLoaderTest extends TestCase
             'user' => 'user',
             'password' => 'password',
             'host' => 'host',
+            'port' => 'port',
             'driver' => '',
         ];
 

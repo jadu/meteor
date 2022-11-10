@@ -40,6 +40,10 @@ class InputOptionConfigurationLoader implements ConfigurationLoaderInterface
             $configuration['host'] = $this->io->getOption('db-host');
         }
 
+        if ($this->io->hasOption('db-port')) {
+            $configuration['port'] = $this->io->getOption('db-port');
+        }
+
         if ($this->io->hasOption('db-driver')) {
             $configuration['driver'] = $this->io->getOption('db-driver');
         }
