@@ -113,7 +113,7 @@ EOT;
             if (!$confirmation) {
                 $this->io->error('Migration cancelled.');
 
-                return Command::FAILURE;;
+                return Command::FAILURE;
             }
         }
 
