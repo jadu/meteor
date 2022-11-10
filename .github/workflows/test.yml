@@ -172,9 +172,6 @@ jobs:
       - name: Check meteor help command
         working-directory: ./tests/mock_project/output/github-action-test_test/github-action-test_test
         run: php meteor.phar help
-      - name: Check meteor version command
-        working-directory: ./tests/mock_project/output/github-action-test_test/github-action-test_test
-        run: php meteor.phar --version
   meteor-migrations-commands:
     runs-on: ubuntu-latest
     needs: meteor-build
