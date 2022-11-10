@@ -16,41 +16,41 @@ jobs:
   test-php74:
     runs-on: ubuntu-latest
     steps:
-    - uses: shivammathur/setup-php@v2
-      with:
-        php-version: '7.4'
-    - uses: actions/checkout@v3
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v3
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
-    - name: Install Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-    - name: Execute tests (Unit and Feature tests) via PHPUnit
-      run: vendor/bin/phpunit
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+      - uses: actions/checkout@v3
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Execute tests (Unit and Feature tests) via PHPUnit
+        run: vendor/bin/phpunit
   test-php81:
     runs-on: ubuntu-latest
     steps:
-    - uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.1'
-    - uses: actions/checkout@v3
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v3
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
-    - name: Install Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-    - name: Execute tests (Unit and Feature tests) via PHPUnit
-      run: vendor/bin/phpunit
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+      - uses: actions/checkout@v3
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Execute tests (Unit and Feature tests) via PHPUnit
+        run: vendor/bin/phpunit
   php-cs:
     runs-on: ubuntu-latest
     steps:
@@ -72,3 +72,135 @@ jobs:
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Run phpcs
         run: vendor/bin/php-cs-fixer fix -v --dry-run
+  meteor-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+      - uses: actions/checkout@v3
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Cache mock_project directory
+        id: mock_project-cache
+        uses: actions/cache@v3
+        with:
+          path: tests/mock_project
+          key: ${{ runner.os }}-mock_project
+          restore-keys: |
+            ${{ runner.os }}-mock_project
+      - name: Build the box
+        run: ./vendor/bin/box build
+      - name: Check meteor existence
+        id: check_meteor
+        uses: andstor/file-existence-action@v2
+        with:
+          files: "bin/meteor.phar"
+          fail: true
+      - name: Download migrations update script
+        uses: suisei-cn/actions-download-file@v1
+        with:
+          url: "https://gist.githubusercontent.com/DenisYaschuk/d3ade2d88d058cf9c971cf9d1f580a0f/raw/871ee04ee0ee01a6a2e0f97e67ce0206f78e3179/migrations-update.php"
+          target: tests/mock_project
+      - name: Copy meteor to mock project
+        uses: canastro/copy-file-action@master
+        with:
+          source: "bin/meteor.phar"
+          target: "tests/mock_project"
+      - name: Update migrations
+        working-directory: ./tests/mock_project
+        run: php migrations-update.php upgrades/migrations
+      - name: Build meteor package
+        working-directory: ./tests/mock_project
+        run: php meteor.phar package -o output
+      - name: Check package existence
+        id: check_package
+        uses: andstor/file-existence-action@v2
+        with:
+          files: "tests/mock_project/output/github-action-test_test.zip"
+          fail: true
+      - name: Remove previous unzips
+        uses: JesseTG/rm@v1.0.3
+        with:
+          path: tests/mock_project/output/github-action-test_test
+      - name: Unzip the mock_project archive
+        uses: montudor/action-zip@v1
+        with:
+          args: unzip -qq tests/mock_project/output/github-action-test_test.zip -d tests/mock_project/output/github-action-test_test
+      - name: Copy meteor to package
+        uses: canastro/copy-file-action@master
+        with:
+          source: "bin/meteor.phar"
+          target: "tests/mock_project/output/github-action-test_test/github-action-test_test"
+  meteor-general-commands:
+    runs-on: ubuntu-latest
+    needs: meteor-build
+    steps:
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+      - uses: actions/checkout@v3
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Cache mock_project directory
+        id: mock_project-cache
+        uses: actions/cache@v3
+        with:
+          path: tests/mock_project
+          key: ${{ runner.os }}-mock_project
+          restore-keys: |
+            ${{ runner.os }}-mock_project
+      - name: Check meteor list command
+        working-directory: ./tests/mock_project/output/github-action-test_test/github-action-test_test
+        run: php meteor.phar list
+      - name: Check meteor help command
+        working-directory: ./tests/mock_project/output/github-action-test_test/github-action-test_test
+        run: php meteor.phar help
+      - name: Check meteor version command
+        working-directory: ./tests/mock_project/output/github-action-test_test/github-action-test_test
+        run: php meteor.phar --version
+  meteor-migrations-commands:
+    runs-on: ubuntu-latest
+    needs: meteor-build
+    steps:
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+      - uses: actions/checkout@v3
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Cache mock_project directory
+        id: mock_project-cache
+        uses: actions/cache@v3
+        with:
+          path: tests/mock_project
+          key: ${{ runner.os }}-mock_project
+          restore-keys: |
+            ${{ runner.os }}-mock_project
+      - name: Check migrations:generate command
+        working-directory: ./tests/mock_project/output/github-action-test_test/github-action-test_test
+        run: php meteor.phar m:g
