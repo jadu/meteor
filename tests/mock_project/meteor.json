@@ -1,0 +1,15 @@
+{
+    "name": "github-action-test",
+    "package": {
+        "files": [
+            "/TEST_FILE"
+        ],
+        "version": "TEST_FILE"
+    },
+    "migrations": {
+        "name": "TEST Migrations",
+        "table": "JaduMigrationsCustom",
+        "namespace": "DoctrineMigrations",
+        "directory": "upgrades/migrations"
+    }
+}
