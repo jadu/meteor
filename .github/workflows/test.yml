@@ -89,14 +89,6 @@ jobs:
             ${{ runner.os }}-php-
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-      - name: Cache mock_project directory
-        id: mock_project-cache
-        uses: actions/cache@v3
-        with:
-          path: tests/mock_project
-          key: ${{ runner.os }}-mock_project
-          restore-keys: |
-            ${{ runner.os }}-mock_project
       - name: Build the box
         run: vendor/bin/box build
       - name: Check meteor existence
@@ -140,6 +132,14 @@ jobs:
         with:
           source: "bin/meteor.phar"
           target: "tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0"
+      - name: Cache mock_project directory
+        id: mock_project-cache
+        uses: actions/cache@v3
+        with:
+          path: tests/mock_project
+          key: ${{ runner.os }}-mock_project
+          restore-keys: |
+            ${{ runner.os }}-mock_project
       - name: install tree commnad
         run: sudo apt install -y tree
       - name: check tree
