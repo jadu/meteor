@@ -6,7 +6,6 @@ use Meteor\Filesystem\Finder\FinderFactory;
 use Meteor\IO\IOInterface;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem as BaseFilesystem;
-use Throwable;
 
 class Filesystem extends BaseFilesystem
 {
