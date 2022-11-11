@@ -125,21 +125,21 @@ jobs:
         id: check_package
         uses: andstor/file-existence-action@v2
         with:
-          files: "tests/mock_project/package/output/github-action-test_test.zip"
+          files: "tests/mock_project/package/output/github-action-test_2.0.zip"
           fail: true
       - name: Remove previous unzips
         uses: JesseTG/rm@v1.0.3
         with:
-          path: tests/mock_project/package/output/github-action-test_test
+          path: tests/mock_project/package/output/github-action-test_2.0
       - name: Unzip the mock_project archive
         uses: montudor/action-zip@v1
         with:
-          args: unzip -qq tests/mock_project/package/output/github-action-test_test.zip -d tests/mock_project/package/output/github-action-test_test
+          args: unzip -qq tests/mock_project/package/output/github-action-test_2.0.zip -d tests/mock_project/package/output/github-action-test_2.0
       - name: Copy meteor to package
         uses: canastro/copy-file-action@master
         with:
           source: "bin/meteor.phar"
-          target: "tests/mock_project/package/output/github-action-test_test/github-action-test_test"
+          target: "tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0"
   meteor-general-commands:
     runs-on: ubuntu-latest
     needs: meteor-build
@@ -167,10 +167,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-mock_project
       - name: Check meteor list command
-        working-directory: ./tests/mock_project/package/output/github-action-test_test/github-action-test_test
+        working-directory: ./tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0
         run: php meteor.phar list
       - name: Check meteor help command
-        working-directory: ./tests/mock_project/package/output/github-action-test_test/github-action-test_test
+        working-directory: ./tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0
         run: php meteor.phar help
   meteor-file-migrations-commands:
     runs-on: ubuntu-latest
@@ -199,5 +199,5 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-mock_project
       - name: Check migrations:generate command
-        working-directory: ./tests/mock_project/package/output/github-action-test_test/github-action-test_test
+        working-directory: ./tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0
         run: php meteor.phar f:g
