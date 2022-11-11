@@ -175,6 +175,7 @@ class Filesystem extends BaseFilesystem
      *
      * @param string $baseDir
      * @param string $path
+     *
      * @return string
      */
     public function getRelativePath($baseDir, $path)
@@ -206,16 +207,16 @@ class Filesystem extends BaseFilesystem
 
         $this->io->text(sprintf('Replacing directory <info>%s</>', $target));
 
-        $this->io->debug(sprintf("Copying %s to %s", $source, $temp));
+        $this->io->debug(sprintf('Copying %s to %s', $source, $temp));
         $this->copyDirectory($source, $temp);
 
-        $this->io->debug(sprintf("Renaming %s to %s", $target, $old));
+        $this->io->debug(sprintf('Renaming %s to %s', $target, $old));
         $this->rename($target, $old);
 
-        $this->io->debug(sprintf("Renaming %s to %s", $temp, $target));
+        $this->io->debug(sprintf('Renaming %s to %s', $temp, $target));
         $this->rename($temp, $target);
 
-        $this->io->debug(sprintf("Removing %s", $old));
+        $this->io->debug(sprintf('Removing %s', $old));
         $this->remove($old);
     }
 }
