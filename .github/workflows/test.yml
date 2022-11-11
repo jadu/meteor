@@ -137,9 +137,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: tests/mock_project
-          key: ${{ runner.os }}-mock_project
+          key: ${{ runner.os }}-mock_project_package
           restore-keys: |
-            ${{ runner.os }}-mock_project
+            ${{ runner.os }}-mock_project_package
       - name: install tree commnad
         run: sudo apt install -y tree
       - name: check tree
@@ -167,9 +167,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: tests/mock_project
-          key: ${{ runner.os }}-mock_project
+          key: ${{ runner.os }}-mock_project_package
           restore-keys: |
-            ${{ runner.os }}-mock_project
+            ${{ runner.os }}-mock_project_package
       - name: check tree
         run: tree tests/mock_project
       - name: Check meteor list command
@@ -201,9 +201,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: tests/mock_project
-          key: ${{ runner.os }}-mock_project
+          key: ${{ runner.os }}-mock_project_package
           restore-keys: |
-            ${{ runner.os }}-mock_project
+            ${{ runner.os }}-mock_project_package
       - name: Check migrations:generate command
         working-directory: tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0
         run: php meteor.phar f:g
