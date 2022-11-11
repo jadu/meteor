@@ -6,6 +6,7 @@ use Meteor\Filesystem\Finder\FinderFactory;
 use Meteor\IO\IOInterface;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem as BaseFilesystem;
+use Throwable;
 
 class Filesystem extends BaseFilesystem
 {
@@ -175,6 +176,7 @@ class Filesystem extends BaseFilesystem
      *
      * @param string $baseDir
      * @param string $path
+     * @return string
      */
     public function getRelativePath($baseDir, $path)
     {
@@ -185,53 +187,36 @@ class Filesystem extends BaseFilesystem
     }
 
     /**
-     * Remove the directory and all of its contents.
+     * Copy $replaceDirectory from $sourceDir to a temporary location, then rename $replaceDirectory from $targetDir and
+     * replace it with the temporary copy. Finally, remove the replaced directory. Used to quickly move a directory of
+     * items into place, completely removing anything in the existing target location.
      *
-     * @param string $directory
-     */
-    public function removeDirectory($directory)
-    {
-        if (file_exists($directory) && is_dir($directory)) {
-            $objects = scandir($directory);
-            foreach ($objects as $object) {
-                if ($object != '.' && $object != '..') {
-                    if (is_dir($directory . '/' . $object)) {
-                        $this->removeDirectory($directory . '/' . $object);
-                    } else {
-                        unlink($directory . '/' . $object);
-                    }
-                }
-            }
-
-            rmdir($directory);
-        }
-    }
-
-    /**
-     * Copy $replaceDirectory from $sourceDir to a temporary location, then remove $replaceDirectory from $targetDir and
-     * replace it with the temporary copy. Used to quickly move a directory of items into place, completely removing
-     * anything in the existing target location.
-     *
-     * Example usage: replaceDirectory('/package', '/install/home', 'vendor')
+     * Example usage: replaceDirectory('/package', '/install/home', 'vendor') to copy vendor from '/package' and replace
+     * the existing 'vendor' in '/install/home'.
      *
      * @param string $sourceDir
      * @param string $targetDir
      * @param string $replaceDirectory
      */
-    public function replaceDirectory($sourceDir, $targetDir, $replaceDirectory)
+    public function replaceDirectory(string $sourceDir, string $targetDir, string $replaceDirectory)
     {
         $source = $sourceDir . DIRECTORY_SEPARATOR . $replaceDirectory;
         $target = $targetDir . DIRECTORY_SEPARATOR . $replaceDirectory;
         $temp = $targetDir . DIRECTORY_SEPARATOR . uniqid($replaceDirectory);
+        $old = $targetDir . DIRECTORY_SEPARATOR . uniqid($replaceDirectory);
 
         $this->io->text(sprintf('Replacing directory <info>%s</>', $target));
 
+        $this->io->debug(sprintf("Copying %s to %s", $source, $temp));
         $this->copyDirectory($source, $temp);
 
-        $this->io->debug(sprintf('Removing %s', $target));
-        $this->removeDirectory($target);
+        $this->io->debug(sprintf("Renaming %s to %s", $target, $old));
+        $this->rename($target, $old);
 
-        $this->io->debug(sprintf('Renaming %s to %s', $temp, $target));
-        rename($temp, $target);
+        $this->io->debug(sprintf("Renaming %s to %s", $temp, $target));
+        $this->rename($temp, $target);
+
+        $this->io->debug(sprintf("Removing %s", $old));
+        $this->remove($old);
     }
 }
