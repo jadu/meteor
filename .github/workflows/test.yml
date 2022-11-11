@@ -140,6 +140,10 @@ jobs:
         with:
           source: "bin/meteor.phar"
           target: "tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0"
+      - name: install tree commnad
+        run: sudo apt install -y tree
+      - name: check tree
+        run: tree tests/mock_project
   meteor-general-commands:
     runs-on: ubuntu-latest
     needs: meteor-build
