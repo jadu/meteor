@@ -98,7 +98,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-mock_project
       - name: Build the box
-        run: ./vendor/bin/box build
+        run: vendor/bin/box build
       - name: Check meteor existence
         id: check_meteor
         uses: andstor/file-existence-action@v2
@@ -116,10 +116,10 @@ jobs:
           source: "bin/meteor.phar"
           target: "tests/mock_project/package"
       - name: Update migrations
-        working-directory: ./tests/mock_project/package
+        working-directory: tests/mock_project/package
         run: php migrations-update.php upgrades/migrations
       - name: Build meteor package
-        working-directory: ./tests/mock_project/package
+        working-directory: tests/mock_project/package
         run: php meteor.phar package -o output
       - name: Check package existence
         id: check_package
@@ -167,10 +167,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-mock_project
       - name: Check meteor list command
-        working-directory: ./tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0
+        working-directory: tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0
         run: php meteor.phar list
       - name: Check meteor help command
-        working-directory: ./tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0
+        working-directory: tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0
         run: php meteor.phar help
   meteor-file-migrations-commands:
     runs-on: ubuntu-latest
@@ -199,5 +199,5 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-mock_project
       - name: Check migrations:generate command
-        working-directory: ./tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0
+        working-directory: tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0
         run: php meteor.phar f:g
