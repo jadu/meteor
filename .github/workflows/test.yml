@@ -97,16 +97,25 @@ jobs:
         with:
           files: "bin/meteor.phar"
           fail: true
+      - name: Store the artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: meteor.phar
+          path: bin/meteor.phar
+  package-for-testing:
+    runs-on: ubuntu-latest
+    needs: meteor-build
+    steps:
       - name: Download migrations update script
         uses: suisei-cn/actions-download-file@v1
         with:
           url: "https://gist.githubusercontent.com/DenisYaschuk/d3ade2d88d058cf9c971cf9d1f580a0f/raw/871ee04ee0ee01a6a2e0f97e67ce0206f78e3179/migrations-update.php"
           target: tests/mock_project/package
       - name: Copy meteor to mock project
-        uses: canastro/copy-file-action@master
+        uses: actions/download-artifact@v3
         with:
-          source: "bin/meteor.phar"
-          target: "tests/mock_project/package"
+          name: meteor.phar
+          path: "tests/mock_project/package"
       - name: Update migrations
         working-directory: tests/mock_project/package
         run: php migrations-update.php upgrades/migrations
@@ -146,7 +155,7 @@ jobs:
         run: tree tests/mock_project
   meteor-general-commands:
     runs-on: ubuntu-latest
-    needs: meteor-build
+    needs: package-for-testing
     steps:
       - uses: shivammathur/setup-php@v2
         with:
@@ -179,7 +188,7 @@ jobs:
         #TODO: Check output of the previous commands
   meteor-file-migrations-commands:
     runs-on: ubuntu-latest
-    needs: meteor-build
+    needs: package-for-testing
     steps:
       - uses: shivammathur/setup-php@v2
         with:
