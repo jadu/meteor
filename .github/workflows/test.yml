@@ -139,6 +139,7 @@ jobs:
           args: unzip -qq tests/mock_project/package/output/github-action-test_2.0.zip -d tests/mock_project/package/output/github-action-test_2.0
       - name: Copy meteor to package
         uses: canastro/copy-file-action@master
+        working-directory: tests/mock_project/package
         with:
           source: "meteor.phar"
           target: "tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0"
