@@ -20,7 +20,7 @@
         "symfony/yaml": "^5.4",
         "doctrine/dbal": "^2.9",
         "doctrine/migrations": "^2.3.5",
-        "jadu/doctrine-types": "v2.x-dev as 2.0.0",
+        "jadu/doctrine-types": "^2.0",
         "composer/semver": "^3.2",
         "composer/package-versions-deprecated": "1.11.99.1"
     },
@@ -44,7 +44,7 @@
         }
     },
     "config": {
-        "stability": "dev",
+        "stability": "stable",
         "platform": {
             "php": "7.4"
         },
