@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 jobs:
-  test-php74:
+  unit-test-php74:
     runs-on: ubuntu-latest
     steps:
       - uses: shivammathur/setup-php@v2
@@ -32,7 +32,7 @@ jobs:
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: vendor/bin/phpunit
-  test-php81:
+  unit-test-php81:
     runs-on: ubuntu-latest
     steps:
       - uses: shivammathur/setup-php@v2
@@ -154,22 +154,22 @@ jobs:
         run: sudo apt install -y tree
       - name: check tree
         run: tree tests/mock_project
-  meteor-general-commands:
+  test-general-commands:
     runs-on: ubuntu-latest
     needs: package-for-testing
     steps:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
-      - uses: actions/checkout@v3
-      - name: Cache Composer packages
-        id: composer-cache
-        uses: actions/cache@v3
-        with:
-          path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-php-
+      # - uses: actions/checkout@v3
+      # - name: Cache Composer packages
+      #   id: composer-cache
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: vendor
+      #     key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-php-
       - name: Cache mock_project directory
         id: mock_project-cache
         uses: actions/cache@v3
@@ -187,7 +187,7 @@ jobs:
         working-directory: tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0
         run: php meteor.phar help
         #TODO: Check output of the previous commands
-  meteor-file-migrations-commands:
+  test-file-migrations-commands:
     runs-on: ubuntu-latest
     needs: package-for-testing
     steps:
