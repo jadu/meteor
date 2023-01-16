@@ -5,6 +5,7 @@
 * Update Doctrine to 2.3.5
 * Content passed to addSql is no longer output to the terminal during migrations.
 * Add support for non-standard database ports (for this to work you must use 127.0.0.1 instead of localhost)
+* Prevent silent failures when removing folders on Windows during processing of replaceDirectories
 
 ## v3.4.1
 

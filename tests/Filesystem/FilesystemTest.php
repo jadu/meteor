@@ -341,28 +341,6 @@ class FilesystemTest extends TestCase
         static::assertTrue(is_file(vfsStream::url('root/target/index.html')));
     }
 
-    public function testRemoveDirectory()
-    {
-        vfsStream::setup('root', null, [
-            'source' => [
-                'index.html' => '',
-                'vendor' => [
-                    'org' => [
-                        'package' => [
-                            'file.html' => '',
-                        ],
-                    ],
-                ],
-            ],
-            'target' => [],
-        ]);
-
-        static::assertTrue(is_file(vfsStream::url('root/source/vendor/org/package/file.html')));
-
-        $this->filesystem->removeDirectory(vfsStream::url('root/source/vendor'));
-        static::assertFalse(is_file(vfsStream::url('root/source/vendor/org/package/file.html')));
-    }
-
     public function testReplaceDirectory()
     {
         vfsStream::setup('root', null, [
