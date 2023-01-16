@@ -193,7 +193,25 @@ jobs:
           key: ${{ runner.os }}-mock_project_package
           restore-keys: |
             ${{ runner.os }}-mock_project_package
-      - name: Check migrations:generate command
+      - name: Check file-migrations:generate command
         working-directory: tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0
         run: php meteor.phar f:g
+  test-migrations-commands:
+    runs-on: ubuntu-latest
+    needs: package-for-testing
+    steps:
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+      - name: Cache mock_project directory
+        id: mock_project-cache
+        uses: actions/cache@v3
+        with:
+          path: tests/mock_project
+          key: ${{ runner.os }}-mock_project_package
+          restore-keys: |
+            ${{ runner.os }}-mock_project_package
+      - name: Check migrations:generate command
+        working-directory: tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0
+        run: php meteor.phar m:g
     #TODO: add other commands
