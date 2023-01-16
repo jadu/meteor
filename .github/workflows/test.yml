@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 jobs:
-  test-php74:
+  unit-test-php74:
     runs-on: ubuntu-latest
     steps:
       - uses: shivammathur/setup-php@v2
@@ -32,7 +32,7 @@ jobs:
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         run: vendor/bin/phpunit
-  test-php81:
+  unit-test-php81:
     runs-on: ubuntu-latest
     steps:
       - uses: shivammathur/setup-php@v2
@@ -97,16 +97,26 @@ jobs:
         with:
           files: "bin/meteor.phar"
           fail: true
+      - name: Store the artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: meteor.phar
+          path: bin/meteor.phar
+  package-for-testing:
+    runs-on: ubuntu-latest
+    needs: meteor-build
+    steps:
+      - uses: actions/checkout@v3
       - name: Download migrations update script
         uses: suisei-cn/actions-download-file@v1
         with:
           url: "https://gist.githubusercontent.com/DenisYaschuk/d3ade2d88d058cf9c971cf9d1f580a0f/raw/871ee04ee0ee01a6a2e0f97e67ce0206f78e3179/migrations-update.php"
           target: tests/mock_project/package
       - name: Copy meteor to mock project
-        uses: canastro/copy-file-action@master
+        uses: actions/download-artifact@v3
         with:
-          source: "bin/meteor.phar"
-          target: "tests/mock_project/package"
+          name: meteor.phar
+          path: "tests/mock_project/package"
       - name: Update migrations
         working-directory: tests/mock_project/package
         run: php migrations-update.php upgrades/migrations
@@ -130,7 +140,7 @@ jobs:
       - name: Copy meteor to package
         uses: canastro/copy-file-action@master
         with:
-          source: "bin/meteor.phar"
+          source: "tests/mock_project/package/meteor.phar"
           target: "tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0"
       - name: Cache mock_project directory
         id: mock_project-cache
@@ -144,22 +154,13 @@ jobs:
         run: sudo apt install -y tree
       - name: check tree
         run: tree tests/mock_project
-  meteor-general-commands:
+  test-general-commands:
     runs-on: ubuntu-latest
-    needs: meteor-build
+    needs: package-for-testing
     steps:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
-      - uses: actions/checkout@v3
-      - name: Cache Composer packages
-        id: composer-cache
-        uses: actions/cache@v3
-        with:
-          path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-php-
       - name: Cache mock_project directory
         id: mock_project-cache
         uses: actions/cache@v3
@@ -168,8 +169,8 @@ jobs:
           key: ${{ runner.os }}-mock_project_package
           restore-keys: |
             ${{ runner.os }}-mock_project_package
-      - name: check tree
-        run: tree tests/mock_project
+      # - name: check tree
+      #   run: tree tests/mock_project
       - name: Check meteor list command
         working-directory: tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0
         run: php meteor.phar list
@@ -177,22 +178,31 @@ jobs:
         working-directory: tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0
         run: php meteor.phar help
         #TODO: Check output of the previous commands
-  meteor-file-migrations-commands:
+  test-file-migrations-commands:
     runs-on: ubuntu-latest
-    needs: meteor-build
+    needs: package-for-testing
     steps:
       - uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
-      - uses: actions/checkout@v3
-      - name: Cache Composer packages
-        id: composer-cache
+      - name: Cache mock_project directory
+        id: mock_project-cache
         uses: actions/cache@v3
         with:
-          path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          path: tests/mock_project
+          key: ${{ runner.os }}-mock_project_package
           restore-keys: |
-            ${{ runner.os }}-php-
+            ${{ runner.os }}-mock_project_package
+      - name: Check file-migrations:generate command
+        working-directory: tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0
+        run: php meteor.phar f:g
+  test-migrations-commands:
+    runs-on: ubuntu-latest
+    needs: package-for-testing
+    steps:
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
       - name: Cache mock_project directory
         id: mock_project-cache
         uses: actions/cache@v3
@@ -203,5 +213,5 @@ jobs:
             ${{ runner.os }}-mock_project_package
       - name: Check migrations:generate command
         working-directory: tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0
-        run: php meteor.phar f:g
+        run: php meteor.phar m:g
     #TODO: add other commands
