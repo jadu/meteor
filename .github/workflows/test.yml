@@ -54,7 +54,6 @@ jobs:
           - '7.4'
           - '8.1'
 
-    needs: package-for-testing
     steps:
       - uses: shivammathur/setup-php@v2
         with:
