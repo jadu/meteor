@@ -13,6 +13,21 @@
         </testsuite>
     </testsuites>
 
+    <coverage
+        cacheDirectory="."
+        includeUncoveredFiles="true"
+        processUncoveredFiles="true"
+        pathCoverage="false"
+        ignoreDeprecatedCodeUnits="true"
+        disableCodeCoverageIgnore="true">
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+        <report>
+            <html outputDirectory="html-coverage" lowUpperBound="50" highLowerBound="90"/>
+        </report>
+    </coverage>
+
     <php>
         <ini name="date.timezone" value="UTC"/>
     </php>
