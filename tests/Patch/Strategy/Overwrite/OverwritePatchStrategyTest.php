@@ -17,6 +17,7 @@ class OverwritePatchStrategyTest extends TestCase
 
     public function testApply()
     {
+        $time = date('YmdHis');
         $tasks = $this->strategy->apply('patch', 'install', [
             'skip-backup' => false,
             'skip-db-migrations' => false,
@@ -47,7 +48,7 @@ class OverwritePatchStrategyTest extends TestCase
         static::assertSame('install', $tasks[5]->installDir);
 
         static::assertInstanceOf('Meteor\Patch\Task\BackupFiles', $tasks[6]);
-        static::assertSame('install/backups/' . date('YmdHis'), $tasks[6]->backupDir);
+        static::assertSame('install/backups/' . $time, $tasks[6]->backupDir);
         static::assertSame('patch', $tasks[6]->patchDir);
         static::assertSame('install', $tasks[6]->installDir);
 
