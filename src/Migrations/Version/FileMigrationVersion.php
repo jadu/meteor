@@ -3,6 +3,7 @@
 namespace Meteor\Migrations\Version;
 
 use Doctrine\Migrations\Configuration\Configuration;
+use Doctrine\Migrations\Version\Direction;
 use Doctrine\Migrations\Version\Executor;
 use Doctrine\Migrations\Version\Version;
 
@@ -34,5 +35,14 @@ class FileMigrationVersion extends Version
     public function markNotMigrated(): void
     {
         $this->versionStorage->markNotMigrated($this->getVersion());
+    }
+
+    public function markVersion(string $direction): void
+    {
+        if ($direction === Direction::UP) {
+            $this->markMigrated();
+        } else {
+            $this->markNotMigrated();
+        }
     }
 }

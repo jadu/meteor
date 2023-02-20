@@ -25,7 +25,9 @@ class ConfigurationFactoryTest extends TestCase
     {
         $this->connectionFactory = Mockery::mock(ConnectionFactory::class);
         $this->fileMigrationVersionStorageFactory = Mockery::mock(FileMigrationVersionStorageFactory::class);
-        $this->versionFileManager = Mockery::mock(VersionFileManager::class);
+        $this->versionFileManager = Mockery::mock(VersionFileManager::class, [
+            'getCurrentVersion' => '0',
+        ]);
         $this->io = new NullIO();
 
         $this->configurationFactory = new ConfigurationFactory(
@@ -172,8 +174,8 @@ class ConfigurationFactoryTest extends TestCase
 
         $versions = [];
 
-        foreach ($configuration->getMigrations() as $migration) {
-            $versions[] = $migration->getVersion();
+        foreach ($configuration->getMigrationVersions() as $version) {
+            $versions[] = $version;
         }
 
         static::assertEquals(['0987654321'], $versions);

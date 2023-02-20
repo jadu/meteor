@@ -10,6 +10,7 @@ use Doctrine\Migrations\OutputWriter;
 use Doctrine\Migrations\ParameterFormatterInterface;
 use Doctrine\Migrations\Provider\SchemaDiffProviderInterface;
 use Doctrine\Migrations\Stopwatch;
+use Doctrine\Migrations\Version\Direction;
 use Doctrine\Migrations\Version\Executor;
 use Mockery;
 use PHPUnit\Framework\TestCase;
@@ -67,5 +68,27 @@ class FileMigrationVersionTest extends TestCase
             ->once();
 
         $this->version->markNotMigrated();
+    }
+
+    public function testMarkVersionUp()
+    {
+        $this->versionStorage->shouldReceive('markMigrated')
+            ->andReturnUsing(function ($version) {
+                static::assertEquals('12345', $version);
+            })
+            ->once();
+
+        $this->version->markVersion(Direction::UP);
+    }
+
+    public function testMarkVersionDown()
+    {
+        $this->versionStorage->shouldReceive('markNotMigrated')
+            ->andReturnUsing(function ($version) {
+                static::assertEquals('12345', $version);
+            })
+            ->once();
+
+        $this->version->markVersion(Direction::DOWN);
     }
 }
