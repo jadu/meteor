@@ -46,15 +46,13 @@ class FileConfiguration extends AbstractConfiguration implements JaduPathAwareCo
                 throw DuplicateMigrationVersion::new($version, get_class($versions[$version]));
             }
 
-            $version = new FileMigrationVersion(
+            $versions[$version] = new FileMigrationVersion(
                 $this,
                 $version,
                 $class,
                 $this->getDependencyFactory()->getVersionExecutor(),
                 $this->versionStorage
             );
-
-            $versions[] = $version;
         }
 
         return $versions;
