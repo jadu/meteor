@@ -202,13 +202,7 @@ class ConfigurationFactoryTest extends TestCase
             ->andReturn($fileMigrationVersionStorage)
             ->once();
 
-        $this->versionFileManager->shouldReceive('getCurrentVersion')
-            ->with(__DIR__ . '/Fixtures/empty/install', 'JaduMigrationsXFP', VersionFileManager::FILE_MIGRATION)
-            ->andReturn('12345')
-            ->once();
-
         $fileMigrationVersionStorage->shouldReceive('initialise')
-            ->with(Mockery::type(FileConfiguration::class), '12345')
             ->once();
 
         $configuration = $this->configurationFactory->createFileConfiguration(

@@ -179,7 +179,7 @@ abstract class DoctrineConfiguration extends Configuration
     }
 
     /**
-     * @return array
+     * @return Version[]
      */
     public function getMigrationVersions(): array
     {

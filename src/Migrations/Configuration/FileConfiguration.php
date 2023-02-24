@@ -24,7 +24,7 @@ class FileConfiguration extends AbstractConfiguration implements JaduPathAwareCo
     }
 
     /**
-     *  @return Version[]
+     *  @return FileMigrationVersion[]
      */
     public function registerMigrationsFromDirectory(string $path): array
     {

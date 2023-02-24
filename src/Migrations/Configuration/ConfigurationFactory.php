@@ -109,9 +109,8 @@ class ConfigurationFactory
         $versions = $configuration->registerMigrationsFromDirectory($patchDir . '/' . $config['directory']);
         $configuration->setVersions($versions);
         if (!$versionStorage->isInitialised()) {
-            // The version storage file does not exist yet, create using the migration status file if available
-            $currentVersion = $this->versionFileManager->getCurrentVersion($installDir, $config['table'], VersionFileManager::FILE_MIGRATION);
-            $versionStorage->initialise($configuration, $currentVersion);
+            // The version storage file does not exist yet, create it
+            $versionStorage->initialise();
         }
 
         return $configuration;
