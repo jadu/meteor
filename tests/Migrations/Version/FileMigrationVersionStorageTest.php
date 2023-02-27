@@ -185,4 +185,11 @@ class FileMigrationVersionStorageTest extends TestCase
 
         static::assertSame("1\n2\n3", file_get_contents(vfsStream::url('root/jadumigrations')));
     }
+
+    public function testInitialiseCreatesFile()
+    {
+        $this->versionStorage->initialise();
+
+        static::assertTrue(file_exists(vfsStream::url('root/jadumigrations')));
+    }
 }

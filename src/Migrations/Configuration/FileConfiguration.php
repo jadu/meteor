@@ -24,6 +24,41 @@ class FileConfiguration extends AbstractConfiguration implements JaduPathAwareCo
     }
 
     /**
+     *  @return FileMigrationVersion[]
+     */
+    public function registerMigrationsFromDirectory(string $path): array
+    {
+        $this->validate();
+
+        $migrations = $this->getDependencyFactory()->getRecursiveRegexFinder()->findMigrations(
+            $path,
+            $this->getMigrationsNamespace()
+        );
+
+        $versions = [];
+
+        foreach ($migrations as $version => $class) {
+            if (!class_exists($class)) {
+                throw MigrationClassNotFound::new($class, $this->getMigrationsNamespace());
+            }
+
+            if (isset($versions[$version])) {
+                throw DuplicateMigrationVersion::new($version, get_class($versions[$version]));
+            }
+
+            $versions[$version] = new FileMigrationVersion(
+                $this,
+                $version,
+                $class,
+                $this->getDependencyFactory()->getVersionExecutor(),
+                $this->versionStorage
+            );
+        }
+
+        return $versions;
+    }
+
+    /**
      * @param FileMigrationVersionStorage $versionStorage
      */
     public function setVersionStorage(FileMigrationVersionStorage $versionStorage)

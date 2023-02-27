@@ -177,4 +177,12 @@ abstract class DoctrineConfiguration extends Configuration
             return $version->getVersion() <= $to;
         }
     }
+
+    /**
+     * @return Version[]
+     */
+    public function getMigrationVersions(): array
+    {
+        return $this->migrationVersions;
+    }
 }

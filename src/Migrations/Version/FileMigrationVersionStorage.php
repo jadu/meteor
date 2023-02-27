@@ -2,8 +2,6 @@
 
 namespace Meteor\Migrations\Version;
 
-use Meteor\Migrations\Configuration\FileConfiguration;
-
 class FileMigrationVersionStorage
 {
     /**
@@ -109,20 +107,11 @@ class FileMigrationVersionStorage
     }
 
     /**
-     * Initialises the version storage from the current known version.
-     *
-     * @param FileConfiguration $configuration
-     * @param string $currentVersion
+     * Initialises the empty version storage.
      */
-    public function initialise(FileConfiguration $configuration, $currentVersion)
+    public function initialise()
     {
-        $versions = array_filter($configuration->getMigrations(), function (FileMigrationVersion $version) use ($currentVersion) {
-            return $version->getVersion() <= $currentVersion;
-        });
-
-        foreach ($versions as $version) {
-            $this->markMigrated($version->getVersion());
-        }
+        touch($this->file);
     }
 
     private function loadVersions()
