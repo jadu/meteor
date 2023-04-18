@@ -100,11 +100,28 @@ class InputQuestionConfigurationLoaderTest extends TestCase
         static::assertEquals($result['host'], 'host');
     }
 
-    public function testAsksForPortWhenNotSet()
+    public function testDoesNotAskForPortWhenNotSet()
     {
         $this->io->shouldReceive('ask')
-            ->andReturn('port')
-            ->once();
+            ->never();
+
+        $configuration = [
+            'dbname' => 'dbname',
+            'user' => 'user',
+            'password' => 'password',
+            'host' => 'host',
+            'driver' => 'driver',
+        ];
+
+        $result = $this->loader->load('install', $configuration);
+
+        static::assertArrayNotHasKey('port', $result);
+    }
+
+    public function testDoesNotAskForPortWhenBlank()
+    {
+        $this->io->shouldReceive('ask')
+            ->never();
 
         $configuration = [
             'dbname' => 'dbname',
@@ -118,7 +135,7 @@ class InputQuestionConfigurationLoaderTest extends TestCase
         $result = $this->loader->load('install', $configuration);
 
         static::assertArrayHasKey('port', $result);
-        static::assertEquals($result['port'], 'port');
+        static::assertEquals($result['port'], '');
     }
 
     public function testAsksForDriverWhenNotSet()
