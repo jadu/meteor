@@ -185,4 +185,14 @@ abstract class DoctrineConfiguration extends Configuration
     {
         return $this->migrationVersions;
     }
+
+    public function getMigrationsColumnLength(): int
+    {
+        /**
+         * HACK: For BC to prevent Doctrine attempting to resize the column on
+         * MSSQL, which causes an error:
+         * "The object 'PK__JaduMigr__79B5C94CE22D7096' is dependent on column 'version'"
+         */
+        return 255;
+    }
 }
