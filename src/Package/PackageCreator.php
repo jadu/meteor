@@ -232,7 +232,7 @@ class PackageCreator
      */
     private function addPharToPackage($tempDir, $pharPath)
     {
-        if ($pharPath === null) {
+        if (empty($pharPath)) {
             $pharPath = $this->getPharPath();
         }
 
@@ -240,7 +240,7 @@ class PackageCreator
             return;
         }
 
-        $this->io->debug('Adding Phar archive to the package');
+        $this->io->debug(sprintf('Adding Phar archive [%s] to the package', $pharPath));
         $this->filesystem->copy($pharPath, $tempDir . '/meteor.phar', true);
     }
 
@@ -251,6 +251,9 @@ class PackageCreator
      */
     private function getPharPath()
     {
-        return \Phar::running(false);
+        $pharPath = \Phar::running(false);
+        $this->io->debug(sprintf('Found phar archive [%s]', $pharPath));
+
+        return $pharPath;
     }
 }
