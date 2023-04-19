@@ -41,15 +41,17 @@ class ProcessRunner
      *
      * @return string
      */
-    public function run($command, $cwd = null, $callback = null, $timeout = self::DEFAULT_TIMEOUT)
+    public function run(string $command, string $cwd = null, $callback = null, $timeout = self::DEFAULT_TIMEOUT)
     {
         if (PHPMemoryLimitSetter::isPHPScript($command) && !PHPMemoryLimitSetter::hasMemoryLimit($command)) {
             $command = PHPMemoryLimitSetter::setMemoryLimit($command);
         }
+
         if ($cwd === null) {
             $cwd = getcwd();
         }
-        $process = $this->processFactory->create(explode(' ', $command));
+
+        $process = $this->processFactory->create($command, $cwd);
         $process->setWorkingDirectory($cwd);
         $process->setTimeout($timeout);
 
