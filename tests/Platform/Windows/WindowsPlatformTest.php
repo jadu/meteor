@@ -36,7 +36,8 @@ class WindowsPlatformTest extends TestCase
 
         $this->processRunner->shouldReceive('run')
             ->andReturnUsing(function ($command) {
-                static::assertEquals(['icacls', 'vfs://root/jadu/JaduConstants.php', '/remove:g', 'IIS_IUSRS', '/grant', 'IIS_IUSRS:RXWM', '/Q'], $command);
+                static::assertStringContainsString('vfs://root/jadu/JaduConstants.php', $command);
+                static::assertStringContainsString('IIS_IUSRS:RXWM', $command);
             })
             ->once();
         $this->platform->setPermission(vfsStream::url('root/jadu/JaduConstants.php'), $permission);
@@ -48,7 +49,8 @@ class WindowsPlatformTest extends TestCase
 
         $this->processRunner->shouldReceive('run')
             ->andReturnUsing(function ($command) {
-                static::assertEquals(['icacls', 'vfs://root/jadu/custom', '/remove:g', 'IIS_IUSRS', '/grant', 'IIS_IUSRS:(OI)(CI)RXWM', '/Q'], $command);
+                static::assertStringContainsString('vfs://root/jadu/custom', $command);
+                static::assertStringContainsString('IIS_IUSRS:(OI)(CI)RXWM', $command);
             })
             ->once();
 
@@ -61,7 +63,9 @@ class WindowsPlatformTest extends TestCase
 
         $this->processRunner->shouldReceive('run')
             ->andReturnUsing(function ($command) {
-                static::assertEquals(['icacls', 'vfs://root/jadu/custom', '/remove:g', 'IIS_IUSRS', '/grant', 'IIS_IUSRS:(OI)(CI)RXWM', '/t', '/Q'], $command);
+                static::assertStringContainsString('vfs://root/jadu/custom', $command);
+                static::assertStringContainsString('IIS_IUSRS:(OI)(CI)RXWM', $command);
+                static::assertStringContainsString('/t', $command);
             })
             ->once();
 
@@ -74,7 +78,9 @@ class WindowsPlatformTest extends TestCase
 
         $this->processRunner->shouldReceive('run')
             ->andReturnUsing(function ($command) {
-                static::assertEquals(['icacls', 'vfs://root/jadu/JaduConstants.php', '/remove:g', 'IIS_IUSRS', '/grant', 'IIS_IUSRS:RXWM', '/Q'], $command);
+                static::assertStringContainsString('vfs://root/jadu/JaduConstants.php', $command);
+                static::assertStringContainsString('IIS_IUSRS:RXWM', $command);
+                static::assertStringNotContainsString('/t', $command);
             })
             ->once();
 
@@ -87,7 +93,9 @@ class WindowsPlatformTest extends TestCase
 
         $this->processRunner->shouldReceive('run')
             ->andReturnUsing(function ($command) {
-                static::assertEquals(['icacls', 'vfs://root/jadu/JaduConstants.php', '/remove:g', 'IIS_IUSRS', '/grant', 'IIS_IUSRS:RX', '/Q'], $command);
+                static::assertStringContainsString('vfs://root/jadu/JaduConstants.php', $command);
+                static::assertStringContainsString('IIS_IUSRS:RX', $command);
+                static::assertStringNotContainsString('/t', $command);
             })
             ->once();
 

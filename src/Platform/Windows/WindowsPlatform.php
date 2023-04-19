@@ -55,13 +55,13 @@ class WindowsPlatform implements PlatformInterface
         }
         $grant .= $this->getModeString($permission);
 
-        $command = ['icacls', $path, '/remove:g', $user, '/grant', $grant];
-
-        if (is_dir($path) && $permission->isRecursive()) {
-            $command[] = '/t';
-        }
-
-        $command[] = '/Q';
+        $command = sprintf(
+            'icacls %s /remove:g %s /grant %s%s /Q',
+            escapeshellarg($path),
+            escapeshellarg($user),
+            escapeshellarg($grant),
+            is_dir($path) && $permission->isRecursive() ? ' /t' : ''
+        );
 
         $this->processRunner->run($command);
     }
