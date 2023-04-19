@@ -84,6 +84,7 @@ class ProcessRunnerTest extends TestCase
 
         $this->processFactory->shouldReceive('create')
             ->with($commandWithLimit)
+            ->once()
             ->andReturn($this->process);
 
         $this->processRunner->run($command);
@@ -97,6 +98,7 @@ class ProcessRunnerTest extends TestCase
 
         $this->processFactory->shouldReceive('create')
             ->with($command)
+            ->once()
             ->andReturn($this->process);
 
         $this->processRunner->run($command);
@@ -108,6 +110,7 @@ class ProcessRunnerTest extends TestCase
 
         $this->processFactory->shouldReceive('create')
             ->with($command)
+            ->once()
             ->andReturn($this->process);
 
         $this->processRunner->run($command);

@@ -46,10 +46,12 @@ class ProcessRunner
         if (PHPMemoryLimitSetter::isPHPScript($command) && !PHPMemoryLimitSetter::hasMemoryLimit($command)) {
             $command = PHPMemoryLimitSetter::setMemoryLimit($command);
         }
+
         if ($cwd === null) {
             $cwd = getcwd();
         }
-        $process = $this->processFactory->create(explode(' ', $command));
+
+        $process = $this->processFactory->create($command, $cwd);
         $process->setWorkingDirectory($cwd);
         $process->setTimeout($timeout);
 
