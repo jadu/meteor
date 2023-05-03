@@ -1,18 +1,26 @@
 {
     "alias": "meteor.phar",
-    "chmod": "0755",
+    "banner": false,
     "compactors": [
-        "Herrera\\Box\\Compactor\\Json",
-        "Herrera\\Box\\Compactor\\Php"
+        "KevinGH\\Box\\Compactor\\Json",
+        "KevinGH\\Box\\Compactor\\Php"
     ],
+    "compression": "GZ",
     "directories": ["src"],
-    "files": [],
+    "dump-autoload": false,
     "finder": [
         {
             "exclude": [
-                "/mikey179",
-                "/mockery",
-                "/phpunit",
+                "doc",
+                "docs",
+                "hamcrest",
+                "mikey179",
+                "mockery",
+                "myclabs",
+                "phpunit",
+                "php-cs-fixer",
+                "sebastian",
+                "theseer",
                 "Tester",
                 "Tests",
                 "tests"
@@ -21,8 +29,5 @@
         }
     ],
     "git-commit": "git-commit",
-    "git-version": "git-version",
-    "main": "bin/meteor",
-    "output": "bin/meteor.phar",
-    "stub": true
+    "git-version": "git-version"
 }

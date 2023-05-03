@@ -8,6 +8,7 @@
         }
     ],
     "require": {
+        "humbug/box": "^3.16",
         "php": ">=7.4",
         "guzzlehttp/guzzle": "~6.0",
         "symfony/config": "^5.4",
@@ -28,7 +29,6 @@
         "phpunit/phpunit": "^9.5",
         "mockery/mockery": "^1.5",
         "mikey179/vfsstream": "*",
-        "humbug/box": "^3.16",
         "friendsofphp/php-cs-fixer": "^2.0",
         "jadu/php-style": "~1.2"
     },
