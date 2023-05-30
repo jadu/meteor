@@ -38,6 +38,11 @@ class CheckVersionHandler
         $versions = $this->versionComparer->comparePackage($task->workingDir, $task->installDir, $config);
 
         foreach ($versions as $version) {
+            // if we have a development package we do not want to error on version checks
+            if (strpos($version->getNewVersion(), 'dev-') === 0 || strpos($version->getCurrentVersion(), 'dev-') === 0) {
+                continue;
+            }
+
             if ($task->operator === CheckVersion::GREATER_THAN_OR_EQUAL && $version->isLessThan()) {
                 $this->io->error('All versions within the patch must be greater than or equal to the current version');
 
