@@ -36,7 +36,7 @@ class DisplayVersionInfoHandler
         $versions = $this->versionComparer->comparePackage($task->workingDir, $task->installDir, $config);
 
         foreach ($versions as $version) {
-            if(strpos($version->getNewVersion(), 'dev-') === 0 || strpos($version->getCurrentVersion(), 'dev-') === 0){
+            if (strpos($version->getNewVersion(), 'dev-') === 0 || strpos($version->getCurrentVersion(), 'dev-') === 0) {
                 $status = '<fg=green>Development</>';
             } elseif ($version->isGreaterThan()) {
                 $status = '<fg=green>Newer</>';

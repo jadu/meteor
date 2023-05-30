@@ -103,15 +103,15 @@ class CheckVersionHandlerTest extends TestCase
         return [
             [
                 'dev-packagebranch-1',
-                '1.0.0'
+                '1.0.0',
             ],
             [
                 'dev-branc-22-33-1',
-                'dev-packagebranch-1'
+                'dev-packagebranch-1',
             ],
             [
                 '3.4.1',
-                'dev-poc-release/23'
+                'dev-poc-release/23',
             ],
         ];
     }
