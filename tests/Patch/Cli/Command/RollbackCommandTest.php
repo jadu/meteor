@@ -7,6 +7,7 @@ use Meteor\Cli\Command\CommandTestCase;
 use Meteor\IO\NullIO;
 use Meteor\Patch\Backup\Backup;
 use Meteor\Patch\Event\PatchEvents;
+use Meteor\Patch\Version\VersionDiff;
 use Meteor\Permissions\PermissionSetter;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
@@ -337,6 +338,91 @@ class RollbackCommandTest extends CommandTestCase
 
         $this->locker->shouldReceive('unlock')
             ->never();
+
+        $this->tester->execute([
+            '--working-dir' => $workingDir,
+            '--install-dir' => $installDir,
+        ]);
+    }
+
+    public function testIgnoresDevVersionsWhenVersionCheck()
+    {
+        $workingDir = vfsStream::url('root/patch');
+        $installDir = vfsStream::url('root/install');
+
+        $config = ['name' => 'test'];
+        $this->command->setConfiguration($config);
+
+        $this->platform->shouldReceive('setInstallDir')
+            ->with($installDir)
+            ->once();
+
+        $this->scriptRunner->shouldReceive('setWorkingDir')
+            ->with($installDir)
+            ->once();
+
+        $this->versionComparer->shouldReceive('comparePackage')
+            ->with($workingDir . '/to_patch', $installDir, $config)
+            ->andReturn([])
+            ->once();
+
+        $this->permissionSetter->shouldReceive('setPostScriptsPermissions')
+            ->with($installDir)
+            ->once();
+
+        $backups = [
+            new Backup(vfsStream::url('root/install/backups/20160701102030'), [
+                new VersionDiff('p1', 'f1', '3.4.1', 'dev-packagebranch-1'),
+                new VersionDiff('p2', 'f2', 'dev-pb-3', '3.4.1'),
+            ]),
+        ];
+
+        $this->backupFinder->shouldReceive('find')
+            ->with($installDir . '/backups', $installDir, $config)
+            ->andReturn($backups)
+            ->once();
+
+        $backupDir = $backups[0]->getPath();
+
+        $this->logger->shouldReceive('enable')
+            ->once();
+
+        $this->locker->shouldReceive('lock')
+            ->with($installDir)
+            ->once();
+
+        $this->eventDispatcher->shouldReceive('dispatch')
+            ->with(Mockery::any(), PatchEvents::PRE_ROLLBACK)
+            ->andReturn(Mockery::mock(Event::class))
+            ->once();
+
+        $tasks = [
+            new \stdClass(),
+            new \stdClass(),
+        ];
+        $this->strategy->shouldReceive('rollback')
+            ->with($backupDir, $workingDir, $installDir, [], Mockery::any())
+            ->andReturn($tasks)
+            ->once();
+
+        $this->taskBus->shouldReceive('run')
+            ->with($tasks[0], $config)
+            ->andReturn(true)
+            ->once();
+
+        $this->taskBus->shouldReceive('run')
+            ->with($tasks[1], $config)
+            ->andReturn(true)
+            ->once();
+
+        $this->eventDispatcher->shouldReceive('dispatch')
+            ->with(Mockery::any(), PatchEvents::POST_ROLLBACK)
+            ->andReturn(Mockery::mock(Event::class))
+            ->once();
+
+        $this->locker->shouldReceive('unlock')
+            ->with($installDir)
+            ->once();
 
         $this->tester->execute([
             '--working-dir' => $workingDir,
