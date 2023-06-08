@@ -5,8 +5,9 @@ namespace Meteor\Patch\Backup;
 use Meteor\Patch\Version\VersionDiff;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use PHPUnit\Framework\TestCase;
 
-class BackupTest extends MockeryTestCase
+class BackupTest extends TestCase
 {
     public function testGetDate()
     {
