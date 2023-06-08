@@ -46,11 +46,13 @@ class Migrator
                 if (is_dir($patchDir . '/' . $config['directory'])) {
                     return true;
                 }
+
                 return false;
             case MigrationsConstants::TYPE_DATABASE:
                 if (is_dir($patchDir . '/' . $config['directory'])) {
                     return true;
                 }
+
                 return false;
             default:
                 return false;
