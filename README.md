@@ -1,6 +1,6 @@
 # Meteor
 
-[![Travis CI](https://api.travis-ci.org/jadu/meteor.svg?branch=master)](https://travis-ci.org/jadu/meteor)
+![CI](https://github.com/jadu/meteor/actions/workflows/test.yml/badge.svg)
 [![MIT License](https://img.shields.io/github/license/jadu/meteor.svg)](https://github.com/jadu/meteor/blob/master/LICENSE.md)
 ![Downloads](https://img.shields.io/github/downloads/jadu/meteor/total.svg)
 

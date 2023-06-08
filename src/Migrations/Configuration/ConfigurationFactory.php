@@ -105,12 +105,14 @@ class ConfigurationFactory
         $versionStorage = $this->fileMigrationVersionStorageFactory->create($installDir, $config['table']);
         $configuration->setVersionStorage($versionStorage);
 
-        // NB: This will attempt to connect to the database
-        $versions = $configuration->registerMigrationsFromDirectory($patchDir . '/' . $config['directory']);
-        $configuration->setVersions($versions);
-        if (!$versionStorage->isInitialised()) {
-            // The version storage file does not exist yet, create it
-            $versionStorage->initialise();
+        if (is_dir($patchDir . '/' . $config['directory'])) {
+            // NB: This will attempt to connect to the database
+            $versions = $configuration->registerMigrationsFromDirectory($patchDir . '/' . $config['directory']);
+            $configuration->setVersions($versions);
+            if (!$versionStorage->isInitialised()) {
+                // The version storage file does not exist yet, create it
+                $versionStorage->initialise();
+            }
         }
 
         return $configuration;
