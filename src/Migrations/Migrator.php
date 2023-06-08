@@ -5,6 +5,7 @@ namespace Meteor\Migrations;
 use Doctrine\Migrations\Exception\MigrationException;
 use Meteor\IO\IOInterface;
 use Meteor\Migrations\Configuration\ConfigurationFactory;
+use Meteor\Migrations\Configuration\FileConfiguration;
 
 class Migrator
 {
@@ -28,6 +29,32 @@ class Migrator
     ) {
         $this->configurationFactory = $configurationFactory;
         $this->io = $io;
+    }
+
+    /**
+     * @param string $type
+     * @param array $config
+     * @param string $patchDir
+     *
+     * @return bool
+     */
+    public function validateConfiguration(string $type, array $config, string $patchDir): bool
+    {
+        switch ($type) {
+            case MigrationsConstants::TYPE_FILE:
+                $config['directory'] = $config['directory'] . '/' . FileConfiguration::MIGRATION_DIRECTORY;
+                if (is_dir($patchDir . '/' . $config['directory'])) {
+                    return true;
+                }
+                return false;
+            case MigrationsConstants::TYPE_DATABASE:
+                if (is_dir($patchDir . '/' . $config['directory'])) {
+                    return true;
+                }
+                return false;
+            default:
+                return false;
+        }
     }
 
     /**
