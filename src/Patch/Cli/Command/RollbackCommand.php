@@ -149,6 +149,11 @@ class RollbackCommand extends AbstractPatchCommand
         $packageValid = true;
         $versions = $this->versionComparer->comparePackage($workingDir . '/' . PackageConstants::PATCH_DIR, $installDir, $config);
         foreach ($versions as $version) {
+            // if we have a development package we do not want to error on version checks
+            if (strpos($version->getNewVersion(), 'dev-') === 0 || strpos($version->getCurrentVersion(), 'dev-') === 0) {
+                continue;
+            }
+
             if ($version->isLessThan()) {
                 // The version in the package is less than the version in the install so the package is not valid
                 $packageValid = false;
