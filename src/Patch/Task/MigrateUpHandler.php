@@ -36,18 +36,22 @@ class MigrateUpHandler
         if (isset($config['combined'])) {
             foreach ($config['combined'] as $combinedConfig) {
                 if (isset($combinedConfig['migrations'])) {
-                    $result = $this->runMigrations($task->type, $task->workingDir, $task->installDir, $task->ignoreUnavailableMigrations, $combinedConfig);
-                    if (!$result) {
-                        return false;
+                    if ($this->migrator->validateConfiguration($task->type, $combinedConfig['migrations'], $task->workingDir)) {
+                        $result = $this->runMigrations($task->type, $task->workingDir, $task->installDir, $task->ignoreUnavailableMigrations, $combinedConfig);
+                        if (!$result) {
+                            return false;
+                        }
                     }
                 }
             }
         }
 
         if (isset($config['migrations'])) {
-            $result = $this->runMigrations($task->type, $task->workingDir, $task->installDir, $task->ignoreUnavailableMigrations, $config);
-            if (!$result) {
-                return false;
+            if ($this->migrator->validateConfiguration($task->type, $config['migrations'], $task->workingDir)) {
+                $result = $this->runMigrations($task->type, $task->workingDir, $task->installDir, $task->ignoreUnavailableMigrations, $config);
+                if (!$result) {
+                    return false;
+                }
             }
         }
 
