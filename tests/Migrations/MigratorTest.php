@@ -34,7 +34,7 @@ class MigratorTest extends TestCase
 
     public function testMigrate()
     {
-        $config = [];
+        $config = ['directory' => 'upgrades'];
 
         $version1 = $this->createVersion('20160701000000');
         $version2 = $this->createVersion('20160702000000');
@@ -69,7 +69,7 @@ class MigratorTest extends TestCase
             });
 
         $this->configurationFactory->shouldReceive('createConfiguration')
-            ->with(MigrationsConstants::TYPE_DATABASE, $config, 'patch', 'install')
+            ->with(MigrationsConstants::TYPE_DATABASE, $config, __DIR__ . '/Configuration/Fixtures/with_migrations/patch', 'install')
             ->andReturn($configuration)
             ->once();
 
@@ -90,12 +90,18 @@ class MigratorTest extends TestCase
             ]))
             ->once();
 
-        static::assertTrue($this->migrator->migrate('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest', false));
+        static::assertTrue($this->migrator->migrate(__DIR__ . '/Configuration/Fixtures/with_migrations/patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest', false));
+    }
+
+    public function testMigrateReturnsTrueWhenNoFilesystemDirFound()
+    {
+        $config = ['directory' => 'upgrades'];
+        static::assertTrue($this->migrator->migrate(__DIR__ . '/Configuration/Fixtures/empty/patch', 'install', $config, MigrationsConstants::TYPE_FILE, 'latest', false));
     }
 
     public function testMigrateHaltsWhenUnavailableMigrationsFound()
     {
-        $config = [];
+        $config = ['directory' => 'upgrades'];
 
         $version1 = $this->createVersion('20160701000000');
         $version2 = $this->createVersion('20160702000000');
@@ -129,19 +135,19 @@ class MigratorTest extends TestCase
             });
 
         $this->configurationFactory->shouldReceive('createConfiguration')
-            ->with(MigrationsConstants::TYPE_DATABASE, $config, 'patch', 'install')
+            ->with(MigrationsConstants::TYPE_DATABASE, $config, __DIR__ . '/Configuration/Fixtures/with_migrations/patch', 'install')
             ->andReturn($configuration)
             ->once();
 
         $version1->shouldReceive('execute')
             ->never();
 
-        static::assertFalse($this->migrator->migrate('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest', false));
+        static::assertFalse($this->migrator->migrate(__DIR__ . '/Configuration/Fixtures/with_migrations/patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest', false));
     }
 
     public function testMigrateReturnsTrueWhenNoMigrationsToExecute()
     {
-        $config = [];
+        $config = ['directory' => 'upgrades'];
 
         $version1 = $this->createVersion('20160701000000');
         $version2 = $this->createVersion('20160702000000');
@@ -174,7 +180,7 @@ class MigratorTest extends TestCase
             });
 
         $this->configurationFactory->shouldReceive('createConfiguration')
-            ->with(MigrationsConstants::TYPE_DATABASE, $config, 'patch', 'install')
+            ->with(MigrationsConstants::TYPE_DATABASE, $config, __DIR__ . '/Configuration/Fixtures/with_migrations/patch', 'install')
             ->andReturn($configuration)
             ->once();
 
@@ -187,12 +193,12 @@ class MigratorTest extends TestCase
         $version3->shouldReceive('execute')
             ->never();
 
-        static::assertTrue($this->migrator->migrate('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest', false));
+        static::assertTrue($this->migrator->migrate(__DIR__ . '/Configuration/Fixtures/with_migrations/patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest', false));
     }
 
     public function testMigrateIgnoresUnavailableMigrations()
     {
-        $config = [];
+        $config = ['directory' => 'upgrades'];
 
         $version1 = $this->createVersion('20160701000000');
         $version2 = $this->createVersion('20160702000000');
@@ -225,7 +231,7 @@ class MigratorTest extends TestCase
             });
 
         $this->configurationFactory->shouldReceive('createConfiguration')
-            ->with(MigrationsConstants::TYPE_DATABASE, $config, 'patch', 'install')
+            ->with(MigrationsConstants::TYPE_DATABASE, $config, __DIR__ . '/Configuration/Fixtures/with_migrations/patch', 'install')
             ->andReturn($configuration)
             ->once();
 
@@ -239,7 +245,7 @@ class MigratorTest extends TestCase
             ]))
             ->once();
 
-        static::assertTrue($this->migrator->migrate('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest', true));
+        static::assertTrue($this->migrator->migrate(__DIR__ . '/Configuration/Fixtures/with_migrations/patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest', true));
     }
 
     public function testExecuteUp()
@@ -248,7 +254,7 @@ class MigratorTest extends TestCase
 
         $configuration = Mockery::mock(DatabaseConfiguration::class);
         $this->configurationFactory->shouldReceive('createConfiguration')
-            ->with(MigrationsConstants::TYPE_DATABASE, $config, 'patch', 'install')
+            ->with(MigrationsConstants::TYPE_DATABASE, $config, __DIR__ . '/Configuration/Fixtures/with_migrations/patch', 'install')
             ->andReturn($configuration)
             ->once();
 
@@ -265,7 +271,7 @@ class MigratorTest extends TestCase
             ]))
             ->once();
 
-        static::assertTrue($this->migrator->execute('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, '20160701000000', 'up'));
+        static::assertTrue($this->migrator->execute(__DIR__ . '/Configuration/Fixtures/with_migrations/patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, '20160701000000', 'up'));
     }
 
     public function testExecuteDown()
@@ -274,7 +280,7 @@ class MigratorTest extends TestCase
 
         $configuration = Mockery::mock(DatabaseConfiguration::class);
         $this->configurationFactory->shouldReceive('createConfiguration')
-            ->with(MigrationsConstants::TYPE_DATABASE, $config, 'patch', 'install')
+            ->with(MigrationsConstants::TYPE_DATABASE, $config, __DIR__ . '/Configuration/Fixtures/with_migrations/patch', 'install')
             ->andReturn($configuration)
             ->once();
 
@@ -288,6 +294,6 @@ class MigratorTest extends TestCase
             ->with('down')
             ->once();
 
-        static::assertTrue($this->migrator->execute('patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, '20160701000000', 'down'));
+        static::assertTrue($this->migrator->execute(__DIR__ . '/Configuration/Fixtures/with_migrations/patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, '20160701000000', 'down'));
     }
 }

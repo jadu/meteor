@@ -71,6 +71,11 @@ class Migrator
      */
     public function migrate($patchDir, $installDir, array $config, $type, $version, $ignoreUnavailableMigrations)
     {
+        if (!$this->validateConfiguration($type, $config, $patchDir)) {
+            $this->io->note(sprintf('No %s migrations to execute', $type));
+
+            return true;
+        }
         $configuration = $this->configurationFactory->createConfiguration($type, $config, $patchDir, $installDir);
         $executedMigrations = $configuration->getMigratedVersions();
         $availableMigrations = $configuration->getAvailableVersions();
