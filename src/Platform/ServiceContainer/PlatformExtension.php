@@ -59,7 +59,8 @@ class PlatformExtension extends ExtensionBase implements ExtensionInterface
     {
         $container->setDefinition(self::SERVICE_PLATFORM_WINDOWS, new Definition('Meteor\Platform\Windows\WindowsPlatform', [
             new Reference(ProcessExtension::SERVICE_PROCESS_RUNNER),
-        ]));
+        ]))
+        ->setPublic(true);
     }
 
     /**
@@ -67,7 +68,11 @@ class PlatformExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadUnixPlatformInstallConfigLoader(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_UNIX_INSTALL_CONFIG_LOADER, new Definition('Meteor\Platform\Unix\InstallConfigLoader'));
+        $container->setDefinition(
+            self::SERVICE_UNIX_INSTALL_CONFIG_LOADER,
+            new Definition('Meteor\Platform\Unix\InstallConfigLoader')
+        )
+        ->setPublic(true);
     }
 
     /**
@@ -81,7 +86,7 @@ class PlatformExtension extends ExtensionBase implements ExtensionInterface
             new Reference(self::SERVICE_UNIX_INSTALL_CONFIG_LOADER),
             new Reference(FilesystemExtension::SERVICE_FILESYSTEM),
         ]);
-        $container->setDefinition(self::SERVICE_PLATFORM_UNIX, $definition);
+        $container->setDefinition(self::SERVICE_PLATFORM_UNIX, $definition)->setPublic(true);
     }
 
     /**
@@ -93,5 +98,7 @@ class PlatformExtension extends ExtensionBase implements ExtensionInterface
             self::SERVICE_PLATFORM,
             defined('PHP_WINDOWS_VERSION_BUILD') ? self::SERVICE_PLATFORM_WINDOWS : self::SERVICE_PLATFORM_UNIX
         );
+
+        $container->getAlias(self::SERVICE_PLATFORM)->setPublic(true);
     }
 }

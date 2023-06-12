@@ -3,13 +3,14 @@
 namespace Meteor\Patch\Task;
 
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class CheckDatabaseConnectionHandlerTest extends \PHPUnit_Framework_TestCase
+class CheckDatabaseConnectionHandlerTest extends TestCase
 {
     private $connectionFactory;
     private $handler;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->connectionFactory = Mockery::mock('Meteor\Migrations\Connection\ConnectionFactory');
         $this->handler = new CheckDatabaseConnectionHandler($this->connectionFactory);

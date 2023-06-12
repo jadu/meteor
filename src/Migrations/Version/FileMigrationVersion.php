@@ -2,8 +2,10 @@
 
 namespace Meteor\Migrations\Version;
 
-use Doctrine\DBAL\Migrations\Configuration\Configuration;
-use Doctrine\DBAL\Migrations\Version;
+use Doctrine\Migrations\Configuration\Configuration;
+use Doctrine\Migrations\Version\Direction;
+use Doctrine\Migrations\Version\Executor;
+use Doctrine\Migrations\Version\Version;
 
 class FileMigrationVersion extends Version
 {
@@ -18,20 +20,29 @@ class FileMigrationVersion extends Version
      * @param string $class
      * @param FileMigrationVersionStorage $versionStorage
      */
-    public function __construct(Configuration $configuration, $version, $class, FileMigrationVersionStorage $versionStorage = null)
+    public function __construct(Configuration $configuration, $version, $class, Executor $executor, FileMigrationVersionStorage $versionStorage = null)
     {
-        parent::__construct($configuration, $version, $class);
+        parent::__construct($configuration, $version, $class, $executor);
 
         $this->versionStorage = $versionStorage;
     }
 
-    public function markMigrated()
+    public function markMigrated(): void
     {
         $this->versionStorage->markMigrated($this->getVersion());
     }
 
-    public function markNotMigrated()
+    public function markNotMigrated(): void
     {
         $this->versionStorage->markNotMigrated($this->getVersion());
+    }
+
+    public function markVersion(string $direction): void
+    {
+        if ($direction === Direction::UP) {
+            $this->markMigrated();
+        } else {
+            $this->markNotMigrated();
+        }
     }
 }

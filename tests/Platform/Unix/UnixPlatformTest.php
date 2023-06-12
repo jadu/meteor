@@ -5,15 +5,16 @@ namespace Meteor\Platform\Unix;
 use Meteor\Permissions\Permission;
 use Mockery;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class UnixPlatformTest extends \PHPUnit_Framework_TestCase
+class UnixPlatformTest extends TestCase
 {
     private $filesystem;
     private $installConfig;
     private $installConfigLoader;
     private $platform;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->filesystem = Mockery::mock('Meteor\Filesystem\Filesystem');
         $this->installConfig = Mockery::mock('Meteor\Platform\Unix\InstallConfig', [

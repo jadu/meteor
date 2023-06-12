@@ -43,9 +43,11 @@ class MigrateDownHandler
     public function handle(MigrateDown $task, array $config)
     {
         if (isset($config['migrations'])) {
-            $result = $this->runMigrations($task->type, $task->backupDir, $task->workingDir, $task->installDir, $task->ignoreUnavailableMigrations, $config);
-            if (!$result) {
-                return false;
+            if ($this->migrator->validateConfiguration($task->type, $config['migrations'], $task->workingDir)) {
+                $result = $this->runMigrations($task->type, $task->backupDir, $task->workingDir, $task->installDir, $task->ignoreUnavailableMigrations, $config);
+                if (!$result) {
+                    return false;
+                }
             }
         }
 
@@ -54,9 +56,11 @@ class MigrateDownHandler
             $combinedConfigs = array_reverse($config['combined']);
             foreach ($combinedConfigs as $combinedConfig) {
                 if (isset($combinedConfig['migrations'])) {
-                    $result = $this->runMigrations($task->type, $task->backupDir, $task->workingDir, $task->installDir, $task->ignoreUnavailableMigrations, $combinedConfig);
-                    if (!$result) {
-                        return false;
+                    if ($this->migrator->validateConfiguration($task->type, $combinedConfig['migrations'], $task->workingDir)) {
+                        $result = $this->runMigrations($task->type, $task->backupDir, $task->workingDir, $task->installDir, $task->ignoreUnavailableMigrations, $combinedConfig);
+                        if (!$result) {
+                            return false;
+                        }
                     }
                 }
             }

@@ -13,7 +13,7 @@ class PackageNameResolver
      *
      * @return string
      */
-    public function resolve($fileName, $workingDir, array $config)
+    public function resolve(string $fileName, string $workingDir, array $config)
     {
         $fileName = trim($fileName);
         if ($this->isValid($fileName)) {

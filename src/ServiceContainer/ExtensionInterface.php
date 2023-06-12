@@ -47,7 +47,7 @@ interface ExtensionInterface extends CompilerPassInterface
      * Loads extension services into temporary container.
      *
      * @param ContainerBuilder $container
-     * @param array            $config
+     * @param array $config
      */
     public function load(ContainerBuilder $container, array $config);
 }

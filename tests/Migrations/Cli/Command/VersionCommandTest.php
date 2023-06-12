@@ -123,7 +123,7 @@ class VersionCommandTest extends MigrationTestCase
             '--install-dir' => $installDir,
         ]);
 
-        $this->assertSame(0, $this->tester->getStatusCode());
+        static::assertSame(0, $this->tester->getStatusCode());
     }
 
     public function testMarkAllNotMigrated()
@@ -158,7 +158,7 @@ class VersionCommandTest extends MigrationTestCase
             '--install-dir' => $installDir,
         ]);
 
-        $this->assertSame(0, $this->tester->getStatusCode());
+        static::assertSame(0, $this->tester->getStatusCode());
     }
 
     public function testRequiresPackageName()
@@ -190,6 +190,6 @@ class VersionCommandTest extends MigrationTestCase
             '--install-dir' => $installDir,
         ]);
 
-        $this->assertSame(1, $this->tester->getStatusCode());
+        static::assertSame(1, $this->tester->getStatusCode());
     }
 }

@@ -3,7 +3,6 @@
 namespace Meteor\Process\ServiceContainer;
 
 use Meteor\IO\ServiceContainer\IOExtension;
-use Meteor\Process\PHPMemoryLimitSetter;
 use Meteor\ServiceContainer\ExtensionBase;
 use Meteor\ServiceContainer\ExtensionInterface;
 use Meteor\ServiceContainer\ExtensionManager;
@@ -58,7 +57,8 @@ class ProcessExtension extends ExtensionBase implements ExtensionInterface
         $container->setDefinition(self::SERVICE_PROCESS_RUNNER, new Definition('Meteor\Process\ProcessRunner', [
             new Reference(IOExtension::SERVICE_IO),
             new Reference(self::SERVICE_PROCESS_FACTORY),
-        ]));
+        ]))
+        ->setPublic(true);
     }
 
     /**
@@ -69,7 +69,8 @@ class ProcessExtension extends ExtensionBase implements ExtensionInterface
         $container->setDefinition(
             self::SERVICE_PROCESS_FACTORY,
             new Definition('Meteor\Process\ProcessFactory')
-        );
+        )
+        ->setPublic(true);
     }
 
     /**

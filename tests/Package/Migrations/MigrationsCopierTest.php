@@ -4,14 +4,15 @@ namespace Meteor\Package\Migrations;
 
 use Meteor\IO\NullIO;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class MigrationsCopierTest extends \PHPUnit_Framework_TestCase
+class MigrationsCopierTest extends TestCase
 {
     private $filesystem;
     private $io;
     private $migrationsCopier;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->filesystem = Mockery::mock('Meteor\Filesystem\Filesystem');
         $this->io = new NullIO();
@@ -25,7 +26,7 @@ class MigrationsCopierTest extends \PHPUnit_Framework_TestCase
             'name' => 'test',
         ];
 
-        $this->assertSame($config, $this->migrationsCopier->copy('working', 'temp', $config));
+        static::assertSame($config, $this->migrationsCopier->copy('working', 'temp', $config));
     }
 
     public function testCopiesMigrations()
@@ -55,7 +56,7 @@ class MigrationsCopierTest extends \PHPUnit_Framework_TestCase
 
         $this->filesystem->shouldReceive('copyDirectory');
 
-        $this->assertSame([
+        static::assertSame([
             'name' => 'test',
             'migrations' => [
                 'directory' => 'migrations/test',

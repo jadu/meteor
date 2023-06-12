@@ -5,14 +5,15 @@ namespace Meteor\Patch\Task;
 use Meteor\IO\NullIO;
 use Meteor\Migrations\MigrationsConstants;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class MigrateUpHandlerTest extends \PHPUnit_Framework_TestCase
+class MigrateUpHandlerTest extends TestCase
 {
     private $migrator;
     private $io;
     private $handler;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->migrator = Mockery::mock('Meteor\Migrations\Migrator');
         $this->io = new NullIO();
@@ -33,6 +34,32 @@ class MigrateUpHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_FILE, 'latest', false)
             ->andReturn(true)
             ->once();
+        $this->migrator->shouldReceive('validateConfiguration')
+            ->with(MigrationsConstants::TYPE_FILE, $config['migrations'], 'working')
+            ->andReturn(true)
+            ->once();
+
+        $task = new MigrateUp('working', 'install', MigrationsConstants::TYPE_FILE, false);
+        $this->handler->handle($task, $config);
+    }
+
+    public function testNoFailureIfNoFilesystemDir()
+    {
+        $config = [
+            'name' => 'root',
+            'migrations' => [
+                'table' => 'Migrations',
+            ],
+        ];
+
+        $this->migrator->shouldReceive('migrate')
+            ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_FILE, 'latest', false)
+            ->andReturn(true)
+            ->never();
+        $this->migrator->shouldReceive('validateConfiguration')
+            ->with(MigrationsConstants::TYPE_FILE, $config['migrations'], 'working')
+            ->andReturn(false)
+            ->once();
 
         $task = new MigrateUp('working', 'install', MigrationsConstants::TYPE_FILE, false);
         $this->handler->handle($task, $config);
@@ -49,6 +76,10 @@ class MigrateUpHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->migrator->shouldReceive('migrate')
             ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_DATABASE, 'latest', false)
+            ->andReturn(true)
+            ->once();
+        $this->migrator->shouldReceive('validateConfiguration')
+            ->with(MigrationsConstants::TYPE_DATABASE, $config['migrations'], 'working')
             ->andReturn(true)
             ->once();
 
@@ -71,6 +102,10 @@ class MigrateUpHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->migrator->shouldReceive('migrate')
             ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, 'latest', false)
+            ->andReturn(true)
+            ->once();
+        $this->migrator->shouldReceive('validateConfiguration')
+            ->with(MigrationsConstants::TYPE_FILE, $config['combined'][0]['migrations'], 'working')
             ->andReturn(true)
             ->once();
 
@@ -106,17 +141,29 @@ class MigrateUpHandlerTest extends \PHPUnit_Framework_TestCase
             ->andReturn(true)
             ->ordered()
             ->once();
+        $this->migrator->shouldReceive('validateConfiguration')
+            ->with(MigrationsConstants::TYPE_FILE, $config['combined'][0]['migrations'], 'working')
+            ->andReturn(true)
+            ->once();
 
         $this->migrator->shouldReceive('migrate')
             ->with('working', 'install', $config['combined'][1]['migrations'], MigrationsConstants::TYPE_FILE, 'latest', false)
             ->andReturn(true)
             ->ordered()
             ->once();
+        $this->migrator->shouldReceive('validateConfiguration')
+            ->with(MigrationsConstants::TYPE_FILE, $config['combined'][1]['migrations'], 'working')
+            ->andReturn(true)
+            ->once();
 
         $this->migrator->shouldReceive('migrate')
             ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_FILE, 'latest', false)
             ->andReturn(true)
             ->ordered()
+            ->once();
+        $this->migrator->shouldReceive('validateConfiguration')
+            ->with(MigrationsConstants::TYPE_FILE, $config['migrations'], 'working')
+            ->andReturn(true)
             ->once();
 
         $task = new MigrateUp('working', 'install', MigrationsConstants::TYPE_FILE, false);
@@ -144,10 +191,18 @@ class MigrateUpHandlerTest extends \PHPUnit_Framework_TestCase
             ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_FILE, 'latest', false)
             ->andReturn(false)
             ->once();
+        $this->migrator->shouldReceive('validateConfiguration')
+            ->with(MigrationsConstants::TYPE_FILE, $config['migrations'], 'working')
+            ->andReturn(true)
+            ->once();
 
         $this->migrator->shouldReceive('migrate')
             ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, 'latest', false)
             ->never();
+        $this->migrator->shouldReceive('validateConfiguration')
+            ->with(MigrationsConstants::TYPE_FILE, $config['combined'][0]['migrations'], 'working')
+            ->andReturn(true)
+            ->once();
 
         $task = new MigrateUp('working', 'install', MigrationsConstants::TYPE_FILE, false);
         $this->handler->handle($task, $config);
@@ -180,6 +235,14 @@ class MigrateUpHandlerTest extends \PHPUnit_Framework_TestCase
         $this->migrator->shouldReceive('migrate')
             ->with('working', 'install', $config['combined'][1]['migrations'], MigrationsConstants::TYPE_FILE, 'latest', false)
             ->never();
+        $this->migrator->shouldReceive('validateConfiguration')
+            ->with(MigrationsConstants::TYPE_FILE, $config['combined'][0]['migrations'], 'working')
+            ->andReturn(true)
+            ->once();
+        $this->migrator->shouldReceive('validateConfiguration')
+            ->with(MigrationsConstants::TYPE_FILE, $config['combined'][1]['migrations'], 'working')
+            ->andReturn(true)
+            ->once();
 
         $task = new MigrateUp('working', 'install', MigrationsConstants::TYPE_FILE, false);
         $this->handler->handle($task, $config);

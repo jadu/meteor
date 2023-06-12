@@ -2,13 +2,15 @@
 
 namespace Meteor\Platform\Unix;
 
+use InvalidArgumentException;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class InstallConfigLoaderTest extends \PHPUnit_Framework_TestCase
+class InstallConfigLoaderTest extends TestCase
 {
     public $loader;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->loader = new InstallConfigLoader();
     }
@@ -76,30 +78,28 @@ CONF;
 
         $config = $this->loader->load(vfsStream::url('root'));
 
-        $this->assertTrue($config->isSuexec());
-        $this->assertSame('jadu', $config->getUser());
-        $this->assertSame('jadu', $config->getGroup());
-        $this->assertSame('jadu-www', $config->getWebUser());
-        $this->assertSame('jadu-www', $config->getWebGroup());
+        static::assertTrue($config->isSuexec());
+        static::assertSame('jadu', $config->getUser());
+        static::assertSame('jadu', $config->getGroup());
+        static::assertSame('jadu-www', $config->getWebUser());
+        static::assertSame('jadu-www', $config->getWebGroup());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unable to open
-     */
     public function testLoadThrowsExceptionWhenFileDoesNotExist()
     {
+        static::expectException(InvalidArgumentException::class);
+        static::expectExceptionMessage('Unable to open');
+
         vfsStream::setup('root');
 
         $this->loader->load(vfsStream::url('root'));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unable to parse
-     */
     public function testLoadThrowsExceptionWhenFileCannotBeParsed()
     {
+        static::expectException(InvalidArgumentException::class);
+        static::expectExceptionMessage('Unable to parse');
+
         vfsStream::setup('root', null, [
             'install.conf' => '!',
         ]);

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <phpunit
+    beStrictAboutTestsThatDoNotTestAnything="false"
     bootstrap="tests/bootstrap.php"
     convertErrorsToExceptions="true"
     convertNoticesToExceptions="true"
@@ -11,16 +12,6 @@
             <directory>tests/</directory>
         </testsuite>
     </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory suffix=".php">src/</directory>
-        </whitelist>
-    </filter>
-
-    <listeners>
-        <listener class="\Mockery\Adapter\Phpunit\TestListener" />
-    </listeners>
 
     <php>
         <ini name="date.timezone" value="UTC"/>

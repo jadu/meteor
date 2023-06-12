@@ -1,3 +1,13 @@
+## v4.0.0
+
+* Added PHP 8 support
+* Updated Symfony to 5.4
+* Update Doctrine to 2.3.5
+* Content passed to addSql is no longer output to the terminal during migrations.
+* Add support for non-standard database ports (for this to work you must use 127.0.0.1 instead of localhost)
+* Prevent silent failures when removing folders on Windows during processing of replaceDirectories
+* Replaced previous build and CI tools with GitHub actions
+
 ## v3.4.1
 
 * Fixed fatal error when permissions prevent access to a directory within the patch target ([#123](https://github.com/jadu/meteor/pull/123))

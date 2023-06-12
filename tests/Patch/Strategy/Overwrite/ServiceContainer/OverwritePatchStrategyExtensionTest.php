@@ -14,7 +14,7 @@ class OverwritePatchStrategyExtensionTest extends ExtensionTestCase
             ],
         ]);
 
-        $this->assertTrue($container->has('patch.strategy.overwrite'));
+        static::assertTrue($container->has('patch.strategy.overwrite'));
     }
 
     public function testServicesNotLoadedWhenNotOverwriteStrategy()
@@ -25,6 +25,6 @@ class OverwritePatchStrategyExtensionTest extends ExtensionTestCase
             ],
         ]);
 
-        $this->assertFalse($container->has('patch.strategy.overwrite'));
+        static::assertFalse($container->has('patch.strategy.overwrite'));
     }
 }

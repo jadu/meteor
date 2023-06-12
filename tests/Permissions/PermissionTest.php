@@ -2,7 +2,9 @@
 
 namespace Meteor\Permissions;
 
-class PermissionTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class PermissionTest extends TestCase
 {
     public function testCreateWithAllPermissions()
     {
@@ -12,7 +14,7 @@ class PermissionTest extends \PHPUnit_Framework_TestCase
         $expectedPermission->setExecute(true);
         $expectedPermission->setRecursive(true);
 
-        $this->assertEquals($expectedPermission, Permission::create('test/*', ['r', 'w', 'x', 'R']));
+        static::assertEquals($expectedPermission, Permission::create('test/*', ['r', 'w', 'x', 'R']));
     }
 
     public function testCreateWithNoPermissions()
@@ -23,7 +25,7 @@ class PermissionTest extends \PHPUnit_Framework_TestCase
         $expectedPermission->setExecute(false);
         $expectedPermission->setRecursive(false);
 
-        $this->assertEquals($expectedPermission, Permission::create('test/*', []));
+        static::assertEquals($expectedPermission, Permission::create('test/*', []));
     }
 
     public function testCreateWithSomePermissions()
@@ -34,14 +36,14 @@ class PermissionTest extends \PHPUnit_Framework_TestCase
         $expectedPermission->setExecute(true);
         $expectedPermission->setRecursive(false);
 
-        $this->assertEquals($expectedPermission, Permission::create('test/*', ['r', 'x']));
+        static::assertEquals($expectedPermission, Permission::create('test/*', ['r', 'x']));
     }
 
     public function testCreateWithExtraWhitespaceInPath()
     {
         $expectedPermission = new Permission('    test/*    ');
 
-        $this->assertEquals($expectedPermission, Permission::create('test/*', []));
+        static::assertEquals($expectedPermission, Permission::create('test/*', []));
     }
 
     /**
@@ -50,7 +52,7 @@ class PermissionTest extends \PHPUnit_Framework_TestCase
     public function testMatches($pattern, $path, $expectedResult)
     {
         $permission = new Permission($pattern);
-        $this->assertSame($expectedResult, $permission->matches($path));
+        static::assertSame($expectedResult, $permission->matches($path));
     }
 
     public function matchesProvider()

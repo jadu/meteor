@@ -2,7 +2,9 @@
 
 namespace Jadu\Meteor\Config;
 
-class InstallConfigTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class InstallConfigTest extends TestCase
 {
     public function testGetWebUserFallsBackToApacheUserWhenNotSuexec()
     {
@@ -11,7 +13,7 @@ class InstallConfigTest extends \PHPUnit_Framework_TestCase
             'APACHE_USER' => 'apache',
         ]);
 
-        $this->assertSame('apache', $config->getWebUser());
+        static::assertSame('apache', $config->getWebUser());
     }
 
     public function testGetWebGroupFallsBackToApacheGroupWhenNotSuexec()
@@ -21,7 +23,7 @@ class InstallConfigTest extends \PHPUnit_Framework_TestCase
             'APACHE_GROUP' => 'apache',
         ]);
 
-        $this->assertSame('apache', $config->getWebGroup());
+        static::assertSame('apache', $config->getWebGroup());
     }
 
     /**
@@ -33,7 +35,7 @@ class InstallConfigTest extends \PHPUnit_Framework_TestCase
             'SUEXEC' => $value,
         ]);
 
-        $this->assertSame($expectedResult, $config->isSuexec());
+        static::assertSame($expectedResult, $config->isSuexec());
     }
 
     public function suexecValueProvider()

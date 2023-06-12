@@ -7,6 +7,7 @@ use Meteor\IO\IOInterface;
 use Meteor\Patch\Cli\Command\AbstractPatchCommand;
 use Meteor\Permissions\PermissionSetter;
 use Meteor\Platform\PlatformInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -65,5 +66,7 @@ class ResetPermissionsCommand extends AbstractPatchCommand
 
         // NB: Find files and set permission in the same directory, which in this case should be the install directory
         $this->permissionSetter->setPermissions($installDir, $installDir);
+
+        return Command::SUCCESS;
     }
 }

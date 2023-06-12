@@ -18,7 +18,7 @@ class DisplayVersionInfoHandler
     private $versionComparer;
 
     /**
-     * @param IOInterface     $io
+     * @param IOInterface $io
      * @param VersionComparer $versionComparer
      */
     public function __construct(IOInterface $io, VersionComparer $versionComparer)
@@ -29,14 +29,16 @@ class DisplayVersionInfoHandler
 
     /**
      * @param DisplayVersionInfo $task
-     * @param array              $config
+     * @param array $config
      */
     public function handle(DisplayVersionInfo $task, array $config)
     {
         $versions = $this->versionComparer->comparePackage($task->workingDir, $task->installDir, $config);
 
         foreach ($versions as $version) {
-            if ($version->isGreaterThan()) {
+            if (strpos($version->getNewVersion(), 'dev-') === 0 || strpos($version->getCurrentVersion(), 'dev-') === 0) {
+                $status = '<fg=green>Development</>';
+            } elseif ($version->isGreaterThan()) {
                 $status = '<fg=green>Newer</>';
             } elseif ($version->isLessThan()) {
                 $status = '<fg=red>Older</>';

@@ -5,7 +5,6 @@ namespace Meteor\Platform\Windows;
 use Meteor\Permissions\Permission;
 use Meteor\Platform\PlatformInterface;
 use Meteor\Process\ProcessRunner;
-use Symfony\Component\Process\ProcessUtils;
 
 class WindowsPlatform implements PlatformInterface
 {
@@ -58,9 +57,9 @@ class WindowsPlatform implements PlatformInterface
 
         $command = sprintf(
             'icacls %s /remove:g %s /grant %s%s /Q',
-            ProcessUtils::escapeArgument($path),
-            ProcessUtils::escapeArgument($user),
-            ProcessUtils::escapeArgument($grant),
+            escapeshellarg($path),
+            escapeshellarg($user),
+            escapeshellarg($grant),
             is_dir($path) && $permission->isRecursive() ? ' /t' : ''
         );
 

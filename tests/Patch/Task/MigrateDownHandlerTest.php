@@ -5,15 +5,16 @@ namespace Meteor\Patch\Task;
 use Meteor\IO\NullIO;
 use Meteor\Migrations\MigrationsConstants;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class MigrateDownHandlerTest extends \PHPUnit_Framework_TestCase
+class MigrateDownHandlerTest extends TestCase
 {
     private $migrator;
     private $versionFileManager;
     private $io;
     private $handler;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->migrator = Mockery::mock('Meteor\Migrations\Migrator');
         $this->versionFileManager = Mockery::mock('Meteor\Migrations\Version\VersionFileManager');
@@ -41,6 +42,39 @@ class MigrateDownHandlerTest extends \PHPUnit_Framework_TestCase
             ->andReturn(true)
             ->once();
 
+        $this->migrator->shouldReceive('validateConfiguration')
+            ->withAnyArgs()
+            ->andReturn(true)
+            ->once();
+
+        $task = new MigrateDown('backups/1', 'working', 'install', MigrationsConstants::TYPE_FILE, false);
+        $this->handler->handle($task, $config);
+    }
+
+    public function testNoFailureIfNoFilesystemDir()
+    {
+        $config = [
+            'name' => 'root',
+            'migrations' => [
+                'table' => 'Migrations',
+            ],
+        ];
+
+        $this->versionFileManager->shouldReceive('getCurrentVersion')
+            ->with('backups/1', 'Migrations', 'FILE_SYSTEM_MIGRATION_NUMBER')
+            ->andReturn('12345')
+            ->once();
+
+        $this->migrator->shouldReceive('migrate')
+            ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_FILE, '12345', false)
+            ->andReturn(true)
+            ->never();
+
+        $this->migrator->shouldReceive('validateConfiguration')
+            ->withAnyArgs()
+            ->andReturn(false)
+            ->once();
+
         $task = new MigrateDown('backups/1', 'working', 'install', MigrationsConstants::TYPE_FILE, false);
         $this->handler->handle($task, $config);
     }
@@ -61,6 +95,10 @@ class MigrateDownHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->migrator->shouldReceive('migrate')
             ->with('working', 'install', $config['migrations'], MigrationsConstants::TYPE_DATABASE, '12345', false)
+            ->andReturn(true)
+            ->once();
+        $this->migrator->shouldReceive('validateConfiguration')
+            ->withAnyArgs()
             ->andReturn(true)
             ->once();
 
@@ -88,6 +126,10 @@ class MigrateDownHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->migrator->shouldReceive('migrate')
             ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, '12345', false)
+            ->andReturn(true)
+            ->once();
+        $this->migrator->shouldReceive('validateConfiguration')
+            ->withAnyArgs()
             ->andReturn(true)
             ->once();
 
@@ -129,6 +171,10 @@ class MigrateDownHandlerTest extends \PHPUnit_Framework_TestCase
             ->andReturn(true)
             ->ordered()
             ->once();
+        $this->migrator->shouldReceive('validateConfiguration')
+            ->withAnyArgs()
+            ->andReturn(true)
+            ->twice();
 
         $this->versionFileManager->shouldReceive('getCurrentVersion')
             ->with('backups/1', $config['combined'][1]['migrations']['table'], 'FILE_SYSTEM_MIGRATION_NUMBER')
@@ -186,6 +232,10 @@ class MigrateDownHandlerTest extends \PHPUnit_Framework_TestCase
         $this->migrator->shouldReceive('migrate')
             ->with('working', 'install', $config['combined'][0]['migrations'], MigrationsConstants::TYPE_FILE, '0', false)
             ->never();
+        $this->migrator->shouldReceive('validateConfiguration')
+            ->withAnyArgs()
+            ->andReturn(true)
+            ->once();
 
         $task = new MigrateDown('backups/1', 'working', 'install', MigrationsConstants::TYPE_FILE, false);
         $this->handler->handle($task, $config);
@@ -216,6 +266,10 @@ class MigrateDownHandlerTest extends \PHPUnit_Framework_TestCase
         $this->migrator->shouldReceive('migrate')
             ->with('working', 'install', $config['combined'][1]['migrations'], MigrationsConstants::TYPE_FILE, '0', false)
             ->andReturn(false)
+            ->once();
+        $this->migrator->shouldReceive('validateConfiguration')
+            ->withAnyArgs()
+            ->andReturn(true)
             ->once();
 
         $this->migrator->shouldReceive('migrate')

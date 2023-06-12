@@ -20,10 +20,9 @@ class JsonFormatter
      *
      * Originally licensed under MIT by Dave Perrett <mail@recursive-design.com>
      *
-     *
-     * @param  string $json
-     * @param  bool   $unescapeUnicode Un escape unicode
-     * @param  bool   $unescapeSlashes Un escape slashes
+     * @param string $json
+     * @param bool $unescapeUnicode Un escape unicode
+     * @param bool $unescapeSlashes Un escape slashes
      *
      * @return string
      */

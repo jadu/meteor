@@ -49,7 +49,8 @@ class IOExtension extends ExtensionBase implements ExtensionInterface
             new Reference(CliExtension::SERVICE_INPUT),
             new Reference(CliExtension::SERVICE_OUTPUT),
             new Reference(LoggerExtension::SERVICE_LOGGER),
-        ]));
+        ]))
+        ->setPublic(true);
     }
 
     /**

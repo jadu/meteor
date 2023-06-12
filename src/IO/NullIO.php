@@ -20,7 +20,7 @@ class NullIO implements IOInterface
      */
     public function getArgument($name)
     {
-        return;
+        return '';
     }
 
     /**
@@ -34,9 +34,9 @@ class NullIO implements IOInterface
     /**
      * {@inheritdoc}
      */
-    public function getOption($name)
+    public function getOption($name): string
     {
-        return;
+        return '';
     }
 
     /**
@@ -76,7 +76,7 @@ class NullIO implements IOInterface
      */
     public function askAndHideAnswer($question)
     {
-        return;
+        return '';
     }
 
     /**

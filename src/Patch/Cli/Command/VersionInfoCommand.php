@@ -7,6 +7,7 @@ use Meteor\Package\PackageConstants;
 use Meteor\Patch\Task\DisplayVersionInfo;
 use Meteor\Patch\Task\TaskBusInterface;
 use Meteor\Platform\PlatformInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -51,5 +52,7 @@ class VersionInfoCommand extends AbstractPatchCommand
         );
 
         $this->taskBus->run($task, $this->getConfiguration());
+
+        return Command::SUCCESS;
     }
 }

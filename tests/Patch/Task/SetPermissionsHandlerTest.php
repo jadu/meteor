@@ -4,14 +4,15 @@ namespace Meteor\Patch\Task;
 
 use Meteor\IO\NullIO;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class SetPermissionsHandlerTest extends \PHPUnit_Framework_TestCase
+class SetPermissionsHandlerTest extends TestCase
 {
     private $io;
     private $permissionSetter;
     private $handler;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->io = new NullIO();
         $this->permissionSetter = Mockery::mock('Meteor\Permissions\PermissionSetter', [

@@ -4,15 +4,16 @@ namespace Meteor\Package\Combined;
 
 use Meteor\IO\NullIO;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class CombinedPackageResolverTest extends \PHPUnit_Framework_TestCase
+class CombinedPackageResolverTest extends TestCase
 {
     private $packageCombiner;
     private $combinedPackageDependencyChecker;
     private $filesystem;
     private $packageProvider;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->packageCombiner = Mockery::mock('Meteor\Package\Combined\PackageCombiner');
         $this->combinedPackageDependencyChecker = Mockery::mock('Meteor\Package\Combined\CombinedPackageDependencyChecker', [
@@ -55,7 +56,7 @@ class CombinedPackageResolverTest extends \PHPUnit_Framework_TestCase
             ->with($tempDir, $updatedConfig)
             ->once();
 
-        $this->assertSame($updatedConfig, $this->combinedPackageResolver->resolve(['cms.zip'], $outputDir, $tempDir, $config, true));
+        static::assertSame($updatedConfig, $this->combinedPackageResolver->resolve(['cms.zip'], $outputDir, $tempDir, $config, true));
     }
 
     public function testResolveDoesNotDownloadPackageIfAlreadyCombined()
@@ -91,7 +92,7 @@ class CombinedPackageResolverTest extends \PHPUnit_Framework_TestCase
             ->with($tempDir, $updatedConfig)
             ->once();
 
-        $this->assertSame($updatedConfig, $this->combinedPackageResolver->resolve(['cms.zip'], $outputDir, $tempDir, $config, true));
+        static::assertSame($updatedConfig, $this->combinedPackageResolver->resolve(['cms.zip'], $outputDir, $tempDir, $config, true));
     }
 
     public function testResolveDoesNotDownloadPackageIfAlreadyCombinedViaAnotherCombinedPackage()
@@ -130,7 +131,7 @@ class CombinedPackageResolverTest extends \PHPUnit_Framework_TestCase
             ->with($tempDir, $updatedConfig)
             ->once();
 
-        $this->assertSame($updatedConfig, $this->combinedPackageResolver->resolve(['xfp.zip'], $outputDir, $tempDir, $config, true));
+        static::assertSame($updatedConfig, $this->combinedPackageResolver->resolve(['xfp.zip'], $outputDir, $tempDir, $config, true));
     }
 
     public function testResolveDownloadsPackages()
@@ -176,7 +177,7 @@ class CombinedPackageResolverTest extends \PHPUnit_Framework_TestCase
             ->with($tempDir, $updatedConfig)
             ->once();
 
-        $this->assertSame($updatedConfig, $this->combinedPackageResolver->resolve([], $outputDir, $tempDir, $config, true));
+        static::assertSame($updatedConfig, $this->combinedPackageResolver->resolve([], $outputDir, $tempDir, $config, true));
     }
 
     public function testChecksPackageDependencies()

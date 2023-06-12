@@ -5,9 +5,11 @@ namespace Meteor\Process;
 use Meteor\IO\IOInterface;
 use Mockery;
 use Mockery\Mock;
+use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Symfony\Component\Process\Process;
 
-class ProcessRunnerTest extends \PHPUnit_Framework_TestCase
+class ProcessRunnerTest extends TestCase
 {
     /**
      * @var ProcessRunner
@@ -29,21 +31,21 @@ class ProcessRunnerTest extends \PHPUnit_Framework_TestCase
      */
     private $process;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->io = Mockery::mock(IOInterface::class, [
-            'debug' => null
+            'debug' => null,
         ]);
         $this->process = Mockery::mock(Process::class, [
             'setWorkingDirectory' => null,
             'stop' => null,
             'setTimeout' => null,
-            'run' => null,
+            'run' => 0,
             'getOutput' => '',
-            'isSuccessful' => true
+            'isSuccessful' => true,
         ]);
         $this->processFactory = Mockery::mock(ProcessFactory::class, [
-            'create' => $this->process
+            'create' => $this->process,
         ]);
 
         $this->processRunner = new ProcessRunner(
@@ -57,7 +59,7 @@ class ProcessRunnerTest extends \PHPUnit_Framework_TestCase
         $this->process->shouldReceive('getOutput')
             ->andReturn('done');
 
-        self::assertSame('done', $this->processRunner->run('whoami'));
+        static::assertSame('done', $this->processRunner->run('whoami'));
     }
 
     public function testRunThrowsExceptionWithErrorOutputWhenNotSuccessful()
@@ -67,7 +69,7 @@ class ProcessRunnerTest extends \PHPUnit_Framework_TestCase
         $this->process->shouldReceive('getErrorOutput')
             ->andReturn('error');
 
-        self::expectException(\RuntimeException::class);
+        self::expectException(RuntimeException::class);
         self::expectExceptionMessage('error');
 
         $this->processRunner->run('invalidcommand');
@@ -82,6 +84,7 @@ class ProcessRunnerTest extends \PHPUnit_Framework_TestCase
 
         $this->processFactory->shouldReceive('create')
             ->with($commandWithLimit)
+            ->once()
             ->andReturn($this->process);
 
         $this->processRunner->run($command);
@@ -95,6 +98,7 @@ class ProcessRunnerTest extends \PHPUnit_Framework_TestCase
 
         $this->processFactory->shouldReceive('create')
             ->with($command)
+            ->once()
             ->andReturn($this->process);
 
         $this->processRunner->run($command);
@@ -106,6 +110,7 @@ class ProcessRunnerTest extends \PHPUnit_Framework_TestCase
 
         $this->processFactory->shouldReceive('create')
             ->with($command)
+            ->once()
             ->andReturn($this->process);
 
         $this->processRunner->run($command);

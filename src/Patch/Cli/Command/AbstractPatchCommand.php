@@ -26,9 +26,9 @@ abstract class AbstractPatchCommand extends AbstractCommand
     protected $logDir;
 
     /**
-     * @param string            $name
-     * @param array             $config
-     * @param IOInterface       $io
+     * @param string $name
+     * @param array $config
+     * @param IOInterface $io
      * @param PlatformInterface $platform
      */
     public function __construct($name, array $config, IOInterface $io, PlatformInterface $platform)

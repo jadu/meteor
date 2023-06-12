@@ -2,13 +2,15 @@
 
 namespace Meteor\Package\Combined;
 
+use Meteor\Package\Combined\Exception\CombinedPackageDependenciesException;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class CombinedPackageDependencyCheckerTest extends \PHPUnit_Framework_TestCase
+class CombinedPackageDependencyCheckerTest extends TestCase
 {
     private $checker;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->checker = new CombinedPackageDependencyChecker();
 
@@ -17,7 +19,7 @@ class CombinedPackageDependencyCheckerTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckWhenHasNoRequirements()
     {
-        $this->assertTrue($this->checker->check(vfsStream::url('root'), []));
+        static::assertTrue($this->checker->check(vfsStream::url('root'), []));
     }
 
     public function testCheckWhenRequirementsMet()
@@ -35,14 +37,13 @@ class CombinedPackageDependencyCheckerTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->assertTrue($this->checker->check(vfsStream::url('root'), $config));
+        static::assertTrue($this->checker->check(vfsStream::url('root'), $config));
     }
 
-    /**
-     * @expectedException \Meteor\Package\Combined\Exception\CombinedPackageDependenciesException
-     */
     public function testCheckThrowsExceptionWhenRequiredPackageMissing()
     {
+        static::expectException(CombinedPackageDependenciesException::class);
+
         $config = [
             'package' => [
                 'combine' => [
@@ -51,14 +52,13 @@ class CombinedPackageDependencyCheckerTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->assertTrue($this->checker->check(vfsStream::url('root'), $config));
+        static::assertTrue($this->checker->check(vfsStream::url('root'), $config));
     }
 
-    /**
-     * @expectedException \Meteor\Package\Combined\Exception\CombinedPackageDependenciesException
-     */
     public function testChecksRequirementsRecursively()
     {
+        static::expectException(CombinedPackageDependenciesException::class);
+
         $config = [
             'package' => [
                 'combine' => [
@@ -77,7 +77,7 @@ class CombinedPackageDependencyCheckerTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->assertTrue($this->checker->check(vfsStream::url('root'), $config));
+        static::assertTrue($this->checker->check(vfsStream::url('root'), $config));
     }
 
     public function testCheckWhenVersionRequirementsMet()
@@ -104,14 +104,13 @@ class CombinedPackageDependencyCheckerTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->assertTrue($this->checker->check(vfsStream::url('root'), $config));
+        static::assertTrue($this->checker->check(vfsStream::url('root'), $config));
     }
 
-    /**
-     * @expectedException \Meteor\Package\Combined\Exception\CombinedPackageDependenciesException
-     */
     public function testCheckThrowsExceptionWhenVersionRequirementIsNotMet()
     {
+        static::expectException(CombinedPackageDependenciesException::class);
+
         $config = [
             'package' => [
                 'combine' => [
@@ -134,14 +133,13 @@ class CombinedPackageDependencyCheckerTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->assertTrue($this->checker->check(vfsStream::url('root'), $config));
+        static::assertTrue($this->checker->check(vfsStream::url('root'), $config));
     }
 
-    /**
-     * @expectedException \Meteor\Package\Combined\Exception\CombinedPackageDependenciesException
-     */
     public function testChecksVersionRequirementsRecursively()
     {
+        static::expectException(CombinedPackageDependenciesException::class);
+
         $config = [
             'package' => [
                 'combine' => [
@@ -174,6 +172,6 @@ class CombinedPackageDependencyCheckerTest extends \PHPUnit_Framework_TestCase
             ],
         ]);
 
-        $this->assertTrue($this->checker->check(vfsStream::url('root'), $config));
+        static::assertTrue($this->checker->check(vfsStream::url('root'), $config));
     }
 }

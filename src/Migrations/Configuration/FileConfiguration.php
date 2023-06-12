@@ -2,7 +2,7 @@
 
 namespace Meteor\Migrations\Configuration;
 
-use Doctrine\DBAL\Migrations\Version;
+use Doctrine\Migrations\Version\Version;
 use Meteor\Migrations\Version\FileMigrationVersion;
 use Meteor\Migrations\Version\FileMigrationVersionStorage;
 
@@ -24,6 +24,41 @@ class FileConfiguration extends AbstractConfiguration implements JaduPathAwareCo
     }
 
     /**
+     *  @return FileMigrationVersion[]
+     */
+    public function registerMigrationsFromDirectory(string $path): array
+    {
+        $this->validate();
+
+        $migrations = $this->getDependencyFactory()->getRecursiveRegexFinder()->findMigrations(
+            $path,
+            $this->getMigrationsNamespace()
+        );
+
+        $versions = [];
+
+        foreach ($migrations as $version => $class) {
+            if (!class_exists($class)) {
+                throw MigrationClassNotFound::new($class, $this->getMigrationsNamespace());
+            }
+
+            if (isset($versions[$version])) {
+                throw DuplicateMigrationVersion::new($version, get_class($versions[$version]));
+            }
+
+            $versions[$version] = new FileMigrationVersion(
+                $this,
+                $version,
+                $class,
+                $this->getDependencyFactory()->getVersionExecutor(),
+                $this->versionStorage
+            );
+        }
+
+        return $versions;
+    }
+
+    /**
      * @param FileMigrationVersionStorage $versionStorage
      */
     public function setVersionStorage(FileMigrationVersionStorage $versionStorage)
@@ -34,7 +69,7 @@ class FileConfiguration extends AbstractConfiguration implements JaduPathAwareCo
     /**
      * {@inheritdoc}
      */
-    public function hasVersionMigrated(Version $version)
+    public function hasVersionMigrated(Version $version): bool
     {
         return $this->versionStorage->hasVersionMigrated($version->getVersion());
     }
@@ -42,7 +77,7 @@ class FileConfiguration extends AbstractConfiguration implements JaduPathAwareCo
     /**
      * {@inheritdoc}
      */
-    public function getMigratedVersions()
+    public function getMigratedVersions(): array
     {
         return $this->versionStorage->getMigratedVersions();
     }
@@ -50,7 +85,7 @@ class FileConfiguration extends AbstractConfiguration implements JaduPathAwareCo
     /**
      * {@inheritdoc}
      */
-    public function getCurrentVersion()
+    public function getCurrentVersion(): string
     {
         return $this->versionStorage->getCurrentVersion();
     }
@@ -58,7 +93,7 @@ class FileConfiguration extends AbstractConfiguration implements JaduPathAwareCo
     /**
      * {@inheritdoc}
      */
-    public function getNumberOfExecutedMigrations()
+    public function getNumberOfExecutedMigrations(): int
     {
         return $this->versionStorage->getNumberOfExecutedMigrations();
     }
@@ -66,7 +101,7 @@ class FileConfiguration extends AbstractConfiguration implements JaduPathAwareCo
     /**
      * {@inheritdoc}
      */
-    public function createMigrationTable()
+    public function createMigrationTable(): bool
     {
         // Migrations table is not needed for file migrations
         return true;
@@ -77,6 +112,12 @@ class FileConfiguration extends AbstractConfiguration implements JaduPathAwareCo
      */
     protected function createMigration($version, $class)
     {
-        return new FileMigrationVersion($this, $version, $class, $this->versionStorage);
+        return new FileMigrationVersion(
+            $this,
+            $version,
+            $class,
+            $this->getDependencyFactory()->getVersionExecutor(),
+            $this->versionStorage
+        );
     }
 }

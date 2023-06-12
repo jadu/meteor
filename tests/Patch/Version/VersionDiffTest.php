@@ -2,7 +2,9 @@
 
 namespace Meteor\Patch\Version;
 
-class VersionDiffTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class VersionDiffTest extends TestCase
 {
     /**
      * @dataProvider lessThanProvider
@@ -11,7 +13,7 @@ class VersionDiffTest extends \PHPUnit_Framework_TestCase
     {
         $version = new VersionDiff('test', 'VERSION', $newVersion, $currentVersion);
 
-        $this->assertSame($expectedResult, $version->isLessThan());
+        static::assertSame($expectedResult, $version->isLessThan());
     }
 
     public function lessThanProvider()
@@ -34,7 +36,7 @@ class VersionDiffTest extends \PHPUnit_Framework_TestCase
     {
         $version = new VersionDiff('test', 'VERSION', $newVersion, $currentVersion);
 
-        $this->assertSame($expectedResult, $version->isGreaterThan());
+        static::assertSame($expectedResult, $version->isGreaterThan());
     }
 
     public function greaterThanProvider()

@@ -4,12 +4,13 @@ namespace Meteor\Scripts;
 
 use Meteor\IO\NullIO;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class ScriptRunnerTest extends \PHPUnit_Framework_TestCase
+class ScriptRunnerTest extends TestCase
 {
     private $processRunner;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->processRunner = Mockery::mock('Meteor\Process\ProcessRunner');
     }
@@ -156,7 +157,7 @@ class ScriptRunnerTest extends \PHPUnit_Framework_TestCase
             'jadu/cms' => [
                 'test' => ['@clear-cache', '@warm-cache'],
                 'clear-cache' => ['clear-cache.sh'],
-                'warm-cache' => ['warm-cache.sh']
+                'warm-cache' => ['warm-cache.sh'],
             ],
         ]);
 

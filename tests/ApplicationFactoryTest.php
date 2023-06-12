@@ -3,15 +3,16 @@
 namespace Meteor;
 
 use Composer\Autoload\ClassLoader;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\StreamOutput;
 
-class ApplicationFactoryTest extends \PHPUnit_Framework_TestCase
+class ApplicationFactoryTest extends TestCase
 {
     private $application;
     private $output;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $factory = new ApplicationFactory();
         $this->application = $factory->createApplication(new ClassLoader());
@@ -34,7 +35,7 @@ class ApplicationFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->application->run($input, $this->output);
 
-        $this->assertRegExp('/Missing the required --install-dir option/', $this->getDisplay());
+        static::assertMatchesRegularExpression('/Missing the required --install-dir option/', $this->getDisplay());
     }
 
     private function getDisplay()

@@ -60,7 +60,7 @@ class PermissionsExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadPermissionLoader(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_PERMISSION_LOADER, new Definition('Meteor\Permissions\PermissionLoader'));
+        $container->setDefinition(self::SERVICE_PERMISSION_LOADER, new Definition('Meteor\Permissions\PermissionLoader'))->setPublic(true);
     }
 
     /**
@@ -72,7 +72,7 @@ class PermissionsExtension extends ExtensionBase implements ExtensionInterface
             new Reference(PlatformExtension::SERVICE_PLATFORM),
             new Reference(self::SERVICE_PERMISSION_LOADER),
             new Reference(IOExtension::SERVICE_IO),
-        ]));
+        ]))->setPublic(true);
     }
 
     /**
@@ -89,6 +89,8 @@ class PermissionsExtension extends ExtensionBase implements ExtensionInterface
             new Reference(self::SERVICE_PERMISSION_SETTER),
         ]);
         $definition->addTag(CliExtension::TAG_COMMAND);
+        $definition->setPublic(true);
+
         $container->setDefinition(self::SERVICE_COMMAND_RESET_PERMISSIONS, $definition);
     }
 

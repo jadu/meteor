@@ -3,12 +3,13 @@
 namespace Meteor\Migrations\Connection\Configuration\Loader;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class SystemConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
+class SystemConfigurationLoaderTest extends TestCase
 {
     private $loader;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->loader = new SystemConfigurationLoader();
     }
@@ -19,7 +20,7 @@ class SystemConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
 <?xml version="1.0" encoding="utf-8" ?>
 <system xmlns:config="http://www.jadu.co.uk/schema/config">
     <db_host>localhost</db_host>
-    <db_port></db_port>
+    <db_port>3306</db_port>
     <db_username>jadu</db_username>
     <db_password>password</db_password>
     <db_name>jadudb</db_name>
@@ -34,11 +35,12 @@ XML;
             ],
         ]);
 
-        $this->assertSame([
+        static::assertSame([
             'dbname' => 'jadudb',
             'user' => 'jadu',
             'password' => 'password',
             'host' => 'localhost',
+            'port' => '3306',
             'driver' => 'pdo_mysql',
         ], $this->loader->load(vfsStream::url('root')));
     }
@@ -49,7 +51,7 @@ XML;
 <?xml version="1.0" encoding="utf-8" ?>
 <system xmlns:config="http://www.jadu.co.uk/schema/config">
     <db_host>localhost</db_host>
-    <db_port></db_port>
+    <db_port>3306</db_port>
     <db_username>jadu</db_username>
     <db_password>password</db_password>
     <db_name>jadudb</db_name>
@@ -64,11 +66,12 @@ XML;
             ],
         ]);
 
-        $this->assertSame([
+        static::assertSame([
             'dbname' => 'jadudb',
             'user' => 'jadu',
             'password' => 'password',
             'host' => 'localhost',
+            'port' => '3306',
             'driver' => 'pdo_mysql',
         ], $this->loader->load(vfsStream::url('root')));
     }
@@ -79,7 +82,7 @@ XML;
 <?xml version="1.0" encoding="utf-8" ?>
 <system xmlns:config="http://www.jadu.co.uk/schema/config">
     <db_host>localhost</db_host>
-    <db_port></db_port>
+    <db_port>3306</db_port>
     <db_username>jadu</db_username>
     <db_password>password</db_password>
     <db_name>jadudb</db_name>
@@ -94,11 +97,12 @@ XML;
             ],
         ]);
 
-        $this->assertSame([
+        static::assertSame([
             'dbname' => 'jadudb',
             'user' => 'jadu',
             'password' => 'password',
             'host' => 'localhost',
+            'port' => '3306',
             'driver' => 'sqlsrv',
         ], $this->loader->load(vfsStream::url('root')));
     }
@@ -109,7 +113,7 @@ XML;
 <?xml version="1.0" encoding="utf-8" ?>
 <system xmlns:config="http://www.jadu.co.uk/schema/config">
     <db_host>localhost</db_host>
-    <db_port></db_port>
+    <db_port>3306</db_port>
     <db_username>jadu</db_username>
     <db_password>password</db_password>
     <db_name>jadudb</db_name>
@@ -124,6 +128,6 @@ XML;
             ],
         ]);
 
-        $this->assertSame([], $this->loader->load(vfsStream::url('root')));
+        static::assertSame([], $this->loader->load(vfsStream::url('root')));
     }
 }

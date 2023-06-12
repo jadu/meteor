@@ -2,6 +2,7 @@
 
 namespace Meteor\Platform\ServiceContainer;
 
+use Meteor\Platform\Windows\WindowsPlatform;
 use Meteor\ServiceContainer\ExtensionTestCase;
 
 class PlatformExtensionTest extends ExtensionTestCase
@@ -11,7 +12,7 @@ class PlatformExtensionTest extends ExtensionTestCase
         $container = $this->loadContainer([]);
 
         foreach ($this->getServiceIds() as $serviceId) {
-            $container->get($serviceId);
+            static::assertTrue($container->has($serviceId), sprintf('Container has "%s" service', $serviceId));
         }
     }
 
@@ -35,8 +36,8 @@ class PlatformExtensionTest extends ExtensionTestCase
 
         $container = $this->loadContainer([]);
 
-        $this->assertInstanceOf(
-            'Meteor\Platform\Windows\WindowsPlatform',
+        static::assertInstanceOf(
+            WindowsPlatform::class,
             $container->get(PlatformExtension::SERVICE_PLATFORM)
         );
     }

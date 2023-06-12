@@ -2,13 +2,15 @@
 
 namespace Meteor\Patch\Task;
 
+use InvalidArgumentException;
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class TaskBusTest extends \PHPUnit_Framework_TestCase
+class TaskBusTest extends TestCase
 {
     private $taskBus;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->taskBus = new TaskBus();
     }
@@ -26,14 +28,13 @@ class TaskBusTest extends \PHPUnit_Framework_TestCase
             ->andReturn(true)
             ->once();
 
-        $this->assertTrue($this->taskBus->run($task, $config));
+        static::assertTrue($this->taskBus->run($task, $config));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testThrowsExceptionWhenMissingHandler()
     {
+        static::expectException(InvalidArgumentException::class);
+
         $this->taskBus->run(new \stdClass(), ['name' => 'value']);
     }
 }

@@ -2,7 +2,9 @@
 
 namespace Meteor\Process;
 
-class PHPMemoryLimitSetterTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+
+class PHPMemoryLimitSetterTest extends TestCase
 {
     /**
      * @dataProvider phpScriptDataProvider
@@ -12,7 +14,7 @@ class PHPMemoryLimitSetterTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsPHPScriptReturnsCorrectResult($script, $isPHP)
     {
-        self::assertEquals(
+        static::assertEquals(
             $isPHP, PHPMemoryLimitSetter::isPHPScript($script),
             sprintf('Expected "%s" to %s a PHP script', $script, $isPHP ? 'be' : 'not be')
         );
@@ -39,7 +41,7 @@ class PHPMemoryLimitSetterTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasMemoryLimitShouldReturnCorrectResult($script, $hasLimit)
     {
-        self::assertEquals(
+        static::assertEquals(
             $hasLimit, PHPMemoryLimitSetter::hasMemoryLimit($script),
             sprintf('Expected "%s" to %s a memory_limit flag', $script, $hasLimit ? 'have' : 'not have')
         );
@@ -100,7 +102,7 @@ class PHPMemoryLimitSetterTest extends \PHPUnit_Framework_TestCase
 
         ini_set('memory_limit', '666M');
 
-        self::assertEquals(
+        static::assertEquals(
             $expected,
             PHPMemoryLimitSetter::setMemoryLimit($input));
 
@@ -111,6 +113,6 @@ class PHPMemoryLimitSetterTest extends \PHPUnit_Framework_TestCase
     {
         $input = '/bin/bash foo.bar';
 
-        self::assertEquals($input, PHPMemoryLimitSetter::setMemoryLimit($input));
+        static::assertEquals($input, PHPMemoryLimitSetter::setMemoryLimit($input));
     }
 }

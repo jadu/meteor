@@ -11,7 +11,7 @@ class MigrationsExtensionTest extends ExtensionTestCase
         $container = $this->loadContainer([]);
 
         foreach ($this->getServiceIds() as $serviceId) {
-            $container->get($serviceId);
+            static::assertTrue($container->has($serviceId), sprintf('Container has "%s" service', $serviceId));
         }
     }
 
@@ -46,6 +46,6 @@ class MigrationsExtensionTest extends ExtensionTestCase
     {
         $config = $this->processConfiguration([]);
 
-        $this->assertArrayNotHasKey('migrations', $config);
+        static::assertArrayNotHasKey('migrations', $config);
     }
 }

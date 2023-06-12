@@ -29,8 +29,8 @@ class ScriptRunner
 
     /**
      * @param ProcessRunner $processRunner
-     * @param IOInterface   $io
-     * @param array         $scripts
+     * @param IOInterface $io
+     * @param array $scripts
      */
     public function __construct(ProcessRunner $processRunner, IOInterface $io, array $scripts)
     {
@@ -93,4 +93,3 @@ class ScriptRunner
         $this->io->newLine();
     }
 }
-

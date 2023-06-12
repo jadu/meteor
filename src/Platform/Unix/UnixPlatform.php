@@ -112,7 +112,7 @@ class UnixPlatform implements PlatformInterface
             $groupMode += 2;
         }
         if ($permission->canExecute()) {
-            $groupMode += 1;
+            ++$groupMode;
         }
 
         return octdec('00' . $groupMode . '0') | (is_dir($path) ? 0700 : 0600);

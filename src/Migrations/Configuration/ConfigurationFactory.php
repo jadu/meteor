@@ -2,8 +2,8 @@
 
 namespace Meteor\Migrations\Configuration;
 
-use Doctrine\DBAL\Migrations\Finder\GlobFinder;
-use Doctrine\DBAL\Migrations\OutputWriter;
+use Doctrine\Migrations\Finder\GlobFinder;
+use Doctrine\Migrations\OutputWriter;
 use InvalidArgumentException;
 use Meteor\IO\IOInterface;
 use Meteor\Migrations\Connection\ConnectionFactory;
@@ -53,7 +53,7 @@ class ConfigurationFactory
 
     /**
      * @param string $type
-     * @param Config $config
+     * @param array $config
      * @param string $patchDir
      * @param string $installDir
      *
@@ -73,7 +73,7 @@ class ConfigurationFactory
     }
 
     /**
-     * @param Config $config
+     * @param array $config
      * @param string $patchDir
      * @param string $installDir
      *
@@ -84,13 +84,14 @@ class ConfigurationFactory
         $configuration = $this->create(DatabaseConfiguration::class, $config, $patchDir, $installDir);
 
         // NB: This will attempt to connect to the database
-        $configuration->registerMigrationsFromDirectory($patchDir . '/' . $config['directory']);
+        $versions = $configuration->registerMigrationsFromDirectory($patchDir . '/' . $config['directory']);
+        $configuration->setVersions($versions);
 
         return $configuration;
     }
 
     /**
-     * @param Config $config
+     * @param array $config
      * @param string $patchDir
      * @param string $installDir
      *
@@ -104,13 +105,14 @@ class ConfigurationFactory
         $versionStorage = $this->fileMigrationVersionStorageFactory->create($installDir, $config['table']);
         $configuration->setVersionStorage($versionStorage);
 
-        // NB: This will attempt to connect to the database
-        $configuration->registerMigrationsFromDirectory($patchDir . '/' . $config['directory']);
-
-        if (!$versionStorage->isInitialised()) {
-            // The version storage file does not exist yet, create using the migration status file if available
-            $currentVersion = $this->versionFileManager->getCurrentVersion($installDir, $config['table'], VersionFileManager::FILE_MIGRATION);
-            $versionStorage->initialise($configuration, $currentVersion);
+        if (is_dir($patchDir . '/' . $config['directory'])) {
+            // NB: This will attempt to connect to the database
+            $versions = $configuration->registerMigrationsFromDirectory($patchDir . '/' . $config['directory']);
+            $configuration->setVersions($versions);
+            if (!$versionStorage->isInitialised()) {
+                // The version storage file does not exist yet, create it
+                $versionStorage->initialise();
+            }
         }
 
         return $configuration;
@@ -118,7 +120,7 @@ class ConfigurationFactory
 
     /**
      * @param string $className
-     * @param Config $config
+     * @param array $config
      * @param string $patchDir
      * @param string $installDir
      *

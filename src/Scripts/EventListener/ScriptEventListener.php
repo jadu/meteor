@@ -3,7 +3,7 @@
 namespace Meteor\Scripts\EventListener;
 
 use Meteor\Scripts\ScriptRunner;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class ScriptEventListener
 {

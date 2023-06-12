@@ -6,6 +6,7 @@ use Meteor\IO\IOInterface;
 use Meteor\Migrations\Outputter\StatusOutputter;
 use Meteor\Patch\Cli\Command\AbstractPatchCommand;
 use Meteor\Platform\PlatformInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -62,7 +63,7 @@ class StatusCommand extends AbstractPatchCommand
             if (empty($config)) {
                 $this->io->error('There are no migrations configured');
 
-                return 1;
+                return Command::FAILURE;
             }
 
             foreach ($config as $packageName => $migrationConfig) {
@@ -77,13 +78,13 @@ class StatusCommand extends AbstractPatchCommand
                 );
             }
 
-            return;
+            return Command::SUCCESS;
         }
 
         if (!isset($config[$packageName])) {
             $this->io->error(sprintf('Unable to find migrations for the package "%s"', $packageName));
 
-            return 1;
+            return Command::FAILURE;
         }
 
         $this->io->title(sprintf('Migration status for <info>%s</>', $packageName));
@@ -95,5 +96,7 @@ class StatusCommand extends AbstractPatchCommand
             $this->type,
             $showVersions
         );
+
+        return Command::SUCCESS;
     }
 }

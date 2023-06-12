@@ -4,12 +4,13 @@ namespace Meteor\Patch\Manifest;
 
 use Meteor\IO\NullIO;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class ManifestCheckerTest extends \PHPUnit_Framework_TestCase
+class ManifestCheckerTest extends TestCase
 {
     private $manifestChecker;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->manifestChecker = new ManifestChecker(new NullIO());
 
@@ -22,14 +23,14 @@ class ManifestCheckerTest extends \PHPUnit_Framework_TestCase
 
     public function testReturnsTrueIfManifestFileDoesNotExist()
     {
-        $this->assertTrue($this->manifestChecker->check(vfsStream::url('root')));
+        static::assertTrue($this->manifestChecker->check(vfsStream::url('root')));
     }
 
     public function testReturnsFalseIfManifestFileCouldNotBeParsed()
     {
         file_put_contents(vfsStream::url('root/' . ManifestChecker::MANIFEST_FILENAME), '!!');
 
-        $this->assertFalse($this->manifestChecker->check(vfsStream::url('root')));
+        static::assertFalse($this->manifestChecker->check(vfsStream::url('root')));
     }
 
     public function testReturnsFalseIfThePatchCannotBeVerifiedDueToMissingFile()
@@ -40,7 +41,7 @@ class ManifestCheckerTest extends \PHPUnit_Framework_TestCase
 
         file_put_contents(vfsStream::url('root/' . ManifestChecker::MANIFEST_FILENAME), json_encode($manifest));
 
-        $this->assertFalse($this->manifestChecker->check(vfsStream::url('root')));
+        static::assertFalse($this->manifestChecker->check(vfsStream::url('root')));
     }
 
     public function testReturnsFalseIfThePatchCannotBeVerifiedDueToInvalidFileHash()
@@ -51,7 +52,7 @@ class ManifestCheckerTest extends \PHPUnit_Framework_TestCase
 
         file_put_contents(vfsStream::url('root/' . ManifestChecker::MANIFEST_FILENAME), json_encode($manifest));
 
-        $this->assertFalse($this->manifestChecker->check(vfsStream::url('root')));
+        static::assertFalse($this->manifestChecker->check(vfsStream::url('root')));
     }
 
     public function testReturnsTrueIfThePatchIsVerified()
@@ -64,6 +65,6 @@ class ManifestCheckerTest extends \PHPUnit_Framework_TestCase
 
         file_put_contents(vfsStream::url('root/' . ManifestChecker::MANIFEST_FILENAME), json_encode($manifest));
 
-        $this->assertTrue($this->manifestChecker->check(vfsStream::url('root')));
+        static::assertTrue($this->manifestChecker->check(vfsStream::url('root')));
     }
 }

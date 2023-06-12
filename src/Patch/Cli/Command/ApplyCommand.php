@@ -15,11 +15,12 @@ use Meteor\Patch\Task\TaskBusInterface;
 use Meteor\Permissions\PermissionSetter;
 use Meteor\Platform\PlatformInterface;
 use Meteor\Scripts\ScriptRunner;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class ApplyCommand extends AbstractPatchCommand
 {
@@ -69,19 +70,19 @@ class ApplyCommand extends AbstractPatchCommand
     private $phpVersion;
 
     /**
-     * @param string                   $name
-     * @param array                    $config
-     * @param IOInterface              $io
-     * @param PlatformInterface        $platform
-     * @param TaskBusInterface         $taskBus
-     * @param PatchStrategyInterface   $strategy
-     * @param Locker                   $locker
-     * @param ManifestChecker          $manifestChecker
+     * @param string $name
+     * @param array $config
+     * @param IOInterface $io
+     * @param PlatformInterface $platform
+     * @param TaskBusInterface $taskBus
+     * @param PatchStrategyInterface $strategy
+     * @param Locker $locker
+     * @param ManifestChecker $manifestChecker
      * @param EventDispatcherInterface $eventDispatcher
-     * @param ScriptRunner             $scriptRunner
-     * @param LoggerInterface          $logger
-     * @param PermissionSetter         $permissionSetter
-     * @param string                   $phpVersion
+     * @param ScriptRunner $scriptRunner
+     * @param LoggerInterface $logger
+     * @param PermissionSetter $permissionSetter
+     * @param string $phpVersion
      */
     public function __construct(
         $name,
@@ -189,7 +190,7 @@ class ApplyCommand extends AbstractPatchCommand
     }
 
     /**
-     * @param InputInterface  $input
+     * @param InputInterface $input
      * @param OutputInterface $output
      *
      * @return int|null
@@ -217,7 +218,7 @@ class ApplyCommand extends AbstractPatchCommand
         if (!$this->io->getOption('skip-verify')) {
             $result = $this->manifestChecker->check($workingDir);
             if ($result === false) {
-                return 1;
+                return Command::FAILURE;
             }
         }
 
@@ -226,19 +227,19 @@ class ApplyCommand extends AbstractPatchCommand
         }
 
         if (!$this->io->getOption('skip-scripts')) {
-            $this->eventDispatcher->dispatch(PatchEvents::PRE_APPLY, new Event());
+            $this->eventDispatcher->dispatch(new Event(), PatchEvents::PRE_APPLY);
         }
 
         $tasks = $this->strategy->apply($workingDir, $installDir, $this->io->getOptions());
         foreach ($tasks as $task) {
             $result = $this->taskBus->run($task, $this->getConfiguration());
             if ($result === false) {
-                return 1;
+                return Command::FAILURE;
             }
         }
 
         if (!$this->io->getOption('skip-scripts')) {
-            $this->eventDispatcher->dispatch(PatchEvents::POST_APPLY, new Event());
+            $this->eventDispatcher->dispatch(new Event(), PatchEvents::POST_APPLY);
         }
 
         if (!$this->io->getOption('skip-post-scripts-permissions')) {
@@ -250,5 +251,7 @@ class ApplyCommand extends AbstractPatchCommand
         }
 
         $this->io->success('Patch complete');
+
+        return Command::SUCCESS;
     }
 }

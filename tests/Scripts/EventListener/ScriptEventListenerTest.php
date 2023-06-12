@@ -2,17 +2,19 @@
 
 namespace Meteor\Scripts\EventListener;
 
+use Meteor\Scripts\ScriptRunner;
 use Mockery;
-use Symfony\Component\EventDispatcher\Event;
+use PHPUnit\Framework\TestCase;
+use Symfony\Contracts\EventDispatcher\Event;
 
-class ScriptEventListenerTest extends \PHPUnit_Framework_TestCase
+class ScriptEventListenerTest extends TestCase
 {
     private $scriptRunner;
     private $listener;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->scriptRunner = Mockery::mock('Meteor\Scripts\ScriptRunner');
+        $this->scriptRunner = Mockery::mock(ScriptRunner::class);
         $this->listener = new ScriptEventListener($this->scriptRunner);
     }
 

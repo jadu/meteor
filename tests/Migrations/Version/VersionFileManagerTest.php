@@ -3,12 +3,13 @@
 namespace Meteor\Migrations\Version;
 
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\TestCase;
 
-class VersionFileManagerTest extends \PHPUnit_Framework_TestCase
+class VersionFileManagerTest extends TestCase
 {
     private $versionFileManager;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->versionFileManager = new VersionFileManager();
     }
@@ -20,7 +21,7 @@ class VersionFileManagerTest extends \PHPUnit_Framework_TestCase
     {
         vfsStream::setup('root', null, $structure);
 
-        $this->assertSame($expectedVersion, $this->versionFileManager->getCurrentVersion(
+        static::assertSame($expectedVersion, $this->versionFileManager->getCurrentVersion(
             vfsStream::url('root'),
             $table,
             $versionFilename
@@ -114,7 +115,7 @@ class VersionFileManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->versionFileManager->setCurrentVersion('20160601102030', vfsStream::url('root'), $table, $versionFilename);
 
-        $this->assertSame('20160601102030', file_get_contents(vfsStream::url('root/' . $expectedVersionFileName)));
+        static::assertSame('20160601102030', file_get_contents(vfsStream::url('root/' . $expectedVersionFileName)));
     }
 
     public function setCurrentVersionProvider()

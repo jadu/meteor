@@ -3,13 +3,14 @@
 namespace Meteor\Migrations\Connection\Configuration\Loader;
 
 use Mockery;
+use PHPUnit\Framework\TestCase;
 
-class InputQuestionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
+class InputQuestionConfigurationLoaderTest extends TestCase
 {
     private $io;
     private $loader;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->io = Mockery::mock('Meteor\IO\IOInterface');
         $this->loader = new InputQuestionConfigurationLoader($this->io);
@@ -26,12 +27,14 @@ class InputQuestionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
             'user' => 'user',
             'password' => 'password',
             'host' => 'host',
+            'port' => 'port',
             'driver' => 'driver',
         ];
 
-        $this->assertArraySubset([
-            'dbname' => 'dbname',
-        ], $this->loader->load('install', $configuration));
+        $result = $this->loader->load('install', $configuration);
+
+        static::assertArrayHasKey('dbname', $result);
+        static::assertEquals($result['dbname'], 'dbname');
     }
 
     public function testAsksForUserWhenNotSet()
@@ -45,12 +48,14 @@ class InputQuestionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
             'user' => '',
             'password' => 'password',
             'host' => 'host',
+            'port' => 'port',
             'driver' => 'driver',
         ];
 
-        $this->assertArraySubset([
-            'user' => 'user',
-        ], $this->loader->load('install', $configuration));
+        $result = $this->loader->load('install', $configuration);
+
+        static::assertArrayHasKey('user', $result);
+        static::assertEquals($result['user'], 'user');
     }
 
     public function testAsksForPasswordWhenNotSet()
@@ -64,12 +69,14 @@ class InputQuestionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
             'user' => 'user',
             'password' => '',
             'host' => 'host',
+            'port' => 'port',
             'driver' => 'driver',
         ];
 
-        $this->assertArraySubset([
-            'password' => 'password',
-        ], $this->loader->load('install', $configuration));
+        $result = $this->loader->load('install', $configuration);
+
+        static::assertArrayHasKey('password', $result);
+        static::assertEquals($result['password'], 'password');
     }
 
     public function testAsksForHostWhenNotSet()
@@ -83,12 +90,52 @@ class InputQuestionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
             'user' => 'user',
             'password' => 'password',
             'host' => '',
+            'port' => 'port',
             'driver' => 'driver',
         ];
 
-        $this->assertArraySubset([
+        $result = $this->loader->load('install', $configuration);
+
+        static::assertArrayHasKey('host', $result);
+        static::assertEquals($result['host'], 'host');
+    }
+
+    public function testDoesNotAskForPortWhenNotSet()
+    {
+        $this->io->shouldReceive('ask')
+            ->never();
+
+        $configuration = [
+            'dbname' => 'dbname',
+            'user' => 'user',
+            'password' => 'password',
             'host' => 'host',
-        ], $this->loader->load('install', $configuration));
+            'driver' => 'driver',
+        ];
+
+        $result = $this->loader->load('install', $configuration);
+
+        static::assertArrayNotHasKey('port', $result);
+    }
+
+    public function testDoesNotAskForPortWhenBlank()
+    {
+        $this->io->shouldReceive('ask')
+            ->never();
+
+        $configuration = [
+            'dbname' => 'dbname',
+            'user' => 'user',
+            'password' => 'password',
+            'host' => 'host',
+            'port' => '',
+            'driver' => 'driver',
+        ];
+
+        $result = $this->loader->load('install', $configuration);
+
+        static::assertArrayHasKey('port', $result);
+        static::assertEquals($result['port'], '');
     }
 
     public function testAsksForDriverWhenNotSet()
@@ -102,11 +149,13 @@ class InputQuestionConfigurationLoaderTest extends \PHPUnit_Framework_TestCase
             'user' => 'user',
             'password' => 'password',
             'host' => 'host',
+            'port' => 'port',
             'driver' => '',
         ];
 
-        $this->assertArraySubset([
-            'driver' => 'driver',
-        ], $this->loader->load('install', $configuration));
+        $result = $this->loader->load('install', $configuration);
+
+        static::assertArrayHasKey('driver', $result);
+        static::assertEquals($result['driver'], 'driver');
     }
 }

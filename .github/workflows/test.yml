@@ -1,0 +1,213 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - "master"
+  pull_request:
+    branches:
+      - "master"
+      - "release/4.0.0"
+
+permissions:
+  contents: read
+
+jobs:
+
+  coding-standards:
+    name: Coding Standadrds
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+      - uses: actions/checkout@v3
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Run phpcs
+        run: vendor/bin/php-cs-fixer fix -v --dry-run
+
+
+  unit-tests:
+    name: Unit Tests
+
+    needs: coding-standards
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+
+        php-version:
+          - '7.4'
+          - '8.1'
+
+    steps:
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+
+      - uses: actions/checkout@v3
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Execute tests (Unit and Feature tests) via PHPUnit
+        run: vendor/bin/phpunit
+
+
+  meteor-build:
+    name: Build phar
+
+    needs: unit-tests
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+      - uses: actions/checkout@v3
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --no-dev
+      - name: Build the phar
+        run: vendor/bin/box compile
+      - name: Check meteor existence
+        id: check_meteor
+        uses: andstor/file-existence-action@v2
+        with:
+          files: "bin/meteor.phar"
+          fail: true
+      - name: Store the artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: meteor.phar
+          path: bin/meteor.phar
+
+  package-for-testing:
+    name: Create test package
+
+    needs: meteor-build
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download migrations update script
+        uses: suisei-cn/actions-download-file@v1
+        with:
+          url: "https://gist.githubusercontent.com/DenisYaschuk/d3ade2d88d058cf9c971cf9d1f580a0f/raw/871ee04ee0ee01a6a2e0f97e67ce0206f78e3179/migrations-update.php"
+          target: tests/mock_project/package
+      - name: Copy meteor to mock project
+        uses: actions/download-artifact@v3
+        with:
+          name: meteor.phar
+          path: "tests/mock_project/package"
+      - name: Update migrations
+        working-directory: tests/mock_project/package
+        run: php migrations-update.php upgrades/migrations
+      - name: Build meteor package
+        working-directory: tests/mock_project/package
+        run: php meteor.phar package -o output
+      - name: Check package existence
+        id: check_package
+        uses: andstor/file-existence-action@v2
+        with:
+          files: "tests/mock_project/package/output/github-action-test_2.0.zip"
+          fail: true
+      - name: Remove previous unzips
+        uses: JesseTG/rm@v1.0.3
+        with:
+          path: tests/mock_project/package/output/github-action-test_2.0
+      - name: Unzip the mock_project archive
+        uses: montudor/action-zip@v1
+        with:
+          args: unzip -qq tests/mock_project/package/output/github-action-test_2.0.zip -d tests/mock_project/package/output/github-action-test_2.0
+      - name: Copy meteor to package
+        uses: canastro/copy-file-action@master
+        with:
+          source: "tests/mock_project/package/meteor.phar"
+          target: "tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0"
+
+      - name: Store the mock project artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: mock_project
+          path: tests/mock_project
+
+  functional-tests:
+    name: Functional Tests
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+
+        php-version:
+          - '7.4'
+          - '8.1'
+
+    needs: package-for-testing
+    steps:
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+
+      - name: Retrieve the mock project
+        uses: actions/download-artifact@v3
+        with:
+          name: mock_project
+          path: mock_project
+
+        # General commands
+      - name: Check meteor list command
+        working-directory: mock_project/package/output/github-action-test_2.0/github-action-test_2.0
+        run: php meteor.phar list
+
+      - name: Check meteor help command
+        working-directory: mock_project/package/output/github-action-test_2.0/github-action-test_2.0
+        run: php meteor.phar help
+
+
+        # File migrations
+      - name: Check file-migrations:generate command
+        working-directory: mock_project/package/output/github-action-test_2.0/github-action-test_2.0
+        run: php meteor.phar f:g
+        
+        # Migrations
+      - name: Check migrations:generate command
+        working-directory: mock_project/package/output/github-action-test_2.0/github-action-test_2.0
+        run: php meteor.phar m:g
+        
+    #TODO: add other commands

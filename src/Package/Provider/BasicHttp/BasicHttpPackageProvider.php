@@ -43,7 +43,9 @@ class BasicHttpPackageProvider implements PackageProviderInterface
      * @param string $packageName
      * @param string $version
      * @param string $tempDir
+     *
      * @return string
+     *
      * @throws PackageNotFoundException
      */
     public function download($packageName, $version, $tempDir)
@@ -63,6 +65,5 @@ class BasicHttpPackageProvider implements PackageProviderInterface
         } catch (Exception $e) {
         }
         throw new PackageNotFoundException(sprintf('Unable to download "%s" package form the package provider.', $packageName));
-
     }
 }

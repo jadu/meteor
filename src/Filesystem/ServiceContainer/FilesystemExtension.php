@@ -2,6 +2,8 @@
 
 namespace Meteor\Filesystem\ServiceContainer;
 
+use Meteor\Filesystem\Filesystem;
+use Meteor\Filesystem\Finder\FinderFactory;
 use Meteor\IO\ServiceContainer\IOExtension;
 use Meteor\ServiceContainer\ExtensionBase;
 use Meteor\ServiceContainer\ExtensionInterface;
@@ -14,7 +16,7 @@ use Symfony\Component\DependencyInjection\Reference;
 class FilesystemExtension extends ExtensionBase implements ExtensionInterface
 {
     const SERVICE_FILESYSTEM = 'filesystem';
-    const SERVICE_FINDER_FACTORY = 'filesyste.finder.factory';
+    const SERVICE_FINDER_FACTORY = 'filesystem.finder.factory';
 
     /**
      * Returns the extension config key.
@@ -54,7 +56,7 @@ class FilesystemExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadFinderFactory(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_FINDER_FACTORY, new Definition('Meteor\Filesystem\Finder\FinderFactory'));
+        $container->setDefinition(self::SERVICE_FINDER_FACTORY, new Definition(FinderFactory::class))->setPublic(true);
     }
 
     /**
@@ -62,10 +64,14 @@ class FilesystemExtension extends ExtensionBase implements ExtensionInterface
      */
     private function loadFilesystem(ContainerBuilder $container)
     {
-        $container->setDefinition(self::SERVICE_FILESYSTEM, new Definition('Meteor\Filesystem\Filesystem', [
-            new Reference(self::SERVICE_FINDER_FACTORY),
-            new Reference(IOExtension::SERVICE_IO),
-        ]));
+        $container->setDefinition(
+            self::SERVICE_FILESYSTEM,
+            new Definition(Filesystem::class, [
+                new Reference(self::SERVICE_FINDER_FACTORY),
+                new Reference(IOExtension::SERVICE_IO),
+            ])
+        )
+        ->setPublic(true);
     }
 
     /**

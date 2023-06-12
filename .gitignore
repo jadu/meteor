@@ -1,5 +1,7 @@
 /.idea/
 /.php_cs.cache
+/.php-cs-fixer.cache
+/.phpunit.result.cache
 /bin/meteor.phar
 /box.json
 /box.phar
@@ -10,4 +12,6 @@
 !/docs/node_modules/bootstrap/
 /php-cs-fixer.phar
 /phpunit.xml
+/tests/mock_project/package/logs/
+/tests/mock_project/package/meteor.phar
 /vendor/
