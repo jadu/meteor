@@ -2,6 +2,7 @@
 
 namespace Meteor\Migrations;
 
+use Doctrine\Migrations\Exception\UnknownMigrationVersion;
 use Doctrine\Migrations\Version\ExecutionResult;
 use Doctrine\Migrations\Version\Version;
 use Meteor\IO\NullIO;
@@ -246,6 +247,34 @@ class MigratorTest extends TestCase
             ->once();
 
         static::assertTrue($this->migrator->migrate(__DIR__ . '/Configuration/Fixtures/with_migrations/patch', 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest', true));
+    }
+
+    public function testMigrateThrowsWhenUnknownMigration()
+    {
+        $this->expectException(UnknownMigrationVersion::class);
+        $this->expectExceptionMessage('Could not find migration version 2');
+
+        $patchDirectory = __DIR__ . '/Configuration/Fixtures/with_migrations/patch';
+
+        $config = [
+            'directory' => 'upgrades',
+        ];
+
+        $configuration = Mockery::mock(DatabaseConfiguration::class, [
+            'getMigrations' => [],
+            'getMigratedVersions' => [],
+            'getAvailableVersions' => [],
+            'getCurrentVersion' => 0,
+            'getMigrationsToExecute' => [],
+            'resolveVersionAlias' => 2,
+        ]);
+
+        $this->configurationFactory->shouldReceive('createConfiguration')
+            ->with(MigrationsConstants::TYPE_DATABASE, $config, $patchDirectory, 'install')
+            ->andReturn($configuration)
+            ->once();
+
+        $this->migrator->migrate($patchDirectory, 'install', $config, MigrationsConstants::TYPE_DATABASE, 'latest', true);
     }
 
     public function testExecuteUp()

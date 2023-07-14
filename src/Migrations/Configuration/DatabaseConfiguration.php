@@ -11,6 +11,6 @@ class DatabaseConfiguration extends AbstractConfiguration implements JaduPathAwa
      */
     protected function createMigration($version, $class)
     {
-        return new Version($this, $version, $class);
+        return new Version($this, $version, $class, $this->getDependencyFactory()->getVersionExecutor());
     }
 }

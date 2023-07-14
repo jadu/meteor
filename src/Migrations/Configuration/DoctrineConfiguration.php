@@ -3,7 +3,7 @@
 namespace Meteor\Migrations\Configuration;
 
 use Doctrine\Migrations\Configuration\Configuration;
-use Doctrine\Migrations\Exception\MigrationException;
+use Doctrine\Migrations\Exception\UnknownMigrationVersion;
 use Doctrine\Migrations\Version\Version;
 
 /**
@@ -31,7 +31,7 @@ abstract class DoctrineConfiguration extends Configuration
     public function getVersion($version): Version
     {
         if (!isset($this->migrationVersions[$version])) {
-            throw MigrationException::unknownMigrationVersion($version);
+            throw UnknownMigrationVersion::new($version);
         }
 
         return $this->migrationVersions[$version];

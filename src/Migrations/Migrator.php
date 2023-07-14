@@ -2,7 +2,7 @@
 
 namespace Meteor\Migrations;
 
-use Doctrine\Migrations\Exception\MigrationException;
+use Doctrine\Migrations\Exception\UnknownMigrationVersion;
 use Meteor\IO\IOInterface;
 use Meteor\Migrations\Configuration\ConfigurationFactory;
 use Meteor\Migrations\Configuration\FileConfiguration;
@@ -107,7 +107,7 @@ class Migrator
 
         $migrations = $configuration->getMigrations();
         if (!isset($migrations[$to]) && $to > 0) {
-            throw MigrationException::unknownMigrationVersion($to);
+            throw UnknownMigrationVersion::new($to);
         }
 
         $direction = $from > $to ? 'down' : 'up';
