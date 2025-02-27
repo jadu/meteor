@@ -11,7 +11,7 @@ class PackageCreatorTest extends TestCase
 {
     private $filesystem;
     private $packageArchiver;
-    private $packageCombiner;
+    private $combinedPackageResolver;
     private $packageNameResolver;
     private $migrationsCopier;
     private $composerDependencyChecker;

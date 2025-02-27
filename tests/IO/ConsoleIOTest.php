@@ -11,6 +11,10 @@ class ConsoleIOTest extends TestCase
 {
     private $io;
 
+    private $input;
+
+    private $output;
+
     protected function setUp(): void
     {
         $this->input = new ArrayInput([]);
