@@ -27,7 +27,7 @@ class StatusOutputter
      */
     public function __construct(
         ConfigurationFactory $configurationFactory,
-        IOInterface $io
+        IOInterface $io,
     ) {
         $this->configurationFactory = $configurationFactory;
         $this->io = $io;

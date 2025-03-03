@@ -15,8 +15,8 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class FilesystemExtension extends ExtensionBase implements ExtensionInterface
 {
-    const SERVICE_FILESYSTEM = 'filesystem';
-    const SERVICE_FINDER_FACTORY = 'filesystem.finder.factory';
+    public const SERVICE_FILESYSTEM = 'filesystem';
+    public const SERVICE_FINDER_FACTORY = 'filesystem.finder.factory';
 
     /**
      * Returns the extension config key.

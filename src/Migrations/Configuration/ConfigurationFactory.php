@@ -43,7 +43,7 @@ class ConfigurationFactory
         ConnectionFactory $connectionFactory,
         FileMigrationVersionStorageFactory $fileMigrationVersionStorageFactory,
         VersionFileManager $versionFileManager,
-        IOInterface $io
+        IOInterface $io,
     ) {
         $this->connectionFactory = $connectionFactory;
         $this->fileMigrationVersionStorageFactory = $fileMigrationVersionStorageFactory;

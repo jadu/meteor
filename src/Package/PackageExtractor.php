@@ -14,9 +14,9 @@ class PackageExtractor
      * @param string $packagePath
      * @param string $targetDir
      *
-     * @throws RuntimeException
-     *
      * @return string
+     *
+     * @throws RuntimeException
      */
     public function extract($packagePath, $targetDir)
     {
@@ -34,9 +34,9 @@ class PackageExtractor
     /**
      * @param string $path
      *
-     * @throws RuntimeException
-     *
      * @return string
+     *
+     * @throws RuntimeException
      */
     private function findFirstDirectoryWithMeteorConfig($path)
     {

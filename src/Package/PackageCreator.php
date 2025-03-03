@@ -73,7 +73,7 @@ class PackageCreator
         CombinedPackageResolver $combinedPackageResolver,
         ComposerDependencyChecker $composerDependencyChecker,
         ConfigurationWriter $configurationWriter,
-        IOInterface $io
+        IOInterface $io,
     ) {
         $this->filesystem = $filesystem;
         $this->packageArchiver = $packageArchiver;

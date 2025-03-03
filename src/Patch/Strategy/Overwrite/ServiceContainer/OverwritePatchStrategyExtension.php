@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\Definition;
 
 class OverwritePatchStrategyExtension extends ExtensionBase implements ExtensionInterface
 {
-    const STRATEGY_NAME = 'overwrite';
+    public const STRATEGY_NAME = 'overwrite';
 
     /**
      * Returns the extension config key.

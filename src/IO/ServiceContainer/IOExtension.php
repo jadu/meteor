@@ -14,7 +14,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class IOExtension extends ExtensionBase implements ExtensionInterface
 {
-    const SERVICE_IO = 'io';
+    public const SERVICE_IO = 'io';
 
     /**
      * Returns the extension config key.

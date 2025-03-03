@@ -4,7 +4,7 @@ namespace Meteor\Migrations\Connection\Configuration\Loader;
 
 class SystemConfigurationLoader implements ConfigurationLoaderInterface
 {
-    const CONFIG_FILENAME = 'config/system.xml';
+    public const CONFIG_FILENAME = 'config/system.xml';
 
     /**
      * {@inheritdoc}
