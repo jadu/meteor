@@ -97,7 +97,7 @@ class ApplyCommand extends AbstractPatchCommand
         ScriptRunner $scriptRunner,
         LoggerInterface $logger,
         PermissionSetter $permissionSetter,
-        $phpVersion = PHP_VERSION,
+        $phpVersion = PHP_VERSION
     ) {
         $this->taskBus = $taskBus;
         $this->strategy = $strategy;

@@ -97,7 +97,7 @@ class RollbackCommand extends AbstractPatchCommand
         EventDispatcherInterface $eventDispatcher,
         ScriptRunner $scriptRunner,
         LoggerInterface $logger,
-        PermissionSetter $permissionSetter,
+        PermissionSetter $permissionSetter
     ) {
         $this->versionComparer = $versionComparer;
         $this->backupFinder = $backupFinder;

@@ -40,7 +40,7 @@ class PermissionSetter
     public function __construct(
         PlatformInterface $platform,
         PermissionLoader $permissionLoader,
-        IOInterface $io,
+        IOInterface $io
     ) {
         $this->platform = $platform;
         $this->permissionLoader = $permissionLoader;

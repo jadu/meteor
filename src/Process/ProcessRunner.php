@@ -25,7 +25,7 @@ class ProcessRunner
      */
     public function __construct(
         IOInterface $io,
-        ProcessFactory $processFactory,
+        ProcessFactory $processFactory
     ) {
         $this->io = $io;
         $this->processFactory = $processFactory;

@@ -48,7 +48,7 @@ class PackageCombiner
         Filesystem $filesystem,
         PackageExtractor $packageExtractor,
         MigrationsCopier $migrationsCopier,
-        IOInterface $io,
+        IOInterface $io
     ) {
         $this->configurationLoader = $configurationLoader;
         $this->filesystem = $filesystem;
