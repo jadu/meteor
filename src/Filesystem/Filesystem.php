@@ -2,8 +2,11 @@
 
 namespace Meteor\Filesystem;
 
+use FilesystemIterator;
 use Meteor\Filesystem\Finder\FinderFactory;
 use Meteor\IO\IOInterface;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem as BaseFilesystem;
 
@@ -218,5 +221,27 @@ class Filesystem extends BaseFilesystem
 
         $this->io->debug(sprintf('Removing %s', $old));
         $this->remove($old);
+    }
+
+    /**
+     * @param string $directory
+     *
+     * @return int
+     */
+    public function getDirectorySize($directory)
+    {
+        $totalBytes = 0;
+
+        $path = realpath($directory);
+
+        if ($path !== false && $path != '' && file_exists($path)) {
+            foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS)) as $object) {
+                if (!$object->isLink()) {
+                    $totalBytes += $object->getSize();
+                }
+            }
+        }
+
+        return $totalBytes;
     }
 }
