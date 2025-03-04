@@ -19,29 +19,29 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class MigrationsExtension extends ExtensionBase implements ExtensionInterface
 {
-    const PARAMETER_MIGRATIONS = 'migrations';
-    const SERVICE_CONFIGURATION_FACTORY = 'migrations.configuration.factory';
-    const SERVICE_CONNECTION_CONFIGURATION_LOADER = 'migrations.connection.configuration.loader';
-    const SERVICE_CONNECTION_CONFIGURATION_LOADER_INPUT_OPTION = 'migrations.connection.configuration.loader.input_option';
-    const SERVICE_CONNECTION_CONFIGURATION_LOADER_INPUT_QUESTION = 'migrations.connection.configuration.loader.input_question';
-    const SERVICE_CONNECTION_CONFIGURATION_LOADER_SYSTEM = 'migrations.connection.configuration.loader.system';
-    const SERVICE_CONNECTION_FACTORY = 'migrations.connection.factory';
-    const SERVICE_COMMAND_EXECUTE_DATABASE_MIGRATION = 'migrations.cli.command.execute_database_migration';
-    const SERVICE_COMMAND_EXECUTE_FILE_MIGRATION = 'migrations.cli.command.execute_file_migration';
-    const SERVICE_COMMAND_GENERATE_DATABASE_MIGRATION = 'migrations.cli.command.generate_database_migration';
-    const SERVICE_COMMAND_GENERATE_FILE_MIGRATION = 'migrations.cli.command.generate_file_migration';
-    const SERVICE_COMMAND_MIGRATE_DATABASE = 'migrations.cli.command.migrate_database';
-    const SERVICE_COMMAND_MIGRATE_FILES = 'migrations.cli.command.migrate_files';
-    const SERVICE_COMMAND_DATABASE_MIGRATION_STATUS = 'migrations.cli.command.database_status';
-    const SERVICE_COMMAND_FILE_MIGRATION_STATUS = 'migrations.cli.command.file_status';
-    const SERVICE_COMMAND_DATABASE_MIGRATION_VERSION = 'migrations.cli.command.database_version';
-    const SERVICE_COMMAND_FILE_MIGRATION_VERSION = 'migrations.cli.command.file_version';
-    const SERVICE_MIGRATION_GENERATOR = 'migrations.migration_generator';
-    const SERVICE_MIGRATOR = 'migrations.migrator';
-    const SERVICE_STATUS_OUTPUTTER = 'migrations.outputter.status';
-    const SERVICE_VERSION_FILE_MANAGER = 'migrations.version.version_file_manager';
-    const SERVICE_VERSION_FILE_MIGRATION_VERSION_STORAGE_FACTORY = 'migrations.version.file_migration_version_storage_factory';
-    const SERVICE_VERSION_MANAGER = 'migrations.version.manager';
+    public const PARAMETER_MIGRATIONS = 'migrations';
+    public const SERVICE_CONFIGURATION_FACTORY = 'migrations.configuration.factory';
+    public const SERVICE_CONNECTION_CONFIGURATION_LOADER = 'migrations.connection.configuration.loader';
+    public const SERVICE_CONNECTION_CONFIGURATION_LOADER_INPUT_OPTION = 'migrations.connection.configuration.loader.input_option';
+    public const SERVICE_CONNECTION_CONFIGURATION_LOADER_INPUT_QUESTION = 'migrations.connection.configuration.loader.input_question';
+    public const SERVICE_CONNECTION_CONFIGURATION_LOADER_SYSTEM = 'migrations.connection.configuration.loader.system';
+    public const SERVICE_CONNECTION_FACTORY = 'migrations.connection.factory';
+    public const SERVICE_COMMAND_EXECUTE_DATABASE_MIGRATION = 'migrations.cli.command.execute_database_migration';
+    public const SERVICE_COMMAND_EXECUTE_FILE_MIGRATION = 'migrations.cli.command.execute_file_migration';
+    public const SERVICE_COMMAND_GENERATE_DATABASE_MIGRATION = 'migrations.cli.command.generate_database_migration';
+    public const SERVICE_COMMAND_GENERATE_FILE_MIGRATION = 'migrations.cli.command.generate_file_migration';
+    public const SERVICE_COMMAND_MIGRATE_DATABASE = 'migrations.cli.command.migrate_database';
+    public const SERVICE_COMMAND_MIGRATE_FILES = 'migrations.cli.command.migrate_files';
+    public const SERVICE_COMMAND_DATABASE_MIGRATION_STATUS = 'migrations.cli.command.database_status';
+    public const SERVICE_COMMAND_FILE_MIGRATION_STATUS = 'migrations.cli.command.file_status';
+    public const SERVICE_COMMAND_DATABASE_MIGRATION_VERSION = 'migrations.cli.command.database_version';
+    public const SERVICE_COMMAND_FILE_MIGRATION_VERSION = 'migrations.cli.command.file_version';
+    public const SERVICE_MIGRATION_GENERATOR = 'migrations.migration_generator';
+    public const SERVICE_MIGRATOR = 'migrations.migrator';
+    public const SERVICE_STATUS_OUTPUTTER = 'migrations.outputter.status';
+    public const SERVICE_VERSION_FILE_MANAGER = 'migrations.version.version_file_manager';
+    public const SERVICE_VERSION_FILE_MIGRATION_VERSION_STORAGE_FACTORY = 'migrations.version.file_migration_version_storage_factory';
+    public const SERVICE_VERSION_MANAGER = 'migrations.version.manager';
 
     /**
      * Returns the extension config key.

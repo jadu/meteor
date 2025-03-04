@@ -17,9 +17,9 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class PermissionsExtension extends ExtensionBase implements ExtensionInterface
 {
-    const SERVICE_COMMAND_RESET_PERMISSIONS = 'permissions.cli.command.reset_permissions';
-    const SERVICE_PERMISSION_LOADER = 'permissions.permission_loader';
-    const SERVICE_PERMISSION_SETTER = 'permissions.permission_setter';
+    public const SERVICE_COMMAND_RESET_PERMISSIONS = 'permissions.cli.command.reset_permissions';
+    public const SERVICE_PERMISSION_LOADER = 'permissions.permission_loader';
+    public const SERVICE_PERMISSION_SETTER = 'permissions.permission_setter';
 
     /**
      * Returns the extension config key.

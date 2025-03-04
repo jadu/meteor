@@ -10,11 +10,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class CliExtension extends ExtensionBase implements ExtensionInterface
 {
-    const PARAMETER_COMMAND_SERVICE_IDS = 'cli.command.service_ids';
-    const SERVICE_APPLICATION = 'cli.application';
-    const SERVICE_INPUT = 'cli.input';
-    const SERVICE_OUTPUT = 'cli.output';
-    const TAG_COMMAND = 'cli.command';
+    public const PARAMETER_COMMAND_SERVICE_IDS = 'cli.command.service_ids';
+    public const SERVICE_APPLICATION = 'cli.application';
+    public const SERVICE_INPUT = 'cli.input';
+    public const SERVICE_OUTPUT = 'cli.output';
+    public const TAG_COMMAND = 'cli.command';
 
     /**
      * Returns the extension config key.

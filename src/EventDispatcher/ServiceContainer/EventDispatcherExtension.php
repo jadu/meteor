@@ -12,8 +12,8 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class EventDispatcherExtension extends ExtensionBase implements ExtensionInterface
 {
-    const SERVICE_EVENT_DISPATCHER = 'events.event_dispatcher';
-    const TAG_SUBSCRIBER = 'events.subscriber';
+    public const SERVICE_EVENT_DISPATCHER = 'events.event_dispatcher';
+    public const TAG_SUBSCRIBER = 'events.subscriber';
 
     /**
      * Returns the extension config key.

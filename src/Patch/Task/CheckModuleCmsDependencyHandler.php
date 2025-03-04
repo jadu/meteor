@@ -7,9 +7,9 @@ use Meteor\IO\IOInterface;
 
 class CheckModuleCmsDependencyHandler
 {
-    const MODULE_CMS_DEPENDENCY_FILE = 'MODULE_CMS_DEPENDENCY';
+    public const MODULE_CMS_DEPENDENCY_FILE = 'MODULE_CMS_DEPENDENCY';
 
-    const CMS_VERSION_FILE = 'VERSION';
+    public const CMS_VERSION_FILE = 'VERSION';
 
     /**
      * @var IOInterface

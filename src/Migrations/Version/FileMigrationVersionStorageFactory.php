@@ -6,7 +6,7 @@ use Meteor\Filesystem\Filesystem;
 
 class FileMigrationVersionStorageFactory
 {
-    const STORAGE_DIR = '.meteor/file-migrations';
+    public const STORAGE_DIR = '.meteor/file-migrations';
 
     /**
      * @var Filesystem

@@ -43,12 +43,12 @@ class ChainedConfigurationLoaderTest extends TestCase
         $chainedLoader = new ChainedConfigurationLoader([$loader1, $loader2, $loader3]);
 
         static::assertSame([
-                'dbname' => 'db1',
-                'user' => 'user1',
-                'password' => 'password1',
-                'host' => 'host1',
-                'port' => 'port1',
-                'driver' => 'driver1',
+            'dbname' => 'db1',
+            'user' => 'user1',
+            'password' => 'password1',
+            'host' => 'host1',
+            'port' => 'port1',
+            'driver' => 'driver1',
         ], $chainedLoader->load('/path', []));
     }
 
@@ -88,12 +88,12 @@ class ChainedConfigurationLoaderTest extends TestCase
         $chainedLoader = new ChainedConfigurationLoader([$loader1, $loader2, $loader3]);
 
         static::assertSame([
-                'dbname' => 'db2',
-                'user' => 'user1',
-                'password' => 'password3',
-                'host' => 'host1',
-                'port' => 'port3',
-                'driver' => 'driver2',
+            'dbname' => 'db2',
+            'user' => 'user1',
+            'password' => 'password3',
+            'host' => 'host1',
+            'port' => 'port3',
+            'driver' => 'driver2',
         ], $chainedLoader->load('/path', []));
     }
 }

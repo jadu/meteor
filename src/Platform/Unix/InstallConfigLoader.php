@@ -7,7 +7,7 @@ use Throwable;
 
 class InstallConfigLoader
 {
-    const CONFIG_NAME = 'install.conf';
+    public const CONFIG_NAME = 'install.conf';
 
     /**
      * @param string $path

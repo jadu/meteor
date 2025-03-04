@@ -8,7 +8,7 @@ use Meteor\Migrations\Version\FileMigrationVersionStorage;
 
 class FileConfiguration extends AbstractConfiguration implements JaduPathAwareConfigurationInterface
 {
-    const MIGRATION_DIRECTORY = 'filesystem';
+    public const MIGRATION_DIRECTORY = 'filesystem';
 
     /**
      * @var FileMigrationVersionStorage
@@ -24,7 +24,7 @@ class FileConfiguration extends AbstractConfiguration implements JaduPathAwareCo
     }
 
     /**
-     *  @return FileMigrationVersion[]
+     * @return FileMigrationVersion[]
      */
     public function registerMigrationsFromDirectory(string $path): array
     {

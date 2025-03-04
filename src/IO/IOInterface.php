@@ -60,9 +60,9 @@ interface IOInterface
      * @param string|array $question The question to ask
      * @param string $default The default answer if none is given by the user
      *
-     * @throws \RuntimeException If there is no data to read in the input stream
-     *
      * @return string The user answer
+     *
+     * @throws \RuntimeException If there is no data to read in the input stream
      */
     public function ask($question, $default = null);
 

@@ -6,7 +6,7 @@ use Meteor\IO\IOInterface;
 
 class ManifestChecker
 {
-    const MANIFEST_FILENAME = 'meteor.manifest';
+    public const MANIFEST_FILENAME = 'meteor.manifest';
 
     /**
      * @var IOInterface
