@@ -41,7 +41,7 @@ class CombinedPackageResolver
      * @param IOInterface $io
      * @param PackageProviderInterface $packageProvider
      */
-    public function __construct(PackageCombiner $packageCombiner, CombinedPackageDependencyChecker $combinedPackageDependencyChecker, Filesystem $filesystem, IOInterface $io, PackageProviderInterface $packageProvider = null)
+    public function __construct(PackageCombiner $packageCombiner, CombinedPackageDependencyChecker $combinedPackageDependencyChecker, Filesystem $filesystem, IOInterface $io, ?PackageProviderInterface $packageProvider = null)
     {
         $this->packageCombiner = $packageCombiner;
         $this->combinedPackageDependencyChecker = $combinedPackageDependencyChecker;

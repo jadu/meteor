@@ -20,7 +20,7 @@ class FileMigrationVersion extends Version
      * @param string $class
      * @param FileMigrationVersionStorage $versionStorage
      */
-    public function __construct(Configuration $configuration, $version, $class, Executor $executor, FileMigrationVersionStorage $versionStorage = null)
+    public function __construct(Configuration $configuration, $version, $class, Executor $executor, ?FileMigrationVersionStorage $versionStorage = null)
     {
         parent::__construct($configuration, $version, $class, $executor);
 

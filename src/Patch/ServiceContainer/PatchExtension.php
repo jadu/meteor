@@ -53,34 +53,34 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class PatchExtension extends ExtensionBase implements ExtensionInterface, ScriptEventProviderInterface
 {
-    const PARAMETER_STRATEGY = 'patch.strategy';
-    const SERVICE_BACKUP_FINDER = 'patch.backup.finder';
-    const SERVICE_COMMAND_APPLY = 'patch.cli.command.apply';
-    const SERVICE_COMMAND_VERIFY = 'patch.cli.command.verify';
-    const SERVICE_COMMAND_CLEAR_LOCK = 'patch.cli.command.clear_lock';
-    const SERVICE_COMMAND_ROLLBACK = 'patch.cli.command.rollback';
-    const SERVICE_COMMAND_VERSION_INFO = 'patch.cli.command.version_info';
-    const SERVICE_LOCKER = 'patch.locker';
-    const SERVICE_MANIFEST_CHECKER = 'patch.manifest_checker';
-    const SERVICE_STRATEGY_PREFIX = 'patch.strategy';
-    const SERVICE_STRATEGY = 'patch.strategy';
-    const SERVICE_TASK_BUS = 'patch.task_bus';
-    const SERVICE_TASK_BACKUP_FILES_HANDLER = 'patch.task.backup_files_handler';
-    const SERVICE_TASK_LIMIT_BACKUPS_HANDLER = 'patch.task.limit_backups_handler';
-    const SERVICE_TASK_CHECK_DATABASE_CONNECTION_HANDLER = 'patch.task.check_database_connection_handler';
-    const SERVICE_TASK_CHECK_DISK_SPACE_HANDLER = 'patch.task.check_disk_space_handler';
-    const SERVICE_TASK_CHECK_MODULE_CMS_DEPENDENCY_HANDLER = 'patch.task.check_module_cms_dependency_handler';
-    const SERVICE_TASK_CHECK_VERSION_HANDLER = 'patch.task.check_version_handler';
-    const SERVICE_TASK_CHECK_WRITE_PERMISSION_HANDLER = 'patch.task.check_write_permission_handler';
-    const SERVICE_TASK_COPY_FILES_HANDLER = 'patch.task.copy_files_handler';
-    const SERVICE_TASK_DELETE_BACKUP_HANDLER = 'patch.task.delete_backup_handler';
-    const SERVICE_TASK_DISPLAY_VERSION_INFO_HANDLER = 'patch.task.display_version_info_handler';
-    const SERVICE_TASK_MIGRATE_DOWN_HANDLER = 'patch.task.migrate_down_handler';
-    const SERVICE_TASK_MIGRATE_UP_HANDLER = 'patch.task.migrate_up_handler';
-    const SERVICE_TASK_SET_PERMISSIONS_HANDLER = 'patch.task.set_permissions_handler';
-    const SERVICE_TASK_UPDATE_MIGRATION_VERSION_FILES_HANDLER = 'patch.task.update_database_migration_version_files_handler';
-    const SERVICE_VERSION_COMPARER = 'patch.version.comparer';
-    const TAG_TASK_HANDLER = 'patch.task_handler';
+    public const PARAMETER_STRATEGY = 'patch.strategy';
+    public const SERVICE_BACKUP_FINDER = 'patch.backup.finder';
+    public const SERVICE_COMMAND_APPLY = 'patch.cli.command.apply';
+    public const SERVICE_COMMAND_VERIFY = 'patch.cli.command.verify';
+    public const SERVICE_COMMAND_CLEAR_LOCK = 'patch.cli.command.clear_lock';
+    public const SERVICE_COMMAND_ROLLBACK = 'patch.cli.command.rollback';
+    public const SERVICE_COMMAND_VERSION_INFO = 'patch.cli.command.version_info';
+    public const SERVICE_LOCKER = 'patch.locker';
+    public const SERVICE_MANIFEST_CHECKER = 'patch.manifest_checker';
+    public const SERVICE_STRATEGY_PREFIX = 'patch.strategy';
+    public const SERVICE_STRATEGY = 'patch.strategy';
+    public const SERVICE_TASK_BUS = 'patch.task_bus';
+    public const SERVICE_TASK_BACKUP_FILES_HANDLER = 'patch.task.backup_files_handler';
+    public const SERVICE_TASK_LIMIT_BACKUPS_HANDLER = 'patch.task.limit_backups_handler';
+    public const SERVICE_TASK_CHECK_DATABASE_CONNECTION_HANDLER = 'patch.task.check_database_connection_handler';
+    public const SERVICE_TASK_CHECK_DISK_SPACE_HANDLER = 'patch.task.check_disk_space_handler';
+    public const SERVICE_TASK_CHECK_MODULE_CMS_DEPENDENCY_HANDLER = 'patch.task.check_module_cms_dependency_handler';
+    public const SERVICE_TASK_CHECK_VERSION_HANDLER = 'patch.task.check_version_handler';
+    public const SERVICE_TASK_CHECK_WRITE_PERMISSION_HANDLER = 'patch.task.check_write_permission_handler';
+    public const SERVICE_TASK_COPY_FILES_HANDLER = 'patch.task.copy_files_handler';
+    public const SERVICE_TASK_DELETE_BACKUP_HANDLER = 'patch.task.delete_backup_handler';
+    public const SERVICE_TASK_DISPLAY_VERSION_INFO_HANDLER = 'patch.task.display_version_info_handler';
+    public const SERVICE_TASK_MIGRATE_DOWN_HANDLER = 'patch.task.migrate_down_handler';
+    public const SERVICE_TASK_MIGRATE_UP_HANDLER = 'patch.task.migrate_up_handler';
+    public const SERVICE_TASK_SET_PERMISSIONS_HANDLER = 'patch.task.set_permissions_handler';
+    public const SERVICE_TASK_UPDATE_MIGRATION_VERSION_FILES_HANDLER = 'patch.task.update_database_migration_version_files_handler';
+    public const SERVICE_VERSION_COMPARER = 'patch.version.comparer';
+    public const TAG_TASK_HANDLER = 'patch.task_handler';
 
     /**
      * Returns the extension config key.
@@ -562,9 +562,9 @@ class PatchExtension extends ExtensionBase implements ExtensionInterface, Script
                 }
 
                 $container->getDefinition(self::SERVICE_TASK_BUS)->addMethodCall('registerHandler', [
-                        $attributes['task'],
-                        new Reference($id),
-                    ]
+                    $attributes['task'],
+                    new Reference($id),
+                ]
                 )
                 ->setPublic(true);
             }

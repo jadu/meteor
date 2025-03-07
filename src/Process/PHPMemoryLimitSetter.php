@@ -4,8 +4,8 @@ namespace Meteor\Process;
 
 class PHPMemoryLimitSetter
 {
-    const RE_PHP_SCRIPT = '/^\s*?(php)/';
-    const RE_MEMORY_LIMIT = '/([-]{1,2}(?:define|d)\s*(memory_limit))/';
+    public const RE_PHP_SCRIPT = '/^\s*?(php)/';
+    public const RE_MEMORY_LIMIT = '/([-]{1,2}(?:define|d)\s*(memory_limit))/';
 
     /**
      * @param string $command

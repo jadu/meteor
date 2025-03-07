@@ -4,8 +4,8 @@ namespace Meteor\Package\Combined;
 
 class CombinedPackageProblem
 {
-    const REASON_MISSING = 0;
-    const REASON_VERSION = 1;
+    public const REASON_MISSING = 0;
+    public const REASON_VERSION = 1;
 
     /**
      * @var CombinedPackageRequirement

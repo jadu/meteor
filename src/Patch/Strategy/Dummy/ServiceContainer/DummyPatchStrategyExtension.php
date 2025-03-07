@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Definition;
 
 class DummyPatchStrategyExtension extends ExtensionBase implements ExtensionInterface
 {
-    const STRATEGY_NAME = 'dummy';
+    public const STRATEGY_NAME = 'dummy';
 
     /**
      * Returns the extension config key.

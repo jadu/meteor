@@ -13,8 +13,8 @@ use Symfony\Component\DependencyInjection\Definition;
 class ConfigurationExtension extends ExtensionBase implements ExtensionInterface
 {
     // NB: Set in Application
-    const SERVICE_LOADER = 'configuration.loader';
-    const SERVICE_WRITER = 'configuration.writer';
+    public const SERVICE_LOADER = 'configuration.loader';
+    public const SERVICE_WRITER = 'configuration.writer';
 
     /**
      * Returns the extension config key.

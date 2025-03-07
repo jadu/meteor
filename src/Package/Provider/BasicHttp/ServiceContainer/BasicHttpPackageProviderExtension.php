@@ -15,8 +15,8 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class BasicHttpPackageProviderExtension extends ExtensionBase implements ExtensionInterface
 {
-    const PROVIDER_NAME = 'http';
-    const PARAMETER_BASE_URLS = 'http_package_provider.base_urls';
+    public const PROVIDER_NAME = 'http';
+    public const PARAMETER_BASE_URLS = 'http_package_provider.base_urls';
 
     /**
      * Returns the extension config key.

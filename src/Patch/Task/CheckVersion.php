@@ -6,8 +6,8 @@ use InvalidArgumentException;
 
 class CheckVersion
 {
-    const GREATER_THAN_OR_EQUAL = '>=';
-    const LESS_THAN_OR_EQUAL = '<=';
+    public const GREATER_THAN_OR_EQUAL = '>=';
+    public const LESS_THAN_OR_EQUAL = '<=';
 
     /**
      * @var string
