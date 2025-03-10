@@ -234,7 +234,7 @@ class Filesystem extends BaseFilesystem
 
         $path = realpath($directory);
 
-        if ($path !== false && $path != '' && file_exists($path)) {
+        if ($path !== false && $path != '' && is_dir($path)) {
             foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS)) as $object) {
                 if (!$object->isLink()) {
                     $totalBytes += $object->getSize();

@@ -67,8 +67,8 @@ class CheckDiskSpaceHandler
 
         $this->io->warning(sprintf(
             'There is not enough free disk space to apply this patch. Space required: %s, Space available: %s',
-            $this->formatFileSize($spaceRequired),
-            $this->formatFileSize(disk_free_space($task->installDir))
+            $this->io->formatFileSize($spaceRequired),
+            $this->io->formatFileSize(disk_free_space($task->installDir))
         ));
 
         // Try removing old backups
@@ -106,12 +106,12 @@ class CheckDiskSpaceHandler
 
         $this->io->debug(sprintf(
             'Available disk space: %s',
-            $this->formatFileSize($freeSpace)
+            $this->io->formatFileSize($freeSpace)
         ));
 
         $this->io->debug(sprintf(
             'Disk space required: %s',
-            $this->formatFileSize($spaceRequired)
+            $this->io->formatFileSize($spaceRequired)
         ));
 
         $resultingSpace = $freeSpace - $spaceRequired;
@@ -133,22 +133,5 @@ class CheckDiskSpaceHandler
         }
 
         $this->removeBackups($backups, self::MAX_BACKUPS);
-    }
-
-    /**
-     * @param type $bytes
-     * @param int $dec
-     *
-     * @return string
-     */
-    private function formatFileSize($bytes, $dec = 2)
-    {
-        $size = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-        $factor = floor((strlen($bytes) - 1) / 3);
-        if ($factor == 0) {
-            $dec = 0;
-        }
-
-        return sprintf("%.{$dec}f %s", $bytes / (1024 ** $factor), $size[$factor]);
     }
 }

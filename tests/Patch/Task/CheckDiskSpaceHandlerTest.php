@@ -195,13 +195,23 @@ class CheckDiskSpaceHandlerTest extends TestCase
         $io = Mockery::mock(\Meteor\IO\IOInterface::class, [
             'askConfirmation' => null,
             'debug' => null,
+            'formatFileSize' => '',
         ]);
 
         $this->handler = new CheckDiskSpaceHandler($this->backupFinder, $this->filesystem, $io);
 
         $io->shouldReceive('warning')
             ->once()
-            ->with('There is not enough free disk space to apply this patch. Space required: 825.00 MB, Space available: 1.91 MB');
+            ->with('There is not enough free disk space to apply this patch. Space required: 825.00 MiB, Space available: 1.91 MiB');
+
+        $io->shouldReceive('formatFileSize')
+            ->with(static::PATCH_SIZE_BYTES * CheckDiskSpaceHandler::PATCH_SIZE_MULTIPLIER)
+            ->andReturn('825.00 MiB');
+
+        $io->shouldReceive('formatFileSize')
+            ->with($GLOBALS['disk_free_space'])
+            ->andReturn('1.91 MiB');
+
 
         static::assertFalse($this->handler->handle(new CheckDiskSpace('install', 'install/backups', '/path/to/patch'), $config));
     }
