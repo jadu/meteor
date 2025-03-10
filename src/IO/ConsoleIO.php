@@ -85,9 +85,9 @@ class ConsoleIO implements IOInterface
         $suffix = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
 
         $base = 1024;
-        $class = min((int)log($bytes , $base) , count($suffix) - 1);
+        $class = min((int) log($bytes, $base), count($suffix) - 1);
 
-        return sprintf("%1.{$dec}f" , $bytes / pow($base, $class)) . ' ' . $suffix[$class];
+        return sprintf("%1.{$dec}f", $bytes / pow($base, $class)) . ' ' . $suffix[$class];
     }
 
     /**

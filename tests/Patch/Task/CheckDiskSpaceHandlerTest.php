@@ -212,7 +212,6 @@ class CheckDiskSpaceHandlerTest extends TestCase
             ->with($GLOBALS['disk_free_space'])
             ->andReturn('1.91 MiB');
 
-
         static::assertFalse($this->handler->handle(new CheckDiskSpace('install', 'install/backups', '/path/to/patch'), $config));
     }
 }
