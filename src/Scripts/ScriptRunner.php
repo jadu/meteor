@@ -63,7 +63,7 @@ class ScriptRunner
     public function run($scriptName)
     {
         foreach ($this->scripts as $scripts) {
-            if (isset($scripts[$scriptName]) && !empty($scripts[$scriptName])) {
+            if (!empty($scripts[$scriptName])) {
                 $this->io->text(sprintf('Running scripts for "%s"', $scriptName));
                 $this->io->progressStart(count($scripts[$scriptName]));
                 $this->runScripts($scriptName, $scripts);
