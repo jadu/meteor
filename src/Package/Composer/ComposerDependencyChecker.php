@@ -45,9 +45,9 @@ class ComposerDependencyChecker
      * @param string $workingDir
      * @param array $config
      *
-     * @throws ComposerDependenciesException
-     *
      * @return bool
+     *
+     * @throws ComposerDependenciesException
      */
     public function check($workingDir, array $config)
     {

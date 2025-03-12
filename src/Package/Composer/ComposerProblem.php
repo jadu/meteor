@@ -4,8 +4,8 @@ namespace Meteor\Package\Composer;
 
 class ComposerProblem
 {
-    const REASON_MISSING = 0;
-    const REASON_CONSTRAINT = 1;
+    public const REASON_MISSING = 0;
+    public const REASON_CONSTRAINT = 1;
 
     /**
      * @var ComposerRequirement

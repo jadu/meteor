@@ -23,10 +23,10 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class ScriptsExtension extends ExtensionBase implements ExtensionInterface
 {
-    const PARAMETER_SCRIPTS = 'scripts';
-    const SERVICE_COMMAND_RUN = 'scripts.cli.command.run';
-    const SERVICE_EVENT_LISTENER = 'scripts.event_listener';
-    const SERVICE_SCRIPT_RUNNER = 'scripts.script_runner';
+    public const PARAMETER_SCRIPTS = 'scripts';
+    public const SERVICE_COMMAND_RUN = 'scripts.cli.command.run';
+    public const SERVICE_EVENT_LISTENER = 'scripts.event_listener';
+    public const SERVICE_SCRIPT_RUNNER = 'scripts.script_runner';
 
     /**
      * @var array
@@ -194,10 +194,10 @@ class ScriptsExtension extends ExtensionBase implements ExtensionInterface
     private function loadScriptRunner(ContainerBuilder $container)
     {
         $container->setDefinition(self::SERVICE_SCRIPT_RUNNER, new Definition(ScriptRunner::class, [
-                new Reference(ProcessExtension::SERVICE_PROCESS_RUNNER),
-                new Reference(IOExtension::SERVICE_IO),
-                '%' . self::PARAMETER_SCRIPTS . '%',
-            ])
+            new Reference(ProcessExtension::SERVICE_PROCESS_RUNNER),
+            new Reference(IOExtension::SERVICE_IO),
+            '%' . self::PARAMETER_SCRIPTS . '%',
+        ])
         )
         ->setPublic(true);
     }

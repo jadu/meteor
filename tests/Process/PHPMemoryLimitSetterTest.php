@@ -37,6 +37,7 @@ class PHPMemoryLimitSetterTest extends TestCase
     /**
      * @param string $script
      * @param bool $hasLimit
+     *
      * @dataProvider memoryLimitDataProvider
      */
     public function testHasMemoryLimitShouldReturnCorrectResult($script, $hasLimit)

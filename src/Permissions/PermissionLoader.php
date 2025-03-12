@@ -6,7 +6,7 @@ use Symfony\Component\Finder\Finder;
 
 class PermissionLoader
 {
-    const PERMISSIONS_CONFIG_DIR = '/config/permissions';
+    public const PERMISSIONS_CONFIG_DIR = '/config/permissions';
 
     /**
      * Load files permissions recursively from a given path.

@@ -22,8 +22,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Application extends BaseApplication
 {
-    const PARAMETER_CONFIG = 'config';
-    const PARAMETER_WORKING_DIR = 'working_dir';
+    public const PARAMETER_CONFIG = 'config';
+    public const PARAMETER_WORKING_DIR = 'working_dir';
 
     /**
      * @var ConfigurationLoader
