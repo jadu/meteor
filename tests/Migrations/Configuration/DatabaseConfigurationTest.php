@@ -18,7 +18,7 @@ class DatabaseConfigurationTest extends TestCase
     {
         $this->configuration = new DatabaseConfiguration(Mockery::mock(Connection::class, [
             'getSchemaManager' => Mockery::mock(AbstractSchemaManager::class),
-            'getDatabasePlatform' => Mockery::mock(AbstractPlatform::class)
+            'getDatabasePlatform' => Mockery::mock(AbstractPlatform::class),
         ]));
     }
 
