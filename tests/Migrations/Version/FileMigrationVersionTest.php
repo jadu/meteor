@@ -20,6 +20,7 @@ class FileMigrationVersionTest extends TestCase
     private $configuration;
     private $versionStorage;
     private $version;
+    private $executor;
 
     protected function setUp(): void
     {

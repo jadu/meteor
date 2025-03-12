@@ -12,6 +12,7 @@ class CombinedPackageResolverTest extends TestCase
     private $combinedPackageDependencyChecker;
     private $filesystem;
     private $packageProvider;
+    private $combinedPackageResolver;
 
     protected function setUp(): void
     {
