@@ -15,17 +15,17 @@ class CheckDiskSpaceHandler
      * Assuming required space is 300MB for backup and new files. Not checking the real package
      * size to avoid performance issues when checking the size of thousands of files.
      */
-    const REQUIRED_BYTES = 314572800;
+    public const REQUIRED_BYTES = 314572800;
 
     /**
      * The required free space as a percentage.
      */
-    const REQUIRED_FREE_SPACE_PERCENT = 10;
+    public const REQUIRED_FREE_SPACE_PERCENT = 10;
 
     /**
      * The maximum number of backups to keep when running low on disk space.
      */
-    const MAX_BACKUPS = 2;
+    public const MAX_BACKUPS = 2;
 
     /**
      * @var BackupFinder

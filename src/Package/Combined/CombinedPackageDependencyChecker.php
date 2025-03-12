@@ -11,9 +11,9 @@ class CombinedPackageDependencyChecker
      * @param string $tempDir
      * @param array $config
      *
-     * @throws CombinedPackageDependenciesException
-     *
      * @return bool
+     *
+     * @throws CombinedPackageDependenciesException
      */
     public function check($tempDir, array $config)
     {

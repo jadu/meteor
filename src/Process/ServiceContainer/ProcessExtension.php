@@ -13,8 +13,8 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class ProcessExtension extends ExtensionBase implements ExtensionInterface
 {
-    const SERVICE_PROCESS_RUNNER = 'process.runner';
-    const SERVICE_PROCESS_FACTORY = 'process.factory';
+    public const SERVICE_PROCESS_RUNNER = 'process.runner';
+    public const SERVICE_PROCESS_FACTORY = 'process.factory';
 
     /**
      * Returns the extension config key.

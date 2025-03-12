@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class ContainerLoader
 {
-    const PARAMETER_CONFIG = 'config';
+    public const PARAMETER_CONFIG = 'config';
 
     /**
      * @var ConfigurationLoader

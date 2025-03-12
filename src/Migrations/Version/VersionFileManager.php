@@ -4,8 +4,8 @@ namespace Meteor\Migrations\Version;
 
 class VersionFileManager
 {
-    const DATABASE_MIGRATION = 'MIGRATION_NUMBER';
-    const FILE_MIGRATION = 'FILE_SYSTEM_MIGRATION_NUMBER';
+    public const DATABASE_MIGRATION = 'MIGRATION_NUMBER';
+    public const FILE_MIGRATION = 'FILE_SYSTEM_MIGRATION_NUMBER';
 
     /**
      * @param string $path

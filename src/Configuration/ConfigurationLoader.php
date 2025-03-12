@@ -10,9 +10,9 @@ use Symfony\Component\Config\Definition\Processor;
 
 class ConfigurationLoader
 {
-    const CONFIG_NAME = 'meteor.json';
-    const DIST_CONFIG_NAME = 'meteor.json.dist';
-    const PACKAGE_CONFIG_NAME = 'meteor.json.package';
+    public const CONFIG_NAME = 'meteor.json';
+    public const DIST_CONFIG_NAME = 'meteor.json.dist';
+    public const PACKAGE_CONFIG_NAME = 'meteor.json.package';
 
     /**
      * @var ExtensionManager
@@ -39,7 +39,7 @@ class ConfigurationLoader
      * @param TreeBuilder $treeBuilder
      * @param Processor $processor
      */
-    public function __construct(ExtensionManager $extensionManager, TreeBuilder $treeBuilder = null, Processor $processor = null)
+    public function __construct(ExtensionManager $extensionManager, ?TreeBuilder $treeBuilder = null, ?Processor $processor = null)
     {
         $this->extensionManager = $extensionManager;
         $this->treeBuilder = $treeBuilder ?: new TreeBuilder('meteor');
@@ -117,9 +117,9 @@ class ConfigurationLoader
      * @param string $path
      * @param bool $strict
      *
-     * @throws ConfigurationLoadingException
-     *
      * @return array
+     *
+     * @throws ConfigurationLoadingException
      */
     public function load($path, $strict = true)
     {

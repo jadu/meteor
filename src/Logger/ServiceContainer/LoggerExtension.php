@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Definition;
 
 class LoggerExtension extends ExtensionBase implements ExtensionInterface
 {
-    const SERVICE_LOGGER = 'logger';
+    public const SERVICE_LOGGER = 'logger';
 
     /**
      * Returns the extension config key.

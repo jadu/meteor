@@ -14,10 +14,10 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class PlatformExtension extends ExtensionBase implements ExtensionInterface
 {
-    const SERVICE_PLATFORM = 'platform';
-    const SERVICE_PLATFORM_UNIX = 'platform.unix';
-    const SERVICE_PLATFORM_WINDOWS = 'platform.windows';
-    const SERVICE_UNIX_INSTALL_CONFIG_LOADER = 'platform.unix.install_config_loader';
+    public const SERVICE_PLATFORM = 'platform';
+    public const SERVICE_PLATFORM_UNIX = 'platform.unix';
+    public const SERVICE_PLATFORM_WINDOWS = 'platform.windows';
+    public const SERVICE_UNIX_INSTALL_CONFIG_LOADER = 'platform.unix.install_config_loader';
 
     /**
      * Returns the extension config key.
