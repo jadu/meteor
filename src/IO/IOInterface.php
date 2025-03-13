@@ -12,6 +12,14 @@ interface IOInterface
     public function isInteractive();
 
     /**
+     * @param int $bytes
+     * @param int $dec
+     *
+     * @return string
+     */
+    public function formatFileSize($bytes, $dec = 2);
+
+    /**
      * Gets argument by name.
      *
      * @param string $name The name of the argument

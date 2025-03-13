@@ -18,6 +18,14 @@ class NullIO implements IOInterface
     /**
      * {@inheritdoc}
      */
+    public function formatFileSize($bytes, $dec = 2)
+    {
+        return '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getArgument($name)
     {
         return '';
