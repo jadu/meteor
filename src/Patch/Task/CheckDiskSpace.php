@@ -15,12 +15,18 @@ class CheckDiskSpace
     public $backupsDir;
 
     /**
+     * @var string
+     */
+    public $patchFilesDir;
+
+    /**
      * @param string $installDir
      * @param string $backupsDir
      */
-    public function __construct($installDir, $backupsDir)
+    public function __construct($installDir, $backupsDir, $patchFilesDir)
     {
         $this->installDir = $installDir;
         $this->backupsDir = $backupsDir;
+        $this->patchFilesDir = $patchFilesDir;
     }
 }

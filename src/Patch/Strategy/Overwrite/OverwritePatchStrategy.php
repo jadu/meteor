@@ -50,7 +50,7 @@ class OverwritePatchStrategy implements PatchStrategyInterface
             $tasks[] = new LimitBackups($backupsDir, $installDir, $options['limit-backups']);
         }
 
-        $tasks[] = new CheckDiskSpace($installDir, $backupsDir);
+        $tasks[] = new CheckDiskSpace($installDir, $backupsDir, $patchFilesDir);
 
         if (!$options['skip-backup']) {
             $tasks[] = new BackupFiles($backupDir, $patchDir, $installDir);
