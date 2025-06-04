@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - "master"
+    tags:
+      - "*"
   pull_request:
     branches:
       - "master"
@@ -52,6 +54,7 @@ jobs:
         php-version:
           - '7.4'
           - '8.1'
+          - '8.3'
 
     steps:
       - uses: shivammathur/setup-php@v2
@@ -85,7 +88,7 @@ jobs:
     steps:
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
+          php-version: '8.3'
       - uses: actions/checkout@v3
       - name: Cache Composer packages
         id: composer-cache
@@ -106,10 +109,11 @@ jobs:
           files: "bin/meteor.phar"
           fail: true
       - name: Store the artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: meteor.phar
           path: bin/meteor.phar
+          overwrite: true
 
   package-for-testing:
     name: Create test package
@@ -125,7 +129,7 @@ jobs:
           url: "https://gist.githubusercontent.com/DenisYaschuk/d3ade2d88d058cf9c971cf9d1f580a0f/raw/871ee04ee0ee01a6a2e0f97e67ce0206f78e3179/migrations-update.php"
           target: tests/mock_project/package
       - name: Copy meteor to mock project
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: meteor.phar
           path: "tests/mock_project/package"
@@ -156,10 +160,11 @@ jobs:
           target: "tests/mock_project/package/output/github-action-test_2.0/github-action-test_2.0"
 
       - name: Store the mock project artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: mock_project
           path: tests/mock_project
+          overwrite: true
 
   functional-tests:
     name: Functional Tests
@@ -176,6 +181,7 @@ jobs:
         php-version:
           - '7.4'
           - '8.1'
+          - '8.3'
 
     needs: package-for-testing
     steps:
@@ -184,7 +190,7 @@ jobs:
           php-version: ${{ matrix.php-version }}
 
       - name: Retrieve the mock project
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: mock_project
           path: mock_project

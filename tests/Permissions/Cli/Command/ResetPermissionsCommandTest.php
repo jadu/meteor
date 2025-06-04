@@ -12,6 +12,7 @@ use org\bovigo\vfs\vfsStream;
 
 class ResetPermissionsCommandTest extends CommandTestCase
 {
+    private $filesystem;
     private $platform;
     private $permissionSetter;
 

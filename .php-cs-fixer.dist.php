@@ -17,6 +17,9 @@ $config->setRules(
         [
             'no_superfluous_phpdoc_tags' => false,
             'fully_qualified_strict_types' => false,
+            'trailing_comma_in_multiline' => [
+                'elements' => ['arrays']
+            ],
         ]
     )
 );

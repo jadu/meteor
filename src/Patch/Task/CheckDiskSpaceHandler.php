@@ -12,20 +12,16 @@ class CheckDiskSpaceHandler
     use BackupHandlerTrait;
 
     /**
-     * Assuming required space is 300MB for backup and new files. Not checking the real package
-     * size to avoid performance issues when checking the size of thousands of files.
+     * Free space must be at least patch size multiplied by this number. Should
+     * ensure we set this large enough to make backup copies of everything in
+     * the patch.
      */
-    const REQUIRED_BYTES = 314572800;
-
-    /**
-     * The required free space as a percentage.
-     */
-    const REQUIRED_FREE_SPACE_PERCENT = 10;
+    public const PATCH_SIZE_MULTIPLIER = 2.5;
 
     /**
      * The maximum number of backups to keep when running low on disk space.
      */
-    const MAX_BACKUPS = 2;
+    public const MAX_BACKUPS = 2;
 
     /**
      * @var BackupFinder
@@ -62,18 +58,24 @@ class CheckDiskSpaceHandler
      */
     public function handle(CheckDiskSpace $task, array $config)
     {
-        if ($this->hasFreeSpace($task->installDir)) {
+        $spaceRequired = $this->calculateRequiredDiskSpace($task->patchFilesDir);
+
+        if ($this->hasFreeSpace($task->installDir, $spaceRequired)) {
             // Plenty of space available
             return true;
         }
 
-        $this->io->warning('Patching will reduce free disk space to less than ' . self::REQUIRED_FREE_SPACE_PERCENT . '%');
+        $this->io->warning(sprintf(
+            'There is not enough free disk space to apply this patch. Space required: %s, Space available: %s',
+            $this->io->formatFileSize($spaceRequired),
+            $this->io->formatFileSize(disk_free_space($task->installDir))
+        ));
 
         // Try removing old backups
         $this->removeOldBackups($task->backupsDir, $task->installDir, $config);
 
         // Check disk space again
-        if ($this->hasFreeSpace($task->installDir)) {
+        if ($this->hasFreeSpace($task->installDir, $spaceRequired)) {
             return true;
         }
 
@@ -85,19 +87,36 @@ class CheckDiskSpaceHandler
         return true;
     }
 
+    private function calculateRequiredDiskSpace($patchDirectory)
+    {
+        $patchSize = $this->filesystem->getDirectorySize($patchDirectory);
+
+        return $patchSize * static::PATCH_SIZE_MULTIPLIER;
+    }
+
     /**
      * @param string $installDir
+     * @param int $spaceRequired
      *
      * @return bool
      */
-    private function hasFreeSpace($installDir)
+    private function hasFreeSpace($installDir, $spaceRequired)
     {
-        $totalSpace = disk_total_space($installDir);
-        $freeSpace = disk_free_space($installDir) - self::REQUIRED_BYTES;
+        $freeSpace = disk_free_space($installDir);
 
-        $freeSpacePercent = ($freeSpace / $totalSpace) * 100;
+        $this->io->debug(sprintf(
+            'Available disk space: %s',
+            $this->io->formatFileSize($freeSpace)
+        ));
 
-        return $freeSpacePercent > self::REQUIRED_FREE_SPACE_PERCENT;
+        $this->io->debug(sprintf(
+            'Disk space required: %s',
+            $this->io->formatFileSize($spaceRequired)
+        ));
+
+        $resultingSpace = $freeSpace - $spaceRequired;
+
+        return $resultingSpace > 0;
     }
 
     /**

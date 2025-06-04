@@ -7,7 +7,7 @@ use RuntimeException;
 
 class ProcessRunner
 {
-    const DEFAULT_TIMEOUT = 3600;
+    public const DEFAULT_TIMEOUT = 3600;
 
     /**
      * @var IOInterface
@@ -37,11 +37,11 @@ class ProcessRunner
      * @param callable $callback
      * @param int $timeout
      *
-     * @throws RuntimeException
-     *
      * @return string
+     *
+     * @throws RuntimeException
      */
-    public function run(string $command, string $cwd = null, $callback = null, $timeout = self::DEFAULT_TIMEOUT)
+    public function run(string $command, ?string $cwd = null, $callback = null, $timeout = self::DEFAULT_TIMEOUT)
     {
         if (PHPMemoryLimitSetter::isPHPScript($command) && !PHPMemoryLimitSetter::hasMemoryLimit($command)) {
             $command = PHPMemoryLimitSetter::setMemoryLimit($command);

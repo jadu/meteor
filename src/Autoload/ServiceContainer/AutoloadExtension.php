@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class AutoloadExtension extends ExtensionBase implements ExtensionInterface
 {
-    const SERVICE_CLASS_LOADER = 'autoload.class_loader';
+    public const SERVICE_CLASS_LOADER = 'autoload.class_loader';
 
     /**
      * Returns the extension config key.

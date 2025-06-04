@@ -15,9 +15,9 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class GoogleDrivePackageProviderExtension extends ExtensionBase implements ExtensionInterface
 {
-    const PROVIDER_NAME = 'gdrive';
-    const PARAMETER_BINARY = 'gdrive_package_provider.binary';
-    const PARAMETER_FOLDERS = 'gdrive_package_provider.folders';
+    public const PROVIDER_NAME = 'gdrive';
+    public const PARAMETER_BINARY = 'gdrive_package_provider.binary';
+    public const PARAMETER_FOLDERS = 'gdrive_package_provider.folders';
 
     /**
      * Returns the extension config key.

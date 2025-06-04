@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Definition;
 
 class DummyPackageProviderExtension extends ExtensionBase implements ExtensionInterface
 {
-    const PROVIDER_NAME = 'dummy';
+    public const PROVIDER_NAME = 'dummy';
 
     /**
      * Returns the extension config key.

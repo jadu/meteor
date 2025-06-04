@@ -12,7 +12,7 @@ class ProcessFactory
      *
      * @return Process
      */
-    public function create(string $command, string $cwd = null)
+    public function create(string $command, ?string $cwd = null)
     {
         return Process::fromShellCommandline($command, $cwd);
     }

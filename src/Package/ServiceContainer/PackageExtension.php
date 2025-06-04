@@ -29,19 +29,19 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class PackageExtension extends ExtensionBase implements ExtensionInterface
 {
-    const PARAMETER_PROVIDER = 'package.provider';
-    const SERVICE_COMBINED_PACKAGE_DEPENDENCY_CHECKER = 'package.combined.package_dependency_checker';
-    const SERVICE_COMBINED_PACKAGE_COMBINER = 'package.combined.package_combiner';
-    const SERVICE_COMBINED_PACKAGE_RESOLVER = 'package.combined.package_resolver';
-    const SERVICE_COMMAND_PACKAGE = 'package.cli.command.package';
-    const SERVICE_COMPOSER_DEPENDENCY_CHECKER = 'package.composer.dependency_checker';
-    const SERVICE_MIGRATIONS_COPIER = 'package.migrations.copier';
-    const SERVICE_PACKAGE_ARCHIVER = 'package.archiver';
-    const SERVICE_PACKAGE_CREATOR = 'package.creator';
-    const SERVICE_PACKAGE_EXTRACTOR = 'package.extractor';
-    const SERVICE_PACKAGE_NAME_RESOLVER = 'package.name_resolver';
-    const SERVICE_PROVIDER_PREFIX = 'package.provider';
-    const SERVICE_PROVIDER = 'package.provider';
+    public const PARAMETER_PROVIDER = 'package.provider';
+    public const SERVICE_COMBINED_PACKAGE_DEPENDENCY_CHECKER = 'package.combined.package_dependency_checker';
+    public const SERVICE_COMBINED_PACKAGE_COMBINER = 'package.combined.package_combiner';
+    public const SERVICE_COMBINED_PACKAGE_RESOLVER = 'package.combined.package_resolver';
+    public const SERVICE_COMMAND_PACKAGE = 'package.cli.command.package';
+    public const SERVICE_COMPOSER_DEPENDENCY_CHECKER = 'package.composer.dependency_checker';
+    public const SERVICE_MIGRATIONS_COPIER = 'package.migrations.copier';
+    public const SERVICE_PACKAGE_ARCHIVER = 'package.archiver';
+    public const SERVICE_PACKAGE_CREATOR = 'package.creator';
+    public const SERVICE_PACKAGE_EXTRACTOR = 'package.extractor';
+    public const SERVICE_PACKAGE_NAME_RESOLVER = 'package.name_resolver';
+    public const SERVICE_PROVIDER_PREFIX = 'package.provider';
+    public const SERVICE_PROVIDER = 'package.provider';
 
     private $extensions;
 
@@ -129,7 +129,7 @@ class PackageExtension extends ExtensionBase implements ExtensionInterface
     {
         $container->setDefinition(
             self::SERVICE_COMBINED_PACKAGE_COMBINER,
-                new Definition(PackageCombiner::class, [
+            new Definition(PackageCombiner::class, [
                 new Reference(ConfigurationExtension::SERVICE_LOADER),
                 new Reference(FilesystemExtension::SERVICE_FILESYSTEM),
                 new Reference(self::SERVICE_PACKAGE_EXTRACTOR),

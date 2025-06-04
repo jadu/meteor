@@ -1,3 +1,14 @@
+## v4.1.0
+
+**Features**
+* [MET-128] Added PHP 8.3 support ([#168](https://github.com/jadu/meteor/pull/168))
+* [MET-127] Required disk space check is now based on package size ([#170](https://github.com/jadu/meteor/pull/170))
+* [MET-129] Suppress output when running scripts and replace with progress bar ([#169](https://github.com/jadu/meteor/pull/169))
+
+**Fixes**
+* [MET-126] Updated references to MigrationException to prevent fatal error ([#167](https://github.com/jadu/meteor/pull/167))
+* [MET-130] Fix PHP CS Fixer in pipeline ([#171](https://github.com/jadu/meteor/pull/171))
+
 ## v4.0.0
 
 * Added PHP 8 support

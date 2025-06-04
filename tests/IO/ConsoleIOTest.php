@@ -11,6 +11,10 @@ class ConsoleIOTest extends TestCase
 {
     private $io;
 
+    private $input;
+
+    private $output;
+
     protected function setUp(): void
     {
         $this->input = new ArrayInput([]);
@@ -152,5 +156,27 @@ class ConsoleIOTest extends TestCase
         $this->io->newLine();
 
         static::assertSame("\n", $this->getOutput());
+    }
+
+    /**
+     * @dataProvider formatFileSizeProvider
+     */
+    public function testFormatFileSize($bytes, $dec, $expected)
+    {
+        $actual = $this->io->formatFileSize($bytes, $dec);
+
+        static::assertEquals($expected, $actual);
+    }
+
+    public function formatFileSizeProvider()
+    {
+        return [
+            ['1024', 2, '1.00 KiB'],
+            ['1234', 2, '1.21 KiB'],
+            ['123456789', 2, '117.74 MiB'],
+            ['1048576', 2, '1.00 MiB'],
+            ['1048576', 0, '1 MiB'],
+            ['100456789012', 2, '93.56 GiB'],
+        ];
     }
 }

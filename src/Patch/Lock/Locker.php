@@ -6,7 +6,7 @@ use RuntimeException;
 
 class Locker
 {
-    const FILENAME = 'meteor.lock';
+    public const FILENAME = 'meteor.lock';
 
     /**
      * @param string $path

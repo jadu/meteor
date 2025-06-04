@@ -63,8 +63,11 @@ class ScriptRunner
     public function run($scriptName)
     {
         foreach ($this->scripts as $scripts) {
-            if (isset($scripts[$scriptName]) && !empty($scripts[$scriptName])) {
+            if (!empty($scripts[$scriptName])) {
+                $this->io->text(sprintf('Running scripts for "%s"', $scriptName));
+                $this->io->progressStart(count($scripts[$scriptName]));
                 $this->runScripts($scriptName, $scripts);
+                $this->io->progressFinish();
             }
         }
     }
@@ -78,16 +81,14 @@ class ScriptRunner
      */
     private function runScripts($scriptName, $scripts)
     {
-        $this->io->text(sprintf('Running scripts for "%s"', $scriptName));
-
         foreach ($scripts[$scriptName] as $script) {
             if (strpos($script, '@') === 0) {
                 // NB: Infinite recursion detection happens when processing the config
                 $script = substr($script, 1);
                 $this->runScripts($script, $scripts);
             } else {
-                $this->io->text(sprintf('$ "%s" in "%s"', $script, $this->getWorkingDir()));
                 $this->processRunner->run($script, $this->getWorkingDir());
+                $this->io->progressAdvance();
             }
         }
         $this->io->newLine();

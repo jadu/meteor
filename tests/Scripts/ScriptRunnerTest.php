@@ -171,4 +171,37 @@ class ScriptRunnerTest extends TestCase
 
         $scriptRunner->run('test');
     }
+
+    public function testRunUpdatesProgressBar()
+    {
+        $mockIO = Mockery::mock(\Meteor\IO\IOInterface::class, [
+            'text' => null,
+            'debug' => null,
+            'newLine' => null,
+        ]);
+
+        $mockIO->shouldReceive('progressStart')
+            ->once()
+            ->with(2);
+
+        $mockIO->shouldReceive('progressAdvance')
+            ->twice();
+
+        $mockIO->shouldReceive('progressFinish')
+            ->once();
+
+        $this->processRunner->shouldReceive('run')
+            ->withAnyArgs()
+            ->twice();
+
+        $scriptRunner = new ScriptRunner($this->processRunner, $mockIO, [
+            'jadu/cms' => [
+                'test' => ['@clear-cache', '@warm-cache'],
+                'clear-cache' => ['clear-cache.sh'],
+                'warm-cache' => ['warm-cache.sh'],
+            ],
+        ]);
+
+        $scriptRunner->run('test');
+    }
 }
