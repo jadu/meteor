@@ -50,10 +50,9 @@ class VerifyCommand extends AbstractPatchCommand
             $this->io->success('The package was verified against the manifest.');
 
             return Command::SUCCESS;
-        } else {
-            $this->io->error('The package could not be verified.');
-
-            return Command::FAILURE;
         }
+        $this->io->error('The package could not be verified.');
+
+        return Command::FAILURE;
     }
 }

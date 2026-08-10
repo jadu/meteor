@@ -52,10 +52,9 @@ class ClearLockCommand extends AbstractPatchCommand
             $this->io->success('Cleared lock file.');
 
             return Command::SUCCESS;
-        } else {
-            $this->io->note('The install was not locked.');
-
-            return Command::FAILURE;
         }
+        $this->io->note('The install was not locked.');
+
+        return Command::FAILURE;
     }
 }

@@ -10,7 +10,7 @@
     "require": {
         "humbug/box": "^3.16",
         "php": ">=7.4",
-        "guzzlehttp/guzzle": "~6.0",
+        "guzzlehttp/guzzle": "^7.0",
         "symfony/config": "^5.4",
         "symfony/console": "^5.4",
         "symfony/dependency-injection": "^5.4",
