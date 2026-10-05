@@ -185,8 +185,6 @@ class ApplyCommand extends AbstractPatchCommand
                 throw new PhpVersionException(sprintf('Your PHP version (%s) is not sufficient enough for the package "%s", which requires %s', $this->phpVersion, $package, $version));
             }
         }
-
-        return;
     }
 
     /**
