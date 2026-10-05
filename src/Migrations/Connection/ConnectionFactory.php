@@ -52,6 +52,7 @@ class ConnectionFactory
     public function createConnection(array $configuration, $installDir)
     {
         Type::addType('unicodetext', 'Jadu\DoctrineTypes\UnicodeTextType');
+        Type::addType('uuid_string', 'Meteor\Type\UuidV7StringType');
         $encryptionKey = $this->getEncryptionKey($installDir);
         if (class_exists('Jadu\Bundle\EncryptionBundle\Type\EncryptedTextType')) {
             Type::addType(\Jadu\Bundle\EncryptionBundle\Type\EncryptedTextType::ENCRYPTED_TEXT_TYPE, \Jadu\Bundle\EncryptionBundle\Type\EncryptedTextType::class);
