@@ -19,6 +19,7 @@
         "symfony/process": "^5.4",
         "symfony/options-resolver": "^5.4",
         "symfony/yaml": "^5.4",
+        "symfony/uid": "^5.4",
         "doctrine/dbal": "^2.9",
         "doctrine/migrations": "^2.3.5",
         "jadu/doctrine-types": "^2.0",
