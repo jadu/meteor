@@ -52,7 +52,6 @@ jobs:
           - ubuntu-latest
 
         php-version:
-          - '7.4'
           - '8.1'
           - '8.3'
 
@@ -179,7 +178,6 @@ jobs:
           - windows-latest
 
         php-version:
-          - '7.4'
           - '8.1'
           - '8.3'
 
