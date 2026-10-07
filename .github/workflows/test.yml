@@ -1,4 +1,4 @@
-name: Test
+§name: Test
 
 on:
   push:
@@ -16,13 +16,13 @@ permissions:
 jobs:
 
   coding-standards:
-    name: Coding Standadrds
+    name: Coding Standards
 
     runs-on: ubuntu-latest
     steps:
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.1'
       - uses: actions/checkout@v3
       - name: Cache Composer packages
         id: composer-cache
